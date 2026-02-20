@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Dashboard | PropertyBazaar</title>
+  <title>My Dashboard | 24Dismil.com</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body { background: var(--bg); }
     .dash-wrap { max-width: 960px; margin: 100px auto 60px; padding: 0 16px; }
@@ -33,6 +34,7 @@
     .upgrade-card p { opacity: 0.7; font-size: 14px; margin-bottom: 20px; }
     @media(max-width: 600px) { .dash-stats { grid-template-columns: 1fr 1fr; } }
   </style>
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 </head>
 <body>
 
@@ -41,8 +43,8 @@
   <div class="container">
     <nav class="nav">
       <a href="index.html" class="nav-logo">
-        <div class="nav-logo-icon">P</div>
-        <span class="nav-logo-text">Property<span>Bazaar</span></span>
+        <div class="nav-logo-icon">24</div>
+        <span class="nav-logo-text">24Dismil.com</span>
       </a>
       <div class="nav-links">
         <a href="index.html" class="nav-link">Home</a>
@@ -62,7 +64,7 @@
 <!-- DASHBOARD -->
 <div class="dash-wrap" id="dashWrap" style="display:none">
   <div class="dash-header">
-    <h1 id="dashGreeting">Welcome back! 👋</h1>
+    <h1 id="dashGreeting">Welcome back! <i class="fa-solid fa-hand"></i></h1>
     <p id="dashEmail"></p>
   </div>
 
@@ -76,7 +78,7 @@
       <div class="dash-stat-label">Free Listings Left</div>
     </div>
     <div class="dash-stat-card">
-      <div class="dash-stat-num">🆓</div>
+      <div class="dash-stat-num" id="tierIconContainer"><i class="fa-solid fa-tag"></i></div>
       <div class="dash-stat-label">Current Plan</div>
     </div>
   </div>
@@ -100,9 +102,9 @@
     </div>
     
     <div class="upgrade-card" id="upgradeCard" style="display:none">
-      <h3>⚡ Unlock Premium Listings</h3>
+      <h3><i class="fa-solid fa-bolt"></i> Unlock Premium Listings</h3>
       <p>Post unlimited properties, get verified badge, priority placement, and lead analytics.</p>
-      <a href="pricing.html" class="btn" style="background:var(--primary);color:#fff;padding:12px 32px;border-radius:var(--radius-sm);font-weight:700;text-decoration:none">Upgrade Now &mdash; View Plans</a>
+      <a href="pricing.html" class="btn" style="background:var(--primary);color:#fff;padding:12px 32px;border-radius:var(--radius-sm);font-weight:700;text-decoration:none">Upgrade Now - View Plans</a>
     </div>
   </div>
 
@@ -124,7 +126,7 @@
   if (!user) throw new Error('Not logged in');
 
   // Nav
-  document.getElementById('dashNavName').textContent = `👤 ${user.name.split(' ')[0]}`;
+  document.getElementById('dashNavName').innerHTML = `<i class="fa-solid fa-user"></i> ${user.name.split(' ')[0]}`;
   document.getElementById('logoutBtn').addEventListener('click', async (e) => {
     e.preventDefault();
     await logout();
@@ -132,7 +134,7 @@
   });
 
   // Stats
-  document.getElementById('dashGreeting').textContent = `Welcome back, ${user.name.split(' ')[0]}! 👋`;
+  document.getElementById('dashGreeting').innerHTML = `Welcome back, ${user.name.split(' ')[0]}! <i class="fa-solid fa-hand"></i>`;
   document.getElementById('dashEmail').textContent = user.email;
   document.getElementById('statPosted').textContent = user.propertyCount;
   
@@ -141,13 +143,11 @@
   
   // Set Tier Badge
   const t = user.subscriptionTier;
-  const tierIcon = t === 'premium' ? '⭐' : (t?.startsWith('agent') ? '💼' : '🆓');
-  let tierName = 'Free';
-  if (t === 'premium') tierName = 'Premium';
-  if (t === 'agent' || t === 'agent_pro') tierName = 'Pro Agent';
-  if (t === 'agent_starter') tierName = 'Starter Agent';
-  
-  document.querySelectorAll('.dash-stat-num')[2].textContent = tierIcon;
+  const iconEl = document.getElementById('tierIconContainer');
+  if (t === 'premium') iconEl.innerHTML = '<i class="fa-solid fa-star" style="color:#FFD700"></i>';
+  else if (t?.startsWith('agent')) iconEl.innerHTML = '<i class="fa-solid fa-briefcase"></i>';
+  else iconEl.innerHTML = '<i class="fa-solid fa-tag"></i>';
+
   document.querySelectorAll('.dash-stat-label')[2].textContent = tierName + ' Plan';
 
   document.getElementById('usageText').textContent = `${user.propertyCount} of ${user.limit} used`;
@@ -169,10 +169,10 @@
 
   if (!properties || properties.length === 0) {
     list.innerHTML = `<div class="dash-empty">
-      <div style="font-size:40px;margin-bottom:12px">🏠</div>
+      <div style="font-size:40px;margin-bottom:12px"><i class="fa-solid fa-house"></i></div>
       <p style="font-weight:700;color:var(--dark)">No properties listed yet</p>
       <p style="font-size:13px">Post your first property to get started!</p>
-      <a href="post-property.html" class="btn btn-primary" style="margin-top:14px;display:inline-block">+ Post Property</a>
+      <a href="post-property.html" class="btn btn-primary" style="margin-top:14px;display:inline-block"><i class="fa-solid fa-plus"></i> Post Property</a>
     </div>`;
   } else {
     list.innerHTML = properties.map(p => `
@@ -181,9 +181,9 @@
         <div class="dash-prop-info">
           <div class="dash-prop-title">
             ${p.details?.bhk && p.details.bhk!=='N/A' && p.details.bhk!=='0' ? p.details.bhk + ' BHK ' : ''}${p.propertyType || ''} in ${p.location?.locality || ''}
-            ${p.isFeatured ? '<span style="background:var(--primary);color:#fff;font-size:10px;padding:2px 8px;border-radius:12px;margin-left:8px;vertical-align:middle;">⭐ Featured</span>' : ''}
+            ${p.isFeatured ? '<span style="background:var(--primary);color:#fff;font-size:10px;padding:2px 8px;border-radius:12px;margin-left:8px;vertical-align:middle;"><i class="fa-solid fa-star"></i> Featured</span>' : ''}
           </div>
-          <div class="dash-prop-loc">📍 ${p.location?.city || ''}, ${p.location?.state || ''}</div>
+          <div class="dash-prop-loc"><i class="fa-solid fa-location-dot"></i> ${p.location?.city || ''}, ${p.location?.state || ''}</div>
         </div>
         <div class="dash-prop-price">₹${(p.pricing?.expectedPrice || 0).toLocaleString('en-IN')}</div>
       </div>
@@ -198,8 +198,8 @@
   } else {
     leadsList.innerHTML = leads.map(l => `
       <div class="dash-prop-card" style="flex-direction:column; align-items:flex-start; gap:8px">
-        <div style="font-weight:700; font-size:15px; color:var(--primary)">👤 ${l.inquirerName}</div>
-        <div style="font-size:13px; color:var(--text)">📞 <a href="tel:${l.inquirerPhone}" style="color:var(--text); text-decoration:none;">${l.inquirerPhone}</a> | ✉️ ${l.inquirerEmail || 'No email provided'}</div>
+        <div style="font-weight:700; font-size:15px; color:var(--primary)"><i class="fa-solid fa-user"></i> ${l.inquirerName}</div>
+        <div style="font-size:13px; color:var(--text)"><i class="fa-solid fa-phone"></i> <a href="tel:${l.inquirerPhone}" style="color:var(--text); text-decoration:none;">${l.inquirerPhone}</a> | <i class="fa-solid fa-envelope"></i> ${l.inquirerEmail || 'No email provided'}</div>
         <div style="font-size:12px; color:var(--text-muted); background:var(--bg); padding:6px 10px; border-radius:6px; width:100%">
           <b>Property:</b> ${l.propertyTitle}
         </div>

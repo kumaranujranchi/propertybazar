@@ -404,10 +404,31 @@ textarea {
   color: #fff;
   margin-bottom: 16px;
   line-height: 1.15;
+  min-height: 160px; /* Space for 2 lines on most screens */
+  display: flex;
+  align-items: flex-start; /* Anchor to top to prevent vertical jumping */
+  padding-top: 10px;
 }
-.hero-title span {
+#typing-text {
+  border-right: 3px solid var(--secondary);
+  padding-right: 4px;
+  animation: blink 0.75s step-end infinite;
+}
+
+#typing-text span {
   color: var(--secondary);
 }
+
+@keyframes blink {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: var(--secondary);
+  }
+}
+
 .hero-subtitle {
   font-size: clamp(15px, 2vw, 18px);
   color: rgba(255, 255, 255, 0.82);
@@ -426,9 +447,10 @@ textarea {
   display: flex;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
-  overflow-x: auto;
 }
 .search-tab {
+  flex: 1;
+  text-align: center;
   padding: 14px 24px;
   font-size: 14px;
   font-weight: 600;
@@ -451,7 +473,7 @@ textarea {
   display: flex;
   align-items: center;
   gap: 0;
-  padding: 16px;
+  padding: 8px 16px;
 }
 .search-field {
   flex: 1;
@@ -460,13 +482,16 @@ textarea {
 .search-field input,
 .search-field select {
   width: 100%;
-  padding: 12px 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  padding: 12px 16px 12px 40px;
+  border: none;
+  background: transparent;
   font-size: 14px;
   color: var(--text);
   outline: none;
   transition: var(--transition);
+}
+.search-field select {
+  padding-left: 16px;
 }
 .search-field input:focus,
 .search-field select:focus {
@@ -474,15 +499,24 @@ textarea {
   box-shadow: 0 0 0 3px rgba(232, 65, 24, 0.1);
 }
 .search-field:not(:last-child) {
-  border-right: 1px solid var(--border);
-  padding-right: 16px;
-  margin-right: 16px;
+  padding-right: 0;
+  margin-right: 0;
 }
 .search-divider {
   width: 1px;
-  height: 36px;
+  height: 24px;
   background: var(--border);
-  margin: 0 8px;
+  margin: 0 12px;
+  flex-shrink: 0;
+}
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+  z-index: 1;
 }
 .search-btn {
   background: var(--primary);
@@ -1546,6 +1580,30 @@ textarea {
   font-weight: 600;
   color: var(--text);
   margin-bottom: 6px;
+}
+.contact-form-g.search-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 300px;
+}
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 16px;
+  pointer-events: none;
+}
+.search-input {
+  width: 100%;
+  padding: 14px 14px 14px 44px !important;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s;
+  background: #fff;
 }
 .contact-form-group input,
 .contact-form-group textarea {

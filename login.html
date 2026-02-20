@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login / Register | PropertyBazaar</title>
-  <meta name="description" content="Login or Register on PropertyBazaar to post and manage property listings.">
+  <title>Login / Register | 24Dismil.com</title>
+  <meta name="description" content="Login or Register on 24Dismil.com to post and manage property listings.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body { background: var(--bg); display: flex; flex-direction: column; min-height: 100vh; }
     .auth-wrap {
@@ -77,6 +78,7 @@
       color: #6B7280; padding: 1px 6px; border-radius: 99px; font-weight: 700;
     }
   </style>
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 </head>
 <body>
 
@@ -85,8 +87,8 @@
   <div class="container">
     <nav class="nav">
       <a href="index.html" class="nav-logo">
-        <div class="nav-logo-icon">P</div>
-        <span class="nav-logo-text">Property<span>Bazaar</span></span>
+        <div class="nav-logo-icon">24</div>
+        <span class="nav-logo-text">24Dismil.com</span>
       </a>
       <div class="nav-links">
         <a href="index.html" class="nav-link">Home</a>
@@ -102,7 +104,7 @@
 <div class="auth-wrap">
   <div class="auth-card">
     <div class="auth-logo">
-      <a href="index.html">🏠 PropertyBazaar</a>
+      <a href="index.html"><i class="fa-solid fa-house"></i> 24Dismil.com</a>
       <p style="color:var(--text-muted);font-size:13px;margin-top:4px">India's Most Trusted Real Estate Portal</p>
     </div>
 
@@ -133,10 +135,10 @@
         <label class="auth-label">Password</label>
         <div class="pass-wrap">
           <input type="password" id="loginPassword" class="auth-input" placeholder="Your password">
-          <span class="pass-toggle" onclick="togglePass('loginPassword', this)">👁️</span>
+          <span class="pass-toggle" onclick="togglePass('loginPassword', this)"><i class="fa-solid fa-eye"></i></span>
         </div>
       </div>
-      <button class="auth-btn" id="loginBtn" onclick="doLogin()">🔐 Login</button>
+      <button class="auth-btn" id="loginBtn" onclick="doLogin()"><i class="fa-solid fa-lock"></i> Login</button>
       <div class="auth-switch">Don't have an account? <a href="#" onclick="switchTab('register'); return false;">Register here</a></div>
     </div>
 
@@ -154,14 +156,14 @@
         <label class="auth-label">Password</label>
         <div class="pass-wrap">
           <input type="password" id="regPassword" class="auth-input" placeholder="Minimum 6 characters">
-          <span class="pass-toggle" onclick="togglePass('regPassword', this)">👁️</span>
+          <span class="pass-toggle" onclick="togglePass('regPassword', this)"><i class="fa-solid fa-eye"></i></span>
         </div>
       </div>
       <div class="auth-input-wrap">
         <label class="auth-label">Confirm Password</label>
         <input type="password" id="regConfirm" class="auth-input" placeholder="Re-enter password">
       </div>
-      <button class="auth-btn" id="registerBtn" onclick="doRegister()">🚀 Create Account</button>
+      <button class="auth-btn" id="registerBtn" onclick="doRegister()"><i class="fa-solid fa-rocket"></i> Create Account</button>
       <div class="auth-switch">Already have an account? <a href="#" onclick="switchTab('login'); return false;">Login here</a></div>
     </div>
   </div>
@@ -190,7 +192,7 @@
     const input = document.getElementById(id);
     const isPass = input.type === 'password';
     input.type = isPass ? 'text' : 'password';
-    el.textContent = isPass ? '🙈' : '👁️';
+    el.innerHTML = isPass ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
   };
 
   function showError(msg) {

@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "live-server . --port=8080",
+    "convex-dev": "npx convex dev",
+    "dev": "concurrently \"npm run serve\" \"npm run convex-dev\"",
     "build": "echo 'No build step needed. Deploying static site...'"
   },
   "keywords": [],
@@ -12,5 +14,9 @@
   "description": "",
   "dependencies": {
     "convex": "^1.32.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "live-server": "^1.2.2"
   }
 }

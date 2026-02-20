@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initWishlist();
   initFilterPanel();
   initViewToggle();
+  initTypingEffect();
 });
 
 // ========== STICKY NAV ==========
@@ -415,3 +416,69 @@ const statsObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('[data-target]').forEach(el => statsObserver.observe(el));
 
 window.renderFilteredProperties = renderFilteredProperties;
+
+// ========== TYPING EFFECT ==========
+function initTypingEffect() {
+  const textEl = document.getElementById('typing-text');
+  if (!textEl) return;
+
+  const sentences = [
+    'Find Your Perfect <span>Dream Home</span> in India',
+    'Discover Exclusive <span>Office Spaces</span> in Top Cities',
+    'Invest in Premium <span>Plots of Land</span> Today',
+    'Experience Luxury in <span>Exclusive Villas</span>',
+    'Build Your Business in <span>Strategic Retail Shops</span>'
+  ];
+  
+  let sentenceIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let typeSpeed = 80; // Faster for full sentences
+
+  function type() {
+    const currentFullText = sentences[sentenceIndex];
+    const totalChars = currentFullText.replace(/<[^>]*>/g, '').length;
+    
+    // Determine the visible text
+    let visibleText = '';
+    let rawIndex = 0;
+    let visibleCount = 0;
+    
+    while (visibleCount < charIndex && rawIndex < currentFullText.length) {
+      if (currentFullText[rawIndex] === '<') {
+        const tagEnd = currentFullText.indexOf('>', rawIndex);
+        visibleText += currentFullText.substring(rawIndex, tagEnd + 1);
+        rawIndex = tagEnd + 1;
+      } else {
+        visibleText += currentFullText[rawIndex];
+        rawIndex++;
+        visibleCount++;
+      }
+    }
+
+    textEl.innerHTML = visibleText;
+
+    if (isDeleting) {
+      charIndex--;
+      typeSpeed = 40;
+    } else {
+      charIndex++;
+      typeSpeed = 80;
+    }
+
+    // Fix: Transition to deleting only AFTER rendering the full text
+    if (!isDeleting && charIndex > totalChars) {
+      isDeleting = true;
+      typeSpeed = 3000; // Pause at end
+    } else if (isDeleting && charIndex < 0) {
+      isDeleting = false;
+      charIndex = 0;
+      sentenceIndex = (sentenceIndex + 1) % sentences.length;
+      typeSpeed = 500;
+    }
+
+    setTimeout(type, typeSpeed);
+  }
+
+  type();
+}

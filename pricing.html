@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pricing Plans - PropertyBazaar</title>
+  <title>Pricing Plans - 24Dismil.com</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/city-dropdown.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <style>
     .pricing-hero {
@@ -225,6 +226,7 @@
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 </head>
 <body>
 
@@ -233,10 +235,10 @@
     <div class="container">
       <nav class="nav">
         <a href="index.html" class="nav-logo">
-          <div class="nav-logo-icon">P</div>
-          <span class="nav-logo-text">Property<span>Bazaar</span></span>
+          <div class="nav-logo-icon">24</div>
+          <span class="nav-logo-text">24Dismil.com</span>
         </a>
-        <div class="nav-city" id="navCityEl">📍 Delhi NCR ▾</div>
+        <div class="nav-city" id="navCityEl"><i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down"></i></div>
         <div class="nav-links">
           <a href="index.html" class="nav-link">Home</a>
           <a href="properties.html?type=buy" class="nav-link">Buy</a>
@@ -249,7 +251,7 @@
         </div>
         <div class="nav-actions">
           <a href="login.html" class="nav-btn-login">Login / Register</a>
-          <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
+          <a href="post-property.html" class="nav-btn-post"><i class="fa-solid fa-plus"></i> Post FREE Property</a>
         </div>
         <div class="hamburger" id="hamburger">
           <span></span><span></span><span></span>
@@ -257,14 +259,14 @@
       </nav>
     </div>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="index.html">🏠 Home</a>
-      <a href="properties.html?type=buy">🛒 Buy Property</a>
-      <a href="properties.html?type=rent">🔑 Rent Property</a>
-      <a href="properties.html?type=commercial">🏢 Commercial</a>
-      <a href="pricing.html">💳 Pricing</a>
-      <a href="post-property.html">➕ Post Property</a>
-      <a href="about.html">ℹ️ About Us</a>
-      <a href="contact.html">📞 Contact</a>
+      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+      <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+      <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
+      <a href="pricing.html"><i class="fa-solid fa-credit-card"></i> Pricing</a>
+      <a href="post-property.html"><i class="fa-solid fa-plus"></i> Post Property</a>
+      <a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
+      <a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a>
       <a href="login.html" style="color: var(--primary); font-weight: 700">Login / Register</a>
     </div>
   </header>
@@ -291,10 +293,10 @@
         <div class="plan-desc">For users who want to try the platform.</div>
         <div class="plan-price"><span class="price-currency">₹</span>0</div>
         <ul class="plan-features">
-          <li><span class="feature-check">✓</span> Post up to 3 properties</li>
-          <li><span class="feature-check">✓</span> Listings valid for 30 days</li>
-          <li><span class="feature-check">✓</span> Upload up to 5 photos</li>
-          <li><span class="feature-check" style="color:#ef4444;">—</span> Standard search ranking</li>
+          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Post up to 3 properties</li>
+          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Listings valid for 30 days</li>
+          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Upload up to 5 photos</li>
+          <li><span class="feature-check" style="color:#ef4444;"><i class="fa-solid fa-minus"></i></span> Standard search ranking</li>
         </ul>
         <button class="btn-plan btn-outline" disabled>Current Free Plan</button>
       </div>
@@ -306,11 +308,11 @@
         <div class="plan-desc">For serious sellers who want fast closures.</div>
         <div class="plan-price"><span class="price-currency">₹</span>999<span class="price-period">/90 days</span></div>
         <ul class="plan-features">
-          <li><span class="feature-check">✓</span> Post up to 10 properties</li>
-          <li><span class="feature-check">✓</span> Listings valid for 90 days</li>
-          <li><span class="feature-check">✓</span> <b>Featured Badge</b> on listings</li>
-          <li><span class="feature-check">✓</span> <b>Top Search Ranking</b> for visibility</li>
-          <li><span class="feature-check">✓</span> Upload up to 15 photos</li>
+          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Post up to 10 properties</li>
+          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Listings valid for 90 days</li>
+          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> <b>Featured Badge</b> on listings</li>
+          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> <b>Top Search Ranking</b> for visibility</li>
+          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Upload up to 15 photos</li>
         </ul>
         <button class="btn-plan btn-primary upgrade-btn" data-tier="premium" data-days="90" data-price="999">Upgrade to Premium</button>
       </div>
@@ -432,7 +434,7 @@
       </div>
       
       <div id="paymentSuccess" style="display:none; color:#10b981; font-weight:bold; margin-top:20px;">
-        ✅ Payment Successful! Redirecting...
+        <i class="fa-solid fa-circle-check"></i> Payment Successful! Redirecting...
       </div>
     </div>
   </div>
@@ -443,8 +445,8 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="footer-logo">
-            <div class="nav-logo-icon">P</div>
-            PropertyBazaar
+            <div class="nav-logo-icon">24</div>
+            24Dismil.com
           </div>
           <p class="footer-tagline">
             India's most trusted real estate portal. Find your dream property
@@ -452,11 +454,11 @@
             home journey starts here.
           </p>
           <div class="footer-socials">
-            <a href="#" class="social-icon">📘</a>
-            <a href="#" class="social-icon">📸</a>
-            <a href="#" class="social-icon">🐦</a>
-            <a href="#" class="social-icon">💼</a>
-            <a href="#" class="social-icon">▶️</a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
           </div>
         </div>
         <div class="footer-col">
@@ -499,7 +501,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2025 PropertyBazaar. All rights reserved. | India's #1 Real Estate Portal</span>
+        <span>© 2025 24Dismil.com. All rights reserved. | India's #1 Real Estate Portal</span>
         <div class="footer-bottom-links">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Use</a>
