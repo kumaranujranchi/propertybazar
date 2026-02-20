@@ -163,23 +163,15 @@
     <div class="form-grid">
       <div class="form-group">
         <label class="form-label">State *</label>
-        <select class="form-input form-select">
+        <select class="form-input form-select" id="stateSelect">
           <option value="">Select State</option>
-          <option>Uttar Pradesh</option>
-          <option>Maharashtra</option>
-          <option>Karnataka</option>
-          <option>Haryana</option>
-          <option>Delhi</option>
-          <option>Tamil Nadu</option>
-          <option>Telangana</option>
-          <option>West Bengal</option>
-          <option>Gujarat</option>
-          <option>Bihar</option>
         </select>
       </div>
       <div class="form-group">
         <label class="form-label">City *</label>
-        <input type="text" class="form-input" placeholder="e.g. Noida, Mumbai, Bangalore">
+        <select class="form-input form-select" id="citySelect" disabled>
+          <option value="">First Select State</option>
+        </select>
       </div>
       <div class="form-group">
         <label class="form-label">Locality / Area *</label>
@@ -510,6 +502,58 @@
       else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
       else step3Title.textContent = 'Step 3: Property Details';
     }
+  }
+
+  // ---- State / City Dropdown Logic ----
+  const LOCATIONS = {
+    "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Rajahmundry", "Tirupati", "Kadapa", "Kakinada", "Anantapur"],
+    "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon", "Tinsukia", "Tezpur", "Bongaigaon"],
+    "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Bihar Sharif", "Ara", "Begusarai", "Katihar", "Bihta"],
+    "Chandigarh": ["Chandigarh"],
+    "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Raigarh", "Jagdalpur", "Ambikapur"],
+    "Delhi": ["New Delhi", "North Delhi", "South Delhi", "West Delhi", "East Delhi", "Dwarka", "Rohini"],
+    "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Porvorim"],
+    "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Gandhinagar", "Junagadh", "Anand", "Navsari", "Morbi", "Bharuch"],
+    "Haryana": ["Gurgaon", "Faridabad", "Panipat", "Ambala", "Yamunanagar", "Rohtak", "Hisar", "Karnal", "Sonipat", "Panchkula"],
+    "Himachal Pradesh": ["Shimla", "Dharamshala", "Solan", "Mandi", "Palampur", "Baddi"],
+    "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Deoghar", "Hazaribagh", "Giridih", "Ramgarh"],
+    "Karnataka": ["Bangalore", "Mysore", "Hubli-Dharwad", "Mangalore", "Belagavi", "Gulbarga", "Davanagere", "Bellary", "Bijapur", "Shimoga", "Tumkur", "Udupi"],
+    "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Kollam", "Thrissur", "Kannur", "Alappuzha", "Kottayam", "Palakkad", "Malappuram"],
+    "Madhya Pradesh": ["Indore", "Bhopal", "Jabalpur", "Gwalior", "Ujjain", "Sagar", "Dewas", "Satna", "Ratlam", "Rewa"],
+    "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Kalyan-Dombivli", "Vasai-Virar", "Aurangabad", "Navi Mumbai", "Solapur", "Mira-Bhayandar", "Bhiwandi", "Amravati", "Nanded", "Kolhapur", "Akola", "Jalgaon", "Latur", "Dhule", "Ahmednagar"],
+    "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Brahmapur", "Sambalpur", "Puri", "Balasore", "Bhadrak", "Baripada"],
+    "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Hoshiarpur", "Mohali", "Pathankot", "Moga", "Abohar"],
+    "Rajasthan": ["Jaipur", "Jodhpur", "Kota", "Bikaner", "Ajmer", "Udaipur", "Bhilwara", "Alwar", "Bharatpur", "Sikar"],
+    "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli", "Tiruppur", "Vellore", "Erode", "Thoothukudi", "Dindigul", "Thanjavur"],
+    "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Ramagundam", "Khammam", "Mahbubnagar"],
+    "Uttar Pradesh": ["Lucknow", "Kanpur", "Ghaziabad", "Agra", "Varanasi", "Meerut", "Allahabad", "Bareilly", "Aligarh", "Moradabad", "Saharanpur", "Gorakhpur", "Noida", "Firozabad", "Jhansi", "Muzaffarnagar", "Mathura"],
+    "Uttarakhand": ["Dehradun", "Haridwar", "Roorkee", "Haldwani-cum-Kathgodam", "Rudrapur", "Kashipur", "Rishikesh"],
+    "West Bengal": ["Kolkata", "Howrah", "Asansol", "Siliguri", "Durgapur", "Kharagpur", "Burdwan", "Haldia"]
+  };
+
+  const stateSelect = document.getElementById('stateSelect');
+  const citySelect = document.getElementById('citySelect');
+
+  if (stateSelect && citySelect) {
+    // Populate states
+    Object.keys(LOCATIONS).sort().forEach(state => {
+      stateSelect.add(new Option(state, state));
+    });
+
+    stateSelect.addEventListener('change', () => {
+      const state = stateSelect.value;
+      citySelect.innerHTML = '<option value="">Select City</option>';
+      
+      if (state && LOCATIONS[state]) {
+        citySelect.disabled = false;
+        LOCATIONS[state].sort().forEach(city => {
+          citySelect.add(new Option(city, city));
+        });
+      } else {
+        citySelect.innerHTML = '<option value="">First Select State</option>';
+        citySelect.disabled = true;
+      }
+    });
   }
 
   // Run when navigating to Step 3
