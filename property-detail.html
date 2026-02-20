@@ -7,6 +7,23 @@
   <meta name="description" content="3 BHK apartment for sale at ₹85 Lakh in Sector 62, Noida. 1450 sq.ft, ready to move, swimming pool, gym, 24x7 security. RERA registered.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/city-dropdown.css">
+  <style>
+    /* ---- Gallery skeleton shimmer ---- */
+    .gallery-skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .gallery-main img, .gallery-thumb img { transition: opacity 0.4s ease; }
+    .detail-card-skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 8px; height: 20px; margin-bottom: 8px;
+    }
+  </style>
 </head>
 <body>
 
@@ -59,15 +76,18 @@
     <div>
       <!-- GALLERY -->
       <div class="detail-gallery" style="margin-top:24px">
-        <div class="gallery-main">
-          <img src="images/property-1.jpg" alt="Property Main View" id="mainGalleryImg">
+        <div class="gallery-main gallery-skeleton">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               alt="Property Main View" id="mainGalleryImg" style="opacity:0;width:100%;height:100%;object-fit:cover">
         </div>
-        <div class="gallery-thumb">
-          <img src="images/city-mumbai.jpg" alt="Property View 2" onclick="document.getElementById('mainGalleryImg').src=this.src" style="cursor:pointer">
+        <div class="gallery-thumb gallery-skeleton" id="galleryThumb2">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               alt="Property View 2" id="galleryImg2" style="opacity:0;cursor:pointer;width:100%;height:100%;object-fit:cover">
         </div>
-        <div class="gallery-thumb" style="position:relative">
-          <img src="images/hero-bg.jpg" alt="Property View 3" onclick="document.getElementById('mainGalleryImg').src=this.src" style="cursor:pointer">
-          <div class="gallery-more">+8 Photos</div>
+        <div class="gallery-thumb gallery-skeleton" style="position:relative" id="galleryThumb3">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               alt="Property View 3" id="galleryImg3" style="opacity:0;cursor:pointer;width:100%;height:100%;object-fit:cover">
+          <div class="gallery-more" id="galleryMore" style="display:none"></div>
         </div>
       </div>
 
@@ -396,19 +416,40 @@
       document.querySelector('.page-breadcrumb span').textContent = title
     );
 
-    // ---- Gallery ----
+    // ---- Gallery ---- (fade in after load, no flash)
     const mainImg = document.getElementById('mainGalleryImg');
-    if (mainImg) mainImg.src = photos[0];
-    const thumbsWrap = document.querySelector('.gallery-thumb');
-    // Replace all thumbnails
-    const thumbContainer = document.querySelectorAll('.gallery-thumb');
-    thumbContainer.forEach((el, i) => {
-      const img = el.querySelector('img');
-      if (img && photos[i + 1]) {
-        img.src = photos[i + 1];
-        img.onclick = () => { if (mainImg) mainImg.src = photos[i + 1]; };
+    const galleryImg2 = document.getElementById('galleryImg2');
+    const galleryImg3 = document.getElementById('galleryImg3');
+    const galleryThumb2 = document.getElementById('galleryThumb2');
+    const galleryThumb3 = document.getElementById('galleryThumb3');
+    const galleryMore = document.getElementById('galleryMore');
+
+    function loadImg(imgEl, wrapEl, src, clickSrc) {
+      if (!imgEl) return;
+      const tmp = new Image();
+      tmp.onload = () => {
+        imgEl.src = src;
+        imgEl.style.opacity = '1';
+        if (wrapEl) wrapEl.classList.remove('gallery-skeleton');
+      };
+      tmp.src = src;
+      if (clickSrc && mainImg) {
+        imgEl.onclick = () => { mainImg.src = clickSrc; };
       }
-    });
+    }
+
+    loadImg(mainImg, mainImg?.parentElement, photos[0]);
+    if (photos[1]) loadImg(galleryImg2, galleryThumb2, photos[1], photos[1]);
+    else if (galleryThumb2) galleryThumb2.style.display = 'none';
+
+    if (photos[2]) loadImg(galleryImg3, galleryThumb3, photos[2], photos[2]);
+    else if (galleryThumb3) galleryThumb3.style.display = 'none';
+
+    if (galleryMore) {
+      const extra = photos.length - 3;
+      if (extra > 0) { galleryMore.textContent = `+${extra} Photos`; galleryMore.style.display = ''; }
+    }
+
 
     // ---- Price & Title card ----
     document.querySelector('.detail-price')?.textContent && (
