@@ -350,6 +350,8 @@
       try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
+        console.log("Google Login Success! UID:", user.uid);
+
         // Save session using existing auth system
         saveSession(user.uid, {
           name: user.displayName || user.email,
@@ -357,8 +359,16 @@
           photo: user.photoURL,
           provider: 'google'
         });
-        window.location.href = getRedirect();
+
+        const redirectUrl = getRedirect();
+        console.log("Redirecting to:", redirectUrl);
+
+        // Force redirect
+        setTimeout(() => {
+          window.location.assign(redirectUrl);
+        }, 100);
       } catch (err) {
+        console.error("Google Login Error:", err);
         let msg = 'Google Sign-In failed. Please try again.';
         if (err.code === 'auth/popup-closed-by-user') msg = 'Sign-in popup was closed. Please try again.';
         if (err.code === 'auth/popup-blocked') msg = 'Popup blocked by browser. Please allow popups for this site.';
