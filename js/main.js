@@ -220,6 +220,16 @@ function renderFilteredProperties() {
   if (activeFilters.bhks.length) filtered = filtered.filter(p => activeFilters.bhks.includes(p.bhk));
   if (activeFilters.statuses.length) filtered = filtered.filter(p => activeFilters.statuses.includes(p.status));
 
+  // City filter from URL param (set by city-selector.js)
+  const urlParams = new URLSearchParams(window.location.search);
+  const cityParam = urlParams.get('city');
+  if (cityParam && cityParam !== 'All India') {
+    filtered = filtered.filter(p =>
+      (p.city || '').toLowerCase().includes(cityParam.toLowerCase()) ||
+      (p.location || '').toLowerCase().includes(cityParam.toLowerCase())
+    );
+  }
+
   const sort = document.querySelector('.sort-select')?.value;
   if (sort === 'price-asc') filtered.sort((a, b) => a.price - b.price);
   else if (sort === 'price-desc') filtered.sort((a, b) => b.price - a.price);

@@ -1,6 +1,9 @@
-/* ========== RESPONSIVE CSS ========== */
+/* =========================================
+   RESPONSIVE CSS — PropertyBazaar
+   Breakpoints: 1200, 1024, 768, 480
+   ========================================= */
 
-/* Large screens */
+/* ---- Large screens ---- */
 @media (max-width: 1200px) {
   .properties-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1.5fr 1fr 1fr; }
@@ -9,7 +12,7 @@
   .prop-types-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* Tablet */
+/* ---- Tablet ---- */
 @media (max-width: 1024px) {
   .nav-links { display: none; }
   .hamburger { display: flex; }
@@ -18,7 +21,7 @@
   .search-field:not(:last-child) { border-right: none; padding-right: 0; margin-right: 0; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 4px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .properties-layout { grid-template-columns: 1fr; }
-  .filter-sidebar { position: static; }
+  .filter-sidebar { position: static; top: auto; }
   .detail-layout { grid-template-columns: 1fr; }
   .contact-card { position: static; }
   .detail-gallery { grid-template-rows: 260px 140px; }
@@ -35,65 +38,143 @@
   .listings-grid.list-view .property-card { grid-template-columns: 1fr; }
   .listings-grid.list-view .prop-img-wrap { height: 200px; }
   .form-type-grid { grid-template-columns: repeat(3, 1fr); }
+  .dash-stats { grid-template-columns: repeat(3, 1fr); }
+  .auth-card { padding: 32px 28px; }
+  .detail-specs { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* Mobile */
+/* ---- Mobile ---- */
 @media (max-width: 768px) {
+  /* Layout */
   .container { padding: 0 16px; }
-  .section { padding: 48px 0; }
-  .section-header h2 { font-size: 24px; }
-  .hero-content { padding: 40px 16px; }
-  .hero-title { font-size: 28px; }
-  .hero-stats { flex-wrap: wrap; gap: 16px; }
-  .hero-stat { width: calc(50% - 8px); }
-  .hero-stat-num { font-size: 22px; }
+  .section { padding: 40px 0; }
+  .section-header h2 { font-size: 22px; }
+
+  /* Hero */
+  .hero-content { padding: 36px 16px; }
+  .hero-title { font-size: 26px; line-height: 1.3; }
+  .hero-subtitle { font-size: 14px; }
+  .hero-stats { flex-wrap: wrap; gap: 14px; }
+  .hero-stat { width: calc(50% - 7px); }
+  .hero-stat-num { font-size: 20px; }
+
+  /* Search */
   .search-box { border-radius: var(--radius); }
-  .search-tabs { }
-  .search-tab { padding: 10px 16px; font-size: 13px; }
+  .search-tab { padding: 10px 14px; font-size: 13px; }
   .search-btn { width: 100%; justify-content: center; margin-top: 8px; }
+
+  /* Stats */
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .stat-num { font-size: 28px; }
+  .stat-num { font-size: 26px; }
+
+  /* Properties */
   .properties-grid { grid-template-columns: 1fr; }
+  .prop-img-wrap { height: 220px; }
+  .prop-price { font-size: 18px; }
+  .filter-sidebar { border-radius: var(--radius-sm); }
+  .listing-controls { flex-wrap: wrap; gap: 8px; }
+
+  /* City & Property Types */
   .city-grid { grid-template-columns: repeat(2, 1fr); }
   .prop-types-grid { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
   .footer-bottom-links { flex-wrap: wrap; justify-content: center; }
+
+  /* Nav */
   .nav-btn-login { display: none; }
+  .nav-city-btn { font-size: 12px; padding: 5px 10px; }
+
+  /* About */
   .about-stats { grid-template-columns: repeat(2, 1fr); }
-  .about-hero { padding: 48px 0; }
-  .about-hero h1 { font-size: 30px; }
+  .about-hero { padding: 40px 0; }
+  .about-hero h1 { font-size: 28px; }
   .team-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Property Detail */
   .detail-gallery { grid-template-columns: 1fr; grid-template-rows: 240px; }
   .gallery-main { grid-column: 1; grid-row: 1; }
   .gallery-thumb { display: none; }
-  .detail-specs { grid-template-columns: repeat(3, 1fr); }
+  .detail-specs { grid-template-columns: repeat(2, 1fr); }
+  .detail-price { font-size: 26px; }
   .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+  .contact-btns { flex-direction: column; gap: 8px; }
+  .contact-btn { width: 100%; text-align: center; }
+
+  /* Post Property Form */
   .form-grid { grid-template-columns: 1fr; }
-  .form-card { padding: 24px; }
-  .steps-indicator { gap: 0; }
-  .step-line { width: 30px; }
-  .step-label { font-size: 11px; }
+  .form-card { padding: 20px 16px; }
+  .steps-indicator { gap: 0; overflow-x: auto; padding-bottom: 4px; }
+  .step-line { width: 24px; }
+  .step-label { font-size: 10px; }
+  .step-dot { width: 28px; height: 28px; font-size: 12px; }
   .form-type-grid { grid-template-columns: repeat(2, 1fr); }
-  .app-banner-text h2 { font-size: 24px; }
+  .form-type-grid .type-card { padding: 12px 8px; }
+  .form-type-grid .type-icon { font-size: 20px; }
+  .form-type-grid .type-name { font-size: 11px; }
+
+  /* Auth / Login */
+  .auth-wrap { padding: 70px 12px 32px; }
+  .auth-card { padding: 28px 20px; }
+  .auth-tab { font-size: 14px; }
+
+  /* Dashboard */
+  .dash-stats { grid-template-columns: repeat(2, 1fr); }
+  .dash-wrap { margin: 80px auto 40px; }
+  .dash-header h1 { font-size: 20px; }
+  .dash-prop-card { flex-direction: column; }
+  .dash-prop-img { width: 100%; height: 140px; }
+
+  /* App Banner */
+  .app-banner-text h2 { font-size: 22px; }
   .app-store-btns { flex-direction: column; align-items: center; }
+
+  /* Contact */
   .contact-layout { padding: 40px 0; }
+
+  /* City dropdown */
+  .city-dropdown { left: -20px; min-width: 240px; }
 }
 
-/* Small Mobile */
+/* ---- Small Mobile ---- */
 @media (max-width: 480px) {
+  /* Core */
   .nav-logo-text { display: none; }
-  .hero-title { font-size: 24px; }
-  .hero-stats { gap: 12px; }
+  .hero-title { font-size: 22px; }
+  .hero-stats { gap: 10px; }
   .hero-stat { width: 100%; }
+
+  /* Grids */
   .city-grid { grid-template-columns: repeat(2, 1fr); }
   .prop-types-grid { grid-template-columns: repeat(2, 1fr); }
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .team-grid { grid-template-columns: 1fr 1fr; }
+  .about-stats { grid-template-columns: 1fr 1fr; }
+  .detail-specs { grid-template-columns: repeat(2, 1fr); }
+  .amenities-grid { grid-template-columns: 1fr 1fr; }
+  .form-type-grid { grid-template-columns: repeat(2, 1fr); }
+  .dash-stats { grid-template-columns: 1fr 1fr; }
+
+  /* Nav & Buttons */
   .slider-prev, .slider-next { display: none; }
   .pagination { flex-wrap: wrap; }
   .store-btn { width: 100%; justify-content: center; }
-  .about-stats { grid-template-columns: 1fr 1fr; }
-  .form-type-grid { grid-template-columns: repeat(2, 1fr); }
-  .detail-specs { grid-template-columns: repeat(2, 1fr); }
+  .btn-lg { padding: 12px 20px; font-size: 14px; }
+
+  /* Property cards */
+  .prop-spec { font-size: 11px; }
+  .prop-price { font-size: 17px; }
+  .prop-title { font-size: 14px; }
+
+  /* Post form */
+  .form-actions { flex-direction: column; gap: 10px; }
+  .form-actions .btn { width: 100%; text-align: center; }
+  .steps-indicator { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0; }
+  .step-line { display: none; }
+  .step-item { flex-direction: column; align-items: center; gap: 2px; }
+
+  /* Remove per-sqft on small screens */
+  .prop-per { display: none; }
 }
