@@ -404,7 +404,7 @@ textarea {
   color: #fff;
   margin-bottom: 16px;
   line-height: 1.15;
-  min-height: 160px; /* Space for 2 lines on most screens */
+  min-height: 210px; /* Space for 3 lines on most screens to prevent layout shift */
   display: flex;
   align-items: flex-start; /* Anchor to top to prevent vertical jumping */
   padding-top: 10px;
