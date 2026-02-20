@@ -196,3 +196,68 @@ export const deleteOldProperties = internalMutation({
     return { deletedCount: oldProperties.length };
   }
 });
+
+// =================== LEADS SYSTEM ===================
+
+export const contactOwner = mutation({
+  args: {
+    propertyId: v.id("properties"),
+    name: v.string(),
+    email: v.string(),
+    phone: v.string(),
+    message: v.optional(v.string())
+  },
+  handler: async (ctx, args) => {
+    // 1. Find the property to get the ownerId
+    const property = await ctx.db.get(args.propertyId);
+    if (!property) throw new Error("Property not found");
+
+    // 2. Insert lead
+    await ctx.db.insert("leads", {
+      propertyId: args.propertyId,
+      ownerId: property.userId,
+      inquirerName: args.name,
+      inquirerEmail: args.email,
+      inquirerPhone: args.phone,
+      message: args.message
+    });
+
+    return { success: true };
+  }
+});
+
+export const getMyLeads = query({
+  args: { token: v.string() },
+  handler: async (ctx, args) => {
+    if (!args.token) return [];
+    
+    // Auth check
+    const session = await ctx.db
+      .query("sessions")
+      .withIndex("by_token", (q) => q.eq("token", args.token))
+      .first();
+      
+    if (!session || session.expiresAt < Date.now()) return [];
+
+    // Fetch leads for this user's properties
+    const leads = await ctx.db
+      .query("leads")
+      .withIndex("by_ownerId", (q) => q.eq("ownerId", session.userId))
+      .order("desc")
+      .collect();
+
+    // Attach property details
+    const leadsWithPropertyInfo = await Promise.all(
+      leads.map(async (lead) => {
+        const prop = await ctx.db.get(lead.propertyId);
+        return {
+          ...lead,
+          propertyTitle: prop ? `${prop.details.bhk !== 'N/A' && prop.details.bhk ? prop.details.bhk + ' BHK ' : ''}${prop.propertyType} in ${prop.location.locality}` : "Deleted Property",
+          propertyType: prop?.propertyType || ''
+        };
+      })
+    );
+
+    return leadsWithPropertyInfo;
+  }
+});

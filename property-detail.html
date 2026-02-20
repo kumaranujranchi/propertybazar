@@ -300,25 +300,29 @@
         <p>Get more details about this property for FREE</p>
         <div class="contact-form-group">
           <label>Your Name</label>
-          <input type="text" placeholder="Enter your full name">
+          <input type="text" id="contactName" placeholder="Enter your full name">
         </div>
         <div class="contact-form-group">
           <label>Mobile Number</label>
-          <input type="tel" placeholder="+91 XXXXX XXXXX">
+          <input type="tel" id="contactPhone" placeholder="+91 XXXXX XXXXX">
         </div>
         <div class="contact-form-group">
           <label>Email (Optional)</label>
-          <input type="email" placeholder="your@email.com">
+          <input type="email" id="contactEmail" placeholder="your@email.com">
         </div>
         <div class="contact-form-group">
           <label>Message</label>
-          <textarea rows="3" placeholder="Hi, I am interested in this property. Please contact me.">Hi, I am interested in this property. Please contact me.</textarea>
+          <textarea id="contactMessage" rows="3" placeholder="Hi, I am interested in this property. Please contact me.">Hi, I am interested in this property. Please contact me.</textarea>
         </div>
         <div class="contact-btns">
           <button class="contact-btn contact-btn-call">📞 Call Now</button>
           <button class="contact-btn contact-btn-wa">💬 WhatsApp</button>
-          <button class="contact-btn contact-btn-email">✉️ Send Enquiry</button>
+          <button class="contact-btn contact-btn-email" id="btnSendEnquiry">✉️ Send Enquiry</button>
         </div>
+        <div id="contactSuccess" style="display:none; color:#10b981; font-weight:bold; margin-top:14px; text-align:center; padding:10px; background:rgba(16,185,129,0.1); border-radius:8px;">
+          ✅ Enquiry Sent Successfully!
+        </div>
+        <div id="contactLoader" class="loader" style="display:none; margin: 10px auto;"></div>
         <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:14px">By submitting, you agree to our <a href="#" style="color:var(--primary)">Terms</a> & <a href="#" style="color:var(--primary)">Privacy Policy</a></p>
       </div>
 
@@ -665,6 +669,53 @@
     }
     const mapText = document.querySelector('[href*="maps.google.com"]')?.previousElementSibling;
     if (mapText) mapText.textContent = `${p.location?.locality || ''}, ${p.location?.city || ''} ${p.location?.pinCode || ''}`;
+
+    // ---- Handle Contact Owner Form ----
+    const btnSendEnquiry = document.getElementById('btnSendEnquiry');
+    if (btnSendEnquiry) {
+      btnSendEnquiry.onclick = async () => {
+        const name = document.getElementById('contactName')?.value;
+        const phone = document.getElementById('contactPhone')?.value;
+        const email = document.getElementById('contactEmail')?.value;
+        const message = document.getElementById('contactMessage')?.value;
+        const successMsg = document.getElementById('contactSuccess');
+        const loader = document.getElementById('contactLoader');
+
+        if (!name || !phone) {
+          alert('Name and Mobile Number are required.');
+          return;
+        }
+
+        btnSendEnquiry.style.display = 'none';
+        if (loader) loader.style.display = 'block';
+
+        try {
+          await convex.mutation('properties:contactOwner', {
+            propertyId: id,
+            name, phone, email: email || '', message: message || ''
+          });
+          if (loader) loader.style.display = 'none';
+          if (successMsg) successMsg.style.display = 'block';
+          
+          // Clear inputs
+          document.getElementById('contactName').value = '';
+          document.getElementById('contactPhone').value = '';
+          document.getElementById('contactEmail').value = '';
+          document.getElementById('contactMessage').value = '';
+
+          // Hide success message after 5 seconds to allow sending another
+          setTimeout(() => {
+            if (successMsg) successMsg.style.display = 'none';
+            btnSendEnquiry.style.display = 'inline-block';
+          }, 5000);
+
+        } catch (err) {
+          alert('Failed to send enquiry: '+err.message);
+          btnSendEnquiry.style.display = 'inline-block';
+          if (loader) loader.style.display = 'none';
+        }
+      };
+    }
 
     // ---- EMI seed value ----
     const emiLoan = document.getElementById('emi-loan');

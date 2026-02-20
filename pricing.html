@@ -224,24 +224,43 @@
 <body>
 
   <!-- HEADER -->
-  <header class="header">
-    <div class="header-container">
-      <div class="logo">
-        <a href="index.html">
-          <img src="images/logo.png" alt="PropertyBazaar Logo" style="height: 32px; width: auto; display: block;">
+  <header class="header" id="header">
+    <div class="container">
+      <nav class="nav">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logo-icon">P</div>
+          <span class="nav-logo-text">Property<span>Bazaar</span></span>
         </a>
-      </div>
-      <nav class="nav-links">
-        <a href="properties.html?type=buy">Buy</a>
-        <a href="properties.html?type=rent">Rent</a>
-        <a href="properties.html?type=commercial">Commercial</a>
-        <a href="pricing.html" class="active" style="color:var(--primary); font-weight:600;">Pricing</a>
+        <div class="nav-city" id="navCityEl">📍 Delhi NCR ▾</div>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="properties.html?type=buy" class="nav-link">Buy</a>
+          <a href="properties.html?type=rent" class="nav-link">Rent</a>
+          <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+          <a href="pricing.html" class="nav-link active">Pricing</a>
+          <a href="post-property.html" class="nav-link">Post Property</a>
+          <a href="about.html" class="nav-link">About</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <div class="nav-actions">
+          <a href="login.html" class="nav-btn-login">Login / Register</a>
+          <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
+        </div>
+        <div class="hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
       </nav>
-      <div class="header-actions">
-        <!-- Auth UI will be handled by main.js automatically -->
-        <a href="post-property.html" class="btn btn-primary d-none d-md-inline-block">Post Property</a>
-        <button class="mobile-menu-btn">☰</button>
-      </div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">🏠 Home</a>
+      <a href="properties.html?type=buy">🛒 Buy Property</a>
+      <a href="properties.html?type=rent">🔑 Rent Property</a>
+      <a href="properties.html?type=commercial">🏢 Commercial</a>
+      <a href="pricing.html">💳 Pricing</a>
+      <a href="post-property.html">➕ Post Property</a>
+      <a href="about.html">ℹ️ About Us</a>
+      <a href="contact.html">📞 Contact</a>
+      <a href="login.html" style="color: var(--primary); font-weight: 700">Login / Register</a>
     </div>
   </header>
 
@@ -331,15 +350,81 @@
     </div>
   </div>
 
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="nav-logo-icon">P</div>
+            PropertyBazaar
+          </div>
+          <p class="footer-tagline">
+            India's most trusted real estate portal. Find your dream property
+            with verified listings, expert guidance, and market insights. Your
+            home journey starts here.
+          </p>
+          <div class="footer-socials">
+            <a href="#" class="social-icon">📘</a>
+            <a href="#" class="social-icon">📸</a>
+            <a href="#" class="social-icon">🐦</a>
+            <a href="#" class="social-icon">💼</a>
+            <a href="#" class="social-icon">▶️</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <div class="footer-links">
+            <a href="properties.html?type=buy">Buy Properties</a>
+            <a href="properties.html?type=rent">Rent Properties</a>
+            <a href="properties.html?type=commercial">Commercial</a>
+            <a href="post-property.html">Post Free Property</a>
+            <a href="properties.html?newLaunch=true">New Projects</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Top Cities</h4>
+          <div class="footer-links">
+            <a href="properties.html?city=Mumbai">Mumbai</a>
+            <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
+            <a href="properties.html?city=Bangalore">Bangalore</a>
+            <a href="properties.html?city=Hyderabad">Hyderabad</a>
+            <a href="properties.html?city=Pune">Pune</a>
+            <a href="properties.html?city=Chennai">Chennai</a>
+            <a href="properties.html?city=Kolkata">Kolkata</a>
+            <a href="properties.html?city=Noida">Noida</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <div class="footer-links">
+            <a href="#">EMI Calculator</a>
+            <a href="#">Property Rates</a>
+            <a href="#">RERA Guide</a>
+            <a href="#">Home Loan</a>
+            <a href="#">Legal Guide</a>
+            <a href="#">Vastu Tips</a>
+            <a href="#">Blog & News</a>
+            <a href="#">FAQ</a>
+          </div>
+        </div>
+      </div>
       <div class="footer-bottom">
-        <p>&copy; 2024 PropertyBazaar. All rights reserved.</p>
+        <span>© 2025 PropertyBazaar. All rights reserved. | India's #1 Real Estate Portal</span>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Sitemap</a>
+        </div>
       </div>
     </div>
   </footer>
 
+  <script src="js/properties.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/city-selector.js"></script>
   <script type="module" src="js/pricing.js"></script>
 </body>
 </html>

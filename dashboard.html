@@ -89,15 +89,27 @@
     <p style="font-size:12px;color:var(--text-muted);margin-top:8px;margin-bottom:0">Upgrade to Premium for unlimited listings, priority placement &amp; verified badge.</p>
   </div>
 
-  <div class="dash-section-title">My Listed Properties</div>
-  <div id="myPropertiesList">
-    <div class="dash-empty">Loading your properties...</div>
+  <div class="dash-tabs" style="display:flex; gap:16px; margin-bottom:16px; border-bottom:1px solid var(--border)">
+    <div class="dash-tab active" id="tabProps" style="padding:10px 16px; font-weight:700; cursor:pointer; border-bottom:2px solid var(--primary); color:var(--primary)">My Properties</div>
+    <div class="dash-tab" id="tabLeads" style="padding:10px 16px; font-weight:600; cursor:pointer; color:var(--text-muted)">My Leads</div>
   </div>
 
-  <div class="upgrade-card" id="upgradeCard" style="display:none">
-    <h3>⚡ Unlock Premium Listings</h3>
-    <p>Post unlimited properties, get verified badge, priority placement, and lead analytics.</p>
-    <a href="#" class="btn" style="background:var(--primary);color:#fff;padding:12px 32px;border-radius:var(--radius-sm);font-weight:700;text-decoration:none">Upgrade Now — ₹999/month</a>
+  <div id="secProps">
+    <div id="myPropertiesList">
+      <div class="dash-empty">Loading your properties...</div>
+    </div>
+    
+    <div class="upgrade-card" id="upgradeCard" style="display:none">
+      <h3>⚡ Unlock Premium Listings</h3>
+      <p>Post unlimited properties, get verified badge, priority placement, and lead analytics.</p>
+      <a href="pricing.html" class="btn" style="background:var(--primary);color:#fff;padding:12px 32px;border-radius:var(--radius-sm);font-weight:700;text-decoration:none">Upgrade Now &mdash; View Plans</a>
+    </div>
+  </div>
+
+  <div id="secLeads" style="display:none">
+    <div id="myLeadsList">
+      <div class="dash-empty">Loading your leads...</div>
+    </div>
   </div>
 </div>
 
@@ -172,6 +184,41 @@
       </div>
     `).join('');
   }
+
+  // Load Leads
+  const leads = await convex.query('properties:getMyLeads', { token });
+  const leadsList = document.getElementById('myLeadsList');
+  if (!leads || leads.length === 0) {
+    leadsList.innerHTML = `<div class="dash-empty">No leads generated yet. Upgrade your plan to boost property visibility!</div>`;
+  } else {
+    leadsList.innerHTML = leads.map(l => `
+      <div class="dash-prop-card" style="flex-direction:column; align-items:flex-start; gap:8px">
+        <div style="font-weight:700; font-size:15px; color:var(--primary)">👤 ${l.inquirerName}</div>
+        <div style="font-size:13px; color:var(--text)">📞 <a href="tel:${l.inquirerPhone}" style="color:var(--text); text-decoration:none;">${l.inquirerPhone}</a> | ✉️ ${l.inquirerEmail || 'No email provided'}</div>
+        <div style="font-size:12px; color:var(--text-muted); background:var(--bg); padding:6px 10px; border-radius:6px; width:100%">
+          <b>Property:</b> ${l.propertyTitle}
+        </div>
+        ${l.message ? `<div style="font-size:13px; margin-top:4px; font-style:italic">"${l.message}"</div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  // Tabs Logic
+  const tabP = document.getElementById('tabProps');
+  const tabL = document.getElementById('tabLeads');
+  const secP = document.getElementById('secProps');
+  const secL = document.getElementById('secLeads');
+
+  tabP.onclick = () => {
+    tabP.style.borderBottom = '2px solid var(--primary)'; tabP.style.color = 'var(--primary)'; tabP.style.fontWeight = '700';
+    tabL.style.borderBottom = 'none'; tabL.style.color = 'var(--text-muted)'; tabL.style.fontWeight = '600';
+    secP.style.display = 'block'; secL.style.display = 'none';
+  };
+  tabL.onclick = () => {
+    tabL.style.borderBottom = '2px solid var(--primary)'; tabL.style.color = 'var(--primary)'; tabL.style.fontWeight = '700';
+    tabP.style.borderBottom = 'none'; tabP.style.color = 'var(--text-muted)'; tabP.style.fontWeight = '600';
+    secL.style.display = 'block'; secP.style.display = 'none';
+  };
 
   document.getElementById('dashWrap').style.display = 'block';
 </script>

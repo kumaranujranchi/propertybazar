@@ -62,4 +62,13 @@ export default defineSchema({
     token: v.string(),
     expiresAt: v.number(),
   }).index("by_token", ["token"]),
+
+  leads: defineTable({
+    propertyId: v.id("properties"),
+    ownerId: v.optional(v.id("users")), // The user who listed the property
+    inquirerName: v.string(),
+    inquirerEmail: v.string(),
+    inquirerPhone: v.string(),
+    message: v.optional(v.string())
+  }).index("by_ownerId", ["ownerId"]),
 });
