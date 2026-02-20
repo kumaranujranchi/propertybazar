@@ -319,7 +319,7 @@
     // ============================================================
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
     import { getAuth, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
-    import { login, register, saveSession } from './js/auth.js';
+    import { login, register, saveSession, googleLogin } from './js/auth.js';
     import { getCachedUser } from './js/auth.js';
 
     function getRedirect() {
@@ -352,13 +352,20 @@
         const user = result.user;
         console.log("Google Login Success! UID:", user.uid);
 
-        // Save session using existing auth system
-        saveSession(user.uid, {
-          name: user.displayName || user.email,
-          email: user.email,
-          photo: user.photoURL,
-          provider: 'google'
-        });
+        // Sync with Convex Backend
+        try {
+          await googleLogin(user.uid, user.email, user.displayName || user.email);
+          console.log("Successfully synced with Convex");
+        } catch (e) {
+          console.error("Convex sync failed", e);
+          // Fallback to local session
+          saveSession(user.uid, {
+            name: user.displayName || user.email,
+            email: user.email,
+            photo: user.photoURL,
+            provider: 'google'
+          });
+        }
 
         const redirectUrl = getRedirect();
         console.log("Redirecting to:", redirectUrl);

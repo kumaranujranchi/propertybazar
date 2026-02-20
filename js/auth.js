@@ -35,6 +35,12 @@ export async function login(email, password) {
   return result;
 }
 
+export async function googleLogin(uid, email, name) {
+  const result = await convex.mutation('auth:googleLogin', { uid, email, name });
+  saveSession(result.token, { name: result.name, email: result.email, provider: 'google' });
+  return result;
+}
+
 export async function logout() {
   const token = getToken();
   if (token) {

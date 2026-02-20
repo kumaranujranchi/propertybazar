@@ -95,6 +95,39 @@ export const logout = mutation({
   },
 });
 
+// =================== GOOGLE LOGIN ===================
+export const googleLogin = mutation({
+  args: {
+    uid: v.string(),
+    email: v.string(),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    let user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", args.email.toLowerCase()))
+      .first();
+
+    if (!user) {
+      const userId = await ctx.db.insert("users", {
+        name: args.name,
+        email: args.email.toLowerCase(),
+        passwordHash: simpleHash(args.uid), // placeholder hash for oauth
+      });
+      user = await ctx.db.get(userId);
+    }
+
+    const token = generateToken();
+    await ctx.db.insert("sessions", {
+      userId: user!._id,
+      token,
+      expiresAt: Date.now() + SESSION_DURATION_MS,
+    });
+
+    return { token, name: user!.name, email: user!.email };
+  },
+});
+
 // =================== GET ME ===================
 export const getMe = query({
   args: { token: v.string() },
@@ -179,7 +212,7 @@ export const getMyProperties = query({
 });
 // =================== UPGRADE TIER ===================
 export const upgradeTier = mutation({
-  args: { 
+  args: {
     token: v.string(),
     tier: v.string(), // 'premium', 'agent'
     durationDays: v.number(),
@@ -195,12 +228,12 @@ export const upgradeTier = mutation({
     }
 
     const expiry = Date.now() + args.durationDays * 24 * 60 * 60 * 1000;
-    
+
     await ctx.db.patch(session.userId, {
       subscriptionTier: args.tier,
       subscriptionExpiry: expiry,
     });
-    
+
     return { success: true, tier: args.tier, expiresAt: expiry };
   }
 });
