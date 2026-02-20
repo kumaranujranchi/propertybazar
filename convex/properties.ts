@@ -42,6 +42,8 @@ export const getProperty = query({
 
 export const createProperty = mutation({
   args: {
+    token: v.optional(v.string()),
+    userId: v.optional(v.id("users")),
     transactionType: v.string(),
     propertyType: v.string(),
     location: v.object({
@@ -84,7 +86,33 @@ export const createProperty = mutation({
     })
   },
   handler: async (ctx, args) => {
+    const FREE_LIMIT = 3;
+    let resolvedUserId = args.userId;
+
+    // Server-side session verification
+    if (args.token) {
+      const session = await ctx.db
+        .query("sessions")
+        .withIndex("by_token", (q) => q.eq("token", args.token as string))
+        .first();
+      if (session && session.expiresAt > Date.now()) {
+        resolvedUserId = session.userId;
+      }
+    }
+
+    // Enforce free posting limit
+    if (resolvedUserId) {
+      const existing = await ctx.db
+        .query("properties")
+        .filter((q) => q.eq(q.field("userId"), resolvedUserId))
+        .collect();
+      if (existing.length >= FREE_LIMIT) {
+        throw new Error(`Free listing limit of ${FREE_LIMIT} reached. Please upgrade.`);
+      }
+    }
+
     const propertyId = await ctx.db.insert("properties", {
+      userId: resolvedUserId,
       transactionType: args.transactionType,
       propertyType: args.propertyType,
       location: args.location,

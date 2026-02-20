@@ -1,4 +1,5 @@
 import { convex } from './convex.js';
+import { requireAuth, getToken } from './auth.js';
 
 // ========== PHOTO HANDLING ==========
 const photoFileInput = document.getElementById('photoFileInput');
@@ -7,39 +8,32 @@ const photoPreviewGrid = document.getElementById('photoPreviewGrid');
 const selectedFiles = [];
 
 if (photoFileInput) {
-  // Click on the upload area (excluding the button itself)
   photoUploadArea.addEventListener('click', (e) => {
     if (e.target === photoUploadArea || e.target.classList.contains('photo-upload-icon') ||
         e.target.classList.contains('photo-upload-text') || e.target.classList.contains('photo-upload-sub')) {
       photoFileInput.click();
     }
   });
-
-  // Drag and drop support
   photoUploadArea.addEventListener('dragover', (e) => {
     e.preventDefault();
     photoUploadArea.style.borderColor = 'var(--primary)';
   });
-  photoUploadArea.addEventListener('dragleave', () => {
-    photoUploadArea.style.borderColor = '';
-  });
+  photoUploadArea.addEventListener('dragleave', () => { photoUploadArea.style.borderColor = ''; });
   photoUploadArea.addEventListener('drop', (e) => {
     e.preventDefault();
     photoUploadArea.style.borderColor = '';
     handleFiles([...e.dataTransfer.files]);
   });
-
   photoFileInput.addEventListener('change', () => {
     handleFiles([...photoFileInput.files]);
-    // Reset input so same file can be re-selected if needed
     photoFileInput.value = '';
   });
 }
 
 function handleFiles(files) {
-  const validFiles = files.filter(f => f.type.startsWith('image/'));
+  const valid = files.filter(f => f.type.startsWith('image/'));
   const remaining = 20 - selectedFiles.length;
-  validFiles.slice(0, remaining).forEach(file => {
+  valid.slice(0, remaining).forEach(file => {
     selectedFiles.push(file);
     addPreview(file, selectedFiles.length - 1);
   });
@@ -51,11 +45,9 @@ function addPreview(file, index) {
     const wrap = document.createElement('div');
     wrap.style.cssText = 'position:relative;width:90px;height:90px;border-radius:8px;overflow:hidden;border:1px solid var(--border)';
     wrap.dataset.index = index;
-
     const img = document.createElement('img');
     img.src = e.target.result;
     img.style.cssText = 'width:100%;height:100%;object-fit:cover';
-
     const removeBtn = document.createElement('div');
     removeBtn.textContent = '✕';
     removeBtn.style.cssText = 'position:absolute;top:2px;right:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;cursor:pointer;padding:0 4px;border-radius:4px;line-height:18px';
@@ -63,10 +55,8 @@ function addPreview(file, index) {
       const idx = parseInt(wrap.dataset.index);
       selectedFiles.splice(idx, 1);
       wrap.remove();
-      // Re-index remaining previews
       [...photoPreviewGrid.querySelectorAll('[data-index]')].forEach((el, i) => el.dataset.index = i);
     });
-
     wrap.appendChild(img);
     wrap.appendChild(removeBtn);
     photoPreviewGrid.appendChild(wrap);
@@ -74,14 +64,36 @@ function addPreview(file, index) {
   reader.readAsDataURL(file);
 }
 
-
 // ========== FORM SUBMISSION ==========
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // Auth guard - redirect to login if not logged in
+  const user = await requireAuth('login.html?redirect=post-property.html');
+  if (!user) return;
+
+  // Check free limit
+  if (!user.canPostMore) {
+    const submitBtn = document.getElementById('btnSubmitProperty');
+    if (submitBtn) {
+      submitBtn.textContent = '🔒 Free Limit Reached — Upgrade to Post More';
+      submitBtn.style.background = '#6B7280';
+      submitBtn.disabled = true;
+    }
+    const note = document.createElement('p');
+    note.style.cssText = 'text-align:center;color:#EF4444;font-size:13px;margin-top:12px;font-weight:600';
+    note.textContent = `You've used all ${user.freeLimit} free listings. Upgrade to post more.`;
+    document.getElementById('btnSubmitProperty')?.parentElement.appendChild(note);
+  }
+
   const submitBtn = document.getElementById('btnSubmitProperty');
   if (!submitBtn) return;
 
   submitBtn.addEventListener('click', async (e) => {
     e.preventDefault();
+
+    if (!user.canPostMore) {
+      window.location.href = 'dashboard.html';
+      return;
+    }
 
     if (selectedFiles.length === 0) {
       alert('⚠️ Please upload at least 1 photo before submitting.');
@@ -89,25 +101,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const prevText = submitBtn.innerText;
-    submitBtn.innerText = '⏳ Uploading...';
+    submitBtn.innerText = '⏳ Uploading photos...';
     submitBtn.disabled = true;
 
     try {
-      // Step 1: Upload photos to Convex Storage
+      // Upload photos
       const photoStorageIds = [];
       for (const file of selectedFiles) {
         const uploadUrl = await convex.mutation('files:generateUploadUrl', {});
-        const response = await fetch(uploadUrl, {
+        const resp = await fetch(uploadUrl, {
           method: 'POST',
           headers: { 'Content-Type': file.type },
           body: file,
         });
-        if (!response.ok) throw new Error('Photo upload failed');
-        const { storageId } = await response.json();
+        if (!resp.ok) throw new Error('Photo upload failed');
+        const { storageId } = await resp.json();
         photoStorageIds.push(storageId);
       }
 
-      // Step 2: Gather form data
+      // Gather form data
       const step1Grids = document.querySelectorAll('#formStep1 .form-type-grid');
       const transactionType = step1Grids[0].querySelector('.active .name').innerText.trim();
       const propertyType = step1Grids[1].querySelector('.active .name').innerText.trim();
@@ -160,25 +172,21 @@ document.addEventListener('DOMContentLoaded', () => {
         contactTime: priceInputs[9].value || undefined,
       };
 
-      // Step 3: Submit to Convex
-      submitBtn.innerText = '⏳ Posting...';
+      submitBtn.innerText = '⏳ Posting property...';
+
       await convex.mutation('properties:createProperty', {
-        transactionType,
-        propertyType,
-        location,
-        details,
-        amenities,
-        photos: photoStorageIds,
-        pricing,
-        contactDesc,
+        transactionType, propertyType, location, details,
+        amenities, photos: photoStorageIds, pricing, contactDesc,
+        userId: user._id,       // link to logged-in user
+        token: getToken(),      // pass session token for server-side verification
       });
 
       alert('🎉 Property posted successfully! Your listing will go live within 30 minutes.');
-      window.location.href = 'properties.html';
+      window.location.href = 'dashboard.html';
 
     } catch (err) {
       console.error('Failed to post property:', err);
-      alert('❌ Error posting property: ' + err.message + '. Check the console for details.');
+      alert('❌ Error posting property: ' + err.message);
     } finally {
       submitBtn.innerText = prevText;
       submitBtn.disabled = false;

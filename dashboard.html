@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard | PropertyBazaar</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    body { background: var(--bg); }
+    .dash-wrap { max-width: 960px; margin: 100px auto 60px; padding: 0 16px; }
+    .dash-header { background: linear-gradient(135deg, var(--primary), #ff6b4a); border-radius: var(--radius); padding: 32px; color: #fff; margin-bottom: 28px; }
+    .dash-header h1 { font-size: 24px; margin-bottom: 4px; }
+    .dash-header p { opacity: 0.85; font-size: 14px; margin: 0; }
+    .dash-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+    .dash-stat-card { background: #fff; border-radius: var(--radius-sm); padding: 24px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); text-align: center; }
+    .dash-stat-num { font-size: 36px; font-weight: 800; color: var(--primary); }
+    .dash-stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+    .dash-limit-bar { background: #fff; border-radius: var(--radius-sm); padding: 20px 24px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 28px; }
+    .dash-limit-title { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
+    .progress-bar-bg { background: var(--bg); border-radius: 99px; height: 10px; overflow: hidden; }
+    .progress-bar-fill { background: var(--primary); height: 100%; border-radius: 99px; transition: width 0.5s; }
+    .dash-section-title { font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 16px; }
+    .dash-empty { text-align: center; padding: 48px 20px; background: #fff; border-radius: var(--radius); border: 1px solid var(--border); color: var(--text-muted); }
+    .dash-prop-card { background: #fff; border-radius: var(--radius-sm); border: 1px solid var(--border); padding: 16px 20px; display: flex; gap: 16px; align-items: center; margin-bottom: 12px; box-shadow: var(--shadow-sm); }
+    .dash-prop-img { width: 80px; height: 64px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: var(--bg); }
+    .dash-prop-info { flex: 1; }
+    .dash-prop-title { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .dash-prop-loc { font-size: 12px; color: var(--text-muted); }
+    .dash-prop-price { font-size: 15px; font-weight: 800; color: var(--primary); }
+    .upgrade-card { background: linear-gradient(135deg, #1A1A2E, #16213E); border-radius: var(--radius); padding: 28px; color: #fff; text-align: center; margin-top: 28px; }
+    .upgrade-card h3 { font-size: 20px; margin-bottom: 8px; }
+    .upgrade-card p { opacity: 0.7; font-size: 14px; margin-bottom: 20px; }
+    @media(max-width: 600px) { .dash-stats { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container">
+    <nav class="nav">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">P</div>
+        <span class="nav-logo-text">Property<span>Bazaar</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="properties.html?type=buy" class="nav-link">Buy</a>
+        <a href="properties.html?type=rent" class="nav-link">Rent</a>
+        <a href="post-property.html" class="nav-link">Post Property</a>
+      </div>
+      <div class="nav-actions">
+        <a href="dashboard.html" class="nav-btn-login" id="dashNavName">My Account</a>
+        <a href="#" class="nav-btn-post" id="logoutBtn">Logout</a>
+      </div>
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </nav>
+  </div>
+</header>
+
+<!-- DASHBOARD -->
+<div class="dash-wrap" id="dashWrap" style="display:none">
+  <div class="dash-header">
+    <h1 id="dashGreeting">Welcome back! 👋</h1>
+    <p id="dashEmail"></p>
+  </div>
+
+  <div class="dash-stats">
+    <div class="dash-stat-card">
+      <div class="dash-stat-num" id="statPosted">0</div>
+      <div class="dash-stat-label">Properties Posted</div>
+    </div>
+    <div class="dash-stat-card">
+      <div class="dash-stat-num" id="statFreeLeft">3</div>
+      <div class="dash-stat-label">Free Listings Left</div>
+    </div>
+    <div class="dash-stat-card">
+      <div class="dash-stat-num">🆓</div>
+      <div class="dash-stat-label">Current Plan</div>
+    </div>
+  </div>
+
+  <div class="dash-limit-bar">
+    <div class="dash-limit-title">Free listing usage (<span id="usageText">0 of 3 used</span>)</div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="usageBar" style="width:0%"></div>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;margin-bottom:0">Upgrade to Premium for unlimited listings, priority placement &amp; verified badge.</p>
+  </div>
+
+  <div class="dash-section-title">My Listed Properties</div>
+  <div id="myPropertiesList">
+    <div class="dash-empty">Loading your properties...</div>
+  </div>
+
+  <div class="upgrade-card" id="upgradeCard" style="display:none">
+    <h3>⚡ Unlock Premium Listings</h3>
+    <p>Post unlimited properties, get verified badge, priority placement, and lead analytics.</p>
+    <a href="#" class="btn" style="background:var(--primary);color:#fff;padding:12px 32px;border-radius:var(--radius-sm);font-weight:700;text-decoration:none">Upgrade Now — ₹999/month</a>
+  </div>
+</div>
+
+<script src="js/properties.js"></script>
+<script src="js/main.js"></script>
+<script type="module">
+  import { requireAuth, logout, getCachedUser } from './js/auth.js';
+  import { convex } from './js/convex.js';
+  import { getToken } from './js/auth.js';
+
+  const user = await requireAuth('login.html');
+  if (!user) throw new Error('Not logged in');
+
+  // Nav
+  document.getElementById('dashNavName').textContent = `👤 ${user.name.split(' ')[0]}`;
+  document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+    e.preventDefault();
+    await logout();
+    window.location.href = 'index.html';
+  });
+
+  // Stats
+  document.getElementById('dashGreeting').textContent = `Welcome back, ${user.name.split(' ')[0]}! 👋`;
+  document.getElementById('dashEmail').textContent = user.email;
+  document.getElementById('statPosted').textContent = user.propertyCount;
+  const freeLeft = Math.max(0, user.freeLimit - user.propertyCount);
+  document.getElementById('statFreeLeft').textContent = freeLeft;
+  document.getElementById('usageText').textContent = `${user.propertyCount} of ${user.freeLimit} used`;
+  const pct = Math.min(100, Math.round((user.propertyCount / user.freeLimit) * 100));
+  document.getElementById('usageBar').style.width = pct + '%';
+  document.getElementById('usageBar').style.background = pct >= 100 ? '#EF4444' : 'var(--primary)';
+
+  if (freeLeft === 0) document.getElementById('upgradeCard').style.display = 'block';
+
+  // Load properties
+  const token = getToken();
+  const properties = await convex.query('auth:getMyProperties', { token });
+  const list = document.getElementById('myPropertiesList');
+
+  if (!properties || properties.length === 0) {
+    list.innerHTML = `<div class="dash-empty">
+      <div style="font-size:40px;margin-bottom:12px">🏠</div>
+      <p style="font-weight:700;color:var(--dark)">No properties listed yet</p>
+      <p style="font-size:13px">Post your first property for FREE!</p>
+      <a href="post-property.html" class="btn btn-primary" style="margin-top:14px;display:inline-block">+ Post Property FREE</a>
+    </div>`;
+  } else {
+    list.innerHTML = properties.map(p => `
+      <div class="dash-prop-card">
+        <img class="dash-prop-img" src="${p.photos?.[0] || 'images/property-1.jpg'}" alt="${p.details?.bhk} BHK ${p.propertyType}" onerror="this.src='images/property-1.jpg'">
+        <div class="dash-prop-info">
+          <div class="dash-prop-title">${p.details?.bhk || ''} BHK ${p.propertyType || ''} in ${p.location?.locality || ''}</div>
+          <div class="dash-prop-loc">📍 ${p.location?.city || ''}, ${p.location?.state || ''}</div>
+        </div>
+        <div class="dash-prop-price">₹${(p.pricing?.expectedPrice || 0).toLocaleString('en-IN')}</div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('dashWrap').style.display = 'block';
+</script>
+</body>
+</html>

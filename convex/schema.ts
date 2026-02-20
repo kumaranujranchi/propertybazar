@@ -3,6 +3,7 @@ import { v } from "convex/values";
 
 export default defineSchema({
   properties: defineTable({
+    userId: v.optional(v.id("users")),
     transactionType: v.string(),
     propertyType: v.string(),
     location: v.object({
@@ -44,4 +45,16 @@ export default defineSchema({
       contactTime: v.optional(v.string()),
     })
   }),
+
+  users: defineTable({
+    name: v.string(),
+    email: v.string(),
+    passwordHash: v.string(),
+  }).index("by_email", ["email"]),
+
+  sessions: defineTable({
+    userId: v.id("users"),
+    token: v.string(),
+    expiresAt: v.number(),
+  }).index("by_token", ["token"]),
 });
