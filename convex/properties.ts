@@ -12,7 +12,24 @@ export const getProperties = query({
         q.eq(q.field("transactionType"), args.transactionType)
       );
     }
-    return await propertiesQuery.order("desc").collect();
+    const properties = await propertiesQuery.order("desc").collect();
+
+    // Resolve storageIds to actual URLs for each property
+    return await Promise.all(
+      properties.map(async (p) => {
+        const resolvedPhotos = await Promise.all(
+          (p.photos || []).map(async (storageId: string) => {
+            try {
+              const url = await ctx.storage.getUrl(storageId as any);
+              return url ?? storageId;
+            } catch {
+              return storageId;
+            }
+          })
+        );
+        return { ...p, photos: resolvedPhotos };
+      })
+    );
   },
 });
 
