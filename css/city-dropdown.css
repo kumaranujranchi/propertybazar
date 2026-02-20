@@ -83,18 +83,19 @@
 }
 .city-drop-item:hover, .city-drop-item.selected { background: #FFF5F2; color: var(--primary); font-weight: 600; }
 
-/* Location icon button at bottom */
 .city-drop-detect {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  gap: 8px;
+  padding: 12px;
   border-top: 1px solid var(--border);
   cursor: pointer;
   color: var(--primary);
-  font-size: 18px;
-  background: #FFF5F2;
+  font-size: 13px;
+  font-weight: 600;
+  background: #fff;
   flex-shrink: 0;
   transition: background 0.15s;
 }
-.city-drop-detect:hover { background: #FFE8E0; }
+.city-drop-detect:hover { background: #FFF5F2; }

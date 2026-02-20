@@ -323,8 +323,54 @@ function initPostSteps() {
     currentStep = n;
   }
 
+  function validateStep(index) {
+    const stepEl = steps[index];
+    if (!stepEl) return true;
+    
+    // Find all visible inputs that have a label with a '*' indicating required
+    const formGroups = stepEl.querySelectorAll('.form-group');
+    let isValid = true;
+    let firstInvalid = null;
+
+    formGroups.forEach(group => {
+      // Only validate if the group is visible (handles dynamic plot/flat fields)
+      if (group.style.display === 'none') return;
+      
+      const label = group.querySelector('.form-label');
+      if (label && label.innerText.includes('*')) {
+        const input = group.querySelector('input, select, textarea');
+        if (input) {
+          if (!input.value.trim()) {
+            isValid = false;
+            input.style.borderColor = '#ef4444'; // Red border
+            input.style.backgroundColor = '#fef2f2';
+            
+            // Remove error styling on input
+            input.addEventListener('input', function removeError() {
+               input.style.borderColor = '';
+               input.style.backgroundColor = '';
+               input.removeEventListener('input', removeError);
+            });
+
+            if (!firstInvalid) firstInvalid = input;
+          }
+        }
+      }
+    });
+
+    if (!isValid && firstInvalid) {
+      firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    
+    return isValid;
+  }
+
   document.querySelectorAll('.btn-next-step').forEach(btn => {
-    btn.addEventListener('click', () => { if (currentStep < steps.length - 1) goToStep(currentStep + 1); });
+    btn.addEventListener('click', () => { 
+      if (validateStep(currentStep) && currentStep < steps.length - 1) {
+        goToStep(currentStep + 1); 
+      }
+    });
   });
   document.querySelectorAll('.btn-prev-step').forEach(btn => {
     btn.addEventListener('click', () => { if (currentStep > 0) goToStep(currentStep - 1); });
