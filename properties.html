@@ -495,6 +495,112 @@
   </div>
 </footer>
 
+<!-- DISCLAIMER MODAL (For Buyers Only) -->
+<div class="disclaimer-overlay" id="disclaimerModal">
+  <div class="disclaimer-box">
+    <div class="disclaimer-header">
+      <span style="font-size:18px;">ℹ️</span> Disclaimer
+    </div>
+    <div class="disclaimer-body">
+      <p>🔍 The data presented on PropertyBazaar is made available for <strong>informational purposes only</strong>. We do not make any representations or warranties regarding its absolute accuracy.</p>
+      <p>💵 Any <strong>investment decisions</strong> you make should not rely solely on the information available on this platform.</p>
+      <p>⚖️ Nothing contained herein shall be deemed to constitute <strong>legal advice, solicitation, or invitation</strong> to acquire property by the developer/builder or any other entity.</p>
+      <p>🏛️ You are strongly advised to visit the <strong>relevant RERA website</strong> and contact the builder/advertiser directly to verify the project details before making financial commitments.</p>
+      <p style="font-size:11px;color:var(--text-muted);margin-top:10px;">If you notice any fraudulent activity or have feedback, please write to us at support@propertybazaar.in. All trademarks belong to their respective owners.</p>
+    </div>
+    <div class="disclaimer-footer">
+      <button class="btn btn-primary" id="btnAcceptDisclaimer" style="width:100%;border-radius:6px;padding:12px;">Agree & Continue</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .disclaimer-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  .disclaimer-overlay.open {
+    opacity: 1;
+    visibility: visible;
+  }
+  .disclaimer-box {
+    background: #fff;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .disclaimer-overlay.open .disclaimer-box {
+    transform: translateY(0);
+  }
+  .disclaimer-header {
+    background: #f8fafc;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--dark);
+  }
+  .disclaimer-body {
+    padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .disclaimer-body p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    gap: 10px;
+  }
+  .disclaimer-footer {
+    padding: 16px 20px;
+    background: #fff;
+    border-top: 1px solid var(--border);
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get('type');
+    
+    // Only show for 'buy' type properties, and if they haven't agreed in this session
+    if (type === 'buy' && !sessionStorage.getItem('pb_agreed_disclaimer')) {
+      const modal = document.getElementById('disclaimerModal');
+      const btn = document.getElementById('btnAcceptDisclaimer');
+      
+      // Small delay for UX
+      setTimeout(() => {
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling bg
+      }, 500);
+
+      btn.addEventListener('click', () => {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+        sessionStorage.setItem('pb_agreed_disclaimer', 'true');
+      });
+    }
+  });
+</script>
+
 <script src="js/properties.js"></script>
 <script src="js/main.js"></script>
 <script type="module" src="js/load-properties.js"></script>
