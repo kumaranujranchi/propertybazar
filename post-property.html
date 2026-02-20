@@ -229,14 +229,53 @@
           <option>New Launch</option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="form-group" id="fgBuiltUpArea">
         <label class="form-label">Built-up Area (sq.ft) *</label>
         <input type="number" class="form-input" placeholder="e.g. 1450">
       </div>
-      <div class="form-group">
+      <div class="form-group" id="fgCarpetArea">
         <label class="form-label">Carpet Area (sq.ft)</label>
         <input type="number" class="form-input" placeholder="e.g. 1100">
       </div>
+      
+      <!-- New Plot/Land Specific Fields -->
+      <div class="form-group" id="fgRatePerSqFt" style="display:none">
+        <label class="form-label">Rate Per Sq Ft (₹) *</label>
+        <input type="number" class="form-input" placeholder="e.g. 1100">
+      </div>
+      <div class="form-group" id="fgDevCharges" style="display:none">
+        <label class="form-label">Development Charges (₹)</label>
+        <input type="number" class="form-input" placeholder="e.g. 50000">
+      </div>
+      <!-- Shared Field: Facing Direction -->
+      <div class="form-group" id="fgFacing">
+        <label class="form-label">Facing Direction</label>
+        <select class="form-input form-select" multiple style="height:auto" title="Cmd/Ctrl+Click for multiple">
+          <option>East</option><option>West</option><option>North</option><option>South</option>
+          <option>North-East</option><option>North-West</option><option>South-East</option><option>South-West</option>
+        </select>
+      </div>
+      <!-- PLC, Loan, EMI -->
+      <div class="form-group" id="fgPlc" style="display:none">
+        <label class="form-label">Preferred Location (PLC)</label>
+        <select class="form-input form-select">
+          <option>None</option><option>Corner Plot</option><option>Park Facing</option><option>Main Road Facing</option>
+        </select>
+      </div>
+      <div class="form-group" id="fgLoan" style="display:none">
+        <label class="form-label">Loan Facility Available?</label>
+        <select class="form-input form-select">
+          <option>Yes</option><option>No</option>
+        </select>
+      </div>
+      <div class="form-group" id="fgEmi" style="display:none">
+        <label class="form-label">EMI Facility Available?</label>
+        <select class="form-input form-select">
+          <option>Yes</option><option>No</option>
+        </select>
+      </div>
+
+      <!-- Flat/Apartment Specific Fields -->
       <div class="form-group" id="fgFloor">
         <label class="form-label">Floor Number</label>
         <input type="number" class="form-input" placeholder="e.g. 5">
@@ -253,20 +292,13 @@
           <option>Fully Furnished</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="form-label">Facing Direction</label>
-        <select class="form-input form-select">
-          <option>East</option><option>West</option><option>North</option><option>South</option>
-          <option>North-East</option><option>North-West</option><option>South-East</option><option>South-West</option>
-        </select>
-      </div>
-      <div class="form-group">
+      <div class="form-group" id="fgParking">
         <label class="form-label">Car Parking</label>
         <select class="form-input form-select">
           <option>None</option><option>1 Covered</option><option>1 Open</option><option>2 Covered</option><option>2+ Parking</option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="form-group" id="fgYear">
         <label class="form-label">Year of Construction</label>
         <input type="number" class="form-input" placeholder="e.g. 2020">
       </div>
@@ -450,10 +482,22 @@
       }
     };
 
+    // Residential fields to hide for Land/Commercial
     hide('fgBhk', hideResidential);
     hide('fgFloor', hideResidential);
     hide('fgTotalFloors', hideResidential);
     hide('fgFurnishing', hideResidential);
+    hide('fgParking', hideResidential);
+    hide('fgYear', hideResidential);
+    hide('fgBuiltUpArea', isLand); // Land usually uses plot area, not built-up
+    hide('fgCarpetArea', isLand);
+
+    // Land specific fields to show only for Land
+    hide('fgRatePerSqFt', !isLand);
+    hide('fgDevCharges', !isLand);
+    hide('fgPlc', !isLand);
+    hide('fgLoan', !isLand);
+    hide('fgEmi', !isLand);
 
     // Also update Step 3 title to match context
     const step3Title = document.querySelector('#formStep3 .form-card-title');
