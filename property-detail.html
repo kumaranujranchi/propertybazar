@@ -355,13 +355,14 @@
 <script type="module">
   import { convex } from './js/convex.js';
 
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
-  if (!id) return; // no ID = show default hardcoded page
+  (async () => {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (!id) return; // no ID = show default hardcoded page
 
-  try {
-    const p = await convex.query('properties:getProperty', { id });
-    if (!p) return;
+    try {
+      const p = await convex.query('properties:getProperty', { id });
+      if (!p) return;
 
     // ---- Resolve photo URLs ----
     const resolvedPhotos = await Promise.all(
@@ -515,6 +516,7 @@
   } catch(err) {
     console.error('Failed to load property details:', err);
   }
+  })();
 </script>
 </body>
 </html>

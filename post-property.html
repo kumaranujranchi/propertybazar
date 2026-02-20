@@ -215,7 +215,7 @@
     <p class="form-card-subtitle">More details = more inquiries. Fill as much as possible.</p>
 
     <div class="form-grid">
-      <div class="form-group">
+      <div class="form-group" id="fgBhk">
         <label class="form-label">BHK Type *</label>
         <select class="form-input form-select">
           <option>1 BHK</option><option selected>2 BHK</option><option>3 BHK</option><option>4 BHK</option><option>4+ BHK</option>
@@ -237,15 +237,15 @@
         <label class="form-label">Carpet Area (sq.ft)</label>
         <input type="number" class="form-input" placeholder="e.g. 1100">
       </div>
-      <div class="form-group">
+      <div class="form-group" id="fgFloor">
         <label class="form-label">Floor Number</label>
         <input type="number" class="form-input" placeholder="e.g. 5">
       </div>
-      <div class="form-group">
+      <div class="form-group" id="fgTotalFloors">
         <label class="form-label">Total Floors in Building</label>
         <input type="number" class="form-input" placeholder="e.g. 18">
       </div>
-      <div class="form-group">
+      <div class="form-group" id="fgFurnishing">
         <label class="form-label">Furnishing Status</label>
         <select class="form-input form-select">
           <option>Unfurnished</option>
@@ -425,7 +425,61 @@
   import { initNavAuth } from './js/auth.js';
   initNavAuth();
 </script>
-</body>
-</html>
+<script>
+  // ---- Property-type-aware Step 3 fields ----
+  function applyPropertyTypeUX() {
+    // Get selected property type from step 1 (2nd grid)
+    const step1Grids = document.querySelectorAll('#formStep1 .form-type-grid');
+    if (!step1Grids[1]) return;
+    const activeType = step1Grids[1].querySelector('.active .name');
+    const propType = activeType ? activeType.innerText.toLowerCase() : '';
 
+    const isLand = /plot|land/i.test(propType);
+    const isCommercial = /commercial|shop|office|warehouse/i.test(propType);
+    const hideResidential = isLand || isCommercial;
+
+    const hide = (id, hidden) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.display = hidden ? 'none' : '';
+        // Clear value when hiding so it doesn't get submitted
+        if (hidden) {
+          const input = el.querySelector('input,select,textarea');
+          if (input) input.value = '';
+        }
+      }
+    };
+
+    hide('fgBhk', hideResidential);
+    hide('fgFloor', hideResidential);
+    hide('fgTotalFloors', hideResidential);
+    hide('fgFurnishing', hideResidential);
+
+    // Also update Step 3 title to match context
+    const step3Title = document.querySelector('#formStep3 .form-card-title');
+    if (step3Title) {
+      if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
+      else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
+      else step3Title.textContent = 'Step 3: Property Details';
+    }
+  }
+
+  // Run when navigating to Step 3
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.btn-next-step')) {
+      const currentStep = document.querySelector('.form-step:not([style*="display:none"])');
+      if (currentStep && currentStep.id === 'formStep1') {
+        // About to go to step 2, which leads to 3 - update on step 1 next click
+        setTimeout(applyPropertyTypeUX, 50);
+      }
+      if (currentStep && currentStep.id === 'formStep2') {
+        setTimeout(applyPropertyTypeUX, 50);
+      }
+    }
+    // Also update when type tiles are clicked
+    const tile = e.target.closest('#formStep1 .form-type-grid .type-card');
+    if (tile) setTimeout(applyPropertyTypeUX, 50);
+  });
+</script>
+</body>
 </html>
