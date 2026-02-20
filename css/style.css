@@ -404,10 +404,7 @@ textarea {
   color: #fff;
   margin-bottom: 16px;
   line-height: 1.15;
-  min-height: 210px; /* Space for 3 lines on most screens to prevent layout shift */
-  display: flex;
-  align-items: flex-start; /* Anchor to top to prevent vertical jumping */
-  padding-top: 10px;
+  min-height: 210px;
 }
 #typing-text {
   border-right: 3px solid var(--secondary);
