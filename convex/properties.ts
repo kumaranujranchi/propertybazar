@@ -14,7 +14,14 @@ export const getProperties = query({
     } else {
       propertiesQuery = ctx.db.query("properties");
     }
-    const properties = await propertiesQuery.order("desc").collect();
+    const results = await propertiesQuery.order("desc").collect();
+    
+    // Sort so featured comes first, while keeping descending order for the rest
+    const properties = results.sort((a, b) => {
+      if (a.isFeatured && !b.isFeatured) return -1;
+      if (!a.isFeatured && b.isFeatured) return 1;
+      return 0; 
+    });
 
     // Resolve storageIds to actual URLs for each property
     return await Promise.all(
@@ -102,8 +109,8 @@ export const createProperty = mutation({
     })
   },
   handler: async (ctx, args) => {
-    const FREE_LIMIT = 3;
     let resolvedUserId = args.userId;
+    let isFeatured = false;
 
     // Server-side session verification
     if (args.token) {
@@ -116,14 +123,32 @@ export const createProperty = mutation({
       }
     }
 
-    // Enforce free posting limit
+    // Enforce dynamic posting limit and check tier for featured status
     if (resolvedUserId) {
-      const existing = await ctx.db
-        .query("properties")
-        .filter((q) => q.eq(q.field("userId"), resolvedUserId))
-        .collect();
-      if (existing.length >= FREE_LIMIT) {
-        throw new Error(`Free listing limit of ${FREE_LIMIT} reached. Please upgrade.`);
+      const user = await ctx.db.get(resolvedUserId);
+      if (user) {
+        let activeTier = user.subscriptionTier || 'free';
+        if (activeTier !== 'free' && user.subscriptionExpiry && user.subscriptionExpiry < Date.now()) {
+          activeTier = 'free'; // Downgrade if expired
+        }
+
+        let limit = 3; // FREE_LIMIT
+        if (activeTier === 'premium') limit = 10;
+        if (activeTier === 'agent') limit = 50;
+
+        // Premium and Agent listings are automatically featured
+        if (activeTier === 'premium' || activeTier === 'agent') {
+          isFeatured = true;
+        }
+
+        const existing = await ctx.db
+          .query("properties")
+          .filter((q) => q.eq(q.field("userId"), resolvedUserId))
+          .collect();
+
+        if (existing.length >= limit) {
+          throw new Error(`Your ${activeTier} plan limit of ${limit} listings reached. Please upgrade.`);
+        }
       }
     }
 
@@ -137,6 +162,7 @@ export const createProperty = mutation({
       photos: args.photos,
       pricing: args.pricing,
       contactDesc: args.contactDesc,
+      isFeatured: isFeatured,
     });
     return propertyId;
   },

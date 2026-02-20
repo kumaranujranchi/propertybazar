@@ -43,14 +43,18 @@ export default defineSchema({
       role: v.optional(v.string()),
       rera: v.optional(v.string()),
       contactTime: v.optional(v.string()),
-    })
+    }),
+    isFeatured: v.optional(v.boolean()),
   }).index("by_transactionType", ["transactionType"])
-    .index("by_city", ["location.city"]),
+    .index("by_city", ["location.city"])
+    .index("by_featured", ["isFeatured"]),
 
   users: defineTable({
     name: v.string(),
     email: v.string(),
     passwordHash: v.string(),
+    subscriptionTier: v.optional(v.string()), // 'free', 'premium', 'agent'
+    subscriptionExpiry: v.optional(v.number()),
   }).index("by_email", ["email"]),
 
   sessions: defineTable({

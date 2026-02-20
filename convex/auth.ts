@@ -112,6 +112,18 @@ export const getMe = query({
     const user = await ctx.db.get(session.userId);
     if (!user) return null;
 
+    // Handle subscription expiry
+    let activeTier = user.subscriptionTier || 'free';
+    if (activeTier !== 'free' && user.subscriptionExpiry && user.subscriptionExpiry < Date.now()) {
+      activeTier = 'free'; // Downgrade if expired
+      // Optionally could update DB here, but read-time downgrade is fine
+    }
+
+    // Set dynamic limits
+    let limit = FREE_PROPERTY_LIMIT;
+    if (activeTier === 'premium') limit = 10;
+    if (activeTier === 'agent') limit = 50;
+
     // Count user's posted properties
     const myProperties = await ctx.db
       .query("properties")
@@ -122,9 +134,11 @@ export const getMe = query({
       _id: user._id,
       name: user.name,
       email: user.email,
+      subscriptionTier: activeTier,
+      subscriptionExpiry: user.subscriptionExpiry,
       propertyCount: myProperties.length,
-      freeLimit: FREE_PROPERTY_LIMIT,
-      canPostMore: myProperties.length < FREE_PROPERTY_LIMIT,
+      limit: limit,
+      canPostMore: myProperties.length < limit,
     };
   },
 });
@@ -161,4 +175,31 @@ export const getMyProperties = query({
       })
     );
   },
+});
+// =================== UPGRADE TIER ===================
+export const upgradeTier = mutation({
+  args: { 
+    token: v.string(),
+    tier: v.string(), // 'premium', 'agent'
+    durationDays: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const session = await ctx.db
+      .query("sessions")
+      .withIndex("by_token", (q) => q.eq("token", args.token))
+      .first();
+
+    if (!session || session.expiresAt < Date.now()) {
+      throw new Error("Unauthorized");
+    }
+
+    const expiry = Date.now() + args.durationDays * 24 * 60 * 60 * 1000;
+    
+    await ctx.db.patch(session.userId, {
+      subscriptionTier: args.tier,
+      subscriptionExpiry: expiry,
+    });
+    
+    return { success: true, tier: args.tier, expiresAt: expiry };
+  }
 });

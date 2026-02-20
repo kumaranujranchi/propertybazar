@@ -123,14 +123,27 @@
   document.getElementById('dashGreeting').textContent = `Welcome back, ${user.name.split(' ')[0]}! 👋`;
   document.getElementById('dashEmail').textContent = user.email;
   document.getElementById('statPosted').textContent = user.propertyCount;
-  const freeLeft = Math.max(0, user.freeLimit - user.propertyCount);
-  document.getElementById('statFreeLeft').textContent = freeLeft;
-  document.getElementById('usageText').textContent = `${user.propertyCount} of ${user.freeLimit} used`;
-  const pct = Math.min(100, Math.round((user.propertyCount / user.freeLimit) * 100));
+  
+  const limitLeft = Math.max(0, user.limit - user.propertyCount);
+  document.getElementById('statFreeLeft').textContent = limitLeft;
+  
+  // Set Tier Badge
+  const tierIcon = user.subscriptionTier === 'premium' ? '⭐' : user.subscriptionTier === 'agent' ? '💼' : '🆓';
+  const tierName = user.subscriptionTier ? user.subscriptionTier.charAt(0).toUpperCase() + user.subscriptionTier.slice(1) : 'Free';
+  document.querySelectorAll('.dash-stat-num')[2].textContent = tierIcon;
+  document.querySelectorAll('.dash-stat-label')[2].textContent = tierName + ' Plan';
+
+  document.getElementById('usageText').textContent = `${user.propertyCount} of ${user.limit} used`;
+  const pct = Math.min(100, Math.round((user.propertyCount / user.limit) * 100));
   document.getElementById('usageBar').style.width = pct + '%';
   document.getElementById('usageBar').style.background = pct >= 100 ? '#EF4444' : 'var(--primary)';
 
-  if (freeLeft === 0) document.getElementById('upgradeCard').style.display = 'block';
+  // Conditional Upgrade Banner
+  if (user.subscriptionTier === 'free') {
+    document.getElementById('upgradeCard').style.display = 'block';
+  } else {
+    document.querySelector('.dash-limit-bar p').textContent = `You are on the ${tierName} plan. Your listings will be featured automatically!`;
+  }
 
   // Load properties
   const token = getToken();
@@ -141,15 +154,18 @@
     list.innerHTML = `<div class="dash-empty">
       <div style="font-size:40px;margin-bottom:12px">🏠</div>
       <p style="font-weight:700;color:var(--dark)">No properties listed yet</p>
-      <p style="font-size:13px">Post your first property for FREE!</p>
-      <a href="post-property.html" class="btn btn-primary" style="margin-top:14px;display:inline-block">+ Post Property FREE</a>
+      <p style="font-size:13px">Post your first property to get started!</p>
+      <a href="post-property.html" class="btn btn-primary" style="margin-top:14px;display:inline-block">+ Post Property</a>
     </div>`;
   } else {
     list.innerHTML = properties.map(p => `
-      <div class="dash-prop-card">
+      <div class="dash-prop-card" style="${p.isFeatured ? 'border: 2px solid var(--primary);' : ''}">
         <img class="dash-prop-img" src="${p.photos?.[0] || 'images/property-1.jpg'}" alt="${p.details?.bhk} BHK ${p.propertyType}" onerror="this.src='images/property-1.jpg'">
         <div class="dash-prop-info">
-          <div class="dash-prop-title">${p.details?.bhk || ''} BHK ${p.propertyType || ''} in ${p.location?.locality || ''}</div>
+          <div class="dash-prop-title">
+            ${p.details?.bhk && p.details.bhk!=='N/A' && p.details.bhk!=='0' ? p.details.bhk + ' BHK ' : ''}${p.propertyType || ''} in ${p.location?.locality || ''}
+            ${p.isFeatured ? '<span style="background:var(--primary);color:#fff;font-size:10px;padding:2px 8px;border-radius:12px;margin-left:8px;vertical-align:middle;">⭐ Featured</span>' : ''}
+          </div>
           <div class="dash-prop-loc">📍 ${p.location?.city || ''}, ${p.location?.state || ''}</div>
         </div>
         <div class="dash-prop-price">₹${(p.pricing?.expectedPrice || 0).toLocaleString('en-IN')}</div>
