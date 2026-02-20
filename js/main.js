@@ -252,11 +252,17 @@ function buildPropertyCardHTML(p) {
       <div class="prop-title">${p.title}</div>
       <div class="prop-location">📍 ${p.location}</div>
       <div class="prop-specs">
-        ${p.bhk ? `<div class="prop-spec">🛏️ ${p.bhk} BHK</div>` : ''}
-        <div class="prop-spec">📐 ${p.areaDisplay}</div>
-        <div class="prop-spec">🏢 ${p.propType}</div>
-        ${p.parking ? `<div class="prop-spec">🚗 ${p.parking} Parking</div>` : ''}
+        ${p.specs
+          ? p.specs.map(s => `<div class="prop-spec">${s.icon} ${s.label}</div>`).join('')
+          : `
+            ${p.bhk ? `<div class="prop-spec">🛏️ ${p.bhk} BHK</div>` : ''}
+            ${p.areaDisplay ? `<div class="prop-spec">📐 ${p.areaDisplay}</div>` : ''}
+            <div class="prop-spec">🏢 ${p.propType}</div>
+            ${p.parking ? `<div class="prop-spec">🚗 ${p.parking} Parking</div>` : ''}
+          `
+        }
       </div>
+
       <div class="prop-footer">
         <div class="badge ${p.status === 'ready' ? 'badge-success' : 'badge-warning'}">${p.status === 'ready' ? '✅ Ready to Move' : '🏗️ Under Construction'}</div>
         <div class="prop-contact-btns">

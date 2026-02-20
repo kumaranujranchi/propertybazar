@@ -352,5 +352,169 @@
 
 <script src="js/properties.js"></script>
 <script src="js/main.js"></script>
+<script type="module">
+  import { convex } from './js/convex.js';
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) return; // no ID = show default hardcoded page
+
+  try {
+    const p = await convex.query('properties:getProperty', { id });
+    if (!p) return;
+
+    // ---- Resolve photo URLs ----
+    const resolvedPhotos = await Promise.all(
+      (p.photos || []).map(async (sid) => {
+        try {
+          const url = await convex.query('properties:getPhotoUrl', { storageId: sid });
+          return url || sid;
+        } catch { return sid; }
+      })
+    );
+    // fallback
+    const photos = resolvedPhotos.filter(Boolean);
+    if (photos.length === 0) photos.push('images/property-1.jpg');
+
+    // ---- Helpers ----
+    const isLand = /plot|land/i.test(p.propertyType || '');
+    const isCommercial = /commercial|shop|office|warehouse/i.test(p.propertyType || '');
+    const bhk = p.details?.bhk;
+    const price = p.pricing?.expectedPrice || 0;
+    const area = p.details?.builtUpArea || 0;
+    const priceStr = '₹' + price.toLocaleString('en-IN');
+    const ppsf = area > 0 ? Math.round(price / area) : 0;
+
+    // Title
+    let title = p.propertyType;
+    if (!isLand && !isCommercial && bhk && bhk !== '0') title = `${bhk} BHK ${p.propertyType}`;
+
+    // ---- Update page title / breadcrumb ----
+    document.title = `${title} in ${p.location?.locality || p.location?.city} | PropertyBazaar`;
+    document.querySelector('.page-breadcrumb span')?.textContent && (
+      document.querySelector('.page-breadcrumb span').textContent = title
+    );
+
+    // ---- Gallery ----
+    const mainImg = document.getElementById('mainGalleryImg');
+    if (mainImg) mainImg.src = photos[0];
+    const thumbsWrap = document.querySelector('.gallery-thumb');
+    // Replace all thumbnails
+    const thumbContainer = document.querySelectorAll('.gallery-thumb');
+    thumbContainer.forEach((el, i) => {
+      const img = el.querySelector('img');
+      if (img && photos[i + 1]) {
+        img.src = photos[i + 1];
+        img.onclick = () => { if (mainImg) mainImg.src = photos[i + 1]; };
+      }
+    });
+
+    // ---- Price & Title card ----
+    document.querySelector('.detail-price')?.textContent && (
+      document.querySelector('.detail-price').textContent = priceStr
+    );
+    const priceSub = document.querySelector('.detail-price + div');
+    if (priceSub) priceSub.textContent = ppsf > 0 ? `₹${ppsf.toLocaleString('en-IN')} per sq.ft` : '';
+    const detailTitle = document.querySelector('.detail-title');
+    if (detailTitle) detailTitle.textContent = `${title} in ${p.location?.society || p.location?.locality || ''}`;
+    const detailLoc = document.querySelector('.detail-location');
+    if (detailLoc) detailLoc.innerHTML = `📍 ${p.location?.locality || ''}, ${p.location?.city || ''}, ${p.location?.state || ''}`;
+
+    // ---- Specs ----
+    const specsEl = document.querySelector('.detail-specs');
+    if (specsEl) {
+      const specs = [];
+      if (!isLand && !isCommercial && bhk && bhk !== '0') {
+        specs.push({ icon: '🛏️', val: `${bhk} BHK`, label: 'Bedrooms' });
+      }
+      if (area > 0) specs.push({ icon: '📐', val: `${area.toLocaleString('en-IN')} sq.ft`, label: 'Built-up Area' });
+      if (p.details?.carpetArea) specs.push({ icon: '📏', val: `${p.details.carpetArea} sq.ft`, label: 'Carpet Area' });
+      if (p.details?.facing) specs.push({ icon: '🧭', val: p.details.facing, label: 'Facing' });
+      if (!isLand && p.details?.floorNumber) {
+        specs.push({ icon: '🏢', val: `${p.details.floorNumber}${p.details.totalFloors ? ' / ' + p.details.totalFloors : ''}`, label: 'Floor' });
+      }
+      if (!isLand && p.details?.furnishing) specs.push({ icon: '🛋️', val: p.details.furnishing, label: 'Furnishing' });
+      if (p.details?.parking && p.details.parking !== 'None') specs.push({ icon: '🚗', val: p.details.parking, label: 'Parking' });
+      if (p.details?.constructionYear) specs.push({ icon: '📅', val: p.details.constructionYear, label: 'Built Year' });
+
+      specsEl.innerHTML = specs.map(s => `
+        <div class="detail-spec">
+          <div class="detail-spec-icon">${s.icon}</div>
+          <div class="detail-spec-value">${s.val}</div>
+          <div class="detail-spec-label">${s.label}</div>
+        </div>`).join('');
+    }
+
+    // ---- Description ----
+    const descEl = document.querySelector('.detail-card p');
+    if (descEl && p.details?.description) descEl.textContent = p.details.description;
+    // Second para
+    const descCards = document.querySelectorAll('.detail-card');
+    const descCard = Array.from(descCards).find(el => el.querySelector('h2')?.textContent.includes('Description'));
+    if (descCard) {
+      const extra = descCard.querySelector('p:nth-of-type(2)');
+      if (extra) extra.remove();
+    }
+
+    // ---- Amenities ----
+    const amenGrid = document.querySelector('.amenities-grid');
+    if (amenGrid && p.amenities?.length > 0) {
+      const icons = { 'Swimming Pool': '🏊', 'Gym': '💪', 'Clubhouse': '🏠', 'Security': '🔒',
+        'Power Backup': '⚡', 'Lift': '🛗', 'Garden': '🌳', 'Parking': '🚗',
+        'Play Area': '🎮', 'Fire Safety': '🔥', 'Intercom': '📡', 'CCTV': '📹',
+        'WiFi': '📶', 'Gas Pipeline': '🔥', 'Solar': '☀️' };
+      amenGrid.innerHTML = p.amenities.map(a => {
+        const icon = Object.entries(icons).find(([k]) => a.toLowerCase().includes(k.toLowerCase()))?.[1] || '✅';
+        return `<div class="amenity-item"><div class="amenity-icon">${icon}</div> ${a}</div>`;
+      }).join('');
+    } else if (amenGrid && (!p.amenities || p.amenities.length === 0)) {
+      amenGrid.closest('.detail-card')?.remove(); // hide empty amenities section
+    }
+
+    // ---- Contact card ----
+    if (p.contactDesc) {
+      const ct = p.contactDesc;
+      const sellerDiv = document.querySelector('.detail-card h3')?.closest('.detail-card');
+      // Update seller info
+      const sellerCard = document.querySelectorAll('.detail-card');
+      sellerCard.forEach(card => {
+        if (card.querySelector('h3')?.textContent.includes('Listed By')) {
+          const nameEl = card.querySelector('div[style*="font-weight:700"]') || card.querySelector('.font-bold');
+          const initial = document.querySelector('.detail-card div[style*="border-radius:50%"]');
+          if (initial) initial.textContent = (ct.name || 'U')[0].toUpperCase();
+          const rows = card.querySelectorAll('div[style*="font-weight:700"]');
+          if (rows[0]) rows[0].textContent = ct.name || 'Owner';
+          const roleEl = card.querySelector('div[style*="font-size:12px"]');
+          if (roleEl) roleEl.textContent = `🏠 ${ct.role || 'Owner'} · Listed on PropertyBazaar`;
+        }
+      });
+
+      // Update Call/WhatsApp buttons
+      const callBtn = document.querySelector('.contact-btn-call');
+      const waBtn = document.querySelector('.contact-btn-wa');
+      if (callBtn && ct.mobile) callBtn.onclick = () => window.location.href = `tel:${ct.mobile}`;
+      if (waBtn && ct.mobile) waBtn.onclick = () => window.open(`https://wa.me/91${ct.mobile}`, '_blank');
+    }
+
+    // ---- Google Maps link ----
+    const mapsLink = document.querySelector('a[href*="maps.google.com"]');
+    if (mapsLink) {
+      const addr = encodeURIComponent(`${p.location?.locality || ''} ${p.location?.city || ''} ${p.location?.state || ''} ${p.location?.pinCode || ''}`);
+      mapsLink.href = `https://maps.google.com?q=${addr}`;
+    }
+    const mapText = document.querySelector('[href*="maps.google.com"]')?.previousElementSibling;
+    if (mapText) mapText.textContent = `${p.location?.locality || ''}, ${p.location?.city || ''} ${p.location?.pinCode || ''}`;
+
+    // ---- EMI seed value ----
+    const emiLoan = document.getElementById('emi-loan');
+    if (emiLoan && price > 0) {
+      emiLoan.value = Math.round(price * 0.8); // 80% as loan
+      emiLoan.dispatchEvent(new Event('input'));
+    }
+
+  } catch(err) {
+    console.error('Failed to load property details:', err);
+  }
+</script>
 </body>
 </html>

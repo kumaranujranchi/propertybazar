@@ -36,7 +36,21 @@ export const getProperties = query({
 export const getProperty = query({
   args: { id: v.id("properties") },
   handler: async (ctx, args) => {
-    return await ctx.db.get(args.id);
+    const p = await ctx.db.get(args.id);
+    if (!p) return null;
+    const resolvedPhotos = await Promise.all(
+      (p.photos || []).map(async (sid: string) => {
+        try { return (await ctx.storage.getUrl(sid as any)) ?? sid; } catch { return sid; }
+      })
+    );
+    return { ...p, photos: resolvedPhotos };
+  },
+});
+
+export const getPhotoUrl = query({
+  args: { storageId: v.string() },
+  handler: async (ctx, args) => {
+    try { return await ctx.storage.getUrl(args.storageId as any); } catch { return null; }
   },
 });
 
