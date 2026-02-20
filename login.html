@@ -322,6 +322,11 @@
     import { login, register, saveSession } from './js/auth.js';
     import { getCachedUser } from './js/auth.js';
 
+    function getRedirect() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('redirect') || 'dashboard.html';
+    }
+
     const firebaseConfig = {
       apiKey: "AIzaSyA2n0kGXRXCWwe80T5F338K3wMIz1x_QQ8",
       authDomain: "dismil-9cb39.firebaseapp.com",
@@ -393,11 +398,6 @@
       const el = document.getElementById('authErr');
       el.textContent = msg;
       el.style.display = 'block';
-    }
-
-    function getRedirect() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('redirect') || 'dashboard.html';
     }
 
     window.doLogin = async () => {
