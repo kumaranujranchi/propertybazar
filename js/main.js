@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initWishlist();
   initFilterPanel();
   initViewToggle();
-  initTypingEffect();
+  // initTypingEffect(); // Disabled - using static title instead
 });
 
 // ========== STICKY NAV ==========
