@@ -30,13 +30,63 @@ if (photoFileInput) {
   });
 }
 
-function handleFiles(files) {
+function compressImage(file, maxWidth = 1200, maxHeight = 1200, quality = 0.8) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height *= maxWidth / width));
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width *= maxHeight / height));
+            height = maxHeight;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob((blob) => {
+          // Create a new File object from the WebP blob
+          const newFile = new File([blob], file.name.replace(/\.[^/.]+$/, '.webp'), {
+            type: 'image/webp',
+            lastModified: Date.now(),
+          });
+          resolve(newFile);
+        }, 'image/webp', quality);
+      };
+    };
+  });
+}
+
+async function handleFiles(files) {
   const valid = files.filter(f => f.type.startsWith('image/'));
   const remaining = 20 - selectedFiles.length;
-  valid.slice(0, remaining).forEach(file => {
-    selectedFiles.push(file);
-    addPreview(file, selectedFiles.length - 1);
-  });
+  const toProcess = valid.slice(0, remaining);
+  
+  // Show loading indicator on area (optional but good UX)
+  if (photoUploadArea) photoUploadArea.style.opacity = '0.5';
+
+  for (const file of toProcess) {
+    const compressedFile = await compressImage(file);
+    selectedFiles.push(compressedFile);
+    addPreview(compressedFile, selectedFiles.length - 1);
+  }
+
+  if (photoUploadArea) photoUploadArea.style.opacity = '1';
 }
 
 function addPreview(file, index) {
