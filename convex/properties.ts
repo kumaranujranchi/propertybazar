@@ -1,4 +1,4 @@
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const getProperties = query({
@@ -6,11 +6,13 @@ export const getProperties = query({
     transactionType: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    let propertiesQuery = ctx.db.query("properties");
+    let propertiesQuery;
     if (args.transactionType) {
-      propertiesQuery = propertiesQuery.filter((q) => 
-        q.eq(q.field("transactionType"), args.transactionType)
-      );
+      propertiesQuery = ctx.db
+        .query("properties")
+        .withIndex("by_transactionType", (q) => q.eq("transactionType", args.transactionType as string));
+    } else {
+      propertiesQuery = ctx.db.query("properties");
     }
     const properties = await propertiesQuery.order("desc").collect();
 
@@ -138,4 +140,33 @@ export const createProperty = mutation({
     });
     return propertyId;
   },
+});
+
+export const deleteOldProperties = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    // 60 days ago in milliseconds
+    const sixtyDaysAgo = Date.now() - 60 * 24 * 60 * 60 * 1000;
+    
+    // Find properties created before 60 days ago
+    const oldProperties = await ctx.db
+      .query("properties")
+      .filter((q) => q.lt(q.field("_creationTime"), sixtyDaysAgo))
+      .collect();
+
+    for (const prop of oldProperties) {
+      // 1. Delete associated photos from storage
+      for (const storageId of prop.photos || []) {
+        try {
+          await ctx.storage.delete(storageId as any);
+        } catch (e) {
+          console.error("Failed to delete photo:", storageId, e);
+        }
+      }
+      // 2. Delete the property record
+      await ctx.db.delete(prop._id);
+    }
+    
+    return { deletedCount: oldProperties.length };
+  }
 });

@@ -44,7 +44,8 @@ export default defineSchema({
       rera: v.optional(v.string()),
       contactTime: v.optional(v.string()),
     })
-  }),
+  }).index("by_transactionType", ["transactionType"])
+    .index("by_city", ["location.city"]),
 
   users: defineTable({
     name: v.string(),
