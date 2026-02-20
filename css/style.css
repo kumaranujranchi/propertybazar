@@ -902,6 +902,42 @@ textarea {
   color: var(--text-muted);
 }
 
+/* ========== ADVANTAGE SECTION ========== */
+.advantage-card {
+  text-align: center;
+  padding: 32px 20px;
+  background: var(--bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+.advantage-card:hover {
+  box-shadow: var(--shadow);
+  border-color: var(--primary);
+  transform: translateY(-4px);
+}
+.advantage-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(
+    135deg,
+    rgba(232, 65, 24, 0.1),
+    rgba(245, 166, 35, 0.1)
+  );
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: var(--primary);
+  margin: 0 auto 16px;
+  transition: var(--transition);
+}
+.advantage-card:hover .advantage-icon {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+}
+
 /* ========== PROJECTS SECTION ========== */
 .project-card {
   background: #fff;
