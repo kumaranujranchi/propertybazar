@@ -248,8 +248,9 @@ function renderFilteredProperties() {
 }
 
 function buildPropertyCardHTML(p) {
+  const detailUrl = `property-detail.html?id=${p.id}`;
   return `
-  <div class="property-card" onclick="window.location='property-detail.html?id=${p.id}'">
+  <div class="property-card" onclick="handlePropertyListingClick(event, '${detailUrl}')">
     <div class="prop-img-wrap">
       <img src="${p.image}" alt="${p.title}" loading="lazy">
       <div class="prop-type-badge">
@@ -284,6 +285,17 @@ function buildPropertyCardHTML(p) {
     </div>
   </div>`;
 }
+
+window.handlePropertyListingClick = (event, url) => {
+  if (sessionStorage.getItem('pb_agreed_disclaimer')) {
+    window.location.href = url;
+  } else if (typeof window.showDisclaimer === 'function') {
+    window.showDisclaimer(url);
+  } else {
+    // Fallback if modal script not present (e.g. on other pages)
+    window.location.href = url;
+  }
+};
 
 // ========== VIEW TOGGLE (Grid / List) ==========
 function initViewToggle() {

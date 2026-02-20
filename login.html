@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login / Register | 24Dismil.com</title>
-  <meta name="description" content="Login or Register on 24Dismil.com to post and manage property listings.">
+  <title>Register / Login | 24Dismil.com</title>
+  <meta name="description" content="Register on 24Dismil.com to post and manage your property listings. India's most trusted real estate portal.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -175,11 +175,10 @@
   import { login, register } from './js/auth.js';
   import { getCachedUser } from './js/auth.js';
 
-  // Already logged in? redirect
-  if (getCachedUser()) {
-    window.location.href = 'dashboard.html';
-  }
-
+  // Mode check: if ?mode=register, show register tab by default
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get('mode');
+  
   window.switchTab = (tab) => {
     document.getElementById('formLogin').classList.toggle('active', tab === 'login');
     document.getElementById('formRegister').classList.toggle('active', tab === 'register');
@@ -187,6 +186,12 @@
     document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
     document.getElementById('authErr').style.display = 'none';
   };
+
+  if (mode === 'register') {
+    switchTab('register');
+  }
+
+  // Already logged in? redirect
 
   window.togglePass = (id, el) => {
     const input = document.getElementById(id);

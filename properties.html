@@ -511,7 +511,11 @@
       <p style="font-size:11px;color:var(--text-muted);margin-top:10px;">If you notice any fraudulent activity or have feedback, please write to us at support@24Dismil.com. All trademarks belong to their respective owners.</p>
     </div>
     <div class="disclaimer-footer">
-      <button class="btn btn-primary" id="btnAcceptDisclaimer" style="width:100%;border-radius:6px;padding:12px;">Agree & Continue</button>
+      <label class="disclaimer-confirm" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;cursor:pointer;font-size:14px;color:var(--text)">
+        <input type="checkbox" id="chkConfirmDisclaimer" style="width:18px;height:18px;cursor:pointer">
+        <span>I confirm that I have read and understood the disclaimer</span>
+      </label>
+      <button class="btn btn-primary" id="btnAcceptDisclaimer" style="width:100%;border-radius:6px;padding:12px;" disabled>Agree & Continue</button>
     </div>
   </div>
 </div>
@@ -580,26 +584,29 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const type = params.get('type');
-    
-    // Only show for 'buy' type properties, and if they haven't agreed in this session
-    if (type === 'buy' && !sessionStorage.getItem('pb_agreed_disclaimer')) {
-      const modal = document.getElementById('disclaimerModal');
-      const btn = document.getElementById('btnAcceptDisclaimer');
-      
-      // Small delay for UX
-      setTimeout(() => {
-        modal.classList.add('open');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling bg
-      }, 500);
+    const modal = document.getElementById('disclaimerModal');
+    const btn = document.getElementById('btnAcceptDisclaimer');
+    const chk = document.getElementById('chkConfirmDisclaimer');
+    let targetUrl = '';
 
-      btn.addEventListener('click', () => {
-        modal.classList.remove('open');
-        document.body.style.overflow = '';
-        sessionStorage.setItem('pb_agreed_disclaimer', 'true');
-      });
-    }
+    window.showDisclaimer = (url) => {
+      targetUrl = url;
+      chk.checked = false;
+      btn.disabled = true;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    chk.addEventListener('change', () => {
+      btn.disabled = !chk.checked;
+    });
+
+    btn.addEventListener('click', () => {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+      sessionStorage.setItem('pb_agreed_disclaimer', 'true');
+      if (targetUrl) window.location.href = targetUrl;
+    });
   });
 </script>
 
