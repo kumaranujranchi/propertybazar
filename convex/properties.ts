@@ -134,10 +134,11 @@ export const createProperty = mutation({
 
         let limit = 3; // FREE_LIMIT
         if (activeTier === 'premium') limit = 10;
-        if (activeTier === 'agent') limit = 50;
+        if (activeTier === 'agent_starter') limit = 15;
+        if (activeTier === 'agent_pro' || activeTier === 'agent') limit = 50;
 
         // Premium and Agent listings are automatically featured
-        if (activeTier === 'premium' || activeTier === 'agent') {
+        if (activeTier === 'premium' || activeTier === 'agent_starter' || activeTier === 'agent_pro' || activeTier === 'agent') {
           isFeatured = true;
         }
 

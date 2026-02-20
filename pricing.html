@@ -316,21 +316,99 @@
       </div>
     </section>
 
-    <!-- AGENT PLANS -->
-    <section class="pricing-cards" id="agentPlans" style="display:none;">
+    <!-- AGENT & BUILDER PLANS -->
+    <section class="pricing-cards" id="agentPlans" style="display:none; margin-bottom: 20px;">
+      
+      <!-- SUBHEADING FOR AGENTS -->
+      <div style="width: 100%; text-align: center; margin-bottom: 10px;">
+        <h2 style="font-size:24px; color:var(--dark);">For Brokers & Agents</h2>
+        <p style="color:var(--text-muted);">Recurring subscription to list properties in bulk.</p>
+      </div>
+
       <!-- Starter Agent -->
-      <div class="pricing-card featured">
+      <div class="pricing-card">
         <div class="plan-name">Starter Agent</div>
         <div class="plan-desc">Perfect for growing real estate brokers.</div>
         <div class="plan-price"><span class="price-currency">₹</span>2,500<span class="price-period">/mo</span></div>
         <ul class="plan-features">
-          <li><span class="feature-check">✓</span> Post up to 50 active listings</li>
-          <li><span class="feature-check">✓</span> All listings get <b>Top Ranking</b></li>
-          <li><span class="feature-check">✓</span> Verified Agent Profile Badge</li>
-          <li><span class="feature-check">✓</span> WhatsApp Lead forwarding</li>
-          <li><span class="feature-check">✓</span> Dedicated support</li>
+          <li><span class="feature-check">✓</span> Up to 15 Active Listings</li>
+          <li><span class="feature-check">✓</span> Access to Owner Contact Database (Limit: 50/mo)</li>
+          <li><span class="feature-check">✓</span> Agent Profile Badge</li>
         </ul>
-        <button class="btn-plan btn-primary upgrade-btn" data-tier="agent" data-days="30" data-price="2500">Subscribe Now</button>
+        <button class="btn-plan btn-primary upgrade-btn" data-tier="agent_starter" data-days="30" data-price="2500">Subscribe Now</button>
+      </div>
+
+      <!-- Pro Agent -->
+      <div class="pricing-card featured">
+        <div class="featured-badge">Most Popular</div>
+        <div class="plan-name">Pro Agent</div>
+        <div class="plan-desc">For established agencies maximizing reach.</div>
+        <div class="plan-price"><span class="price-currency">₹</span>6,000<span class="price-period">/mo</span></div>
+        <ul class="plan-features">
+          <li><span class="feature-check">✓</span> Up to 50 Active Listings</li>
+          <li><span class="feature-check">✓</span> Unlimited Owner Contacts</li>
+          <li><span class="feature-check">✓</span> 5 "Featured" Listing boosts per month</li>
+          <li><span class="feature-check">✓</span> SEO Optimized Agent Page</li>
+        </ul>
+        <button class="btn-plan btn-primary upgrade-btn" data-tier="agent_pro" data-days="30" data-price="6000">Subscribe Now</button>
+      </div>
+
+      <!-- Agency / Corporate -->
+      <div class="pricing-card">
+        <div class="plan-name">Agency / Corporate</div>
+        <div class="plan-desc">Custom solutions for large franchises.</div>
+        <div class="plan-price" style="font-size: 32px;">Custom</div>
+        <ul class="plan-features">
+          <li><span class="feature-check">✓</span> Unlimited Listings</li>
+          <li><span class="feature-check">✓</span> Sub-accounts for multiple staff</li>
+          <li><span class="feature-check">✓</span> Banner ads on homepage</li>
+        </ul>
+        <button class="btn-plan btn-outline" onclick="window.location.href='contact.html'">Call Us</button>
+      </div>
+
+      <!-- SUBHEADING FOR BUILDERS -->
+      <div style="width: 100%; text-align: center; margin-top: 50px; margin-bottom: 10px;">
+        <h2 style="font-size:24px; color:var(--dark);">For Builders & Developers (New Projects)</h2>
+        <p style="color:var(--text-muted);">Premium visibility for New Projects with massive marketing budgets.</p>
+      </div>
+
+      <!-- Banner Ads -->
+      <div class="pricing-card">
+        <div class="plan-name">Homepage Banner Ads</div>
+        <div class="plan-desc">Maximum visibility on city-based traffic.</div>
+        <div class="plan-price"><span class="price-currency">₹</span>20-50k<span class="price-period">/mo</span></div>
+        <ul class="plan-features">
+          <li><span class="feature-check">✓</span> Prime hero-section placement</li>
+          <li><span class="feature-check">✓</span> Geo-targeted by City</li>
+          <li><span class="feature-check">✓</span> Drive direct project inquiries</li>
+        </ul>
+        <button class="btn-plan btn-outline" onclick="window.location.href='contact.html'">Enquire Now</button>
+      </div>
+
+      <!-- Project of the Month -->
+      <div class="pricing-card featured">
+        <div class="plan-name">Project of the Month</div>
+        <div class="plan-desc">The ultimate full-scale takeover.</div>
+        <div class="plan-price"><span class="price-currency">₹</span>1 Lakh<span class="price-period">/mo</span></div>
+        <ul class="plan-features">
+          <li><span class="feature-check">✓</span> Full Page Homepage Takeover</li>
+          <li><span class="feature-check">✓</span> Dedicated Email Blast to Users</li>
+          <li><span class="feature-check">✓</span> Priority Customer Support</li>
+        </ul>
+        <button class="btn-plan btn-primary" onclick="window.location.href='contact.html'">Book Slot</button>
+      </div>
+
+      <!-- Cost Per Lead -->
+      <div class="pricing-card">
+        <div class="plan-name">Performance (CPL)</div>
+        <div class="plan-desc">Pay only for verified buyer leads.</div>
+        <div class="plan-price"><span class="price-currency">₹</span>500+<span class="price-period">/lead</span></div>
+        <ul class="plan-features">
+          <li><span class="feature-check">✓</span> ₹500-₹1000 per verified phone number/lead generated</li>
+          <li><span class="feature-check">✓</span> SMS/WhatsApp notifications</li>
+          <li><span class="feature-check">✓</span> High-intent buyer matching</li>
+        </ul>
+        <button class="btn-plan btn-outline" onclick="window.location.href='contact.html'">Start Campaign</button>
       </div>
     </section>
 

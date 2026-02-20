@@ -140,8 +140,13 @@
   document.getElementById('statFreeLeft').textContent = limitLeft;
   
   // Set Tier Badge
-  const tierIcon = user.subscriptionTier === 'premium' ? '⭐' : user.subscriptionTier === 'agent' ? '💼' : '🆓';
-  const tierName = user.subscriptionTier ? user.subscriptionTier.charAt(0).toUpperCase() + user.subscriptionTier.slice(1) : 'Free';
+  const t = user.subscriptionTier;
+  const tierIcon = t === 'premium' ? '⭐' : (t?.startsWith('agent') ? '💼' : '🆓');
+  let tierName = 'Free';
+  if (t === 'premium') tierName = 'Premium';
+  if (t === 'agent' || t === 'agent_pro') tierName = 'Pro Agent';
+  if (t === 'agent_starter') tierName = 'Starter Agent';
+  
   document.querySelectorAll('.dash-stat-num')[2].textContent = tierIcon;
   document.querySelectorAll('.dash-stat-label')[2].textContent = tierName + ' Plan';
 

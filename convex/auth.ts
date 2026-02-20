@@ -122,7 +122,8 @@ export const getMe = query({
     // Set dynamic limits
     let limit = FREE_PROPERTY_LIMIT;
     if (activeTier === 'premium') limit = 10;
-    if (activeTier === 'agent') limit = 50;
+    if (activeTier === 'agent_starter') limit = 15;
+    if (activeTier === 'agent_pro' || activeTier === 'agent') limit = 50;
 
     // Count user's posted properties
     const myProperties = await ctx.db
