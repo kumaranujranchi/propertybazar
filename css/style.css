@@ -409,7 +409,7 @@ textarea {
   border-right: none;
   animation: none;
 }
-#typing-text span {
+.hero-title span {
   color: var(--secondary);
 }
 
