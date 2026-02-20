@@ -134,7 +134,7 @@ function buildCityDropdown() {
         <input type="text" id="citySearchInput" placeholder="🔍 Search city..." autocomplete="off">
       </div>
       <div class="city-drop-list" id="cityDropList"></div>
-      <div class="city-drop-detect" id="cityDetectBtn">📡 Use My Current Location</div>
+      <div class="city-drop-detect" id="cityDetectBtn" title="Use My Current Location">📡</div>
     </div>
   `;
 
