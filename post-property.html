@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post FREE Property | PropertyBazaar — Sell or Rent Your Property</title>
+  <meta name="description" content="Post your property for free on PropertyBazaar. Reach lakhs of genuine buyers and tenants. RERA compliant, verified listing with maximum exposure.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container">
+    <nav class="nav">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">P</div>
+        <span class="nav-logo-text">Property<span>Bazaar</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="properties.html?type=buy" class="nav-link">Buy</a>
+        <a href="properties.html?type=rent" class="nav-link">Rent</a>
+        <a href="post-property.html" class="nav-link active">Post Property</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <a href="#" class="nav-btn-login">Login / Register</a>
+        <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
+      </div>
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </nav>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">🏠 Home</a>
+    <a href="properties.html">🔍 Properties</a>
+    <a href="about.html">ℹ️ About</a>
+    <a href="contact.html">📞 Contact</a>
+  </div>
+</header>
+
+<!-- POST HERO -->
+<div class="post-hero">
+  <div class="container">
+    <h1>🏠 Post Your Property for FREE</h1>
+    <p>Reach 50 Lakh+ genuine buyers and tenants. 100% FREE listing. Maximum exposure guaranteed.</p>
+
+    <!-- STEP INDICATOR -->
+    <div class="steps-indicator">
+      <div class="step-item">
+        <div class="step-num active" id="stepNum1">1</div>
+        <div class="step-label" id="stepLabel1">Property Type</div>
+      </div>
+      <div class="step-line" id="stepLine1"></div>
+      <div class="step-item">
+        <div class="step-num pending" id="stepNum2">2</div>
+        <div class="step-label pending" id="stepLabel2">Location</div>
+      </div>
+      <div class="step-line" id="stepLine2"></div>
+      <div class="step-item">
+        <div class="step-num pending" id="stepNum3">3</div>
+        <div class="step-label pending" id="stepLabel3">Details</div>
+      </div>
+      <div class="step-line" id="stepLine3"></div>
+      <div class="step-item">
+        <div class="step-num pending" id="stepNum4">4</div>
+        <div class="step-label pending" id="stepLabel4">Photos</div>
+      </div>
+      <div class="step-line" id="stepLine4"></div>
+      <div class="step-item">
+        <div class="step-num pending" id="stepNum5">5</div>
+        <div class="step-label pending" id="stepLabel5">Pricing</div>
+      </div>
+    </div>
+
+    <!-- BENEFITS STRIP -->
+    <div style="display:flex;gap:24px;justify-content:center;margin-top:28px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px">✅ 100% FREE Listing</div>
+      <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px">✅ 50 Lakh+ Buyers</div>
+      <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px">✅ Instant Visibility</div>
+      <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px">✅ RERA Compliant</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM BODY -->
+<div class="post-body">
+
+  <!-- STEP 1: Property Type -->
+  <div class="form-card form-step" id="formStep1">
+    <h2 class="form-card-title">Step 1: What are you listing?</h2>
+    <p class="form-card-subtitle">Select the transaction type and property type</p>
+
+    <div style="margin-bottom:24px">
+      <div class="filter-group-title" style="margin-bottom:12px">Transaction Type</div>
+      <div class="form-type-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="form-type-option active">
+          <div class="icon">🛒</div>
+          <div class="name">For Sale</div>
+        </div>
+        <div class="form-type-option">
+          <div class="icon">🔑</div>
+          <div class="name">For Rent</div>
+        </div>
+        <div class="form-type-option">
+          <div class="icon">🏳️</div>
+          <div class="name">PG / Co-living</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="filter-group-title" style="margin-bottom:12px">Property Type</div>
+      <div class="form-type-grid">
+        <div class="form-type-option active">
+          <div class="icon">🏢</div>
+          <div class="name">Apartment</div>
+        </div>
+        <div class="form-type-option">
+          <div class="icon">🏡</div>
+          <div class="name">Villa / House</div>
+        </div>
+        <div class="form-type-option">
+          <div class="icon">🌱</div>
+          <div class="name">Plot / Land</div>
+        </div>
+        <div class="form-type-option">
+          <div class="icon">🏗️</div>
+          <div class="name">Builder Floor</div>
+        </div>
+        <div class="form-type-option">
+          <div class="icon">🏬</div>
+          <div class="name">Commercial</div>
+        </div>
+        <div class="form-type-option">
+          <div class="icon">🛋️</div>
+          <div class="name">PG Room</div>
+        </div>
+        <div class="form-type-option">
+          <div class="icon">🏭</div>
+          <div class="name">Warehouse</div>
+        </div>
+        <div class="form-type-option">
+          <div class="icon">🏨</div>
+          <div class="name">Hotel / Resort</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <span></span>
+      <button class="btn btn-primary btn-lg btn-next-step">Next: Location →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Location -->
+  <div class="form-card form-step" id="formStep2" style="display:none">
+    <h2 class="form-card-title">Step 2: Where is your property?</h2>
+    <p class="form-card-subtitle">Add the exact location for better visibility</p>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">State *</label>
+        <select class="form-input form-select">
+          <option value="">Select State</option>
+          <option>Uttar Pradesh</option>
+          <option>Maharashtra</option>
+          <option>Karnataka</option>
+          <option>Haryana</option>
+          <option>Delhi</option>
+          <option>Tamil Nadu</option>
+          <option>Telangana</option>
+          <option>West Bengal</option>
+          <option>Gujarat</option>
+          <option>Bihar</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">City *</label>
+        <input type="text" class="form-input" placeholder="e.g. Noida, Mumbai, Bangalore">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Locality / Area *</label>
+        <input type="text" class="form-input" placeholder="e.g. Sector 62, Koramangala">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Society / Project Name</label>
+        <input type="text" class="form-input" placeholder="e.g. Prestige Lakeside Habitat">
+      </div>
+      <div class="form-group full">
+        <label class="form-label">Full Address</label>
+        <textarea class="form-input" rows="3" placeholder="Flat No., Building Name, Street, Landmark..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">PIN Code *</label>
+        <input type="text" class="form-input" placeholder="6-digit PIN code">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Landmark (Optional)</label>
+        <input type="text" class="form-input" placeholder="Near Metro Station, Mall, etc.">
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-outline btn-lg btn-prev-step">← Back</button>
+      <button class="btn btn-primary btn-lg btn-next-step">Next: Details →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Details -->
+  <div class="form-card form-step" id="formStep3" style="display:none">
+    <h2 class="form-card-title">Step 3: Property Details</h2>
+    <p class="form-card-subtitle">More details = more inquiries. Fill as much as possible.</p>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">BHK Type *</label>
+        <select class="form-input form-select">
+          <option>1 BHK</option><option selected>2 BHK</option><option>3 BHK</option><option>4 BHK</option><option>4+ BHK</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Property Status *</label>
+        <select class="form-input form-select">
+          <option>Ready to Move</option>
+          <option>Under Construction</option>
+          <option>New Launch</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Built-up Area (sq.ft) *</label>
+        <input type="number" class="form-input" placeholder="e.g. 1450">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Carpet Area (sq.ft)</label>
+        <input type="number" class="form-input" placeholder="e.g. 1100">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Floor Number</label>
+        <input type="number" class="form-input" placeholder="e.g. 5">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Total Floors in Building</label>
+        <input type="number" class="form-input" placeholder="e.g. 18">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Furnishing Status</label>
+        <select class="form-input form-select">
+          <option>Unfurnished</option>
+          <option>Semi-Furnished</option>
+          <option>Fully Furnished</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Facing Direction</label>
+        <select class="form-input form-select">
+          <option>East</option><option>West</option><option>North</option><option>South</option>
+          <option>North-East</option><option>North-West</option><option>South-East</option><option>South-West</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Car Parking</label>
+        <select class="form-input form-select">
+          <option>None</option><option>1 Covered</option><option>1 Open</option><option>2 Covered</option><option>2+ Parking</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Year of Construction</label>
+        <input type="number" class="form-input" placeholder="e.g. 2020">
+      </div>
+      <div class="form-group full">
+        <label class="form-label">Property Description *</label>
+        <textarea class="form-input" rows="4" placeholder="Describe your property — location advantages, interior highlights, nearby amenities, special features..."></textarea>
+      </div>
+    </div>
+
+    <div style="margin-top:20px">
+      <div class="filter-group-title" style="margin-bottom:12px">Amenities Available</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Swimming Pool</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Gymnasium</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Clubhouse</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> 24x7 Security</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Power Backup</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Lift</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Garden / Park</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Water Supply</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> CCTV</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Intercom</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Fire Safety</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Solar Energy</label>
+      </div>
+    </div>
+
+    <div class="form-actions" style="margin-top:28px">
+      <button class="btn btn-outline btn-lg btn-prev-step">← Back</button>
+      <button class="btn btn-primary btn-lg btn-next-step">Next: Photos →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: Photos -->
+  <div class="form-card form-step" id="formStep4" style="display:none">
+    <h2 class="form-card-title">Step 4: Upload Property Photos</h2>
+    <p class="form-card-subtitle">Properties with photos get 5X more inquiries. Upload at least 5 clear photos.</p>
+    <div class="photo-upload-area" onclick="this.querySelector('input').click()">
+      <input type="file" multiple accept="image/*" style="display:none">
+      <div class="photo-upload-icon">📸</div>
+      <div class="photo-upload-text">Click to upload or drag & drop photos</div>
+      <div class="photo-upload-sub">Supports JPG, PNG up to 10MB each · Max 20 photos</div>
+      <div style="margin-top:16px"><span class="btn btn-outline" style="cursor:pointer">Browse Files</span></div>
+    </div>
+    <div style="margin-top:20px;background:rgba(232,65,24,0.05);border:1px solid rgba(232,65,24,0.15);border-radius:var(--radius-sm);padding:14px">
+      <h4 style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px">📋 Photo Tips for Maximum Inquiries:</h4>
+      <ul style="font-size:13px;color:var(--text-muted);line-height:2;list-style:inside disc">
+        <li>Take photos during daylight for bright, clear images</li>
+        <li>Include all rooms, kitchen, bathrooms, and balcony</li>
+        <li>Show the building exterior, common areas, and parking</li>
+        <li>Keep the property neat and clutter-free before shooting</li>
+      </ul>
+    </div>
+    <div class="form-actions" style="margin-top:28px">
+      <button class="btn btn-outline btn-lg btn-prev-step">← Back</button>
+      <button class="btn btn-primary btn-lg btn-next-step">Next: Pricing →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: Pricing & Contact -->
+  <div class="form-card form-step" id="formStep5" style="display:none">
+    <h2 class="form-card-title">Step 5: Pricing & Your Details</h2>
+    <p class="form-card-subtitle">Set a competitive price to attract serious buyers.</p>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Expected Price (₹) *</label>
+        <input type="number" class="form-input" placeholder="e.g. 8500000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Price Type</label>
+        <select class="form-input form-select">
+          <option>Fixed</option><option>Negotiable</option><option>Price on request</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Maintenance Charges (₹/mo)</label>
+        <input type="number" class="form-input" placeholder="e.g. 5000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Token Amount (For Rent)</label>
+        <input type="number" class="form-input" placeholder="e.g. 100000">
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--border);margin:24px 0">
+    <h3 style="font-size:16px;font-weight:700;color:var(--dark);margin-bottom:18px">Your Contact Details</h3>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Your Name *</label>
+        <input type="text" class="form-input" placeholder="Full Name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mobile Number *</label>
+        <input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <input type="email" class="form-input" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">You are</label>
+        <select class="form-input form-select">
+          <option>Property Owner</option>
+          <option>Builder / Developer</option>
+          <option>Authorised Agent</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">RERA Number (Optional)</label>
+        <input type="text" class="form-input" placeholder="e.g. MH/2023/12345">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Preferred Contact Time</label>
+        <select class="form-input form-select">
+          <option>Any Time</option>
+          <option>Morning (9AM – 12PM)</option>
+          <option>Afternoon (12PM – 4PM)</option>
+          <option>Evening (4PM – 8PM)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions" style="margin-top:28px">
+      <button class="btn btn-outline btn-lg btn-prev-step">← Back</button>
+      <button class="btn btn-primary btn-lg" id="btnSubmitProperty">🚀 Post Property FREE</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo"><div class="nav-logo-icon">P</div> PropertyBazaar</div>
+        <p class="footer-tagline">India's most trusted real estate portal.</p>
+        <div class="footer-socials"><a href="#" class="social-icon">📘</a><a href="#" class="social-icon">📸</a><a href="#" class="social-icon">🐦</a></div>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><div class="footer-links"><a href="properties.html?type=buy">Buy</a><a href="properties.html?type=rent">Rent</a><a href="post-property.html">Post Property</a><a href="about.html">About</a><a href="contact.html">Contact</a></div></div>
+      <div class="footer-col"><h4>Top Cities</h4><div class="footer-links"><a href="#">Mumbai</a><a href="#">Delhi NCR</a><a href="#">Bangalore</a><a href="#">Hyderabad</a><a href="#">Pune</a></div></div>
+      <div class="footer-col"><h4>Resources</h4><div class="footer-links"><a href="#">EMI Calculator</a><a href="#">Home Loan</a><a href="#">RERA Guide</a><a href="#">Blog</a></div></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 PropertyBazaar. All rights reserved.</span><div class="footer-bottom-links"><a href="#">Privacy</a><a href="#">Terms</a></div></div>
+  </div>
+</footer>
+
+<script src="js/properties.js"></script>
+<script src="js/main.js"></script>
+<script type="module" src="js/submit-property.js"></script>
+</body>
+</html>

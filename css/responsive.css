@@ -1,0 +1,99 @@
+/* ========== RESPONSIVE CSS ========== */
+
+/* Large screens */
+@media (max-width: 1200px) {
+  .properties-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1.5fr 1fr 1fr; }
+  .footer-grid .footer-col:last-child { grid-column: 1 / -1; }
+  .team-grid { grid-template-columns: repeat(3, 1fr); }
+  .prop-types-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .hero { min-height: auto; padding: 40px 0; }
+  .search-body { flex-wrap: wrap; }
+  .search-field:not(:last-child) { border-right: none; padding-right: 0; margin-right: 0; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 4px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .properties-layout { grid-template-columns: 1fr; }
+  .filter-sidebar { position: static; }
+  .detail-layout { grid-template-columns: 1fr; }
+  .contact-card { position: static; }
+  .detail-gallery { grid-template-rows: 260px 140px; }
+  .about-hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .about-img-wrap { height: 280px; }
+  .contact-layout { grid-template-columns: 1fr; gap: 32px; }
+  .city-grid { grid-template-columns: repeat(3, 1fr); }
+  .prop-types-grid { grid-template-columns: repeat(3, 1fr); }
+  .app-banner-inner { flex-direction: column; text-align: center; }
+  .app-store-btns { justify-content: center; }
+  .app-phones { text-align: center; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .listings-grid { grid-template-columns: 1fr; }
+  .listings-grid.list-view .property-card { grid-template-columns: 1fr; }
+  .listings-grid.list-view .prop-img-wrap { height: 200px; }
+  .form-type-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .container { padding: 0 16px; }
+  .section { padding: 48px 0; }
+  .section-header h2 { font-size: 24px; }
+  .hero-content { padding: 40px 16px; }
+  .hero-title { font-size: 28px; }
+  .hero-stats { flex-wrap: wrap; gap: 16px; }
+  .hero-stat { width: calc(50% - 8px); }
+  .hero-stat-num { font-size: 22px; }
+  .search-box { border-radius: var(--radius); }
+  .search-tabs { }
+  .search-tab { padding: 10px 16px; font-size: 13px; }
+  .search-btn { width: 100%; justify-content: center; margin-top: 8px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .stat-num { font-size: 28px; }
+  .properties-grid { grid-template-columns: 1fr; }
+  .city-grid { grid-template-columns: repeat(2, 1fr); }
+  .prop-types-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  .footer-bottom-links { flex-wrap: wrap; justify-content: center; }
+  .nav-btn-login { display: none; }
+  .about-stats { grid-template-columns: repeat(2, 1fr); }
+  .about-hero { padding: 48px 0; }
+  .about-hero h1 { font-size: 30px; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .detail-gallery { grid-template-columns: 1fr; grid-template-rows: 240px; }
+  .gallery-main { grid-column: 1; grid-row: 1; }
+  .gallery-thumb { display: none; }
+  .detail-specs { grid-template-columns: repeat(3, 1fr); }
+  .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-card { padding: 24px; }
+  .steps-indicator { gap: 0; }
+  .step-line { width: 30px; }
+  .step-label { font-size: 11px; }
+  .form-type-grid { grid-template-columns: repeat(2, 1fr); }
+  .app-banner-text h2 { font-size: 24px; }
+  .app-store-btns { flex-direction: column; align-items: center; }
+  .contact-layout { padding: 40px 0; }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .nav-logo-text { display: none; }
+  .hero-title { font-size: 24px; }
+  .hero-stats { gap: 12px; }
+  .hero-stat { width: 100%; }
+  .city-grid { grid-template-columns: repeat(2, 1fr); }
+  .prop-types-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .team-grid { grid-template-columns: 1fr 1fr; }
+  .slider-prev, .slider-next { display: none; }
+  .pagination { flex-wrap: wrap; }
+  .store-btn { width: 100%; justify-content: center; }
+  .about-stats { grid-template-columns: 1fr 1fr; }
+  .form-type-grid { grid-template-columns: repeat(2, 1fr); }
+  .detail-specs { grid-template-columns: repeat(2, 1fr); }
+}
