@@ -248,19 +248,23 @@
         <input type="number" class="form-input" placeholder="e.g. 50000">
       </div>
       <!-- Shared Field: Facing Direction -->
-      <div class="form-group" id="fgFacing">
+      <div class="form-group full" id="fgFacing">
         <label class="form-label">Facing Direction</label>
-        <select class="form-input form-select" multiple style="height:auto" title="Cmd/Ctrl+Click for multiple">
-          <option>East</option><option>West</option><option>North</option><option>South</option>
-          <option>North-East</option><option>North-West</option><option>South-East</option><option>South-West</option>
-        </select>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:6px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="East" style="accent-color:var(--primary)"> East</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="West" style="accent-color:var(--primary)"> West</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="North" style="accent-color:var(--primary)"> North</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="South" style="accent-color:var(--primary)"> South</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="North-East" style="accent-color:var(--primary)"> North-East</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="North-West" style="accent-color:var(--primary)"> North-West</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="South-East" style="accent-color:var(--primary)"> South-East</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="South-West" style="accent-color:var(--primary)"> South-West</label>
+        </div>
       </div>
       <!-- PLC, Loan, EMI -->
       <div class="form-group" id="fgPlc" style="display:none">
-        <label class="form-label">Preferred Location (PLC)</label>
-        <select class="form-input form-select">
-          <option>None</option><option>Corner Plot</option><option>Park Facing</option><option>Main Road Facing</option>
-        </select>
+        <label class="form-label">Preferred Location Charges (PLC) / Describe</label>
+        <input type="text" class="form-input" placeholder="e.g. 10% for Corner Plot, ₹50/sqft for Park Facing">
       </div>
       <div class="form-group" id="fgLoan" style="display:none">
         <label class="form-label">Loan Facility Available?</label>
