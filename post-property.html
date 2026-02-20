@@ -304,13 +304,15 @@
   <div class="form-card form-step" id="formStep4" style="display:none">
     <h2 class="form-card-title">Step 4: Upload Property Photos</h2>
     <p class="form-card-subtitle">Properties with photos get 5X more inquiries. Upload at least 5 clear photos.</p>
-    <div class="photo-upload-area" onclick="this.querySelector('input').click()">
-      <input type="file" multiple accept="image/*" style="display:none">
+    <div class="photo-upload-area" id="photoUploadArea">
+      <input type="file" id="photoFileInput" multiple accept="image/*" style="display:none">
       <div class="photo-upload-icon">📸</div>
-      <div class="photo-upload-text">Click to upload or drag & drop photos</div>
+      <div class="photo-upload-text">Click to upload or drag &amp; drop photos</div>
       <div class="photo-upload-sub">Supports JPG, PNG up to 10MB each · Max 20 photos</div>
-      <div style="margin-top:16px"><span class="btn btn-outline" style="cursor:pointer">Browse Files</span></div>
+      <div style="margin-top:16px"><span class="btn btn-outline" style="cursor:pointer" onclick="document.getElementById('photoFileInput').click()">Browse Files</span></div>
     </div>
+    <!-- Preview grid -->
+    <div id="photoPreviewGrid" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"></div>
     <div style="margin-top:20px;background:rgba(232,65,24,0.05);border:1px solid rgba(232,65,24,0.15);border-radius:var(--radius-sm);padding:14px">
       <h4 style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px">📋 Photo Tips for Maximum Inquiries:</h4>
       <ul style="font-size:13px;color:var(--text-muted);line-height:2;list-style:inside disc">
