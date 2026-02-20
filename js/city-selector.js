@@ -1,6 +1,6 @@
 /**
- * City Selector — interactive dropdown with geolocation auto-detect
- * Usage: include this script on any page that has a .nav-city element
+ * City Selector — auto-geolocation on click + searchable city dropdown
+ * Included on: index.html, properties.html
  */
 
 const CITIES = [
@@ -32,72 +32,109 @@ const CITIES = [
 const CITY_KEY = 'pb_selected_city';
 
 function getSavedCity() {
-  return localStorage.getItem(CITY_KEY) || 'All India';
+  return localStorage.getItem(CITY_KEY) || null;
 }
 
 function saveCity(city) {
   localStorage.setItem(CITY_KEY, city);
 }
 
-function goToCity(city) {
+function applySelectedCity(city, labelEl) {
   saveCity(city);
-  // If on properties page, filter in-place
-  if (window.location.pathname.includes('properties.html')) {
+  if (labelEl) labelEl.textContent = city;
+  // If on properties page, update filter
+  if (window.location.pathname.endsWith('properties.html') || window.location.href.includes('properties.html')) {
     const params = new URLSearchParams(window.location.search);
     if (city === 'All India') params.delete('city');
     else params.set('city', city);
     const newUrl = window.location.pathname + (params.toString() ? '?' + params : '');
     window.history.replaceState({}, '', newUrl);
-    // Trigger re-filter if function available
-    if (typeof window.renderFilteredProperties === 'function') window.renderFilteredProperties();
+    if (typeof window.renderFilteredProperties === 'function') {
+      window.renderFilteredProperties();
+    }
   } else {
-    // Navigate to properties page with city filter
     if (city === 'All India') {
       window.location.href = 'properties.html';
     } else {
-      window.location.href = `properties.html?city=${encodeURIComponent(city)}`;
+      window.location.href = 'properties.html?city=' + encodeURIComponent(city);
     }
   }
 }
 
-function autoDetectCity(btn) {
-  if (!navigator.geolocation) { alert('Geolocation is not supported by your browser.'); return; }
-  btn.textContent = '⏳ Detecting...';
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    try {
-      const { latitude, longitude } = pos.coords;
-      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
-      const data = await res.json();
-      const detectedCity = data.address?.city || data.address?.town || data.address?.county || 'All India';
-      // Try to match with our city list
-      const match = CITIES.find(c => c.name.toLowerCase().includes(detectedCity.toLowerCase()));
-      const city = match ? match.name : detectedCity;
-      goToCity(city);
-    } catch {
-      btn.innerHTML = '📍 Detect Location';
-      alert('Could not detect city. Please select manually.');
-    }
-  }, () => {
-    btn.innerHTML = '📍 Detect Location';
-    alert('Location access denied. Please select city manually.');
-  });
+function matchCityFromDetected(rawCity) {
+  const lower = (rawCity || '').toLowerCase();
+  // Direct match first
+  const direct = CITIES.find(c => c.name.toLowerCase() === lower);
+  if (direct) return direct.name;
+  // Partial match
+  const partial = CITIES.find(c =>
+    lower.includes(c.name.toLowerCase().split(' ')[0]) ||
+    c.name.toLowerCase().includes(lower)
+  );
+  return partial ? partial.name : null;
+}
+
+function detectAndSetCity(labelEl, dropdownEl, searchInput) {
+  if (!navigator.geolocation) {
+    // No geolocation — just open the dropdown
+    dropdownEl.classList.add('open');
+    return;
+  }
+  if (labelEl) labelEl.textContent = '⏳ Detecting...';
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      try {
+        const { latitude, longitude } = pos.coords;
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+          { headers: { 'Accept-Language': 'en' } }
+        );
+        const data = await res.json();
+        const rawCity = data.address?.city || data.address?.town || data.address?.state_district || '';
+        const matched = matchCityFromDetected(rawCity);
+        if (matched) {
+          applySelectedCity(matched, labelEl);
+          dropdownEl.classList.remove('open');
+        } else {
+          // City not in list — open dropdown and show what was detected
+          if (labelEl) labelEl.textContent = rawCity || 'Select City';
+          dropdownEl.classList.add('open');
+          if (searchInput) {
+            searchInput.value = rawCity;
+            searchInput.dispatchEvent(new Event('input'));
+          }
+        }
+      } catch {
+        if (labelEl) labelEl.textContent = getSavedCity() || 'All India';
+        dropdownEl.classList.add('open');
+      }
+    },
+    () => {
+      // Permission denied — open dropdown
+      if (labelEl) labelEl.textContent = getSavedCity() || 'All India';
+      dropdownEl.classList.add('open');
+    },
+    { timeout: 8000 }
+  );
 }
 
 function buildCityDropdown() {
   const navCityEl = document.querySelector('.nav-city');
   if (!navCityEl) return;
 
-  const currentCity = getSavedCity();
+  const savedCity = getSavedCity() || 'All India';
 
-  // Build HTML
   navCityEl.innerHTML = `
-    <button class="nav-city-btn" id="citySelectorBtn">
-      📍 <span id="citySelectorLabel">${currentCity}</span> <span class="city-arrow">▾</span>
+    <button class="nav-city-btn" id="citySelectorBtn" aria-label="Select city">
+      📍 <span id="citySelectorLabel">${savedCity}</span>
+      <span class="city-arrow">▾</span>
     </button>
-    <div class="city-dropdown" id="cityDropdown">
-      <div class="city-drop-detect" id="cityDetectBtn">📡 Detect My Location</div>
-      <div class="city-drop-search"><input type="text" id="citySearchInput" placeholder="Search city..."></div>
+    <div class="city-dropdown" id="cityDropdown" role="listbox">
+      <div class="city-drop-search">
+        <input type="text" id="citySearchInput" placeholder="🔍 Search city..." autocomplete="off">
+      </div>
       <div class="city-drop-list" id="cityDropList"></div>
+      <div class="city-drop-detect" id="cityDetectBtn">📡 Use My Current Location</div>
     </div>
   `;
 
@@ -105,42 +142,52 @@ function buildCityDropdown() {
   const dropdown = document.getElementById('cityDropdown');
   const searchInput = document.getElementById('citySearchInput');
   const listEl = document.getElementById('cityDropList');
+  const labelEl = document.getElementById('citySelectorLabel');
+  const detectBtn = document.getElementById('cityDetectBtn');
 
-  function renderCityList(query = '') {
-    const filtered = CITIES.filter(c => c.name.toLowerCase().includes(query.toLowerCase()));
+  function renderList(query = '') {
+    const filtered = CITIES.filter(c =>
+      c.name.toLowerCase().includes(query.toLowerCase())
+    );
     listEl.innerHTML = filtered.map(c => `
-      <div class="city-drop-item ${c.name === currentCity ? 'selected' : ''}" data-city="${c.name}">
-        <span>${c.emoji}</span> ${c.name}
+      <div class="city-drop-item ${c.name === labelEl.textContent ? 'selected' : ''}" data-city="${c.name}" role="option">
+        ${c.emoji} ${c.name}
       </div>
-    `).join('');
+    `).join('') || '<div style="padding:12px 16px;color:var(--text-muted);font-size:13px">No city found</div>';
+
     listEl.querySelectorAll('.city-drop-item').forEach(item => {
       item.addEventListener('click', () => {
-        goToCity(item.dataset.city);
+        applySelectedCity(item.dataset.city, labelEl);
         dropdown.classList.remove('open');
         btn.classList.remove('open');
-        document.getElementById('citySelectorLabel').textContent = item.dataset.city;
       });
     });
   }
 
-  // Toggle dropdown
+  // CLICK on city button: auto-detect location FIRST
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
-    const isOpen = dropdown.classList.toggle('open');
-    btn.classList.toggle('open', isOpen);
+    const isOpen = dropdown.classList.contains('open');
     if (isOpen) {
-      renderCityList();
-      setTimeout(() => searchInput.focus(), 100);
+      dropdown.classList.remove('open');
+      btn.classList.remove('open');
+      return;
     }
+    // Render list immediately so it's ready
+    renderList();
+    // Then auto-detect
+    detectAndSetCity(labelEl, dropdown, searchInput);
+    btn.classList.add('open');
   });
 
-  // Search filter
-  searchInput.addEventListener('input', () => renderCityList(searchInput.value));
+  // Search
+  searchInput.addEventListener('input', () => renderList(searchInput.value));
+  searchInput.addEventListener('click', e => e.stopPropagation());
 
-  // Detect location
-  document.getElementById('cityDetectBtn').addEventListener('click', (e) => {
+  // Manual detect button at bottom
+  detectBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    autoDetectCity(document.getElementById('cityDetectBtn'));
+    detectAndSetCity(labelEl, dropdown, searchInput);
   });
 
   // Close on outside click
@@ -148,18 +195,25 @@ function buildCityDropdown() {
     dropdown.classList.remove('open');
     btn.classList.remove('open');
   });
-  dropdown.addEventListener('click', (e) => e.stopPropagation());
+  dropdown.addEventListener('click', e => e.stopPropagation());
+
+  // Keyboard ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      dropdown.classList.remove('open');
+      btn.classList.remove('open');
+    }
+  });
 }
 
-// Also update properties.html city filter from URL param
-function applyCityFilter() {
-  if (!window.location.pathname.includes('properties.html')) return;
+// Apply city filter on properties page if city param in URL
+function syncFromURL() {
   const params = new URLSearchParams(window.location.search);
   const city = params.get('city');
   if (city) saveCity(city);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  applyCityFilter();
+  syncFromURL();
   buildCityDropdown();
 });
