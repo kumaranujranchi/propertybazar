@@ -61,32 +61,12 @@
     <h1><i class="fa-solid fa-house"></i> Post Your Property for FREE</h1>
     <p>Reach 50 Lakh+ genuine buyers and tenants. 100% FREE listing. Maximum exposure guaranteed.</p>
 
-    <!-- STEP INDICATOR -->
-    <div class="steps-indicator">
-      <div class="step-item">
-        <div class="step-num active" id="stepNum1">1</div>
-        <div class="step-label" id="stepLabel1">Property Type</div>
+    <!-- MODERN PROGRESS BAR -->
+    <div class="post-progress-container">
+      <div class="post-progress-bar">
+        <div class="post-progress-fill" style="width: 20%"></div>
       </div>
-      <div class="step-line" id="stepLine1"></div>
-      <div class="step-item">
-        <div class="step-num pending" id="stepNum2">2</div>
-        <div class="step-label pending" id="stepLabel2">Location</div>
-      </div>
-      <div class="step-line" id="stepLine2"></div>
-      <div class="step-item">
-        <div class="step-num pending" id="stepNum3">3</div>
-        <div class="step-label pending" id="stepLabel3">Details</div>
-      </div>
-      <div class="step-line" id="stepLine3"></div>
-      <div class="step-item">
-        <div class="step-num pending" id="stepNum4">4</div>
-        <div class="step-label pending" id="stepLabel4">Photos</div>
-      </div>
-      <div class="step-line" id="stepLine4"></div>
-      <div class="step-item">
-        <div class="step-num pending" id="stepNum5">5</div>
-        <div class="step-label pending" id="stepLabel5">Pricing</div>
-      </div>
+      <div class="step-counter-text">Step 1 of 5</div>
     </div>
 
     <!-- BENEFITS STRIP -->
@@ -169,7 +149,7 @@
 
     <div class="form-actions">
       <span></span>
-      <button class="btn btn-primary btn-lg btn-next-step">Next: Location <i class="fa-solid fa-arrow-right"></i></button>
+      <button class="btn btn-primary btn-app-nav btn-next-step">Next: Location <i class="fa-solid fa-arrow-right"></i></button>
     </div>
   </div>
 
@@ -233,8 +213,8 @@
     </div>
 
     <div class="form-actions">
-      <button class="btn btn-outline btn-lg btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
-      <button class="btn btn-primary btn-lg btn-next-step">Next: Details <i class="fa-solid fa-arrow-right"></i></button>
+      <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
+      <button class="btn btn-primary btn-app-nav btn-next-step">Next: Details <i class="fa-solid fa-arrow-right"></i></button>
     </div>
   </div>
 
@@ -409,8 +389,8 @@
     </div>
 
     <div class="form-actions" style="margin-top:28px">
-      <button class="btn btn-outline btn-lg btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
-      <button class="btn btn-primary btn-lg btn-next-step">Next: Photos <i class="fa-solid fa-arrow-right"></i></button>
+      <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
+      <button class="btn btn-primary btn-app-nav btn-next-step">Next: Photos <i class="fa-solid fa-arrow-right"></i></button>
     </div>
   </div>
 
@@ -420,10 +400,18 @@
     <p class="form-card-subtitle">Properties with photos get 5X more inquiries. Upload at least 5 clear photos.</p>
     <div class="photo-upload-area" id="photoUploadArea">
       <input type="file" id="photoFileInput" multiple accept="image/*" style="display:none">
+      <input type="file" id="cameraFileInput" accept="image/*" capture="camera" style="display:none">
       <div class="photo-upload-icon"><i class="fa-solid fa-camera"></i></div>
-      <div class="photo-upload-text">Click to upload or drag &amp; drop photos</div>
-      <div class="photo-upload-sub">Supports JPG, PNG up to 10MB each · Max 20 photos</div>
-      <div style="margin-top:16px"><span class="btn btn-outline" style="cursor:pointer" onclick="document.getElementById('photoFileInput').click()">Browse Files</span></div>
+      <div class="photo-upload-text">Upload property photos</div>
+      <div class="photo-upload-sub">Add at least 5 clear photos for better reach</div>
+      <div style="margin-top:20px;display:flex;gap:12px;justify-content:center">
+        <span class="btn btn-primary btn-app-nav" style="cursor:pointer;flex:1" onclick="document.getElementById('cameraFileInput').click()">
+          <i class="fa-solid fa-camera-retro"></i> Take Photo
+        </span>
+        <span class="btn btn-outline btn-app-nav" style="cursor:pointer;flex:1" onclick="document.getElementById('photoFileInput').click()">
+          <i class="fa-solid fa-images"></i> Gallery
+        </span>
+      </div>
     </div>
     <!-- Preview grid -->
     <div id="photoPreviewGrid" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"></div>
@@ -437,8 +425,8 @@
       </ul>
     </div>
     <div class="form-actions" style="margin-top:28px">
-      <button class="btn btn-outline btn-lg btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
-      <button class="btn btn-primary btn-lg btn-next-step">Next: Pricing <i class="fa-solid fa-arrow-right"></i></button>
+      <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
+      <button class="btn btn-primary btn-app-nav btn-next-step">Next: Pricing <i class="fa-solid fa-arrow-right"></i></button>
     </div>
   </div>
 
@@ -542,8 +530,8 @@
     </div>
 
     <div class="form-actions" style="margin-top:28px">
-      <button class="btn btn-outline btn-lg btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
-      <button class="btn btn-primary btn-lg" id="btnSubmitProperty"><i class="fa-solid fa-rocket"></i> Post Property FREE</button>
+      <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
+      <button class="btn btn-primary btn-app-nav" id="btnSubmitProperty"><i class="fa-solid fa-rocket"></i> Post Property FREE</button>
     </div>
   </div>
 

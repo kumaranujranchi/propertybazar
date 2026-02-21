@@ -335,18 +335,42 @@ function initPostSteps() {
   const stepLabels = document.querySelectorAll('.step-label');
   const stepLines = document.querySelectorAll('.step-line');
 
+  const progressLine = document.querySelector('.post-progress-fill');
+  const stepText = document.querySelector('.step-counter-text');
+
   function goToStep(n) {
-    steps.forEach((s, i) => s.style.display = i === n ? 'block' : 'none');
-    stepNums.forEach((num, i) => {
-      num.classList.toggle('active', i === n);
-      num.classList.toggle('completed', i < n);
-      num.classList.toggle('pending', i > n);
-      if (i < n) num.textContent = '✓';
-      else num.textContent = i + 1;
-    });
-    stepLabels.forEach((lbl, i) => lbl.classList.toggle('pending', i > n));
-    stepLines.forEach((line, i) => line.classList.toggle('completed', i < n));
+    steps.forEach((s, i) => (s.style.display = i === n ? 'block' : 'none'));
+
+    // Update new Progress Indicator
+    if (progressLine) {
+      const percent = ((n + 1) / steps.length) * 100;
+      progressLine.style.width = percent + '%';
+    }
+    if (stepText) {
+      stepText.textContent = `Step ${n + 1} of ${steps.length}`;
+    }
+
+    // Preserve legacy indicators for compatibility if they exist
+    if (stepNums.length) {
+      stepNums.forEach((num, i) => {
+        num.classList.toggle('active', i === n);
+        num.classList.toggle('completed', i < n);
+        num.classList.toggle('pending', i > n);
+        if (i < n) num.textContent = '✓';
+        else num.textContent = i + 1;
+      });
+    }
+    if (stepLabels.length) {
+      stepLabels.forEach((lbl, i) => lbl.classList.toggle('pending', i > n));
+    }
+    if (stepLines.length) {
+      stepLines.forEach((line, i) => line.classList.toggle('completed', i < n));
+    }
+
     currentStep = n;
+
+    // SCROLL TO TOP - App-style feel
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function validateStep(index) {

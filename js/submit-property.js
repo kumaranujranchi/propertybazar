@@ -8,6 +8,8 @@ const photoPreviewGrid = document.getElementById("photoPreviewGrid");
 const selectedFiles = [];
 
 if (photoFileInput) {
+  const cameraFileInput = document.getElementById("cameraFileInput");
+
   photoUploadArea.addEventListener("click", (e) => {
     if (
       e.target === photoUploadArea ||
@@ -18,6 +20,13 @@ if (photoFileInput) {
       photoFileInput.click();
     }
   });
+
+  if (cameraFileInput) {
+    cameraFileInput.addEventListener("change", () => {
+      handleFiles([...cameraFileInput.files]);
+      cameraFileInput.value = "";
+    });
+  }
   photoUploadArea.addEventListener("dragover", (e) => {
     e.preventDefault();
     photoUploadArea.style.borderColor = "var(--primary)";
