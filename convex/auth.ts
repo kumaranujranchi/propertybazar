@@ -158,13 +158,15 @@ export const googleLogin = mutation({
     }
 
     const token = generateToken();
-    await ctx.db.insert("sessions", {
-      userId: user!._id,
-      token,
-      expiresAt: Date.now() + SESSION_DURATION_MS,
-    });
-
-    return { token, name: user!.name, email: user!.email };
+    if (user) {
+      await ctx.db.insert("sessions", {
+        userId: user._id,
+        token,
+        expiresAt: Date.now() + SESSION_DURATION_MS,
+      });
+      return { token, name: user.name, email: user.email };
+    }
+    throw new Error("Failed to create or login user.");
   },
 });
 
