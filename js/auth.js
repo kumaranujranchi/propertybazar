@@ -72,7 +72,10 @@ export async function initNavAuth() {
   if (!loginBtn) return;
 
   if (user) {
-    loginBtn.textContent = `👤 ${user.name.split(' ')[0]}`;
+    loginBtn.innerHTML = `<i class="fa-solid fa-user" style="margin-right: 6px;"></i>${user.name.split(' ')[0]}`;
+    loginBtn.style.display = 'inline-flex';
+    loginBtn.style.alignItems = 'center';
+    loginBtn.style.whiteSpace = 'nowrap';
     loginBtn.href = 'dashboard.html';
 
     // Add logout button next to it

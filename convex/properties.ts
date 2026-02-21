@@ -77,6 +77,10 @@ export const createProperty = mutation({
       fullAddress: v.optional(v.string()),
       pinCode: v.string(),
       landmark: v.optional(v.string()),
+      metroDistance: v.optional(v.string()),
+      schoolDistance: v.optional(v.string()),
+      mallDistance: v.optional(v.string()),
+      hospitalDistance: v.optional(v.string()),
     }),
     details: v.object({
       bhk: v.string(),

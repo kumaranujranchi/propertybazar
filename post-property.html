@@ -20,27 +20,38 @@
         <div class="nav-logo-icon">24</div>
         <span class="nav-logo-text">24Dismil.com</span>
       </a>
+      <div class="nav-city">
+        <i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
+      </div>
       <div class="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="properties.html?type=buy" class="nav-link">Buy</a>
         <a href="properties.html?type=rent" class="nav-link">Rent</a>
+        <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+        <a href="pricing.html" class="nav-link">Pricing</a>
         <a href="post-property.html" class="nav-link active">Post Property</a>
         <a href="about.html" class="nav-link">About</a>
         <a href="contact.html" class="nav-link">Contact</a>
       </div>
       <div class="nav-actions">
-        <a href="login.html" class="nav-btn-login">Login / Register</a>
-        <a href="post-property.html" class="nav-btn-post"><i class="fa-solid fa-plus"></i> Post FREE Property</a>
+        <a href="login.html" class="nav-btn-login">Login</a>
+        <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
       </div>
-      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
     </nav>
   </div>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="properties.html"><i class="fa-solid fa-magnifying-glass"></i> Properties</a>
-    <a href="post-property.html"><i class="fa-solid fa-plus"></i> Post Property</a>
-    <a href="about.html"><i class="fa-solid fa-circle-info"></i> About</a>
-    <a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a>
+    <a href="index.html">🏠 Home</a>
+    <a href="properties.html?type=buy">🛒 Buy Property</a>
+    <a href="properties.html?type=rent">🔑 Rent Property</a>
+    <a href="properties.html?type=commercial">🏢 Commercial</a>
+    <a href="pricing.html">💳 Pricing</a>
+    <a href="post-property.html">➕ Post Property</a>
+    <a href="about.html">ℹ️ About Us</a>
+    <a href="contact.html">📞 Contact</a>
+    <a href="login.html" style="color: var(--primary); font-weight: 700">Login</a>
   </div>
 </header>
 
@@ -149,6 +160,10 @@
           <div class="icon"><i class="fa-solid fa-hotel"></i></div>
           <div class="name">Hotel / Resort</div>
         </div>
+        <div class="form-type-option">
+          <div class="icon"><i class="fa-solid fa-bed"></i></div>
+          <div class="name">Lodge</div>
+        </div>
       </div>
     </div>
 
@@ -197,6 +212,25 @@
         <input type="text" class="form-input" placeholder="Near Metro Station, Mall, etc.">
       </div>
     </div>
+    <h3 style="font-size:16px;font-weight:700;margin-top:20px;margin-bottom:12px;color:var(--dark);padding-bottom:8px;border-bottom:1px solid var(--border)">Nearby Distances (Optional)</h3>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Distance from Metro (km)</label>
+        <input type="number" class="form-input" id="metroDistance" placeholder="e.g. 0.5" step="0.1" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Distance from School (km)</label>
+        <input type="number" class="form-input" id="schoolDistance" placeholder="e.g. 1.2" step="0.1" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Distance from Mall (km)</label>
+        <input type="number" class="form-input" id="mallDistance" placeholder="e.g. 2.5" step="0.1" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Distance from Hospital (km)</label>
+        <input type="number" class="form-input" id="hospitalDistance" placeholder="e.g. 1.0" step="0.1" min="0">
+      </div>
+    </div>
 
     <div class="form-actions">
       <button class="btn btn-outline btn-lg btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
@@ -242,6 +276,44 @@
         <label class="form-label">Development Charges (₹)</label>
         <input type="number" class="form-input" placeholder="e.g. 50000">
       </div>
+      
+      <!-- New Lodge Specific Fields -->
+      <div class="form-group" id="fgRoomType" style="display:none">
+        <label class="form-label">Room Type *</label>
+        <select class="form-input form-select">
+          <option>Single Bed</option>
+          <option>2 Seater</option>
+          <option>3 Seater</option>
+          <option>4 Seater</option>
+        </select>
+      </div>
+      <div class="form-group" id="fgAcNonAc" style="display:none">
+        <label class="form-label">AC / Non-AC *</label>
+        <select class="form-input form-select">
+          <option>AC</option>
+          <option>Non-AC</option>
+        </select>
+      </div>
+      <div class="form-group" id="fgAttachedBathroom" style="display:none">
+        <label class="form-label">Bathroom Type *</label>
+        <select class="form-input form-select">
+          <option>Attached</option>
+          <option>Common</option>
+        </select>
+      </div>
+      <div class="form-group" id="fgBedType" style="display:none">
+        <label class="form-label">Bed Type *</label>
+        <select class="form-input form-select">
+          <option>Single</option>
+          <option>Double</option>
+          <option>Bunk Bed</option>
+        </select>
+      </div>
+      <div class="form-group" id="fgRoomSize" style="display:none">
+        <label class="form-label">Room Size (sq.ft) (Optional)</label>
+        <input type="number" class="form-input" placeholder="e.g. 120">
+      </div>
+      <!-- End Lodge Specific Fields -->
       <!-- Shared Field: Facing Direction -->
       <div class="form-group full" id="fgFacing">
         <label class="form-label">Facing Direction</label>
@@ -327,6 +399,12 @@
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Outside Boundary</label>
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Central Drainage System</label>
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Street Light</label>
+
+        <!-- Lodge Specific Amenities -->
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Free WiFi</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Room Service</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Daily Housekeeping</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> RO / Drinking Water</label>
       </div>
     </div>
 
@@ -370,24 +448,58 @@
     <p class="form-card-subtitle">Set a competitive price to attract serious buyers.</p>
 
     <div class="form-grid">
-      <div class="form-group">
+      <!-- Standard Pricing Fields (Hidden for Lodge) -->
+      <div class="form-group" id="fgExpectedPrice">
         <label class="form-label">Expected Price (₹) *</label>
         <input type="number" class="form-input" placeholder="e.g. 8500000">
       </div>
-      <div class="form-group">
+      <div class="form-group" id="fgPriceType">
         <label class="form-label">Price Type</label>
         <select class="form-input form-select">
           <option>Fixed</option><option>Negotiable</option><option>Price on request</option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="form-group" id="fgMaintCharges">
         <label class="form-label">Maintenance Charges (₹/mo)</label>
         <input type="number" class="form-input" placeholder="e.g. 5000">
       </div>
-      <div class="form-group">
+      <div class="form-group" id="fgTokenAmt">
         <label class="form-label">Token Amount (For Rent)</label>
         <input type="number" class="form-input" placeholder="e.g. 100000">
       </div>
+
+      <!-- New Lodge Pricing Fields -->
+      <div class="form-group" id="fgPricePerDay" style="display:none">
+        <label class="form-label">Price per Day (₹) *</label>
+        <input type="number" class="form-input" placeholder="e.g. 500">
+      </div>
+      <div class="form-group" id="fgPricePerWeek" style="display:none">
+        <label class="form-label">Price per Week (₹) (Optional)</label>
+        <input type="number" class="form-input" placeholder="e.g. 3000">
+      </div>
+      <div class="form-group" id="fgPricePerMonth" style="display:none">
+        <label class="form-label">Price per Month (₹) (Optional)</label>
+        <input type="number" class="form-input" placeholder="e.g. 10000">
+      </div>
+      <div class="form-group" id="fgSecurityDeposit" style="display:none">
+        <label class="form-label">Security Deposit (₹) (if any)</label>
+        <input type="number" class="form-input" placeholder="e.g. 1500">
+      </div>
+      <div class="form-group" id="fgElectricityExtra" style="display:none">
+        <label class="form-label">Electricity Charges</label>
+        <select class="form-input form-select">
+          <option>Included</option>
+          <option>Extra</option>
+        </select>
+      </div>
+      <div class="form-group" id="fgGstExtra" style="display:none">
+        <label class="form-label">GST Charges</label>
+        <select class="form-input form-select">
+          <option>Included</option>
+          <option>Extra</option>
+        </select>
+      </div>
+      <!-- End Lodge Pricing Fields -->
     </div>
 
     <hr style="border:none;border-top:1px solid var(--border);margin:24px 0">
@@ -527,7 +639,8 @@
 
     const isLand = /plot|land/i.test(propType);
     const isCommercial = /commercial|shop|office|warehouse/i.test(propType);
-    const hideResidential = isLand || isCommercial;
+    const isLodge = /lodge/i.test(propType);
+    const hideResidential = isLand || isCommercial || isLodge;
 
     const hide = (id, hidden) => {
       const el = document.getElementById(id);
@@ -541,15 +654,15 @@
       }
     };
 
-    // Residential fields to hide for Land/Commercial
+    // Residential fields to hide for Land/Commercial/Lodge
     hide('fgBhk', hideResidential);
     hide('fgFloor', hideResidential);
     hide('fgTotalFloors', hideResidential);
     hide('fgFurnishing', hideResidential);
     hide('fgParking', hideResidential);
     hide('fgYear', hideResidential);
-    hide('fgBuiltUpArea', isLand); // Land usually uses plot area, not built-up
-    hide('fgCarpetArea', isLand);
+    hide('fgBuiltUpArea', isLand || isLodge); // Land uses plot area, Lodge uses rooms/size
+    hide('fgCarpetArea', isLand || isLodge);
 
     // Land specific fields to show only for Land
     hide('fgRatePerSqFt', !isLand);
@@ -558,11 +671,33 @@
     hide('fgLoan', !isLand);
     hide('fgEmi', !isLand);
 
+    // Lodge specific room fields to show only for Lodge
+    hide('fgRoomType', !isLodge);
+    hide('fgAcNonAc', !isLodge);
+    hide('fgAttachedBathroom', !isLodge);
+    hide('fgBedType', !isLodge);
+    hide('fgRoomSize', !isLodge);
+
+    // Lodge specific pricing fields (Step 5)
+    hide('fgPricePerDay', !isLodge);
+    hide('fgPricePerWeek', !isLodge);
+    hide('fgPricePerMonth', !isLodge);
+    hide('fgSecurityDeposit', !isLodge);
+    hide('fgElectricityExtra', !isLodge);
+    hide('fgGstExtra', !isLodge);
+
+    // Standard pricing fields to hide for Lodge
+    hide('fgExpectedPrice', isLodge);
+    hide('fgPriceType', isLodge);
+    hide('fgMaintCharges', isLodge);
+    hide('fgTokenAmt', isLodge);
+
     // Also update Step 3 title to match context
     const step3Title = document.querySelector('#formStep3 .form-card-title');
     if (step3Title) {
       if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
       else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
+      else if (isLodge) step3Title.textContent = 'Step 3: Lodge Details';
       else step3Title.textContent = 'Step 3: Property Details';
     }
   }

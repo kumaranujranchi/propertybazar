@@ -80,7 +80,6 @@
 </div>
 
 <!-- HEADER -->
-
 <header class="header" id="header">
   <div class="container">
     <nav class="nav">
@@ -88,25 +87,38 @@
         <div class="nav-logo-icon">24</div>
         <span class="nav-logo-text">24Dismil.com</span>
       </a>
+      <div class="nav-city">
+        <i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
+      </div>
       <div class="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="properties.html?type=buy" class="nav-link active">Buy</a>
         <a href="properties.html?type=rent" class="nav-link">Rent</a>
+        <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+        <a href="pricing.html" class="nav-link">Pricing</a>
         <a href="post-property.html" class="nav-link">Post Property</a>
         <a href="about.html" class="nav-link">About</a>
         <a href="contact.html" class="nav-link">Contact</a>
       </div>
       <div class="nav-actions">
-        <a href="login.html" class="nav-btn-login">Login / Register</a>
-        <a href="post-property.html" class="nav-btn-post"><i class="fa-solid fa-plus"></i> Post FREE Property</a>
+        <a href="login.html" class="nav-btn-login">Login</a>
+        <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
       </div>
-      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
     </nav>
   </div>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="properties.html"><i class="fa-solid fa-magnifying-glass"></i> Properties</a>
-    <a href="post-property.html"><i class="fa-solid fa-plus"></i> Post Property</a>
+    <a href="index.html">🏠 Home</a>
+    <a href="properties.html?type=buy">🛒 Buy Property</a>
+    <a href="properties.html?type=rent">🔑 Rent Property</a>
+    <a href="properties.html?type=commercial">🏢 Commercial</a>
+    <a href="pricing.html">💳 Pricing</a>
+    <a href="post-property.html">➕ Post Property</a>
+    <a href="about.html">ℹ️ About Us</a>
+    <a href="contact.html">📞 Contact</a>
+    <a href="login.html" style="color: var(--primary); font-weight: 700">Login</a>
   </div>
 </header>
 
@@ -205,13 +217,10 @@
         <h2 style="font-size:18px;font-weight:700;color:var(--dark);margin-bottom:14px">Property Description</h2>
         <p style="font-size:14px;color:var(--text-muted);line-height:1.8">A beautifully designed 3BHK apartment with modern amenities in a premium gated society in Sector 62, Noida. The apartment features large windows that bring in abundant natural light, a fully-modular kitchen with premium fittings, and stunning city views from the sprawling balcony.</p>
         <p style="font-size:14px;color:var(--text-muted);line-height:1.8;margin-top:10px">The society has world-class amenities including a swimming pool, well-equipped gymnasium, landscaped gardens, children's play area and 24x7 multi-layer security. Located minutes from Noida Sector 62 metro station, Logix City Centre Mall and major IT hubs.</p>
-        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+        <div id="locationBadgesContainer" style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
           <span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-building-circle-check"></i> DDA Approved</span>
           <span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-file-contract"></i> RERA Registered</span>
           <span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-user-check"></i> Owner Listing</span>
-          <span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-train-subway"></i> Metro: 0.5 km</span>
-          <span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-hospital"></i> Hospital: 1.2 km</span>
-          <span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-school"></i> School: 0.8 km</span>
         </div>
       </div>
 
@@ -275,22 +284,7 @@
           <p style="font-size:14px;color:var(--text-muted)">Sector 62, Noida, Uttar Pradesh 201301</p>
           <a href="https://maps.google.com?q=Sector+62+Noida" target="_blank" class="btn btn-outline btn-sm">Open in Google Maps ↗</a>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px">
-          <div style="background:var(--bg);padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">
-            <div style="font-size:20px;margin-bottom:4px"><i class="fa-solid fa-train-subway"></i></div>
-            <div style="font-weight:600;color:var(--text)">Metro</div>
-            <div style="color:var(--text-muted)">0.5 km</div>
-          </div>
-          <div style="background:var(--bg);padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">
-            <div style="font-size:20px;margin-bottom:4px"><i class="fa-solid fa-school"></i></div>
-            <div style="font-weight:600;color:var(--text)">School</div>
-            <div style="color:var(--text-muted)">0.8 km</div>
-          </div>
-          <div style="background:var(--bg);padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">
-            <div style="font-size:20px;margin-bottom:4px"><i class="fa-solid fa-cart-shopping"></i></div>
-            <div style="font-weight:600;color:var(--text)">Mall</div>
-            <div style="color:var(--text-muted)">1.5 km</div>
-          </div>
+        <div id="locationDistancesGrid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px">
         </div>
       </div>
     </div>
@@ -677,6 +671,38 @@
     }
     const mapText = document.querySelector('[href*="maps.google.com"]')?.previousElementSibling;
     if (mapText) mapText.textContent = `${p.location?.locality || ''}, ${p.location?.city || ''} ${p.location?.pinCode || ''}`;
+
+    // ---- Dynamic Distances (Badges & Map Cards) ----
+    const { metroDistance, schoolDistance, mallDistance, hospitalDistance } = p.location || {};
+    const locBadgesContainer = document.getElementById('locationBadgesContainer');
+    const locDistancesGrid = document.getElementById('locationDistancesGrid');
+    
+    const distanceItems = [
+      { name: 'Metro', val: metroDistance, icon: 'fa-train-subway', iconColor: 'var(--text-muted)' },
+      { name: 'School', val: schoolDistance, icon: 'fa-school', iconColor: 'var(--text-muted)' },
+      { name: 'Hospital', val: hospitalDistance, icon: 'fa-hospital', iconColor: 'var(--text-muted)' },
+      { name: 'Mall', val: mallDistance, icon: 'fa-cart-shopping', iconColor: 'var(--text-muted)' }
+    ].filter(item => item.val && parseFloat(item.val) > 0);
+
+    if (locBadgesContainer && distanceItems.length > 0) {
+      distanceItems.forEach(item => {
+        locBadgesContainer.innerHTML += `<span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid ${item.icon}"></i> ${item.name}: ${item.val} km</span>`;
+      });
+    }
+
+    if (locDistancesGrid) {
+      if (distanceItems.length > 0) {
+        locDistancesGrid.innerHTML = distanceItems.slice(0, 3).map(item => `
+          <div style="background:var(--bg);padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">
+            <div style="font-size:20px;margin-bottom:4px"><i class="fa-solid ${item.icon}"></i></div>
+            <div style="font-weight:600;color:var(--text)">${item.name}</div>
+            <div style="color:var(--text-muted)">${item.val} km</div>
+          </div>
+        `).join('');
+      } else {
+        locDistancesGrid.style.display = 'none';
+      }
+    }
 
     // ---- Handle Contact Owner Form ----
     const btnSendEnquiry = document.getElementById('btnSendEnquiry');

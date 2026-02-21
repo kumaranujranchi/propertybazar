@@ -14,6 +14,10 @@ export default defineSchema({
       fullAddress: v.optional(v.string()),
       pinCode: v.string(),
       landmark: v.optional(v.string()),
+      metroDistance: v.optional(v.string()),
+      schoolDistance: v.optional(v.string()),
+      mallDistance: v.optional(v.string()),
+      hospitalDistance: v.optional(v.string()),
     }),
     details: v.object({
       bhk: v.string(),
@@ -55,6 +59,20 @@ export default defineSchema({
     passwordHash: v.string(),
     subscriptionTier: v.optional(v.string()), // 'free', 'premium', 'agent'
     subscriptionExpiry: v.optional(v.number()),
+    // Profile
+    mobile: v.optional(v.string()),
+    companyName: v.optional(v.string()),
+    officeAddress: v.optional(v.string()),
+    profilePictureUrl: v.optional(v.string()),
+    // RERA
+    reraNumber: v.optional(v.string()),
+    reraCertificateUrl: v.optional(v.string()),
+    reraStatus: v.optional(v.string()), // pending, verified, rejected
+    // Settings
+    settings: v.optional(v.object({
+      emailNotifications: v.boolean(),
+      smsNotifications: v.boolean(),
+    })),
   }).index("by_email", ["email"]),
 
   sessions: defineTable({

@@ -16,24 +16,42 @@
 <header class="header" id="header">
   <div class="container">
     <nav class="nav">
-      <a href="index.html" class="nav-logo"><div class="nav-logo-icon">24</div><span class="nav-logo-text">24Dismil.com</span></a>
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">24</div>
+        <span class="nav-logo-text">24Dismil.com</span>
+      </a>
+      <div class="nav-city">
+        <i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
+      </div>
       <div class="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="properties.html?type=buy" class="nav-link">Buy</a>
         <a href="properties.html?type=rent" class="nav-link">Rent</a>
+        <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+        <a href="pricing.html" class="nav-link">Pricing</a>
         <a href="post-property.html" class="nav-link">Post Property</a>
         <a href="about.html" class="nav-link">About</a>
         <a href="contact.html" class="nav-link active">Contact</a>
       </div>
       <div class="nav-actions">
-        <a href="login.html" class="nav-btn-login">Login / Register</a>
+        <a href="login.html" class="nav-btn-login">Login</a>
         <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
       </div>
-      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
     </nav>
   </div>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html"><i class="fa-solid fa-house"></i> Home</a><a href="properties.html"><i class="fa-solid fa-magnifying-glass"></i> Properties</a><a href="post-property.html"><i class="fa-solid fa-plus"></i> Post Property</a><a href="about.html"><i class="fa-solid fa-circle-info"></i> About</a>
+    <a href="index.html">🏠 Home</a>
+    <a href="properties.html?type=buy">🛒 Buy Property</a>
+    <a href="properties.html?type=rent">🔑 Rent Property</a>
+    <a href="properties.html?type=commercial">🏢 Commercial</a>
+    <a href="pricing.html">💳 Pricing</a>
+    <a href="post-property.html">➕ Post Property</a>
+    <a href="about.html">ℹ️ About Us</a>
+    <a href="contact.html">📞 Contact</a>
+    <a href="login.html" style="color: var(--primary); font-weight: 700">Login</a>
   </div>
 </header>
 
@@ -62,7 +80,7 @@
           <div class="contact-detail-icon"><i class="fa-solid fa-phone"></i></div>
           <div>
             <div class="contact-detail-label">Phone</div>
-            <div class="contact-detail-value">1800-41-99099 (Toll Free)</div>
+            <div class="contact-detail-value">+91 9525230232</div>
             <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Mon - Sat: 9 AM - 8 PM</div>
           </div>
         </div>
@@ -78,34 +96,8 @@
           <div class="contact-detail-icon"><i class="fa-brands fa-whatsapp"></i></div>
           <div>
             <div class="contact-detail-label">WhatsApp Support</div>
-            <div class="contact-detail-value">+91 98765 43210</div>
+            <div class="contact-detail-value">+91 9525230232</div>
             <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Available 24x7</div>
-          </div>
-        </div>
-        <div class="contact-detail-item">
-          <div class="contact-detail-icon"><i class="fa-solid fa-building"></i></div>
-          <div>
-            <div class="contact-detail-label">Head Office</div>
-            <div class="contact-detail-value">InfoEdge India Ltd., B-8, Sector 132, Noida - 201304, Uttar Pradesh</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- OFFICE LOCATIONS -->
-      <div style="margin-top:32px">
-        <h3 style="font-size:16px;font-weight:700;color:var(--dark);margin-bottom:16px">Regional Offices</h3>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="background:var(--bg);border-radius:var(--radius-sm);padding:14px 16px;border:1px solid var(--border)">
-            <div style="font-weight:700;font-size:14px;color:var(--dark)"><i class="fa-solid fa-location-dot"></i> Mumbai Office</div>
-            <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Unit 901, Trade Centre, BKC, Bandra East, Mumbai - 400051</div>
-          </div>
-          <div style="background:var(--bg);border-radius:var(--radius-sm);padding:14px 16px;border:1px solid var(--border)">
-            <div style="font-weight:700;font-size:14px;color:var(--dark)"><i class="fa-solid fa-location-dot"></i> Bangalore Office</div>
-            <div style="font-size:13px;color:var(--text-muted);margin-top:4px">6th Floor, RMZ Infinity, Old Madras Road, Bangalore - 560016</div>
-          </div>
-          <div style="background:var(--bg);border-radius:var(--radius-sm);padding:14px 16px;border:1px solid var(--border)">
-            <div style="font-weight:700;font-size:14px;color:var(--dark)"><i class="fa-solid fa-location-dot"></i> Delhi Office</div>
-            <div style="font-size:13px;color:var(--text-muted);margin-top:4px">A-41, Connaught Place, New Delhi - 110001</div>
           </div>
         </div>
       </div>
@@ -179,8 +171,8 @@
         </button>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px">
-          <a href="tel:18004199099" class="btn btn-outline" style="justify-content:center;font-size:13px"><i class="fa-solid fa-phone"></i> Call Us</a>
-          <a href="https://wa.me/919876543210" class="btn" style="background:#25D366;color:#fff;justify-content:center;font-size:13px"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+          <a href="tel:+919525230232" class="btn btn-outline" style="justify-content:center;font-size:13px"><i class="fa-solid fa-phone"></i> Call Us</a>
+          <a href="https://wa.me/919525230232" class="btn" style="background:#25D366;color:#fff;justify-content:center;font-size:13px"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
         </div>
       </div>
 
@@ -206,18 +198,7 @@
   </div>
 </div>
 
-<!-- MAP SECTION -->
-<div style="background:var(--bg);padding:48px 0">
-  <div class="container">
-    <h2 style="font-size:22px;font-weight:700;color:var(--dark);margin-bottom:20px"><i class="fa-solid fa-location-dot"></i> Our Head Office Location</h2>
-    <div style="background:#E2E8F0;border-radius:var(--radius-lg);height:320px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;border:2px dashed var(--border)">
-      <div style="font-size:60px"><i class="fa-solid fa-map-location-dot"></i></div>
-      <h3 style="font-size:18px;font-weight:600;color:var(--text)">24Dismil.com Head Office</h3>
-      <p style="font-size:14px;color:var(--text-muted)">B-8, Sector 132, Noida - 201304, Uttar Pradesh, India</p>
-      <a href="https://maps.google.com?q=Sector+132,Noida" target="_blank" class="btn btn-primary">Open in Google Maps ↗</a>
-    </div>
-  </div>
-</div>
+
 
 <!-- FOOTER -->
 <footer class="footer">

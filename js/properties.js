@@ -90,6 +90,16 @@ window.properties = [
     description: 'Tastefully furnished independent villa with a private garden, ideal for families.',
     price_per_sqft: 30,
   },
+  {
+    id: 10, type: 'rent', propType: 'Lodge', bhk: 0, price: 1500, priceDisplay: '₹1,500/night',
+    title: 'Comfortable AC Lodge Room Near Station', location: 'Patliputra, Patna', city: 'Patna',
+    area: 250, areaDisplay: '250 sq.ft', image: 'images/hero-bg.jpg',
+    status: 'ready', verified: true, featured: false, newLaunch: false, rera: null,
+    amenities: ['AC','WiFi','Attached Bathroom','Room Service','Hot Water'],
+    possession: 'Ready to Move', floor: '1st', facing: 'East', parking: 1,
+    description: 'Clean and comfortable AC lodge room available on daily/monthly basis. Suitable for travellers and students.',
+    price_per_sqft: 6,
+  },
 ];
 
 const cities = [

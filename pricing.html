@@ -1,519 +1,827 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pricing Plans - 24Dismil.com</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/city-dropdown.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
-  <style>
-    .pricing-hero {
-      padding: 60px 20px 40px;
-      margin-top: 64px;
-      text-align: center;
-      background: var(--bg);
-    }
-    .pricing-hero h1 {
-      font-size: 36px;
-      margin-bottom: 16px;
-      color: var(--dark);
-    }
-    .pricing-hero p {
-      color: var(--text-muted);
-      font-size: 16px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    .pricing-toggle {
-      display: flex;
-      justify-content: center;
-      margin: 40px 0;
-    }
-    .toggle-container {
-      background: #e2e8f0;
-      border-radius: 30px;
-      display: flex;
-      padding: 4px;
-      position: relative;
-      width: 380px;
-      max-width: 100%;
-    }
-    .toggle-btn {
-      flex: 1;
-      padding: 10px 16px;
-      border: none;
-      background: transparent;
-      border-radius: 26px;
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-      cursor: pointer;
-      position: relative;
-      z-index: 2;
-      transition: color 0.3s;
-      white-space: nowrap;
-    }
-    .toggle-btn.active {
-      color: var(--primary);
-    }
-    .toggle-slider {
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      bottom: 4px;
-      width: 50%;
-      background: #fff;
-      border-radius: 26px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 1;
-    }
-    
-    .pricing-cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
-      max-width: 1200px;
-      margin: 0 auto 80px auto;
-      padding: 0 20px;
-      justify-content: center;
-    }
-    
-    .pricing-card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 32px;
-      width: 340px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-      border: 1px solid var(--border);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .pricing-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-    }
-    .pricing-card.featured {
-      border: 2px solid var(--primary);
-      box-shadow: 0 12px 30px rgba(255, 90, 61, 0.15);
-    }
-    .featured-badge {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--primary);
-      color: #fff;
-      padding: 4px 16px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .plan-name {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 8px;
-    }
-    .plan-desc {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-      min-height: 42px;
-    }
-    .plan-price {
-      font-size: 42px;
-      font-weight: 800;
-      color: var(--dark);
-      margin-bottom: 8px;
-      display: flex;
-      align-items: flex-end;
-      gap: 4px;
-    }
-    .price-currency { font-size: 24px; margin-bottom: 6px; }
-    .price-period { font-size: 14px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px;}
-    
-    .plan-features {
-      margin: 24px 0 32px 0;
-      padding: 0;
-      list-style: none;
-      flex-grow: 1;
-    }
-    .plan-features li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 14px;
-      color: var(--text);
-      margin-bottom: 16px;
-      line-height: 1.5;
-    }
-    .feature-check {
-      color: #10b981;
-      font-weight: bold;
-    }
-    .btn-plan {
-      width: 100%;
-      padding: 14px;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .btn-outline {
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--dark);
-    }
-    .btn-outline:hover {
-      border-color: var(--dark);
-    }
-    
-    /* Mock Payment Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: 0.2s;
-    }
-    .modal-overlay.open {
-      opacity: 1; visibility: visible;
-    }
-    .payment-modal {
-      background: #fff;
-      width: 100%; max-width: 400px;
-      border-radius: 12px;
-      padding: 24px;
-      text-align: center;
-      transform: translateY(20px);
-      transition: 0.3s;
-    }
-    .modal-overlay.open .payment-modal {
-      transform: translateY(0);
-    }
-    .payment-modal h3 { margin-bottom: 10px; }
-    .payment-modal p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
-    .loader {
-      width: 40px; height: 40px;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px auto;
-      display: none;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-  </style>
-  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pricing Plans - 24Dismil.com</title>
 
-  <!-- HEADER -->
-  <header class="header" id="header">
-    <div class="container">
-      <nav class="nav">
-        <a href="index.html" class="nav-logo">
-          <div class="nav-logo-icon">24</div>
-          <span class="nav-logo-text">24Dismil.com</span>
-        </a>
-        <div class="nav-city" id="navCityEl"><i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down"></i></div>
-        <div class="nav-links">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="properties.html?type=buy" class="nav-link">Buy</a>
-          <a href="properties.html?type=rent" class="nav-link">Rent</a>
-          <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
-          <a href="pricing.html" class="nav-link active">Pricing</a>
-          <a href="post-property.html" class="nav-link">Post Property</a>
-          <a href="about.html" class="nav-link">About</a>
-          <a href="contact.html" class="nav-link">Contact</a>
-        </div>
-        <div class="nav-actions">
-          <a href="login.html" class="nav-btn-login">Login / Register</a>
-          <a href="post-property.html" class="nav-btn-post"><i class="fa-solid fa-plus"></i> Post FREE Property</a>
-        </div>
-        <div class="hamburger" id="hamburger">
-          <span></span><span></span><span></span>
-        </div>
-      </nav>
-    </div>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-      <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
-      <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
-      <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
-      <a href="pricing.html"><i class="fa-solid fa-credit-card"></i> Pricing</a>
-      <a href="post-property.html"><i class="fa-solid fa-plus"></i> Post Property</a>
-      <a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
-      <a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a>
-      <a href="login.html" style="color: var(--primary); font-weight: 700">Login / Register</a>
-    </div>
-  </header>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <main>
-    <section class="pricing-hero">
-      <h1>Simple & Transparent Pricing</h1>
-      <p>Choose the right plan to boost your property visibility and close deals faster.</p>
-      
-      <div class="pricing-toggle">
-        <div class="toggle-container" id="toggleContainer">
-          <div class="toggle-slider" id="toggleSlider"></div>
-          <button class="toggle-btn active" id="btnIndividual">For Individuals</button>
-          <button class="toggle-btn" id="btnAgent">For Agents & Builders</button>
-        </div>
-      </div>
-    </section>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/city-dropdown.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
 
-    <!-- INDIVIDUAL PLANS -->
-    <section class="pricing-cards" id="individualPlans">
-      <!-- Basic -->
-      <div class="pricing-card">
-        <div class="plan-name">Basic</div>
-        <div class="plan-desc">For users who want to try the platform.</div>
-        <div class="plan-price"><span class="price-currency">₹</span>0</div>
-        <ul class="plan-features">
-          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Post up to 3 properties</li>
-          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Listings valid for 30 days</li>
-          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Upload up to 5 photos</li>
-          <li><span class="feature-check" style="color:#ef4444;"><i class="fa-solid fa-minus"></i></span> Standard search ranking</li>
-        </ul>
-        <button class="btn-plan btn-outline" disabled>Current Free Plan</button>
-      </div>
+    <style>
+      .pricing-hero {
+        padding: 60px 20px 40px;
+        margin-top: 64px;
+        text-align: center;
+        background: var(--bg);
+      }
+      .pricing-hero h1 {
+        font-size: 36px;
+        margin-bottom: 16px;
+        color: var(--dark);
+      }
+      .pricing-hero p {
+        color: var(--text-muted);
+        font-size: 16px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
 
-      <!-- Premium -->
-      <div class="pricing-card featured">
-        <div class="featured-badge">Most Popular</div>
-        <div class="plan-name">Premium</div>
-        <div class="plan-desc">For serious sellers who want fast closures.</div>
-        <div class="plan-price"><span class="price-currency">₹</span>999<span class="price-period">/90 days</span></div>
-        <ul class="plan-features">
-          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Post up to 10 properties</li>
-          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Listings valid for 90 days</li>
-          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> <b>Featured Badge</b> on listings</li>
-          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> <b>Top Search Ranking</b> for visibility</li>
-          <li><span class="feature-check"><i class="fa-solid fa-check"></i></span> Upload up to 15 photos</li>
-        </ul>
-        <button class="btn-plan btn-primary upgrade-btn" data-tier="premium" data-days="90" data-price="999">Upgrade to Premium</button>
-      </div>
-    </section>
+      .pricing-toggle {
+        display: flex;
+        justify-content: center;
+        margin: 40px 0;
+      }
+      .toggle-container {
+        background: #e2e8f0;
+        border-radius: 30px;
+        display: flex;
+        padding: 4px;
+        position: relative;
+        width: 380px;
+        max-width: 100%;
+      }
+      .toggle-btn {
+        flex: 1;
+        padding: 10px 16px;
+        border: none;
+        background: transparent;
+        border-radius: 26px;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+        transition: color 0.3s;
+        white-space: nowrap;
+      }
+      .toggle-btn.active {
+        color: var(--primary);
+      }
+      .toggle-slider {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        bottom: 4px;
+        width: 50%;
+        background: #fff;
+        border-radius: 26px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 1;
+      }
 
-    <!-- AGENT & BUILDER PLANS -->
-    <section class="pricing-cards" id="agentPlans" style="display:none; margin-bottom: 20px;">
-      
-      <!-- SUBHEADING FOR AGENTS -->
-      <div style="width: 100%; text-align: center; margin-bottom: 10px;">
-        <h2 style="font-size:24px; color:var(--dark);">For Brokers & Agents</h2>
-        <p style="color:var(--text-muted);">Recurring subscription to list properties in bulk.</p>
-      </div>
+      .pricing-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto 80px auto;
+        padding: 0 20px;
+        justify-content: center;
+      }
 
-      <!-- Starter Agent -->
-      <div class="pricing-card">
-        <div class="plan-name">Starter Agent</div>
-        <div class="plan-desc">Perfect for growing real estate brokers.</div>
-        <div class="plan-price"><span class="price-currency">₹</span>2,500<span class="price-period">/mo</span></div>
-        <ul class="plan-features">
-          <li><span class="feature-check">✓</span> Up to 15 Active Listings</li>
-          <li><span class="feature-check">✓</span> Access to Owner Contact Database (Limit: 50/mo)</li>
-          <li><span class="feature-check">✓</span> Agent Profile Badge</li>
-        </ul>
-        <button class="btn-plan btn-primary upgrade-btn" data-tier="agent_starter" data-days="30" data-price="2500">Subscribe Now</button>
-      </div>
+      .pricing-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 32px;
+        width: 340px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        border: 1px solid var(--border);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .pricing-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      }
+      .pricing-card.featured {
+        border: 2px solid var(--primary);
+        box-shadow: 0 12px 30px rgba(255, 90, 61, 0.15);
+      }
+      .featured-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary);
+        color: #fff;
+        padding: 4px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
 
-      <!-- Pro Agent -->
-      <div class="pricing-card featured">
-        <div class="featured-badge">Most Popular</div>
-        <div class="plan-name">Pro Agent</div>
-        <div class="plan-desc">For established agencies maximizing reach.</div>
-        <div class="plan-price"><span class="price-currency">₹</span>6,000<span class="price-period">/mo</span></div>
-        <ul class="plan-features">
-          <li><span class="feature-check">✓</span> Up to 50 Active Listings</li>
-          <li><span class="feature-check">✓</span> Unlimited Owner Contacts</li>
-          <li><span class="feature-check">✓</span> 5 "Featured" Listing boosts per month</li>
-          <li><span class="feature-check">✓</span> SEO Optimized Agent Page</li>
-        </ul>
-        <button class="btn-plan btn-primary upgrade-btn" data-tier="agent_pro" data-days="30" data-price="6000">Subscribe Now</button>
-      </div>
+      .plan-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 8px;
+      }
+      .plan-desc {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        min-height: 42px;
+      }
+      .plan-price {
+        font-size: 42px;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+      }
+      .price-currency {
+        font-size: 24px;
+        margin-bottom: 6px;
+      }
+      .price-period {
+        font-size: 14px;
+        color: var(--text-muted);
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
 
-      <!-- Agency / Corporate -->
-      <div class="pricing-card">
-        <div class="plan-name">Agency / Corporate</div>
-        <div class="plan-desc">Custom solutions for large franchises.</div>
-        <div class="plan-price" style="font-size: 32px;">Custom</div>
-        <ul class="plan-features">
-          <li><span class="feature-check">✓</span> Unlimited Listings</li>
-          <li><span class="feature-check">✓</span> Sub-accounts for multiple staff</li>
-          <li><span class="feature-check">✓</span> Banner ads on homepage</li>
-        </ul>
-        <button class="btn-plan btn-outline" onclick="window.location.href='contact.html'">Call Us</button>
-      </div>
+      .plan-features {
+        margin: 24px 0 32px 0;
+        padding: 0;
+        list-style: none;
+        flex-grow: 1;
+      }
+      .plan-features li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 14px;
+        color: var(--text);
+        margin-bottom: 16px;
+        line-height: 1.5;
+      }
+      .feature-check {
+        color: #10b981;
+        font-weight: bold;
+      }
+      .btn-plan {
+        width: 100%;
+        padding: 14px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn-outline {
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--dark);
+      }
+      .btn-outline:hover {
+        border-color: var(--dark);
+      }
 
-      <!-- SUBHEADING FOR BUILDERS -->
-      <div style="width: 100%; text-align: center; margin-top: 50px; margin-bottom: 10px;">
-        <h2 style="font-size:24px; color:var(--dark);">For Builders & Developers (New Projects)</h2>
-        <p style="color:var(--text-muted);">Premium visibility for New Projects with massive marketing budgets.</p>
-      </div>
-
-      <!-- Banner Ads -->
-      <div class="pricing-card">
-        <div class="plan-name">Homepage Banner Ads</div>
-        <div class="plan-desc">Maximum visibility on city-based traffic.</div>
-        <div class="plan-price"><span class="price-currency">₹</span>20-50k<span class="price-period">/mo</span></div>
-        <ul class="plan-features">
-          <li><span class="feature-check">✓</span> Prime hero-section placement</li>
-          <li><span class="feature-check">✓</span> Geo-targeted by City</li>
-          <li><span class="feature-check">✓</span> Drive direct project inquiries</li>
-          <li><span class="feature-check">✓</span> estimated leads 50+ per month</li>
-          <li><span class="feature-check">✓</span> dedicated Page for your Projects</li>
-        </ul>
-        <button class="btn-plan btn-outline" onclick="window.location.href='contact.html'">Enquire Now</button>
-      </div>
-
-      <!-- Project of the Month -->
-      <div class="pricing-card featured">
-        <div class="plan-name">Project of the Month</div>
-        <div class="plan-desc">The ultimate full-scale takeover.</div>
-        <div class="plan-price"><span class="price-currency">₹</span>1 Lakh<span class="price-period">/mo</span></div>
-        <ul class="plan-features">
-          <li><span class="feature-check">✓</span> Full Page Homepage Takeover</li>
-          <li><span class="feature-check">✓</span> Dedicated Email Blast to Users</li>
-          <li><span class="feature-check">✓</span> Priority Customer Support</li>
-          <li><span class="feature-check">✓</span> 100+ leads per month</li>
-          <li><span class="feature-check">✓</span> Dedicated landing page for your project</li>
-        </ul>
-        <button class="btn-plan btn-primary" onclick="window.location.href='contact.html'">Book Slot</button>
-      </div>
-
-      <!-- Cost Per Lead -->
-      <div class="pricing-card">
-        <div class="plan-name">Performance (CPL)</div>
-        <div class="plan-desc">Pay only for verified buyer leads.</div>
-        <div class="plan-price"><span class="price-currency">₹</span>500+<span class="price-period">/lead</span></div>
-        <ul class="plan-features">
-          <li><span class="feature-check">✓</span> ₹500-₹1000 per verified phone number/lead generated</li>
-          <li><span class="feature-check">✓</span> SMS/WhatsApp notifications</li>
-          <li><span class="feature-check">✓</span> High-intent buyer matching</li>
-        </ul>
-        <button class="btn-plan btn-outline" onclick="window.location.href='contact.html'">Start Campaign</button>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- MOCK PAYMENT MODAL -->
-  <div class="modal-overlay" id="paymentModal">
-    <div class="payment-modal">
-      <h3 id="paymentTitle">Complete Payment</h3>
-      <p id="paymentDesc">You will be charged ₹999 securely.</p>
-      
-      <div class="loader" id="paymentLoader"></div>
-      
-      <div id="paymentActions">
-        <button class="btn btn-primary" id="btnConfirmPay" style="width:100%; margin-bottom:12px;">Mock Pay Now</button>
-        <button class="btn btn-outline" id="btnCancelPay" style="width:100%;">Cancel</button>
-      </div>
-      
-      <div id="paymentSuccess" style="display:none; color:#10b981; font-weight:bold; margin-top:20px;">
-        <i class="fa-solid fa-circle-check"></i> Payment Successful! Redirecting...
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="footer-logo">
+      /* Mock Payment Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.2s;
+      }
+      .modal-overlay.open {
+        opacity: 1;
+        visibility: visible;
+      }
+      .payment-modal {
+        background: #fff;
+        width: 100%;
+        max-width: 400px;
+        border-radius: 12px;
+        padding: 24px;
+        text-align: center;
+        transform: translateY(20px);
+        transition: 0.3s;
+      }
+      .modal-overlay.open .payment-modal {
+        transform: translateY(0);
+      }
+      .payment-modal h3 {
+        margin-bottom: 10px;
+      }
+      .payment-modal p {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+      .loader {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px auto;
+        display: none;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="header" id="header">
+      <div class="container">
+        <nav class="nav">
+          <a href="index.html" class="nav-logo">
             <div class="nav-logo-icon">24</div>
-            24Dismil.com
+            <span class="nav-logo-text">24Dismil.com</span>
+          </a>
+          <div class="nav-city">
+            <i class="fa-solid fa-location-dot"></i> Delhi NCR
+            <i class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
           </div>
-          <p class="footer-tagline">
-            India's most trusted real estate portal. Find your dream property
-            with verified listings, expert guidance, and market insights. Your
-            home journey starts here.
-          </p>
-          <div class="footer-socials">
-            <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+          <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="properties.html?type=buy" class="nav-link">Buy</a>
+            <a href="properties.html?type=rent" class="nav-link">Rent</a>
+            <a href="properties.html?type=commercial" class="nav-link"
+              >Commercial</a
+            >
+            <a href="pricing.html" class="nav-link active">Pricing</a>
+            <a href="post-property.html" class="nav-link">Post Property</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
           </div>
-        </div>
-        <div class="footer-col">
-          <h4>Quick Links</h4>
-          <div class="footer-links">
-            <a href="properties.html?type=buy">Buy Properties</a>
-            <a href="properties.html?type=rent">Rent Properties</a>
-            <a href="properties.html?type=commercial">Commercial</a>
-            <a href="post-property.html">Post Free Property</a>
-            <a href="properties.html?newLaunch=true">New Projects</a>
-            <a href="about.html">About Us</a>
-            <a href="contact.html">Contact</a>
+          <div class="nav-actions">
+            <a href="login.html" class="nav-btn-login"
+              >Login</a
+            >
+            <a href="post-property.html" class="nav-btn-post"
+              >+ Post FREE Property</a
+            >
           </div>
-        </div>
-        <div class="footer-col">
-          <h4>Top Cities</h4>
-          <div class="footer-links">
-            <a href="properties.html?city=Mumbai">Mumbai</a>
-            <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
-            <a href="properties.html?city=Bangalore">Bangalore</a>
-            <a href="properties.html?city=Hyderabad">Hyderabad</a>
-            <a href="properties.html?city=Pune">Pune</a>
-            <a href="properties.html?city=Chennai">Chennai</a>
-            <a href="properties.html?city=Kolkata">Kolkata</a>
-            <a href="properties.html?city=Noida">Noida</a>
+          <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
           </div>
-        </div>
-        <div class="footer-col">
-          <h4>Resources</h4>
-          <div class="footer-links">
-            <a href="#">EMI Calculator</a>
-            <a href="#">Property Rates</a>
-            <a href="#">RERA Guide</a>
-            <a href="#">Home Loan</a>
-            <a href="#">Legal Guide</a>
-            <a href="#">Vastu Tips</a>
-            <a href="#">Blog & News</a>
-            <a href="#">FAQ</a>
-          </div>
-        </div>
+        </nav>
       </div>
-      <div class="footer-bottom">
-        <span>© 2025 24Dismil.com. All rights reserved. | India's #1 Real Estate Portal</span>
-        <div class="footer-bottom-links">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Use</a>
-          <a href="#">Sitemap</a>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">🏠 Home</a>
+        <a href="properties.html?type=buy">🛒 Buy Property</a>
+        <a href="properties.html?type=rent">🔑 Rent Property</a>
+        <a href="properties.html?type=commercial">🏢 Commercial</a>
+        <a href="pricing.html">💳 Pricing</a>
+        <a href="post-property.html">➕ Post Property</a>
+        <a href="about.html">ℹ️ About Us</a>
+        <a href="contact.html">📞 Contact</a>
+        <a
+          href="login.html"
+          style="color: var(--primary); font-weight: 700"
+          >Login</a
+        >
+      </div>
+    </header>
+
+    <main>
+      <section class="pricing-hero">
+        <h1>Simple & Transparent Pricing</h1>
+        <p>
+          Choose the right plan to boost your property visibility and close
+          deals faster.
+        </p>
+
+        <div class="pricing-toggle">
+          <div class="toggle-container" id="toggleContainer">
+            <div class="toggle-slider" id="toggleSlider"></div>
+            <button class="toggle-btn active" id="btnIndividual">
+              For Individuals
+            </button>
+            <button class="toggle-btn" id="btnAgent">
+              For Agents & Builders
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- INDIVIDUAL PLANS -->
+      <section class="pricing-cards" id="individualPlans">
+        <!-- Basic -->
+        <div class="pricing-card">
+          <div class="plan-name">Basic</div>
+          <div class="plan-desc">For users who want to try the platform.</div>
+          <div class="plan-price"><span class="price-currency">₹</span>0</div>
+          <ul class="plan-features">
+            <li>
+              <span class="feature-check"
+                ><i class="fa-solid fa-check"></i
+              ></span>
+              Post 1 property
+            </li>
+            <li>
+              <span class="feature-check"
+                ><i class="fa-solid fa-check"></i
+              ></span>
+              1 free listing per 90 days
+            </li>
+            <li>
+              <span class="feature-check"
+                ><i class="fa-solid fa-check"></i
+              ></span>
+              Upload up to 5 photos
+            </li>
+            <li>
+              <span class="feature-check" style="color: #ef4444"
+                ><i class="fa-solid fa-minus"></i
+              ></span>
+              Standard search ranking
+            </li>
+          </ul>
+          <button class="btn-plan btn-outline" disabled>
+            Current Free Plan
+          </button>
+        </div>
+
+        <!-- Standard -->
+        <div class="pricing-card">
+          <div class="plan-name">Standard</div>
+          <div class="plan-desc">For sellers who need an extra listing.</div>
+          <div class="plan-price">
+            <span class="price-currency">₹</span>249<span class="price-period"
+              >/30 days</span
+            >
+          </div>
+          <ul class="plan-features">
+            <li>
+              <span class="feature-check"
+                ><i class="fa-solid fa-check"></i
+              ></span>
+              Post 1 additional property
+            </li>
+            <li>
+              <span class="feature-check"
+                ><i class="fa-solid fa-check"></i
+              ></span>
+              Listing valid for 30 days
+            </li>
+            <li>
+              <span class="feature-check"
+                ><i class="fa-solid fa-check"></i
+              ></span>
+              Upload up to 10 photos
+            </li>
+            <li>
+              <span class="feature-check" style="color: #ef4444"
+                ><i class="fa-solid fa-minus"></i
+              ></span>
+              Standard search ranking
+            </li>
+          </ul>
+          <button
+            class="btn-plan btn-primary upgrade-btn"
+            data-tier="standard_individual"
+            data-days="30"
+            data-price="249"
+          >
+            Buy Standard Plan
+          </button>
+        </div>
+
+        <!-- Premium -->
+        <div class="pricing-card featured">
+          <div class="featured-badge">Most Popular</div>
+          <div class="plan-name">Premium</div>
+          <div class="plan-desc">
+            For serious sellers who want fast closures.
+          </div>
+          <div class="plan-price">
+            <span class="price-currency">₹</span>999<span class="price-period"
+              >/90 days</span
+            >
+          </div>
+          <ul class="plan-features">
+            <li>
+              <span class="feature-check"
+                ><i class="fa-solid fa-check"></i
+              ></span>
+              Post up to 10 properties
+            </li>
+            <li>
+              <span class="feature-check"
+                ><i class="fa-solid fa-check"></i
+              ></span>
+              Listings valid for 90 days
+            </li>
+            <li>
+              <span class="feature-check"
+                ><i class="fa-solid fa-check"></i
+              ></span>
+              <b>Featured Badge</b> on listings
+            </li>
+            <li>
+              <span class="feature-check"
+                ><i class="fa-solid fa-check"></i
+              ></span>
+              <b>Top Search Ranking</b> for visibility
+            </li>
+            <li>
+              <span class="feature-check"
+                ><i class="fa-solid fa-check"></i
+              ></span>
+              Upload up to 15 photos
+            </li>
+          </ul>
+          <button
+            class="btn-plan btn-primary upgrade-btn"
+            data-tier="premium"
+            data-days="90"
+            data-price="999"
+          >
+            Upgrade to Premium
+          </button>
+        </div>
+      </section>
+
+      <!-- AGENT & BUILDER PLANS -->
+      <section
+        class="pricing-cards"
+        id="agentPlans"
+        style="display: none; margin-bottom: 20px"
+      >
+        <!-- SUBHEADING FOR AGENTS -->
+        <div style="width: 100%; text-align: center; margin-bottom: 10px">
+          <h2 style="font-size: 24px; color: var(--dark)">
+            For Brokers & Agents
+          </h2>
+          <p style="color: var(--text-muted)">
+            Recurring subscription to list properties in bulk.
+          </p>
+        </div>
+
+        <!-- Starter Agent -->
+        <div class="pricing-card">
+          <div class="plan-name">Starter Agent</div>
+          <div class="plan-desc">Perfect for growing real estate brokers.</div>
+          <div class="plan-price">
+            <span class="price-currency">₹</span>2,500<span class="price-period"
+              >/mo</span
+            >
+          </div>
+          <ul class="plan-features">
+            <li>
+              <span class="feature-check">✓</span> Up to 15 Active Listings
+            </li>
+            <li>
+              <span class="feature-check">✓</span> Access to Owner Contact
+              Database (Limit: 50/mo)
+            </li>
+            <li><span class="feature-check">✓</span> Agent Profile Badge</li>
+          </ul>
+          <button
+            class="btn-plan btn-primary upgrade-btn"
+            data-tier="agent_starter"
+            data-days="30"
+            data-price="2500"
+          >
+            Subscribe Now
+          </button>
+        </div>
+
+        <!-- Pro Agent -->
+        <div class="pricing-card featured">
+          <div class="featured-badge">Most Popular</div>
+          <div class="plan-name">Pro Agent</div>
+          <div class="plan-desc">
+            For established agencies maximizing reach.
+          </div>
+          <div class="plan-price">
+            <span class="price-currency">₹</span>6,000<span class="price-period"
+              >/mo</span
+            >
+          </div>
+          <ul class="plan-features">
+            <li>
+              <span class="feature-check">✓</span> Up to 50 Active Listings
+            </li>
+            <li>
+              <span class="feature-check">✓</span> Unlimited Owner Contacts
+            </li>
+            <li>
+              <span class="feature-check">✓</span> 5 "Featured" Listing boosts
+              per month
+            </li>
+            <li>
+              <span class="feature-check">✓</span> SEO Optimized Agent Page
+            </li>
+          </ul>
+          <button
+            class="btn-plan btn-primary upgrade-btn"
+            data-tier="agent_pro"
+            data-days="30"
+            data-price="6000"
+          >
+            Subscribe Now
+          </button>
+        </div>
+
+        <!-- Agency / Corporate -->
+        <div class="pricing-card">
+          <div class="plan-name">Agency / Corporate</div>
+          <div class="plan-desc">Custom solutions for large franchises.</div>
+          <div class="plan-price" style="font-size: 32px">Custom</div>
+          <ul class="plan-features">
+            <li><span class="feature-check">✓</span> Unlimited Listings</li>
+            <li>
+              <span class="feature-check">✓</span> Sub-accounts for multiple
+              staff
+            </li>
+            <li><span class="feature-check">✓</span> Banner ads on homepage</li>
+          </ul>
+          <button
+            class="btn-plan btn-outline"
+            onclick="window.location.href = 'contact.html'"
+          >
+            Call Us
+          </button>
+        </div>
+
+        <!-- SUBHEADING FOR BUILDERS -->
+        <div
+          style="
+            width: 100%;
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 10px;
+          "
+        >
+          <h2 style="font-size: 24px; color: var(--dark)">
+            For Builders & Developers (New Projects)
+          </h2>
+          <p style="color: var(--text-muted)">
+            Premium visibility for New Projects with massive marketing budgets.
+          </p>
+        </div>
+
+        <!-- Banner Ads -->
+        <div class="pricing-card">
+          <div class="plan-name">Homepage Banner Ads</div>
+          <div class="plan-desc">Maximum visibility on city-based traffic.</div>
+          <div class="plan-price">
+            <span class="price-currency">₹</span>20-50k<span
+              class="price-period"
+              >/mo</span
+            >
+          </div>
+          <ul class="plan-features">
+            <li>
+              <span class="feature-check">✓</span> Prime hero-section placement
+            </li>
+            <li><span class="feature-check">✓</span> Geo-targeted by City</li>
+            <li>
+              <span class="feature-check">✓</span> Drive direct project
+              inquiries
+            </li>
+            <li>
+              <span class="feature-check">✓</span> estimated leads 50+ per month
+            </li>
+            <li>
+              <span class="feature-check">✓</span> dedicated Page for your
+              Projects
+            </li>
+          </ul>
+          <button
+            class="btn-plan btn-outline"
+            onclick="window.location.href = 'contact.html'"
+          >
+            Enquire Now
+          </button>
+        </div>
+
+        <!-- Project of the Month -->
+        <div class="pricing-card featured">
+          <div class="plan-name">Project of the Month</div>
+          <div class="plan-desc">The ultimate full-scale takeover.</div>
+          <div class="plan-price">
+            <span class="price-currency">₹</span>1 Lakh<span
+              class="price-period"
+              >/mo</span
+            >
+          </div>
+          <ul class="plan-features">
+            <li>
+              <span class="feature-check">✓</span> Full Page Homepage Takeover
+            </li>
+            <li>
+              <span class="feature-check">✓</span> Dedicated Email Blast to
+              Users
+            </li>
+            <li>
+              <span class="feature-check">✓</span> Priority Customer Support
+            </li>
+            <li><span class="feature-check">✓</span> 100+ leads per month</li>
+            <li>
+              <span class="feature-check">✓</span> Dedicated landing page for
+              your project
+            </li>
+          </ul>
+          <button
+            class="btn-plan btn-primary"
+            onclick="window.location.href = 'contact.html'"
+          >
+            Book Slot
+          </button>
+        </div>
+
+        <!-- Cost Per Lead -->
+        <div class="pricing-card">
+          <div class="plan-name">Performance (CPL)</div>
+          <div class="plan-desc">Pay only for verified buyer leads.</div>
+          <div class="plan-price">
+            <span class="price-currency">₹</span>500+<span class="price-period"
+              >/lead</span
+            >
+          </div>
+          <ul class="plan-features">
+            <li>
+              <span class="feature-check">✓</span> ₹500-₹1000 per verified phone
+              number/lead generated
+            </li>
+            <li>
+              <span class="feature-check">✓</span> SMS/WhatsApp notifications
+            </li>
+            <li>
+              <span class="feature-check">✓</span> High-intent buyer matching
+            </li>
+          </ul>
+          <button
+            class="btn-plan btn-outline"
+            onclick="window.location.href = 'contact.html'"
+          >
+            Start Campaign
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- MOCK PAYMENT MODAL -->
+    <div class="modal-overlay" id="paymentModal">
+      <div class="payment-modal">
+        <h3 id="paymentTitle">Complete Payment</h3>
+        <p id="paymentDesc">You will be charged ₹999 securely.</p>
+
+        <div class="loader" id="paymentLoader"></div>
+
+        <div id="paymentActions">
+          <button
+            class="btn btn-primary"
+            id="btnConfirmPay"
+            style="width: 100%; margin-bottom: 12px"
+          >
+            Mock Pay Now
+          </button>
+          <button class="btn btn-outline" id="btnCancelPay" style="width: 100%">
+            Cancel
+          </button>
+        </div>
+
+        <div
+          id="paymentSuccess"
+          style="
+            display: none;
+            color: #10b981;
+            font-weight: bold;
+            margin-top: 20px;
+          "
+        >
+          <i class="fa-solid fa-circle-check"></i> Payment Successful!
+          Redirecting...
         </div>
       </div>
     </div>
-  </footer>
 
-  <script src="js/properties.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/city-selector.js"></script>
-  <script type="module" src="js/pricing.js"></script>
-</body>
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <div class="nav-logo-icon">24</div>
+              24Dismil.com
+            </div>
+            <p class="footer-tagline">
+              India's most trusted real estate portal. Find your dream property
+              with verified listings, expert guidance, and market insights. Your
+              home journey starts here.
+            </p>
+            <div class="footer-socials">
+              <a href="#" class="social-icon"
+                ><i class="fa-brands fa-facebook"></i
+              ></a>
+              <a href="#" class="social-icon"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+              <a href="#" class="social-icon"
+                ><i class="fa-brands fa-twitter"></i
+              ></a>
+              <a href="#" class="social-icon"
+                ><i class="fa-brands fa-linkedin"></i
+              ></a>
+              <a href="#" class="social-icon"
+                ><i class="fa-brands fa-youtube"></i
+              ></a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <div class="footer-links">
+              <a href="properties.html?type=buy">Buy Properties</a>
+              <a href="properties.html?type=rent">Rent Properties</a>
+              <a href="properties.html?type=commercial">Commercial</a>
+              <a href="post-property.html">Post Free Property</a>
+              <a href="properties.html?newLaunch=true">New Projects</a>
+              <a href="about.html">About Us</a>
+              <a href="contact.html">Contact</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Top Cities</h4>
+            <div class="footer-links">
+              <a href="properties.html?city=Mumbai">Mumbai</a>
+              <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
+              <a href="properties.html?city=Bangalore">Bangalore</a>
+              <a href="properties.html?city=Hyderabad">Hyderabad</a>
+              <a href="properties.html?city=Pune">Pune</a>
+              <a href="properties.html?city=Chennai">Chennai</a>
+              <a href="properties.html?city=Kolkata">Kolkata</a>
+              <a href="properties.html?city=Noida">Noida</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <div class="footer-links">
+              <a href="#">EMI Calculator</a>
+              <a href="#">Property Rates</a>
+              <a href="#">RERA Guide</a>
+              <a href="#">Home Loan</a>
+              <a href="#">Legal Guide</a>
+              <a href="#">Vastu Tips</a>
+              <a href="#">Blog & News</a>
+              <a href="#">FAQ</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span
+            >© 2025 24Dismil.com. All rights reserved. | India's #1 Real Estate
+            Portal</span
+          >
+          <div class="footer-bottom-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Sitemap</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/properties.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/city-selector.js"></script>
+    <script type="module" src="js/pricing.js"></script>
+  </body>
 </html>

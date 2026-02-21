@@ -1,32 +1,38 @@
-import { convex } from './convex.js';
-import { requireAuth, getToken } from './auth.js';
+import { convex } from "./convex.js";
+import { requireAuth, getToken } from "./auth.js";
 
 // ========== PHOTO HANDLING ==========
-const photoFileInput = document.getElementById('photoFileInput');
-const photoUploadArea = document.getElementById('photoUploadArea');
-const photoPreviewGrid = document.getElementById('photoPreviewGrid');
+const photoFileInput = document.getElementById("photoFileInput");
+const photoUploadArea = document.getElementById("photoUploadArea");
+const photoPreviewGrid = document.getElementById("photoPreviewGrid");
 const selectedFiles = [];
 
 if (photoFileInput) {
-  photoUploadArea.addEventListener('click', (e) => {
-    if (e.target === photoUploadArea || e.target.classList.contains('photo-upload-icon') ||
-        e.target.classList.contains('photo-upload-text') || e.target.classList.contains('photo-upload-sub')) {
+  photoUploadArea.addEventListener("click", (e) => {
+    if (
+      e.target === photoUploadArea ||
+      e.target.classList.contains("photo-upload-icon") ||
+      e.target.classList.contains("photo-upload-text") ||
+      e.target.classList.contains("photo-upload-sub")
+    ) {
       photoFileInput.click();
     }
   });
-  photoUploadArea.addEventListener('dragover', (e) => {
+  photoUploadArea.addEventListener("dragover", (e) => {
     e.preventDefault();
-    photoUploadArea.style.borderColor = 'var(--primary)';
+    photoUploadArea.style.borderColor = "var(--primary)";
   });
-  photoUploadArea.addEventListener('dragleave', () => { photoUploadArea.style.borderColor = ''; });
-  photoUploadArea.addEventListener('drop', (e) => {
+  photoUploadArea.addEventListener("dragleave", () => {
+    photoUploadArea.style.borderColor = "";
+  });
+  photoUploadArea.addEventListener("drop", (e) => {
     e.preventDefault();
-    photoUploadArea.style.borderColor = '';
+    photoUploadArea.style.borderColor = "";
     handleFiles([...e.dataTransfer.files]);
   });
-  photoFileInput.addEventListener('change', () => {
+  photoFileInput.addEventListener("change", () => {
     handleFiles([...photoFileInput.files]);
-    photoFileInput.value = '';
+    photoFileInput.value = "";
   });
 }
 
@@ -53,32 +59,40 @@ function compressImage(file, maxWidth = 1200, maxHeight = 1200, quality = 0.8) {
           }
         }
 
-        const canvas = document.createElement('canvas');
+        const canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, width, height);
 
-        canvas.toBlob((blob) => {
-          // Create a new File object from the WebP blob
-          const newFile = new File([blob], file.name.replace(/\.[^/.]+$/, '.webp'), {
-            type: 'image/webp',
-            lastModified: Date.now(),
-          });
-          resolve(newFile);
-        }, 'image/webp', quality);
+        canvas.toBlob(
+          (blob) => {
+            // Create a new File object from the WebP blob
+            const newFile = new File(
+              [blob],
+              file.name.replace(/\.[^/.]+$/, ".webp"),
+              {
+                type: "image/webp",
+                lastModified: Date.now(),
+              },
+            );
+            resolve(newFile);
+          },
+          "image/webp",
+          quality,
+        );
       };
     };
   });
 }
 
 async function handleFiles(files) {
-  const valid = files.filter(f => f.type.startsWith('image/'));
+  const valid = files.filter((f) => f.type.startsWith("image/"));
   const remaining = 20 - selectedFiles.length;
   const toProcess = valid.slice(0, remaining);
-  
+
   // Show loading indicator on area (optional but good UX)
-  if (photoUploadArea) photoUploadArea.style.opacity = '0.5';
+  if (photoUploadArea) photoUploadArea.style.opacity = "0.5";
 
   for (const file of toProcess) {
     const compressedFile = await compressImage(file);
@@ -86,26 +100,30 @@ async function handleFiles(files) {
     addPreview(compressedFile, selectedFiles.length - 1);
   }
 
-  if (photoUploadArea) photoUploadArea.style.opacity = '1';
+  if (photoUploadArea) photoUploadArea.style.opacity = "1";
 }
 
 function addPreview(file, index) {
   const reader = new FileReader();
   reader.onload = (e) => {
-    const wrap = document.createElement('div');
-    wrap.style.cssText = 'position:relative;width:90px;height:90px;border-radius:8px;overflow:hidden;border:1px solid var(--border)';
+    const wrap = document.createElement("div");
+    wrap.style.cssText =
+      "position:relative;width:90px;height:90px;border-radius:8px;overflow:hidden;border:1px solid var(--border)";
     wrap.dataset.index = index;
-    const img = document.createElement('img');
+    const img = document.createElement("img");
     img.src = e.target.result;
-    img.style.cssText = 'width:100%;height:100%;object-fit:cover';
-    const removeBtn = document.createElement('div');
-    removeBtn.textContent = '✕';
-    removeBtn.style.cssText = 'position:absolute;top:2px;right:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;cursor:pointer;padding:0 4px;border-radius:4px;line-height:18px';
-    removeBtn.addEventListener('click', () => {
+    img.style.cssText = "width:100%;height:100%;object-fit:cover";
+    const removeBtn = document.createElement("div");
+    removeBtn.textContent = "✕";
+    removeBtn.style.cssText =
+      "position:absolute;top:2px;right:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;cursor:pointer;padding:0 4px;border-radius:4px;line-height:18px";
+    removeBtn.addEventListener("click", () => {
       const idx = parseInt(wrap.dataset.index);
       selectedFiles.splice(idx, 1);
       wrap.remove();
-      [...photoPreviewGrid.querySelectorAll('[data-index]')].forEach((el, i) => el.dataset.index = i);
+      [...photoPreviewGrid.querySelectorAll("[data-index]")].forEach(
+        (el, i) => (el.dataset.index = i),
+      );
     });
     wrap.appendChild(img);
     wrap.appendChild(removeBtn);
@@ -115,66 +133,78 @@ function addPreview(file, index) {
 }
 
 // ========== FORM SUBMISSION ==========
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
   // Auth guard - redirect to login if not logged in
-  const user = await requireAuth('login.html?redirect=post-property.html');
+  const user = await requireAuth("login.html?redirect=post-property.html");
   if (!user) return;
 
   // Check free limit
   if (!user.canPostMore) {
-    const submitBtn = document.getElementById('btnSubmitProperty');
+    const submitBtn = document.getElementById("btnSubmitProperty");
     if (submitBtn) {
-      submitBtn.textContent = '🔒 Free Limit Reached — Upgrade to Post More';
-      submitBtn.style.background = '#6B7280';
+      submitBtn.textContent = "🔒 Free Limit Reached — Upgrade to Post More";
+      submitBtn.style.background = "#6B7280";
       submitBtn.disabled = true;
     }
-    const note = document.createElement('p');
-    note.style.cssText = 'text-align:center;color:#EF4444;font-size:13px;margin-top:12px;font-weight:600';
-    note.textContent = `You've used all ${user.freeLimit} free listings. Upgrade to post more.`;
-    document.getElementById('btnSubmitProperty')?.parentElement.appendChild(note);
+    const note = document.createElement("p");
+    note.style.cssText =
+      "text-align:center;color:#EF4444;font-size:13px;margin-top:12px;font-weight:600";
+    note.textContent = `You've used your free listing for this 90-day period. Upgrade to post another.`;
+    document
+      .getElementById("btnSubmitProperty")
+      ?.parentElement.appendChild(note);
   }
 
-  const submitBtn = document.getElementById('btnSubmitProperty');
+  const submitBtn = document.getElementById("btnSubmitProperty");
   if (!submitBtn) return;
 
-  submitBtn.addEventListener('click', async (e) => {
+  submitBtn.addEventListener("click", async (e) => {
     e.preventDefault();
 
     if (!user.canPostMore) {
-      window.location.href = 'dashboard.html';
+      window.location.href = "dashboard.html";
       return;
     }
 
     if (selectedFiles.length === 0) {
-      alert('⚠️ Please upload at least 1 photo before submitting.');
+      window.showToast(
+        "Please upload at least 1 photo before submitting.",
+        "error",
+      );
       return;
     }
 
     const prevText = submitBtn.innerText;
-    submitBtn.innerText = '⏳ Uploading photos...';
+    submitBtn.innerText = "⏳ Uploading photos...";
     submitBtn.disabled = true;
 
     try {
       // Upload photos
       const photoStorageIds = [];
       for (const file of selectedFiles) {
-        const uploadUrl = await convex.mutation('files:generateUploadUrl', {});
+        const uploadUrl = await convex.mutation("files:generateUploadUrl", {});
         const resp = await fetch(uploadUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': file.type },
+          method: "POST",
+          headers: { "Content-Type": file.type },
           body: file,
         });
-        if (!resp.ok) throw new Error('Photo upload failed');
+        if (!resp.ok) throw new Error("Photo upload failed");
         const { storageId } = await resp.json();
         photoStorageIds.push(storageId);
       }
 
       // Gather form data
-      const step1Grids = document.querySelectorAll('#formStep1 .form-type-grid');
-      const transactionType = step1Grids[0].querySelector('.active .name').innerText.trim();
-      const propertyType = step1Grids[1].querySelector('.active .name').innerText.trim();
+      const step1Grids = document.querySelectorAll(
+        "#formStep1 .form-type-grid",
+      );
+      const transactionType = step1Grids[0]
+        .querySelector(".active .name")
+        .innerText.trim();
+      const propertyType = step1Grids[1]
+        .querySelector(".active .name")
+        .innerText.trim();
 
-      const locInputs = document.querySelectorAll('#formStep2 .form-input');
+      const locInputs = document.querySelectorAll("#formStep2 .form-input");
       const location = {
         state: locInputs[0].value,
         city: locInputs[1].value,
@@ -183,9 +213,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         fullAddress: locInputs[4].value || undefined,
         pinCode: locInputs[5].value,
         landmark: locInputs[6].value || undefined,
+        metroDistance: locInputs[7]?.value || undefined,
+        schoolDistance: locInputs[8]?.value || undefined,
+        mallDistance: locInputs[9]?.value || undefined,
+        hospitalDistance: locInputs[10]?.value || undefined,
       };
 
-      const detInputs = document.querySelectorAll('#formStep3 .form-input');
+      const detInputs = document.querySelectorAll("#formStep3 .form-input");
       const details = {
         bhk: detInputs[0].value,
         status: detInputs[1].value,
@@ -197,15 +231,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         facing: detInputs[7].value || undefined,
         parking: detInputs[8].value || undefined,
         constructionYear: Number(detInputs[9].value) || undefined,
-        description: detInputs[10].value || '',
+        description: detInputs[10].value || "",
       };
 
       const amenities = [];
-      document.querySelectorAll('#formStep3 input[type="checkbox"]').forEach(cb => {
-        if (cb.checked) amenities.push(cb.parentElement.innerText.trim());
-      });
+      document
+        .querySelectorAll('#formStep3 input[type="checkbox"]')
+        .forEach((cb) => {
+          if (cb.checked) amenities.push(cb.parentElement.innerText.trim());
+        });
 
-      const priceInputs = document.querySelectorAll('#formStep5 .form-input');
+      const priceInputs = document.querySelectorAll("#formStep5 .form-input");
       const pricing = {
         expectedPrice: Number(priceInputs[0].value) || 0,
         priceType: priceInputs[1].value || undefined,
@@ -222,21 +258,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         contactTime: priceInputs[9].value || undefined,
       };
 
-      submitBtn.innerText = '⏳ Posting property...';
+      submitBtn.innerText = "⏳ Posting property...";
 
-      await convex.mutation('properties:createProperty', {
-        transactionType, propertyType, location, details,
-        amenities, photos: photoStorageIds, pricing, contactDesc,
-        userId: user._id,       // link to logged-in user
-        token: getToken(),      // pass session token for server-side verification
+      await convex.mutation("properties:createProperty", {
+        transactionType,
+        propertyType,
+        location,
+        details,
+        amenities,
+        photos: photoStorageIds,
+        pricing,
+        contactDesc,
+        userId: user._id, // link to logged-in user
+        token: getToken(), // pass session token for server-side verification
       });
 
-      alert('🎉 Property posted successfully! Your listing will go live within 30 minutes.');
-      window.location.href = 'dashboard.html';
-
+      window.showToast(
+        "Property posted successfully! Your listing will go live within 30 minutes.",
+        "success",
+      );
+      window.location.href = "dashboard.html";
     } catch (err) {
-      console.error('Failed to post property:', err);
-      alert('❌ Error posting property: ' + err.message);
+      console.error("Failed to post property:", err);
+      window.showToast("Error posting property: " + err.message, "error");
     } finally {
       submitBtn.innerText = prevText;
       submitBtn.disabled = false;
