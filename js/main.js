@@ -52,12 +52,24 @@ function initNav() {
 // ========== SEARCH TABS ==========
 function initSearchTabs() {
   const tabs = document.querySelectorAll('.search-tab');
+  const mobileSelector = document.getElementById('mobileTypeSelector');
+
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
+      if (mobileSelector) mobileSelector.value = tab.dataset.type;
     });
   });
+
+  if (mobileSelector) {
+    mobileSelector.addEventListener('change', () => {
+      const val = mobileSelector.value;
+      tabs.forEach(t => {
+        t.classList.toggle('active', t.dataset.type === val);
+      });
+    });
+  }
 
   const searchForm = document.querySelector('.search-form');
   if (searchForm) {

@@ -544,6 +544,9 @@ textarea {
   color: var(--text);
   background: rgba(0, 0, 0, 0.03);
 }
+.search-mobile-selector {
+  display: none;
+}
 .search-body {
   display: flex;
   align-items: center;

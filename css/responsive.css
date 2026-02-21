@@ -62,10 +62,47 @@
   .hero-stat-num { font-size: 20px; }
 
   /* Search */
-  .search-box { border-radius: var(--radius); }
-  .search-tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
-  .search-tab { padding: 10px 14px; font-size: 13px; flex-shrink: 0; }
-  .search-btn { width: 100%; justify-content: center; margin-top: 8px; }
+  .search-box { border-radius: var(--radius); margin: 0; width: 100%; overflow: hidden; }
+  .search-tabs { display: none; } 
+  
+  .search-mobile-selector {
+    display: block;
+    position: relative;
+    padding: 12px 16px;
+    background: var(--bg-white);
+    border-bottom: 1px solid var(--border);
+  }
+  .search-mobile-selector select {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary);
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+  }
+  .search-mobile-selector i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary);
+    pointer-events: none;
+  }
+  
+  .search-body { 
+    flex-direction: column; 
+    padding: 12px; 
+    gap: 12px;
+  }
+  .search-field { 
+    width: 100% !important; 
+    padding-bottom: 8px;
+  }
+  .search-divider { display: none; }
+  .search-btn { width: 100%; justify-content: center; margin-top: 4px; height: 48px; }
 
   /* Remove per-sqft on small screens */
   .prop-per { display: none; }
@@ -149,20 +186,26 @@
 /* ---- Small Mobile ---- */
 @media (max-width: 480px) {
   .advantage-grid { grid-template-columns: 1fr; }
-  .nav-btn-post { font-size: 12px; padding: 6px 12px; }
-
-
-/* ---- Small Mobile ---- */
-@media (max-width: 480px) {
+  .nav-btn-post { font-size: 11px; padding: 6px 10px; }
+  .nav-btn-post i { margin-right: 0; }
+  
   /* Core */
   .nav-logo-text { display: none; }
-  .hero-title { font-size: 22px; }
-  .hero-stats { gap: 10px; }
-  .hero-stat { width: 100%; }
+  .nav-city { font-size: 11px; }
+  .nav { gap: 8px; }
+  
+  .hero-title { font-size: 20px !important; word-break: break-word; }
+  .hero-subtitle { font-size: 13px; line-height: 1.4; }
+  
+  /* Hero Stats */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; gap: 12px; display: grid; margin-top: 24px; padding: 0 8px; }
+  .hero-stat { width: 100%; text-align: center; }
+  .hero-stat-num { font-size: 18px; }
+  .hero-stat-label { font-size: 10px; }
 
   /* Grids */
-  .city-grid { grid-template-columns: repeat(2, 1fr); }
-  .prop-types-grid { grid-template-columns: repeat(2, 1fr); }
+  .city-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .prop-types-grid { grid-template-columns: repeat(2, 1fr) !important; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .team-grid { grid-template-columns: 1fr 1fr; }
   .about-stats { grid-template-columns: 1fr 1fr; }
@@ -192,3 +235,6 @@
   /* Remove per-sqft on small screens */
   .prop-per { display: none; }
 }
+
+
+
