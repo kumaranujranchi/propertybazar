@@ -2256,7 +2256,7 @@ textarea {
 }
 
 .post-body {
-  max-width: 760px;
+  max-width: 1200px;
   margin: 40px auto 60px;
   padding: 0 20px;
 }

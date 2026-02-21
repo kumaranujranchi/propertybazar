@@ -11,6 +11,19 @@
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <style>
+    /* Responsive Grid for Post Property */
+    @media (max-width: 992px) {
+      .post-body {
+        grid-template-columns: 1fr !important;
+      }
+
+      .post-sidebar {
+        position: static !important;
+        order: 2;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -598,371 +611,370 @@
           <button class="btn btn-primary btn-app-nav" id="btnSubmitProperty"><i class="fa-solid fa-rocket"></i> Post
             Property FREE</button>
         </div>
-      </div> <!-- End Form Steps Container -->
+      </div> <!-- End Step 5 -->
+    </div> <!-- End Form Steps Container -->
 
-      <!-- SIDEBAR: Opportunity Score -->
-      <aside class="post-sidebar" style="position: sticky; top: 100px;">
-        <div class="form-card" style="padding: 24px; border: 2px solid var(--primary); background: #fff;">
-          <h3
-            style="font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--dark); display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-chart-line" style="color: var(--primary)"></i> Opportunity Score
-          </h3>
+    <!-- SIDEBAR: Opportunity Score -->
+    <aside class="post-sidebar" style="position: sticky; top: 100px;">
+      <div class="form-card" style="padding: 24px; border: 2px solid var(--primary); background: #fff;">
+        <h3
+          style="font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--dark); display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-chart-line" style="color: var(--primary)"></i> Opportunity Score
+        </h3>
 
-          <div style="text-align: center; margin-bottom: 24px;">
-            <div
-              style="width: 120px; height: 120px; margin: 0 auto; border-radius: 50%; border: 8px solid #f3f4f6; display: flex; align-items: center; justify-content: center; position: relative;">
-              <div id="scoreRing"
-                style="position: absolute; inset: -8px; border-radius: 50%; border: 8px solid var(--primary); border-top-color: transparent; border-right-color: transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: rotate(0deg);">
-              </div>
-              <span id="scoreValue" style="font-size: 32px; font-weight: 800; color: var(--dark);">0</span>
-            </div>
-            <div id="scoreLabel"
-              style="margin-top: 12px; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
-              Needs Improvement</div>
-          </div>
-
-          <div style="background: #f8fafc; border-radius: 12px; padding: 16px;">
-            <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 12px; color: var(--text);">How to rank higher:
-            </h4>
-            <ul id="scoreTips"
-              style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
-              <!-- Tips will be injected by JS -->
-            </ul>
-          </div>
-
+        <div style="text-align: center; margin-bottom: 24px;">
           <div
-            style="margin-top: 20px; font-size: 11px; color: var(--text-muted); line-height: 1.5; text-align: center;">
-            <i class="fa-solid fa-circle-info"></i> High-score properties appear first in search results and get 10x
-            more leads.
+            style="width: 120px; height: 120px; margin: 0 auto; border-radius: 50%; border: 8px solid #f3f4f6; display: flex; align-items: center; justify-content: center; position: relative;">
+            <div id="scoreRing"
+              style="position: absolute; inset: -8px; border-radius: 50%; border: 8px solid var(--primary); border-top-color: transparent; border-right-color: transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: rotate(0deg);">
+            </div>
+            <span id="scoreValue" style="font-size: 32px; font-weight: 800; color: var(--dark);">0</span>
+          </div>
+          <div id="scoreLabel"
+            style="margin-top: 12px; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+            Needs Improvement</div>
+        </div>
+
+        <div style="background: #f8fafc; border-radius: 12px; padding: 16px;">
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 12px; color: var(--text);">How to rank higher:
+          </h4>
+          <ul id="scoreTips"
+            style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+            <!-- Tips will be injected by JS -->
+          </ul>
+        </div>
+
+        <div style="margin-top: 20px; font-size: 11px; color: var(--text-muted); line-height: 1.5; text-align: center;">
+          <i class="fa-solid fa-circle-info"></i> High-score properties appear first in search results and get 10x
+          more leads.
+        </div>
+      </div>
+    </aside>
+
+  </div> <!-- End Post Body Container -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="nav-logo-icon">24</div>
+            24Dismil.com
+          </div>
+          <p class="footer-tagline">
+            India's most trusted real estate portal. Find your dream property
+            with verified listings, expert guidance, and market insights. Your
+            home journey starts here.
+          </p>
+          <div class="footer-socials">
+            <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
           </div>
         </div>
-      </aside>
-
-    </div>
-
-
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-grid">
-          <div class="footer-brand">
-            <div class="footer-logo">
-              <div class="nav-logo-icon">24</div>
-              24Dismil.com
-            </div>
-            <p class="footer-tagline">
-              India's most trusted real estate portal. Find your dream property
-              with verified listings, expert guidance, and market insights. Your
-              home journey starts here.
-            </p>
-            <div class="footer-socials">
-              <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
-              <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-              <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
-              <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
-              <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
-            </div>
-          </div>
-          <div class="footer-col">
-            <h4>Quick Links</h4>
-            <div class="footer-links">
-              <a href="properties.html?type=buy">Buy Properties</a>
-              <a href="properties.html?type=rent">Rent Properties</a>
-              <a href="properties.html?type=commercial">Commercial</a>
-              <a href="post-property.html">Post Free Property</a>
-              <a href="properties.html?newLaunch=true">New Projects</a>
-              <a href="about.html">About Us</a>
-              <a href="contact.html">Contact</a>
-            </div>
-          </div>
-          <div class="footer-col">
-            <h4>Top Cities</h4>
-            <div class="footer-links">
-              <a href="properties.html?city=Mumbai">Mumbai</a>
-              <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
-              <a href="properties.html?city=Bangalore">Bangalore</a>
-              <a href="properties.html?city=Hyderabad">Hyderabad</a>
-              <a href="properties.html?city=Pune">Pune</a>
-              <a href="properties.html?city=Chennai">Chennai</a>
-              <a href="properties.html?city=Kolkata">Kolkata</a>
-              <a href="properties.html?city=Noida">Noida</a>
-            </div>
-          </div>
-          <div class="footer-col">
-            <h4>Resources</h4>
-            <div class="footer-links">
-              <a href="#">EMI Calculator</a>
-              <a href="#">Property Rates</a>
-              <a href="#">RERA Guide</a>
-              <a href="#">Home Loan</a>
-              <a href="#">Legal Guide</a>
-              <a href="#">Vastu Tips</a>
-              <a href="#">Blog & News</a>
-              <a href="#">FAQ</a>
-            </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <div class="footer-links">
+            <a href="properties.html?type=buy">Buy Properties</a>
+            <a href="properties.html?type=rent">Rent Properties</a>
+            <a href="properties.html?type=commercial">Commercial</a>
+            <a href="post-property.html">Post Free Property</a>
+            <a href="properties.html?newLaunch=true">New Projects</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
           </div>
         </div>
-        <div class="footer-bottom">
-          <span>© 2025 24Dismil.com. All rights reserved. | India's #1 Real Estate Portal</span>
-          <div class="footer-bottom-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Use</a>
-            <a href="#">Sitemap</a>
+        <div class="footer-col">
+          <h4>Top Cities</h4>
+          <div class="footer-links">
+            <a href="properties.html?city=Mumbai">Mumbai</a>
+            <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
+            <a href="properties.html?city=Bangalore">Bangalore</a>
+            <a href="properties.html?city=Hyderabad">Hyderabad</a>
+            <a href="properties.html?city=Pune">Pune</a>
+            <a href="properties.html?city=Chennai">Chennai</a>
+            <a href="properties.html?city=Kolkata">Kolkata</a>
+            <a href="properties.html?city=Noida">Noida</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <div class="footer-links">
+            <a href="#">EMI Calculator</a>
+            <a href="#">Property Rates</a>
+            <a href="#">RERA Guide</a>
+            <a href="#">Home Loan</a>
+            <a href="#">Legal Guide</a>
+            <a href="#">Vastu Tips</a>
+            <a href="#">Blog & News</a>
+            <a href="#">FAQ</a>
           </div>
         </div>
       </div>
-    </footer>
+      <div class="footer-bottom">
+        <span>© 2025 24Dismil.com. All rights reserved. | India's #1 Real Estate Portal</span>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-    <script src="js/properties.js"></script>
-    <script src="js/main.js"></script>
-    <script type="module" src="js/submit-property.js"></script>
-    <script type="module">
-      import { initNavAuth } from './js/auth.js';
-      initNavAuth();
-    </script>
-    <script>
-      // ---- Property-type-aware Step 3 fields ----
-      function applyPropertyTypeUX() {
-        // Get selected property type from step 1 (2nd grid)
-        const step1Grids = document.querySelectorAll('#formStep1 .form-type-grid');
-        if (!step1Grids[1]) return;
-        const activeType = step1Grids[1].querySelector('.active .name');
-        const propType = activeType ? activeType.innerText.toLowerCase() : '';
+  <script src="js/properties.js"></script>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/submit-property.js"></script>
+  <script type="module">
+    import { initNavAuth } from './js/auth.js';
+    initNavAuth();
+  </script>
+  <script>
+    // ---- Property-type-aware Step 3 fields ----
+    function applyPropertyTypeUX() {
+      // Get selected property type from step 1 (2nd grid)
+      const step1Grids = document.querySelectorAll('#formStep1 .form-type-grid');
+      if (!step1Grids[1]) return;
+      const activeType = step1Grids[1].querySelector('.active .name');
+      const propType = activeType ? activeType.innerText.toLowerCase() : '';
 
-        const isLand = /plot|land/i.test(propType);
-        const isCommercial = /commercial|shop|office|warehouse/i.test(propType);
-        const isLodge = /lodge/i.test(propType);
-        const hideResidential = isLand || isCommercial || isLodge;
+      const isLand = /plot|land/i.test(propType);
+      const isCommercial = /commercial|shop|office|warehouse/i.test(propType);
+      const isLodge = /lodge/i.test(propType);
+      const hideResidential = isLand || isCommercial || isLodge;
 
-        const hide = (id, hidden) => {
-          const el = document.getElementById(id);
-          if (el) {
-            el.style.display = hidden ? 'none' : '';
-            // Clear value when hiding so it doesn't get submitted
-            if (hidden) {
-              const input = el.querySelector('input,select,textarea');
-              if (input) input.value = '';
-            }
+      const hide = (id, hidden) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.style.display = hidden ? 'none' : '';
+          // Clear value when hiding so it doesn't get submitted
+          if (hidden) {
+            const input = el.querySelector('input,select,textarea');
+            if (input) input.value = '';
           }
-        };
-
-        // Residential fields to hide for Land/Commercial/Lodge
-        hide('fgBhk', hideResidential);
-        hide('fgFloor', hideResidential);
-        hide('fgTotalFloors', hideResidential);
-        hide('fgFurnishing', hideResidential);
-        hide('fgParking', hideResidential);
-        hide('fgYear', hideResidential);
-        hide('fgBuiltUpArea', isLand || isLodge); // Land uses plot area, Lodge uses rooms/size
-        hide('fgCarpetArea', isLand || isLodge);
-
-        // Land specific fields to show only for Land
-        hide('fgRatePerSqFt', !isLand);
-        hide('fgDevCharges', !isLand);
-        hide('fgPlc', !isLand);
-        hide('fgLoan', !isLand);
-        hide('fgEmi', !isLand);
-
-        // Lodge specific room fields to show only for Lodge
-        hide('fgRoomType', !isLodge);
-        hide('fgAcNonAc', !isLodge);
-        hide('fgAttachedBathroom', !isLodge);
-        hide('fgBedType', !isLodge);
-        hide('fgRoomSize', !isLodge);
-
-        // Lodge specific pricing fields (Step 5)
-        hide('fgPricePerDay', !isLodge);
-        hide('fgPricePerWeek', !isLodge);
-        hide('fgPricePerMonth', !isLodge);
-        hide('fgSecurityDeposit', !isLodge);
-        hide('fgElectricityExtra', !isLodge);
-        hide('fgGstExtra', !isLodge);
-
-        // Standard pricing fields to hide for Lodge
-        hide('fgExpectedPrice', isLodge);
-        hide('fgPriceType', isLodge);
-        hide('fgMaintCharges', isLodge);
-        hide('fgTokenAmt', isLodge);
-
-        // Also update Step 3 title to match context
-        const step3Title = document.querySelector('#formStep3 .form-card-title');
-        if (step3Title) {
-          if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
-          else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
-          else if (isLodge) step3Title.textContent = 'Step 3: Lodge Details';
-          else step3Title.textContent = 'Step 3: Property Details';
         }
-      }
-
-      // ---- State / City Dropdown Logic ----
-      const LOCATIONS = {
-        "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Rajahmundry", "Tirupati", "Kadapa", "Kakinada", "Anantapur"],
-        "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon", "Tinsukia", "Tezpur", "Bongaigaon"],
-        "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Bihar Sharif", "Ara", "Begusarai", "Katihar", "Bihta"],
-        "Chandigarh": ["Chandigarh"],
-        "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Raigarh", "Jagdalpur", "Ambikapur"],
-        "Delhi": ["New Delhi", "North Delhi", "South Delhi", "West Delhi", "East Delhi", "Dwarka", "Rohini"],
-        "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Porvorim"],
-        "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Gandhinagar", "Junagadh", "Anand", "Navsari", "Morbi", "Bharuch"],
-        "Haryana": ["Gurgaon", "Faridabad", "Panipat", "Ambala", "Yamunanagar", "Rohtak", "Hisar", "Karnal", "Sonipat", "Panchkula"],
-        "Himachal Pradesh": ["Shimla", "Dharamshala", "Solan", "Mandi", "Palampur", "Baddi"],
-        "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Deoghar", "Hazaribagh", "Giridih", "Ramgarh"],
-        "Karnataka": ["Bangalore", "Mysore", "Hubli-Dharwad", "Mangalore", "Belagavi", "Gulbarga", "Davanagere", "Bellary", "Bijapur", "Shimoga", "Tumkur", "Udupi"],
-        "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Kollam", "Thrissur", "Kannur", "Alappuzha", "Kottayam", "Palakkad", "Malappuram"],
-        "Madhya Pradesh": ["Indore", "Bhopal", "Jabalpur", "Gwalior", "Ujjain", "Sagar", "Dewas", "Satna", "Ratlam", "Rewa"],
-        "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Kalyan-Dombivli", "Vasai-Virar", "Aurangabad", "Navi Mumbai", "Solapur", "Mira-Bhayandar", "Bhiwandi", "Amravati", "Nanded", "Kolhapur", "Akola", "Jalgaon", "Latur", "Dhule", "Ahmednagar"],
-        "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Brahmapur", "Sambalpur", "Puri", "Balasore", "Bhadrak", "Baripada"],
-        "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Hoshiarpur", "Mohali", "Pathankot", "Moga", "Abohar"],
-        "Rajasthan": ["Jaipur", "Jodhpur", "Kota", "Bikaner", "Ajmer", "Udaipur", "Bhilwara", "Alwar", "Bharatpur", "Sikar"],
-        "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli", "Tiruppur", "Vellore", "Erode", "Thoothukudi", "Dindigul", "Thanjavur"],
-        "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Ramagundam", "Khammam", "Mahbubnagar"],
-        "Uttar Pradesh": ["Lucknow", "Kanpur", "Ghaziabad", "Agra", "Varanasi", "Meerut", "Allahabad", "Bareilly", "Aligarh", "Moradabad", "Saharanpur", "Gorakhpur", "Noida", "Firozabad", "Jhansi", "Muzaffarnagar", "Mathura"],
-        "Uttarakhand": ["Dehradun", "Haridwar", "Roorkee", "Haldwani-cum-Kathgodam", "Rudrapur", "Kashipur", "Rishikesh"],
-        "West Bengal": ["Kolkata", "Howrah", "Asansol", "Siliguri", "Durgapur", "Kharagpur", "Burdwan", "Haldia"]
       };
 
-      const stateSelect = document.getElementById('stateSelect');
-      const citySelect = document.getElementById('citySelect');
+      // Residential fields to hide for Land/Commercial/Lodge
+      hide('fgBhk', hideResidential);
+      hide('fgFloor', hideResidential);
+      hide('fgTotalFloors', hideResidential);
+      hide('fgFurnishing', hideResidential);
+      hide('fgParking', hideResidential);
+      hide('fgYear', hideResidential);
+      hide('fgBuiltUpArea', isLand || isLodge); // Land uses plot area, Lodge uses rooms/size
+      hide('fgCarpetArea', isLand || isLodge);
 
-      if (stateSelect && citySelect) {
-        // Populate states
-        Object.keys(LOCATIONS).sort().forEach(state => {
-          stateSelect.add(new Option(state, state));
-        });
+      // Land specific fields to show only for Land
+      hide('fgRatePerSqFt', !isLand);
+      hide('fgDevCharges', !isLand);
+      hide('fgPlc', !isLand);
+      hide('fgLoan', !isLand);
+      hide('fgEmi', !isLand);
 
-        stateSelect.addEventListener('change', () => {
-          const state = stateSelect.value;
-          citySelect.innerHTML = '<option value="">Select City</option>';
+      // Lodge specific room fields to show only for Lodge
+      hide('fgRoomType', !isLodge);
+      hide('fgAcNonAc', !isLodge);
+      hide('fgAttachedBathroom', !isLodge);
+      hide('fgBedType', !isLodge);
+      hide('fgRoomSize', !isLodge);
 
-          if (state && LOCATIONS[state]) {
-            citySelect.disabled = false;
-            LOCATIONS[state].sort().forEach(city => {
-              citySelect.add(new Option(city, city));
-            });
-          } else {
-            citySelect.innerHTML = '<option value="">First Select State</option>';
-            citySelect.disabled = true;
-          }
-        });
+      // Lodge specific pricing fields (Step 5)
+      hide('fgPricePerDay', !isLodge);
+      hide('fgPricePerWeek', !isLodge);
+      hide('fgPricePerMonth', !isLodge);
+      hide('fgSecurityDeposit', !isLodge);
+      hide('fgElectricityExtra', !isLodge);
+      hide('fgGstExtra', !isLodge);
+
+      // Standard pricing fields to hide for Lodge
+      hide('fgExpectedPrice', isLodge);
+      hide('fgPriceType', isLodge);
+      hide('fgMaintCharges', isLodge);
+      hide('fgTokenAmt', isLodge);
+
+      // Also update Step 3 title to match context
+      const step3Title = document.querySelector('#formStep3 .form-card-title');
+      if (step3Title) {
+        if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
+        else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
+        else if (isLodge) step3Title.textContent = 'Step 3: Lodge Details';
+        else step3Title.textContent = 'Step 3: Property Details';
+      }
+    }
+
+    // ---- State / City Dropdown Logic ----
+    const LOCATIONS = {
+      "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Rajahmundry", "Tirupati", "Kadapa", "Kakinada", "Anantapur"],
+      "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon", "Tinsukia", "Tezpur", "Bongaigaon"],
+      "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Bihar Sharif", "Ara", "Begusarai", "Katihar", "Bihta"],
+      "Chandigarh": ["Chandigarh"],
+      "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Raigarh", "Jagdalpur", "Ambikapur"],
+      "Delhi": ["New Delhi", "North Delhi", "South Delhi", "West Delhi", "East Delhi", "Dwarka", "Rohini"],
+      "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Porvorim"],
+      "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Gandhinagar", "Junagadh", "Anand", "Navsari", "Morbi", "Bharuch"],
+      "Haryana": ["Gurgaon", "Faridabad", "Panipat", "Ambala", "Yamunanagar", "Rohtak", "Hisar", "Karnal", "Sonipat", "Panchkula"],
+      "Himachal Pradesh": ["Shimla", "Dharamshala", "Solan", "Mandi", "Palampur", "Baddi"],
+      "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Deoghar", "Hazaribagh", "Giridih", "Ramgarh"],
+      "Karnataka": ["Bangalore", "Mysore", "Hubli-Dharwad", "Mangalore", "Belagavi", "Gulbarga", "Davanagere", "Bellary", "Bijapur", "Shimoga", "Tumkur", "Udupi"],
+      "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Kollam", "Thrissur", "Kannur", "Alappuzha", "Kottayam", "Palakkad", "Malappuram"],
+      "Madhya Pradesh": ["Indore", "Bhopal", "Jabalpur", "Gwalior", "Ujjain", "Sagar", "Dewas", "Satna", "Ratlam", "Rewa"],
+      "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Kalyan-Dombivli", "Vasai-Virar", "Aurangabad", "Navi Mumbai", "Solapur", "Mira-Bhayandar", "Bhiwandi", "Amravati", "Nanded", "Kolhapur", "Akola", "Jalgaon", "Latur", "Dhule", "Ahmednagar"],
+      "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Brahmapur", "Sambalpur", "Puri", "Balasore", "Bhadrak", "Baripada"],
+      "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Hoshiarpur", "Mohali", "Pathankot", "Moga", "Abohar"],
+      "Rajasthan": ["Jaipur", "Jodhpur", "Kota", "Bikaner", "Ajmer", "Udaipur", "Bhilwara", "Alwar", "Bharatpur", "Sikar"],
+      "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli", "Tiruppur", "Vellore", "Erode", "Thoothukudi", "Dindigul", "Thanjavur"],
+      "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Ramagundam", "Khammam", "Mahbubnagar"],
+      "Uttar Pradesh": ["Lucknow", "Kanpur", "Ghaziabad", "Agra", "Varanasi", "Meerut", "Allahabad", "Bareilly", "Aligarh", "Moradabad", "Saharanpur", "Gorakhpur", "Noida", "Firozabad", "Jhansi", "Muzaffarnagar", "Mathura"],
+      "Uttarakhand": ["Dehradun", "Haridwar", "Roorkee", "Haldwani-cum-Kathgodam", "Rudrapur", "Kashipur", "Rishikesh"],
+      "West Bengal": ["Kolkata", "Howrah", "Asansol", "Siliguri", "Durgapur", "Kharagpur", "Burdwan", "Haldia"]
+    };
+
+    const stateSelect = document.getElementById('stateSelect');
+    const citySelect = document.getElementById('citySelect');
+
+    if (stateSelect && citySelect) {
+      // Populate states
+      Object.keys(LOCATIONS).sort().forEach(state => {
+        stateSelect.add(new Option(state, state));
+      });
+
+      stateSelect.addEventListener('change', () => {
+        const state = stateSelect.value;
+        citySelect.innerHTML = '<option value="">Select City</option>';
+
+        if (state && LOCATIONS[state]) {
+          citySelect.disabled = false;
+          LOCATIONS[state].sort().forEach(city => {
+            citySelect.add(new Option(city, city));
+          });
+        } else {
+          citySelect.innerHTML = '<option value="">First Select State</option>';
+          citySelect.disabled = true;
+        }
+      });
+    }
+
+    // Run when navigating to Step 3
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.btn-next-step')) {
+        const currentStep = document.querySelector('.form-step:not([style*="display:none"])');
+        if (currentStep && currentStep.id === 'formStep1') {
+          // About to go to step 2, which leads to 3 - update on step 1 next click
+          setTimeout(applyPropertyTypeUX, 50);
+        }
+        if (currentStep && currentStep.id === 'formStep2') {
+          setTimeout(applyPropertyTypeUX, 50);
+        }
+      }
+      // Also update when type tiles are clicked
+      const tile = e.target.closest('#formStep1 .form-type-grid .type-card');
+      if (tile) setTimeout(applyPropertyTypeUX, 50);
+    });
+    // ---- Opportunity Score Logic ----
+    function updateOpportunityScore() {
+      let score = 0;
+      const tips = [];
+
+      // 1. Photos (Biggest Factor)
+      const photoCount = document.getElementById('photoPreviewGrid')?.children.length || 0;
+      if (photoCount > 0) {
+        const photoScore = Math.min(photoCount * 5, 25);
+        score += photoScore;
+        if (photoCount < 5) tips.push({ text: `Add ${5 - photoCount} more photos for +${(5 - photoCount) * 5} pts`, icon: 'fa-camera' });
+      } else {
+        tips.push({ text: 'Add at least 5 photos for +25 pts', icon: 'fa-camera', highlight: true });
       }
 
-      // Run when navigating to Step 3
-      document.addEventListener('click', (e) => {
-        if (e.target.closest('.btn-next-step')) {
-          const currentStep = document.querySelector('.form-step:not([style*="display:none"])');
-          if (currentStep && currentStep.id === 'formStep1') {
-            // About to go to step 2, which leads to 3 - update on step 1 next click
-            setTimeout(applyPropertyTypeUX, 50);
-          }
-          if (currentStep && currentStep.id === 'formStep2') {
-            setTimeout(applyPropertyTypeUX, 50);
-          }
-        }
-        // Also update when type tiles are clicked
-        const tile = e.target.closest('#formStep1 .form-type-grid .type-card');
-        if (tile) setTimeout(applyPropertyTypeUX, 50);
-      });
-      // ---- Opportunity Score Logic ----
-      function updateOpportunityScore() {
-        let score = 0;
-        const tips = [];
+      // 2. Description
+      const desc = document.querySelector('textarea[placeholder*="Describe your property"]')?.value || "";
+      if (desc.length > 300) {
+        score += 15;
+      } else if (desc.length > 100) {
+        score += 10;
+        tips.push({ text: 'Make description longer (>300 chars) for +5 pts', icon: 'fa-align-left' });
+      } else if (desc.length > 0) {
+        score += 5;
+        tips.push({ text: 'Add detailed description for +10 pts', icon: 'fa-align-left' });
+      } else {
+        tips.push({ text: 'Add property description for +15 pts', icon: 'fa-align-left' });
+      }
 
-        // 1. Photos (Biggest Factor)
-        const photoCount = document.getElementById('photoPreviewGrid')?.children.length || 0;
-        if (photoCount > 0) {
-          const photoScore = Math.min(photoCount * 5, 25);
-          score += photoScore;
-          if (photoCount < 5) tips.push({ text: `Add ${5 - photoCount} more photos for +${(5 - photoCount) * 5} pts`, icon: 'fa-camera' });
+      // 3. RERA
+      const rera = document.querySelector('input[placeholder*="MH/2023/12345"]')?.value;
+      if (rera && rera.trim().length > 5) {
+        score += 20;
+      } else {
+        tips.push({ text: 'Add RERA Number for +20 pts', icon: 'fa-file-contract' });
+      }
+
+      // 4. Amenities
+      const amenitiesCount = document.querySelectorAll('#formStep3 input[type="checkbox"]:checked').length;
+      if (amenitiesCount > 5) score += 10;
+      else if (amenitiesCount > 0) tips.push({ text: 'Select more amenities for +10 pts', icon: 'fa-list-check' });
+
+      // 5. Basic Details (Project Name, Locality)
+      const project = document.querySelector('input[placeholder*="Prestige Lakeside"]')?.value;
+      const locality = document.querySelector('input[placeholder*="Sector 62"]')?.value;
+      if (project && locality) score += 10;
+
+      // UI Update
+      const scoreValEl = document.getElementById('scoreValue');
+      const scoreRingEl = document.getElementById('scoreRing');
+      const scoreLabelEl = document.getElementById('scoreLabel');
+      const tipsEl = document.getElementById('scoreTips');
+
+      if (scoreValEl) scoreValEl.textContent = score;
+      if (scoreRingEl) {
+        const rotation = (score / 100) * 180; // Simple semi-circle or limited ring
+        scoreRingEl.style.transform = `rotate(${rotation}deg)`;
+
+        // Color coding
+        if (score > 70) {
+          scoreRingEl.style.borderColor = '#10B981'; // Green
+          scoreLabelEl.textContent = 'Excellent';
+          scoreLabelEl.style.color = '#10B981';
+        } else if (score > 40) {
+          scoreRingEl.style.borderColor = '#F59E0B'; // Amber
+          scoreLabelEl.textContent = 'Good';
+          scoreLabelEl.style.color = '#F59E0B';
         } else {
-          tips.push({ text: 'Add at least 5 photos for +25 pts', icon: 'fa-camera', highlight: true });
+          scoreRingEl.style.borderColor = '#EF4444'; // Red
+          scoreLabelEl.textContent = 'Needs Improvement';
+          scoreLabelEl.style.color = '#EF4444';
         }
+      }
 
-        // 2. Description
-        const desc = document.querySelector('textarea[placeholder*="Describe your property"]')?.value || "";
-        if (desc.length > 300) {
-          score += 15;
-        } else if (desc.length > 100) {
-          score += 10;
-          tips.push({ text: 'Make description longer (>300 chars) for +5 pts', icon: 'fa-align-left' });
-        } else if (desc.length > 0) {
-          score += 5;
-          tips.push({ text: 'Add detailed description for +10 pts', icon: 'fa-align-left' });
-        } else {
-          tips.push({ text: 'Add property description for +15 pts', icon: 'fa-align-left' });
-        }
-
-        // 3. RERA
-        const rera = document.querySelector('input[placeholder*="MH/2023/12345"]')?.value;
-        if (rera && rera.trim().length > 5) {
-          score += 20;
-        } else {
-          tips.push({ text: 'Add RERA Number for +20 pts', icon: 'fa-file-contract' });
-        }
-
-        // 4. Amenities
-        const amenitiesCount = document.querySelectorAll('#formStep3 input[type="checkbox"]:checked').length;
-        if (amenitiesCount > 5) score += 10;
-        else if (amenitiesCount > 0) tips.push({ text: 'Select more amenities for +10 pts', icon: 'fa-list-check' });
-
-        // 5. Basic Details (Project Name, Locality)
-        const project = document.querySelector('input[placeholder*="Prestige Lakeside"]')?.value;
-        const locality = document.querySelector('input[placeholder*="Sector 62"]')?.value;
-        if (project && locality) score += 10;
-
-        // UI Update
-        const scoreValEl = document.getElementById('scoreValue');
-        const scoreRingEl = document.getElementById('scoreRing');
-        const scoreLabelEl = document.getElementById('scoreLabel');
-        const tipsEl = document.getElementById('scoreTips');
-
-        if (scoreValEl) scoreValEl.textContent = score;
-        if (scoreRingEl) {
-          const rotation = (score / 100) * 180; // Simple semi-circle or limited ring
-          scoreRingEl.style.transform = `rotate(${rotation}deg)`;
-
-          // Color coding
-          if (score > 70) {
-            scoreRingEl.style.borderColor = '#10B981'; // Green
-            scoreLabelEl.textContent = 'Excellent';
-            scoreLabelEl.style.color = '#10B981';
-          } else if (score > 40) {
-            scoreRingEl.style.borderColor = '#F59E0B'; // Amber
-            scoreLabelEl.textContent = 'Good';
-            scoreLabelEl.style.color = '#F59E0B';
-          } else {
-            scoreRingEl.style.borderColor = '#EF4444'; // Red
-            scoreLabelEl.textContent = 'Needs Improvement';
-            scoreLabelEl.style.color = '#EF4444';
-          }
-        }
-
-        if (tipsEl) {
-          tipsEl.innerHTML = tips.slice(0, 3).map(tip => `
+      if (tipsEl) {
+        tipsEl.innerHTML = tips.slice(0, 3).map(tip => `
             <li style="font-size: 12px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 8px;">
               <i class="fa-solid ${tip.icon}" style="margin-top: 2px; color: ${tip.highlight ? 'var(--primary)' : '#94a3b8'}"></i>
               ${tip.text}
             </li>
           `).join('');
-        }
       }
+    }
 
-      // Listen for all inputs
-      document.addEventListener('input', (e) => {
-        if (e.target.closest('.post-body')) {
-          updateOpportunityScore();
-        }
-      });
+    // Listen for all inputs
+    document.addEventListener('input', (e) => {
+      if (e.target.closest('.post-body')) {
+        updateOpportunityScore();
+      }
+    });
 
-      // Also run on certain clicks
-      document.addEventListener('click', (e) => {
-        if (e.target.type === 'checkbox' || e.target.closest('.btn-app-nav')) {
-          setTimeout(updateOpportunityScore, 100);
-        }
-      });
+    // Also run on certain clicks
+    document.addEventListener('click', (e) => {
+      if (e.target.type === 'checkbox' || e.target.closest('.btn-app-nav')) {
+        setTimeout(updateOpportunityScore, 100);
+      }
+    });
 
-      // Initial run
-      window.addEventListener('load', updateOpportunityScore);
-    </script>
+    // Initial run
+    window.addEventListener('load', updateOpportunityScore);
+  </script>
 </body>
 
 
