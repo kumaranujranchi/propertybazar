@@ -458,25 +458,8 @@
             amenities including a swimming pool, well-equipped gymnasium, landscaped gardens, children's play area and
             24x7 multi-layer security. Located minutes from Noida Sector 62 metro station, Logix City Centre Mall and
             major IT hubs.</p>
-          <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
-            <span
-              style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i
-                class="fa-solid fa-building-circle-check"></i> DDA Approved</span>
-            <span
-              style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i
-                class="fa-solid fa-file-contract"></i> RERA Registered</span>
-            <span
-              style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i
-                class="fa-solid fa-user-check"></i> Owner Listing</span>
-            <span
-              style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i
-                class="fa-solid fa-train-subway"></i> Metro: 0.5 km</span>
-            <span
-              style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i
-                class="fa-solid fa-hospital"></i> Hospital: 1.2 km</span>
-            <span
-              style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i
-                class="fa-solid fa-school"></i> School: 0.8 km</span>
+          <div id="detailTags" style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+            <!-- Dynamic Tags will be injected here -->
           </div>
         </div>
 
@@ -569,26 +552,7 @@
             <a href="https://maps.google.com?q=Sector+62+Noida" target="_blank" class="btn btn-outline btn-sm">Open in
               Google Maps ↗</a>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px">
-            <div
-              style="background:var(--bg);padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">
-              <div style="font-size:20px;margin-bottom:4px"><i class="fa-solid fa-train-subway"></i></div>
-              <div style="font-weight:600;color:var(--text)">Metro</div>
-              <div style="color:var(--text-muted)">0.5 km</div>
-            </div>
-            <div
-              style="background:var(--bg);padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">
-              <div style="font-size:20px;margin-bottom:4px"><i class="fa-solid fa-school"></i></div>
-              <div style="font-weight:600;color:var(--text)">School</div>
-              <div style="color:var(--text-muted)">0.8 km</div>
-            </div>
-            <div
-              style="background:var(--bg);padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:12px">
-              <div style="font-size:20px;margin-bottom:4px"><i class="fa-solid fa-cart-shopping"></i></div>
-              <div style="font-weight:600;color:var(--text)">Mall</div>
-              <div style="color:var(--text-muted)">1.5 km</div>
-            </div>
-          </div>
+          <!-- Removed hardcoded map distances -->
         </div>
       </div>
 
@@ -664,33 +628,10 @@
         </div>
 
         <!-- KEY HIGHLIGHTS -->
-        <div class="detail-card" style="margin-top:16px">
+        <div id="keyHighlightsCard" class="detail-card" style="margin-top:16px; display: none;">
           <h3 style="font-size:15px;font-weight:700;color:var(--dark);margin-bottom:14px">Key Highlights</h3>
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <div style="display:flex;align-items:center;gap:10px;font-size:13px">
-              <span
-                style="width:28px;height:28px;background:rgba(16,185,129,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i
-                  class="fa-solid fa-check" style="color:#10b981"></i></span>
-              <span style="color:var(--text)">RERA Registered Project</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:13px">
-              <span
-                style="width:28px;height:28px;background:rgba(59,130,246,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i
-                  class="fa-solid fa-magnifying-glass" style="color:#3fb8f6"></i></span>
-              <span style="color:var(--text)">Physically Verified Listing</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:13px">
-              <span
-                style="width:28px;height:28px;background:rgba(245,158,11,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i
-                  class="fa-solid fa-handshake" style="color:#f59e0b"></i></span>
-              <span style="color:var(--text)">Zero Brokerage (Direct Owner)</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:13px">
-              <span
-                style="width:28px;height:28px;background:rgba(139,92,246,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i
-                  class="fa-solid fa-video" style="color:#8b5cf6"></i></span>
-              <span style="color:var(--text)">Video Tour Available</span>
-            </div>
+          <div id="keyHighlightsList" style="display:flex;flex-direction:column;gap:10px">
+            <!-- Dynamic Highlights will be injected here -->
           </div>
         </div>
       </div>
@@ -704,53 +645,8 @@
         <h2 style="font-size:22px">Similar Properties You May Like</h2>
       </div>
       <div class="cards-slider-wrap">
-        <div class="cards-slider">
-          <div class="property-card" style="min-width:280px;flex-shrink:0">
-            <div class="prop-img-wrap"><img src="images/city-mumbai.jpg" alt="Similar Property">
-              <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
-              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-            </div>
-            <div class="prop-body">
-              <div class="prop-price">₹72 Lakh</div>
-              <div class="prop-title">3 BHK Apartment in Sector 61</div>
-              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Noida</div>
-              <div class="prop-specs">
-                <div class="prop-spec"><i class="fa-solid fa-bed"></i> 3 BHK</div>
-                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,350 sq.ft</div>
-              </div>
-            </div>
-          </div>
-          <div class="property-card" style="min-width:280px;flex-shrink:0">
-            <div class="prop-img-wrap"><img src="images/hero-bg.jpg" alt="Similar Property">
-              <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
-              <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
-              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-            </div>
-            <div class="prop-body">
-              <div class="prop-price">₹98 Lakh</div>
-              <div class="prop-title">3 BHK Semi-Furnished Flat</div>
-              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Sector 63, Noida</div>
-              <div class="prop-specs">
-                <div class="prop-spec"><i class="fa-solid fa-bed"></i> 3 BHK</div>
-                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,550 sq.ft</div>
-              </div>
-            </div>
-          </div>
-          <div class="property-card" style="min-width:280px;flex-shrink:0">
-            <div class="prop-img-wrap"><img src="images/property-1.jpg" alt="Similar Property">
-              <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
-              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-            </div>
-            <div class="prop-body">
-              <div class="prop-price">₹1.1 Cr</div>
-              <div class="prop-title">4 BHK Premium Flat</div>
-              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Sector 60, Noida</div>
-              <div class="prop-specs">
-                <div class="prop-spec"><i class="fa-solid fa-bed"></i> 4 BHK</div>
-                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,900 sq.ft</div>
-              </div>
-            </div>
-          </div>
+        <div class="cards-slider" id="similarPropertiesSlider">
+          <!-- Dynamic Similar Properties will be injected here -->
         </div>
       </div>
     </div>
@@ -1142,6 +1038,49 @@
           if (extra) extra.remove();
         }
 
+        // ---- Dynamic Property Tags ----
+        const tagsContainer = document.getElementById('detailTags');
+        if (tagsContainer) {
+          let tagsHtml = '';
+          if (p.details?.rera) tagsHtml += `<span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-file-contract"></i> RERA Registered</span>`;
+          if (p.contactDesc?.role === 'Owner') tagsHtml += `<span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-user-check"></i> Owner Listing</span>`;
+          if (p.verified) tagsHtml += `<span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-shield-halved"></i> Verified</span>`;
+          if (p.status === 'ready') tagsHtml += `<span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-check"></i> Ready to Move</span>`;
+          tagsContainer.innerHTML = tagsHtml;
+        }
+
+        // ---- Key Highlights ----
+        const highlightsCard = document.getElementById('keyHighlightsCard');
+        const highlightsList = document.getElementById('keyHighlightsList');
+        if (highlightsCard && highlightsList) {
+          let hlHtml = '';
+          if (p.details?.rera) {
+            hlHtml += `
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+              <span style="width:28px;height:28px;background:rgba(16,185,129,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-check" style="color:#10b981"></i></span>
+              <span style="color:var(--text)">RERA Registered Project</span>
+            </div>`;
+          }
+          if (p.verified) {
+            hlHtml += `
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+              <span style="width:28px;height:28px;background:rgba(59,130,246,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-magnifying-glass" style="color:#3fb8f6"></i></span>
+              <span style="color:var(--text)">Physically Verified Listing</span>
+            </div>`;
+          }
+          if (p.contactDesc?.role === 'Owner') {
+            hlHtml += `
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+              <span style="width:28px;height:28px;background:rgba(245,158,11,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-handshake" style="color:#f59e0b"></i></span>
+              <span style="color:var(--text)">Zero Brokerage (Direct Owner)</span>
+            </div>`;
+          }
+          if (hlHtml) {
+            highlightsList.innerHTML = hlHtml;
+            highlightsCard.style.display = 'block';
+          }
+        }
+
         // ---- Amenities ----
         const amenGrid = document.querySelector('.amenities-grid');
         if (amenGrid && p.amenities?.length > 0) {
@@ -1353,6 +1292,64 @@ Interested in Site Visit: ${visit}
         if (emiLoan && price > 0) {
           emiLoan.value = Math.round(price * 0.8); // 80% as loan
           emiLoan.dispatchEvent(new Event('input'));
+        }
+
+        // ---- Similar Properties ----
+        try {
+          const allProps = await convex.query('properties:getProperties', {}) || [];
+          const similar = allProps
+            .filter(item => item._id !== id && item.id !== id) // Exclude current
+            .filter(item => (item.location?.city === p.location?.city) || (item.propertyType === p.propertyType))
+            .slice(0, 4); // Take up to 4
+
+          const slider = document.getElementById('similarPropertiesSlider');
+          if (slider && similar.length > 0) {
+            let htmlStr = '';
+            for (const sp of similar) {
+              const spPrice = sp.pricing?.expectedPrice || 0;
+              let spPriceStr = 'Price on Request';
+              if (spPrice > 0) {
+                if (spPrice >= 10000000) spPriceStr = `₹${(spPrice / 10000000).toFixed(2)} Cr`;
+                else if (spPrice >= 100000) spPriceStr = `₹${(spPrice / 100000).toFixed(2)} Lac`;
+                else spPriceStr = `₹${spPrice.toLocaleString('en-IN')}`;
+              }
+
+              let spPhoto = 'images/property-1.jpg';
+              if (sp.photos && sp.photos[0]) {
+                try { spPhoto = await convex.query('properties:getPhotoUrl', { storageId: sp.photos[0] }) || spPhoto; } catch (e) { }
+              }
+
+              let spTitle = sp.propertyType || 'Property';
+              if (!/plot|land|commercial|shop/i.test(spTitle) && sp.details?.bhk && sp.details.bhk !== '0') {
+                spTitle = `${sp.details.bhk} BHK ${spTitle}`;
+              }
+
+              htmlStr += `
+                  <div class="property-card" style="min-width:280px;flex-shrink:0;cursor:pointer;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff;transition:transform 0.2s" onclick="window.location.href='property-detail.html?id=${sp._id || sp.id}'" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div class="prop-img-wrap" style="position:relative"><img src="${spPhoto}" alt="${spTitle}" loading="lazy" style="height:200px;object-fit:cover;width:100%">
+                      <div class="prop-type-badge" style="position:absolute;top:10px;left:10px"><span class="badge ${sp.type === 'rent' ? 'badge-warning' : 'badge-primary'}" style="background:var(--primary);color:#fff;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:700">${sp.type === 'rent' ? 'RENT' : 'BUY'}</span></div>
+                      ${sp.verified ? '<div class="prop-verified" style="position:absolute;bottom:10px;left:10px;background:rgba(16,185,129,0.9);color:#fff;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600"><i class="fa-solid fa-circle-check"></i> Verified</div>' : ''}
+                    </div>
+                    <div class="prop-body" style="padding:16px">
+                      <div class="prop-price" style="font-size:20px;font-weight:800;color:var(--primary);margin-bottom:4px">${spPriceStr}</div>
+                      <div class="prop-title" style="font-size:15px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${spTitle}</div>
+                      <div class="prop-location" style="color:var(--text-muted);font-size:13px;margin:8px 0"><i class="fa-solid fa-location-dot"></i> ${sp.location?.locality || ''}, ${sp.location?.city || ''}</div>
+                      <div class="prop-specs" style="display:flex;gap:12px;font-size:13px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
+                        ${sp.details?.bhk ? `<div><i class="fa-solid fa-bed"></i> ${sp.details.bhk} BHK</div>` : ''}
+                        ${sp.details?.builtUpArea ? `<div><i class="fa-solid fa-ruler-combined"></i> ${sp.details.builtUpArea} sq.ft</div>` : ''}
+                      </div>
+                    </div>
+                  </div>
+                `;
+            }
+            slider.innerHTML = htmlStr;
+          } else if (slider) {
+            slider.parentElement.parentElement.style.display = 'none';
+          }
+        } catch (e) {
+          console.error('Failed to load similar properties', e);
+          const slider = document.getElementById('similarPropertiesSlider');
+          if (slider) slider.parentElement.parentElement.style.display = 'none';
         }
 
       } catch (err) {
