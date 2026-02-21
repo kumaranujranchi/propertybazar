@@ -450,14 +450,9 @@
         <!-- DESCRIPTION -->
         <div class="detail-card">
           <h2 style="font-size:18px;font-weight:700;color:var(--dark);margin-bottom:14px">Property Description</h2>
-          <p style="font-size:14px;color:var(--text-muted);line-height:1.8">A beautifully designed 3BHK apartment with
-            modern amenities in a premium gated society in Sector 62, Noida. The apartment features large windows that
-            bring in abundant natural light, a fully-modular kitchen with premium fittings, and stunning city views from
-            the sprawling balcony.</p>
-          <p style="font-size:14px;color:var(--text-muted);line-height:1.8;margin-top:10px">The society has world-class
-            amenities including a swimming pool, well-equipped gymnasium, landscaped gardens, children's play area and
-            24x7 multi-layer security. Located minutes from Noida Sector 62 metro station, Logix City Centre Mall and
-            major IT hubs.</p>
+          <p id="dynamicDescription"
+            style="font-size:14px;color:var(--text-muted);line-height:1.8;white-space:pre-wrap;">No description provided
+            for this property.</p>
           <div id="detailTags" style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
             <!-- Dynamic Tags will be injected here -->
           </div>
@@ -1028,14 +1023,9 @@
         }
 
         // ---- Description ----
-        const descEl = document.querySelector('.detail-card p');
-        if (descEl && p.details?.description) descEl.textContent = p.details.description;
-        // Second para
-        const descCards = document.querySelectorAll('.detail-card');
-        const descCard = Array.from(descCards).find(el => el.querySelector('h2')?.textContent.includes('Description'));
-        if (descCard) {
-          const extra = descCard.querySelector('p:nth-of-type(2)');
-          if (extra) extra.remove();
+        const descEl = document.getElementById('dynamicDescription');
+        if (descEl && p.details?.description) {
+          descEl.textContent = p.details.description;
         }
 
         // ---- Dynamic Property Tags ----
