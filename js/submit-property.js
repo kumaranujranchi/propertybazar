@@ -142,17 +142,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!user.canPostMore) {
     const submitBtn = document.getElementById("btnSubmitProperty");
     if (submitBtn) {
-      submitBtn.textContent = "🔒 Free Limit Reached — Upgrade to Post More";
-      submitBtn.style.background = "#6B7280";
-      submitBtn.disabled = true;
+      // Replace button with Upgrade link
+      submitBtn.outerHTML = `
+        <a href="pricing.html" class="btn btn-primary btn-lg btn-upgrade" id="btnUpgrade">
+          <i class="fa-solid fa-crown"></i> Upgrade to Post More
+        </a>
+      `;
     }
-    const note = document.createElement("p");
-    note.style.cssText =
-      "text-align:center;color:#EF4444;font-size:13px;margin-top:12px;font-weight:600";
-    note.textContent = `You've used your free listing for this 90-day period. Upgrade to post another.`;
-    document
-      .getElementById("btnSubmitProperty")
-      ?.parentElement.appendChild(note);
+    
+    // Add a nice info box
+    const infoBox = document.createElement("div");
+    infoBox.className = "limit-reached-container";
+    infoBox.style.marginTop = "24px";
+    infoBox.innerHTML = `
+      <div class="limit-reached-title" style="color: var(--primary);"><i class="fa-solid fa-circle-exclamation"></i> Listing Limit Reached</div>
+      <p class="limit-reached-text">
+        You've used your free listing for this 90-day period. <br>
+        <b>Upgrade to Premium</b> for only ₹499 to post up to 5 properties and get featured visibility!
+      </p>
+    `;
+    
+    const formActions = document.querySelector("#formStep5 .form-actions");
+    if (formActions) {
+      formActions.parentElement.insertBefore(infoBox, formActions);
+    }
   }
 
   const submitBtn = document.getElementById("btnSubmitProperty");
