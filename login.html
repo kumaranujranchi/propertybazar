@@ -477,10 +477,18 @@
           const user = result.user;
           console.log("Google Login Success! UID:", user.uid);
 
-          // Save session using existing auth system
-          saveSession(user.uid, {
-            name: user.displayName || user.email,
+          // Get properly signed token from Convex
+          const convexResult = await convex.mutation("auth:googleLogin", {
             email: user.email,
+            name: user.displayName || user.email,
+            photoUrl: user.photoURL || undefined,
+            googleId: user.uid,
+          });
+
+          // Save session using Convex token
+          saveSession(convexResult.token, {
+            name: convexResult.name,
+            email: convexResult.email,
             photo: user.photoURL,
             provider: "google",
           });

@@ -85,6 +85,44 @@ export const login = mutation({
   },
 });
 
+// =================== GOOGLE LOGIN ===================
+export const googleLogin = mutation({
+  args: {
+    email: v.string(),
+    name: v.string(),
+    photoUrl: v.optional(v.string()),
+    googleId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    let user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", args.email.toLowerCase()))
+      .first();
+
+    if (!user) {
+      // Create new user if not exists
+      const userId = await ctx.db.insert("users", {
+        name: args.name,
+        email: args.email.toLowerCase(),
+        profilePictureUrl: args.photoUrl,
+        // No passwordHash for Google users
+      });
+      user = await ctx.db.get(userId);
+    }
+
+    if (!user) throw new Error("Failed to login with Google");
+
+    const token = generateToken();
+    await ctx.db.insert("sessions", {
+      userId: user._id,
+      token,
+      expiresAt: Date.now() + SESSION_DURATION_MS,
+    });
+
+    return { token, name: user.name, email: user.email };
+  },
+});
+
 // =================== LOGOUT ===================
 export const logout = mutation({
   args: { token: v.string() },

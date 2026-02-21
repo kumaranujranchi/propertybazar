@@ -56,7 +56,7 @@ export default defineSchema({
   users: defineTable({
     name: v.string(),
     email: v.string(),
-    passwordHash: v.string(),
+    passwordHash: v.optional(v.string()),
     subscriptionTier: v.optional(v.string()), // 'free', 'premium', 'agent'
     subscriptionExpiry: v.optional(v.number()),
     // Profile
