@@ -184,6 +184,106 @@
     <div id="lbThumbs"></div>
   </div>
 
+  <!-- ADVERTISER MODAL -->
+  <div class="advertiser-modal-overlay" id="advModal">
+    <div class="advertiser-modal-content">
+      <!-- Header -->
+      <div class="adv-modal-header">
+        <div class="adv-header-col">
+          <div class="adv-header-label">Posted By Owner:</div>
+          <div class="adv-header-phone" id="advPhoneDisplay">+91 98***543**</div>
+          <div class="adv-header-name" id="advNameDisplay">Name Hidden</div>
+        </div>
+        <div class="adv-header-col" style="text-align: right;">
+          <div class="adv-header-label" id="advDateDisplay">Posted On: --</div>
+          <div style="font-size: 14px; font-weight: 600; color: var(--text); margin-top: 4px;" id="advPriceAddress">₹--
+            | --</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;" id="advAreaType">-- Sq.Ft. | --</div>
+        </div>
+        <button class="adv-modal-close" id="advModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Instruction -->
+      <div class="adv-modal-instruction">
+        Please fill in your details to be shared with this advertiser only.
+      </div>
+
+      <!-- Body -->
+      <div class="adv-modal-body">
+        <div class="adv-modal-grid">
+          <!-- Left Col: Basic Info -->
+          <div>
+            <div class="adv-section-title">Basic Information</div>
+
+            <div class="adv-form-row">
+              <div class="adv-form-label">Your reason to buy is</div>
+              <div class="adv-radio-group">
+                <label class="adv-radio-label"><input type="radio" name="advReason" value="Investment">
+                  Investment</label>
+                <label class="adv-radio-label"><input type="radio" name="advReason" value="Self Use" checked> Self
+                  Use</label>
+              </div>
+            </div>
+
+            <div class="adv-form-row">
+              <div class="adv-form-label">Are you a property dealer</div>
+              <div class="adv-radio-group">
+                <label class="adv-radio-label"><input type="radio" name="advDealer" value="Yes"> Yes</label>
+                <label class="adv-radio-label"><input type="radio" name="advDealer" value="No" checked> No</label>
+              </div>
+            </div>
+
+            <div class="adv-input-group" style="margin-top: 32px;">
+              <input type="text" id="advInputName" class="adv-input" placeholder="Name">
+            </div>
+
+            <div class="adv-input-group">
+              <div class="adv-phone-input">
+                <div class="adv-phone-prefix">+91 IND <i class="fa-solid fa-chevron-down"
+                    style="font-size:10px;margin-left:4px;"></i></div>
+                <input type="tel" id="advInputPhone" class="adv-input" placeholder="Phone">
+              </div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">This number would be verified
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Col: Optional Info -->
+          <div>
+            <div class="adv-section-title">Optional Information</div>
+
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">By when you are planning to buy
+              the property?</div>
+            <div class="adv-radio-group" style="margin-bottom: 24px; flex-wrap: wrap;">
+              <label class="adv-radio-label"><input type="radio" name="advTimeframe" value="3 months"> 3 months</label>
+              <label class="adv-radio-label"><input type="radio" name="advTimeframe" value="6 months"> 6 months</label>
+              <label class="adv-radio-label"><input type="radio" name="advTimeframe" value="More than 6 months" checked>
+                More than 6 months</label>
+            </div>
+
+            <div class="adv-checkbox-group">
+              <label class="adv-checkbox-label">
+                <input type="checkbox" id="advCheckLoan"> I am interested in home loan
+              </label>
+              <label class="adv-checkbox-label">
+                <input type="checkbox" id="advCheckVisit" checked> I am interested in site visits.
+              </label>
+              <label class="adv-checkbox-label">
+                <input type="checkbox" id="advCheckTerms">
+                <span>I agree to the <a href="terms.html" style="color:var(--primary)">Terms & Conditions</a> and <a
+                    href="privacy.html" style="color:var(--primary)">Privacy Policy</a></span>
+              </label>
+            </div>
+
+            <button class="adv-btn-submit" id="advBtnSubmit">View Advertiser Details</button>
+            <div id="advSuccessMsg" class="adv-success-msg"><i class="fa-solid fa-circle-check"></i> Details shared
+              successfully. Contact info revealed above!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- HEADER -->
 
   <header class="header" id="header">
@@ -465,7 +565,17 @@
 
       <!-- RIGHT COLUMN — CONTACT CARD -->
       <div style="margin-top:24px">
-        <div class="contact-card">
+        <!-- NEW VIEW ADVERTISER CARD -->
+        <div class="contact-card" style="text-align: center; padding: 32px 24px;">
+          <h3 style="font-size: 20px; font-weight: 800; color: var(--dark); margin-bottom: 8px;">Interested in this
+            property?</h3>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Get complete details and contact
+            the owner directly.</p>
+          <button class="adv-btn-submit" id="btnOpenAdvModal" style="margin-top: 0;">View Advertiser Details</button>
+        </div>
+
+        <!-- OLD CONTACT CARD (Kept for fallback/emails but hidden by default to prefer new modal) -->
+        <div class="contact-card" style="margin-top:24px; display: none;">
           <h3>Contact Owner / Agent</h3>
           <p>Get more details about this property for FREE</p>
           <div class="contact-form-group">
@@ -719,6 +829,95 @@
         btn.style.display = 'inline-block';
       }, 5000);
     });
+
+    // ---- NEW ADVERTISER MODAL FALLBACK LOGIC ----
+    const advModal = document.getElementById('advModal');
+    const btnOpenAdvModal = document.getElementById('btnOpenAdvModal');
+    const advModalClose = document.getElementById('advModalClose');
+    const advBtnSubmit = document.getElementById('advBtnSubmit');
+
+    // Elements to update in modal header
+    const advHeaderPhone = document.getElementById('advPhoneDisplay');
+    const advHeaderName = document.getElementById('advNameDisplay');
+    const advDateDisplay = document.getElementById('advDateDisplay');
+    const advPriceAddress = document.getElementById('advPriceAddress');
+    const advAreaType = document.getElementById('advAreaType');
+
+    // Fallback defaults for static page
+    let REAL_OWNER_PHONE = DEFAULT_PHONE;
+    let REAL_OWNER_NAME = "Rajesh Kumar";
+    let PROPERTY_ID = null;
+
+    function maskPhone(phone) {
+      if (!phone) return '+91 98***543**';
+      return '+91 ' + phone.substring(0, 2) + '***' + phone.substring(5, 8) + '**';
+    }
+
+    if (btnOpenAdvModal) {
+      btnOpenAdvModal.addEventListener('click', () => {
+        advModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        // Set masked phone and hidden name on open
+        advHeaderPhone.textContent = maskPhone(REAL_OWNER_PHONE);
+        advHeaderName.textContent = 'Name Hidden';
+      });
+    }
+
+    function closeAdvModal() {
+      advModal.classList.remove('open');
+      document.body.style.overflow = '';
+
+      // reset form states
+      document.getElementById('advSuccessMsg').style.display = 'none';
+      advBtnSubmit.style.display = 'block';
+      advBtnSubmit.textContent = 'View Advertiser Details';
+      advBtnSubmit.disabled = false;
+    }
+
+    if (advModalClose) advModalClose.addEventListener('click', closeAdvModal);
+    if (advModal) {
+      advModal.addEventListener('click', (e) => {
+        if (e.target === advModal) closeAdvModal();
+      });
+    }
+
+    // Fallback form submit
+    if (advBtnSubmit) {
+      advBtnSubmit.addEventListener('click', async function () {
+        const nameEl = document.getElementById('advInputName');
+        const phoneEl = document.getElementById('advInputPhone');
+        const termsEl = document.getElementById('advCheckTerms');
+
+        if (!nameEl.value.trim() || !phoneEl.value.trim()) {
+          alert('Please enter your Name and Mobile Number.');
+          return;
+        }
+        if (!termsEl.checked) {
+          alert('Please agree to the Terms & Conditions.');
+          return;
+        }
+
+        this.disabled = true;
+        this.textContent = 'Submitting...';
+
+        // Fallback submit delay
+        await new Promise(r => setTimeout(r, 800));
+
+        // Success UI update
+        this.style.display = 'none';
+        document.getElementById('advSuccessMsg').style.display = 'block';
+
+        // Reveal owner details
+        advHeaderPhone.textContent = '+91 ' + REAL_OWNER_PHONE;
+        advHeaderName.textContent = REAL_OWNER_NAME;
+
+        // Reset fields
+        nameEl.value = '';
+        phoneEl.value = '';
+        termsEl.checked = false;
+      });
+    }
+
   </script>
   <script type="module">
     import { convex } from './js/convex.js';
@@ -977,7 +1176,100 @@
         const mapText = document.querySelector('[href*="maps.google.com"]')?.previousElementSibling;
         if (mapText) mapText.textContent = `${p.location?.locality || ''}, ${p.location?.city || ''} ${p.location?.pinCode || ''}`;
 
-        // ---- Handle Contact Owner Form (DB property - overrides fallback handler) ----
+        // ---- Populate Modal Header Details ----
+        PROPERTY_ID = id;
+        if (p.contactDesc) {
+          REAL_OWNER_PHONE = p.contactDesc.mobile;
+          REAL_OWNER_NAME = p.contactDesc.name || 'Owner';
+        }
+
+        // Format Date from property creation (if we have access to _creationTime from convex)
+        const creationDate = p._creationTime ? new Date(p._creationTime).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Recently';
+        if (advDateDisplay) advDateDisplay.textContent = `Posted On: ${creationDate}`;
+
+        // Format Price & Address
+        const shortAddress = `${p.location?.locality || ''}, ${p.location?.city || ''}`;
+        let formattedPrice = 'Price on Request';
+        if (price > 0) {
+          if (price >= 10000000) formattedPrice = `₹${(price / 10000000).toFixed(2)} Cr`;
+          else if (price >= 100000) formattedPrice = `₹${(price / 100000).toFixed(2)} Lac`;
+          else formattedPrice = priceStr;
+        }
+        if (advPriceAddress) advPriceAddress.textContent = `${formattedPrice} | ${shortAddress}`;
+
+        // Format Area & Type
+        const areaStr = area > 0 ? `${area.toLocaleString('en-IN')} SQ.FT.` : '';
+        const propTypeStr = p.propertyType ? p.propertyType.toUpperCase() : '';
+        if (advAreaType) advAreaType.textContent = `${areaStr} | ${propTypeStr}`;
+
+        // ---- Override Modal Submit for Real DB Submit ----
+        const newAdvSubmit = advBtnSubmit.cloneNode(true);
+        advBtnSubmit.parentNode.replaceChild(newAdvSubmit, advBtnSubmit);
+
+        newAdvSubmit.addEventListener('click', async function () {
+          const name = document.getElementById('advInputName').value.trim();
+          const phone = document.getElementById('advInputPhone').value.trim();
+          const termsChecked = document.getElementById('advCheckTerms').checked;
+
+          // Extract Radio/Checkbox values
+          const reason = document.querySelector('input[name="advReason"]:checked')?.value || '';
+          const dealer = document.querySelector('input[name="advDealer"]:checked')?.value || '';
+          const timeframe = document.querySelector('input[name="advTimeframe"]:checked')?.value || '';
+          const loan = document.getElementById('advCheckLoan').checked ? 'Yes' : 'No';
+          const visit = document.getElementById('advCheckVisit').checked ? 'Yes' : 'No';
+
+          if (!name || !phone) {
+            alert('Please enter your Name and Mobile Number.');
+            return;
+          }
+          if (!termsChecked) {
+            alert('Please agree to the Terms & Conditions.');
+            return;
+          }
+
+          this.disabled = true;
+          this.textContent = 'Submitting...';
+
+          // Format payload into single message string
+          const fullMessage = `
+--- Advertiser Modal Enquiry ---
+Reason to Buy: ${reason}
+Property Dealer: ${dealer}
+Planning to Buy In: ${timeframe}
+Interested in Home Loan: ${loan}
+Interested in Site Visit: ${visit}
+      `.trim();
+
+          try {
+            await convex.mutation('properties:contactOwner', {
+              propertyId: PROPERTY_ID,
+              name,
+              phone,
+              email: '', // Not collected in this modal
+              message: fullMessage
+            });
+
+            // UI Success state
+            this.style.display = 'none';
+            document.getElementById('advSuccessMsg').style.display = 'block';
+
+            // Reveal Owner Details!
+            advHeaderPhone.textContent = '+91 ' + REAL_OWNER_PHONE;
+            advHeaderName.textContent = REAL_OWNER_NAME;
+
+            // Clear only core inputs, keep preferences
+            document.getElementById('advInputName').value = '';
+            document.getElementById('advInputPhone').value = '';
+            document.getElementById('advCheckTerms').checked = false;
+
+          } catch (err) {
+            alert('Failed to send enquiry: ' + err.message);
+            this.disabled = false;
+            this.textContent = 'View Advertiser Details';
+          }
+        });
+
+        // Keep OLD Handle Contact Owner Form valid for DOM safety
         const btnSendEnquiry = document.getElementById('btnSendEnquiry');
         if (btnSendEnquiry) {
           // Remove fallback listener and replace with DB-backed version

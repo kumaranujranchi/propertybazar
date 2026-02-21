@@ -1221,6 +1221,234 @@ textarea {
   text-align: right;
 }
 
+/* ========== ADVERTISER MODAL ========== */
+.advertiser-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.advertiser-modal-overlay.open {
+  display: flex;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.advertiser-modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 8px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+.adv-modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 32px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+.adv-header-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.adv-header-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.adv-header-phone {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--dark);
+}
+.adv-header-name {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.adv-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.adv-modal-close:hover {
+  color: var(--dark);
+}
+.adv-modal-instruction {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 12px 32px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.adv-modal-body {
+  padding: 32px;
+  overflow-y: auto;
+}
+.adv-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.adv-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+}
+.adv-form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.adv-form-label {
+  font-size: 14px;
+  color: var(--text);
+}
+.adv-radio-group {
+  display: flex;
+  gap: 16px;
+}
+.adv-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.adv-radio-label input[type="radio"] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.adv-input-group {
+  margin-bottom: 24px;
+  position: relative;
+}
+.adv-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--text);
+  background: transparent;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.adv-input:focus {
+  border-bottom-color: var(--primary);
+}
+.adv-phone-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.adv-phone-prefix {
+  font-size: 14px;
+  color: var(--primary);
+  font-weight: 600;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.adv-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+.adv-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1.4;
+}
+.adv-checkbox-label input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  cursor: pointer;
+}
+.adv-btn-submit {
+  width: 100%;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 4px;
+  margin-top: 32px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.adv-btn-submit:hover {
+  background: #2563eb;
+}
+.adv-btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.adv-success-msg {
+  display: none;
+  padding: 16px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  text-align: center;
+  border-radius: 4px;
+  font-weight: 600;
+  margin-top: 24px;
+  font-size: 14px;
+}
+@media (max-width: 768px) {
+  .adv-modal-header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+  }
+  .adv-modal-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .adv-modal-instruction {
+    padding: 12px 20px;
+    font-size: 13px;
+  }
+  .adv-modal-body {
+    padding: 20px;
+  }
+}
+
 /* ========== FOOTER ========== */
 .footer {
   background: var(--dark);
