@@ -106,13 +106,23 @@
 }
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 body {
   font-family: "Inter", sans-serif;
   color: var(--text);
   background: var(--bg);
   line-height: 1.6;
+  overflow-x: hidden;
+  width: 100%;
 }
+/* ... */
+.advantage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
 h1,
 h2,
 h3,
@@ -509,6 +519,7 @@ textarea {
 }
 .search-tabs {
   display: flex;
+  flex-wrap: wrap;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
 }
@@ -1219,8 +1230,7 @@ textarea {
   gap: 40px;
   margin-bottom: 48px;
 }
-.footer-brand {
-}
+/* removed empty ruleset */
 .footer-logo {
   display: flex;
   align-items: center;
@@ -1761,8 +1771,7 @@ textarea {
 }
 
 /* EMI Calculator */
-.emi-calc {
-}
+/* removed empty ruleset */
 .emi-inputs {
   display: flex;
   flex-direction: column;
@@ -2160,8 +2169,7 @@ textarea {
   gap: 48px;
   padding: 60px 0;
 }
-.contact-info {
-}
+/* removed empty ruleset */
 .contact-info h2 {
   font-size: 28px;
   font-weight: 700;
