@@ -44,10 +44,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       const specs = buildSpecs(p);
       const area = p.details?.builtUpArea || 0;
       const price = p.pricing?.expectedPrice || 0;
+      const score = calculateQualityScore(p);
 
       return {
         id: p._id,
         convexId: p._id,
+        qualityScore: score,
         type: (p.transactionType || '').toLowerCase().includes('rent') ? 'rent' : 'buy',
         propType: p.propertyType,
         bhk: parseInt(p.details?.bhk) || 0,
@@ -160,4 +162,40 @@ function buildPropertyCardHTML(p) {
       </div>
     </div>
   </div>`;
+}
+
+/**
+ * Calculates a property's quality score for ranking/sorting.
+ * Factors: Verification (+30), Featured (+25), RERA (+20), Photos (max 25), Description (+15), Owner Listing (+10)
+ */
+function calculateQualityScore(p) {
+    let score = 0;
+    
+    // 1. Verification (Highest Trust)
+    if (p.verified) score += 30;
+    
+    // 2. Featured/Premium Promotion
+    if (p.featured) score += 25;
+    
+    // 3. Legal Compliance: RERA
+    if (p.details?.rera) score += 20;
+    
+    // 4. Visual Completeness (Max 25)
+    if (p.photos && p.photos.length > 0) {
+        score += Math.min(p.photos.length * 5, 25);
+    }
+    
+    // 5. Contextual Completeness: Description (Max 15)
+    const desc = p.details?.description || "";
+    if (desc.length > 300) score += 15;
+    else if (desc.length > 100) score += 10;
+    else if (desc.length > 0) score += 5;
+    
+    // 6. Direct Connect: Owner Listings
+    if (p.contactDesc?.role === 'Owner') score += 10;
+    
+    // 7. Freshness (Simulated)
+    // For now, newer Convex _id or timestamp would go here.
+    
+    return score;
 }

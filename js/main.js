@@ -244,10 +244,12 @@ function renderFilteredProperties() {
     );
   }
 
-  const sort = document.querySelector('.sort-select')?.value;
-  if (sort === 'price-asc') filtered.sort((a, b) => a.price - b.price);
+  const sort = document.querySelector('.sort-select')?.value || 'relevance';
+  if (sort === 'relevance') filtered.sort((a, b) => (b.qualityScore || 0) - (a.qualityScore || 0));
+  else if (sort === 'price-asc') filtered.sort((a, b) => a.price - b.price);
   else if (sort === 'price-desc') filtered.sort((a, b) => b.price - a.price);
   else if (sort === 'area-desc') filtered.sort((a, b) => b.area - a.area);
+  else if (sort === 'newest') filtered.sort((a, b) => (b.id > a.id ? 1 : -1)); // Simple newest first logic
 
   const count = document.querySelector('.listings-count h2');
   if (count) count.textContent = `${filtered.length} Properties Found`;
