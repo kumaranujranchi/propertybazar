@@ -20,47 +20,49 @@
 
 <body>
   <!-- HEADER -->
-<header class="header" id="header">
-  <div class="container">
-    <nav class="nav">
-      <a href="index.html" class="nav-logo">
-        <div class="nav-logo-icon">24</div>
-        <span class="nav-logo-text">24Dismil.com</span>
-      </a>
-      <div class="nav-city">
-        <i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
-      </div>
-      <div class="nav-links">
-        <a href="index.html" class="nav-link active">Home</a>
-        <a href="properties.html?type=buy" class="nav-link">Buy</a>
-        <a href="properties.html?type=rent" class="nav-link">Rent</a>
-        <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
-        <a href="pricing.html" class="nav-link">Pricing</a>
-        <a href="post-property.html" class="nav-link">Post Property</a>
-        <a href="about.html" class="nav-link">About</a>
-        <a href="contact.html" class="nav-link">Contact</a>
-      </div>
-      <div class="nav-actions">
-        <a href="login.html" class="nav-btn-login">Login</a>
-        <a href="post-property.html" class="nav-btn-post">+ Post Property</a>
-      </div>
-      <div class="hamburger" id="hamburger">
-        <span></span><span></span><span></span>
-      </div>
-    </nav>
-  </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
-    <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
-    <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
-    <a href="pricing.html"><i class="fa-solid fa-credit-card"></i> Pricing</a>
-    <a href="post-property.html"><i class="fa-solid fa-circle-plus"></i> Post Property</a>
-    <a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
-    <a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a>
-    <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
-  </div>
-</header>
+  <header class="header" id="header">
+    <div class="container">
+      <nav class="nav">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logo-icon">24</div>
+          <span class="nav-logo-text">24Dismil.com</span>
+        </a>
+        <div class="nav-city">
+          <i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down"
+            style="font-size: 0.8em;"></i>
+        </div>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link active">Home</a>
+          <a href="properties.html?type=buy" class="nav-link">Buy</a>
+          <a href="properties.html?type=rent" class="nav-link">Rent</a>
+          <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+          <a href="pricing.html" class="nav-link">Pricing</a>
+          <a href="post-property.html" class="nav-link">Post Property</a>
+          <a href="about.html" class="nav-link">About</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+        <div class="nav-actions">
+          <a href="login.html" class="nav-btn-login">Login</a>
+          <a href="post-property.html" class="nav-btn-post">+ Post Property</a>
+        </div>
+        <div class="hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </nav>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+      <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+      <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
+      <a href="pricing.html"><i class="fa-solid fa-credit-card"></i> Pricing</a>
+      <a href="post-property.html"><i class="fa-solid fa-circle-plus"></i> Post Property</a>
+      <a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
+      <a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a>
+      <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i>
+        Login</a>
+    </div>
+  </header>
 
   <!-- HERO -->
   <section class="hero">
@@ -375,8 +377,10 @@
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px">
         <div>
-          <h2 style="font-size:32px;font-weight:800;color:var(--dark);margin-bottom:10px">Find Your Dream Home Today</h2>
-          <p style="font-size:16px;color:var(--text-muted)">Join 1,500+ users who found their perfect property with us.</p>
+          <h2 style="font-size:32px;font-weight:800;color:var(--dark);margin-bottom:10px">Find Your Dream Home Today
+          </h2>
+          <p style="font-size:16px;color:var(--text-muted)">Join 1,500+ users who found their perfect property with us.
+          </p>
         </div>
       </div>
     </div>
@@ -523,7 +527,7 @@
       </div>
       <div class="cards-slider-wrap">
         <button class="slider-btn slider-prev">‹</button>
-        <div class="cards-slider">
+        <div class="cards-slider" id="newLaunchSlider">
           <div class="project-card" style="min-width: 300px; flex-shrink: 0">
             <div class="project-img">
               <img src="images/hero-bg.jpg" alt="Godrej Azure Project" />
