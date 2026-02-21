@@ -184,105 +184,134 @@
     <div id="lbThumbs"></div>
   </div>
 
-  <!-- ADVERTISER MODAL -->
-  <div class="advertiser-modal-overlay" id="advModal">
-    <div class="advertiser-modal-content">
-      <!-- Header -->
-      <div class="adv-modal-header">
-        <div class="adv-header-col">
-          <div class="adv-header-label">Posted By Owner:</div>
-          <div class="adv-header-phone" id="advPhoneDisplay">+91 98***543**</div>
-          <div class="adv-header-name" id="advNameDisplay">Name Hidden</div>
+  <!-- ADVERTISER MODAL (Modern Redesign) -->
+  <div class="adv-modal-overlay" id="advModal">
+    <div class="adv-modal-content">
+      <!-- Modern Header -->
+      <div class="adv-header">
+        <div class="adv-owner-profile">
+          <div class="adv-avatar"><i class="fa-solid fa-user-lock"></i></div>
+          <div class="adv-owner-details">
+            <div class="adv-owner-name" id="advNameDisplay">Name Hidden</div>
+            <div class="adv-owner-role">Property Owner</div>
+            <div class="adv-owner-phone" id="advPhoneDisplay">+91 98*** 543**</div>
+          </div>
         </div>
-        <div class="adv-header-col" style="text-align: right;">
-          <div class="adv-header-label" id="advDateDisplay">Posted On: --</div>
-          <div style="font-size: 14px; font-weight: 600; color: var(--text); margin-top: 4px;" id="advPriceAddress">₹--
-            | --</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;" id="advAreaType">-- Sq.Ft. | --</div>
-        </div>
-        <button class="adv-modal-close" id="advModalClose"><i class="fa-solid fa-xmark"></i></button>
+        <button class="adv-close" id="advModalClose"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- Instruction -->
-      <div class="adv-modal-instruction">
-        Please fill in your details to be shared with this advertiser only.
+      <!-- Warning/Instruction -->
+      <div class="adv-alert">
+        <i class="fa-solid fa-shield-halved"></i> Please share your details to unlock the owner's contact info.
       </div>
 
       <!-- Body -->
-      <div class="adv-modal-body">
-        <div class="adv-modal-grid">
-          <!-- Left Col: Basic Info -->
-          <div>
-            <div class="adv-section-title">Basic Information</div>
+      <div class="adv-body">
+        <div class="adv-grid">
 
-            <div class="adv-form-row">
-              <div class="adv-form-label">Your reason to buy is</div>
-              <div class="adv-radio-group">
-                <label class="adv-radio-label"><input type="radio" name="advReason" value="Investment">
-                  Investment</label>
-                <label class="adv-radio-label"><input type="radio" name="advReason" value="Self Use" checked> Self
-                  Use</label>
+          <!-- Left Column: Primary Info -->
+          <div class="adv-form-section">
+            <h4 class="adv-title">Basic Information</h4>
+
+            <div class="adv-group">
+              <label class="adv-label">Property interested for?</label>
+              <div class="adv-chips" id="chipReason">
+                <div class="adv-chip" data-val="Investment">Investment</div>
+                <div class="adv-chip active" data-val="Self Use">Self Use</div>
+              </div>
+              <input type="hidden" id="valReason" value="Self Use">
+            </div>
+
+            <div class="adv-group">
+              <label class="adv-label">Are you a property dealer?</label>
+              <div class="adv-chips" id="chipDealer">
+                <div class="adv-chip" data-val="Yes">Yes</div>
+                <div class="adv-chip active" data-val="No">No</div>
+              </div>
+              <input type="hidden" id="valDealer" value="No">
+            </div>
+
+            <div class="adv-input-row" style="margin-top:24px;">
+              <div class="adv-input-wrap">
+                <i class="fa-regular fa-user adv-input-icon"></i>
+                <input type="text" id="advInputName" class="adv-input-text" placeholder="Your Full Name">
               </div>
             </div>
 
-            <div class="adv-form-row">
-              <div class="adv-form-label">Are you a property dealer</div>
-              <div class="adv-radio-group">
-                <label class="adv-radio-label"><input type="radio" name="advDealer" value="Yes"> Yes</label>
-                <label class="adv-radio-label"><input type="radio" name="advDealer" value="No" checked> No</label>
-              </div>
-            </div>
-
-            <div class="adv-input-group" style="margin-top: 32px;">
-              <input type="text" id="advInputName" class="adv-input" placeholder="Name">
-            </div>
-
-            <div class="adv-input-group">
-              <div class="adv-phone-input">
-                <div class="adv-phone-prefix">+91 IND <i class="fa-solid fa-chevron-down"
-                    style="font-size:10px;margin-left:4px;"></i></div>
-                <input type="tel" id="advInputPhone" class="adv-input" placeholder="Phone">
-              </div>
-              <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">This number would be verified
-              </div>
+            <div class="adv-input-wrap">
+              <i class="fa-solid fa-mobile-screen adv-input-icon"></i>
+              <span class="adv-prefix">+91 IND</span>
+              <input type="tel" id="advInputPhone" class="adv-input-text" placeholder="Mobile Number"
+                style="padding-left:106px;">
             </div>
           </div>
 
-          <!-- Right Col: Optional Info -->
-          <div>
-            <div class="adv-section-title">Optional Information</div>
+          <!-- Right Column: Optional Info -->
+          <div class="adv-form-section">
+            <h4 class="adv-title">Additional Preferences</h4>
 
-            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">By when you are planning to buy
-              the property?</div>
-            <div class="adv-radio-group" style="margin-bottom: 24px; flex-wrap: wrap;">
-              <label class="adv-radio-label"><input type="radio" name="advTimeframe" value="3 months"> 3 months</label>
-              <label class="adv-radio-label"><input type="radio" name="advTimeframe" value="6 months"> 6 months</label>
-              <label class="adv-radio-label"><input type="radio" name="advTimeframe" value="More than 6 months" checked>
-                More than 6 months</label>
+            <div class="adv-group">
+              <label class="adv-label">Planning to buy in?</label>
+              <div class="adv-chips" id="chipTimeframe">
+                <div class="adv-chip" data-val="3 months">3 Months</div>
+                <div class="adv-chip" data-val="6 months">6 Months</div>
+                <div class="adv-chip active" data-val="More than 6 months">More than 6 months</div>
+              </div>
+              <input type="hidden" id="valTimeframe" value="More than 6 months">
             </div>
 
-            <div class="adv-checkbox-group">
-              <label class="adv-checkbox-label">
-                <input type="checkbox" id="advCheckLoan"> I am interested in home loan
+            <div class="adv-checks">
+              <label class="adv-check-label">
+                <input type="checkbox" id="advCheckLoan" class="adv-checkbox">
+                <span class="adv-check-text">I am interested in Home Loan assistance</span>
               </label>
-              <label class="adv-checkbox-label">
-                <input type="checkbox" id="advCheckVisit" checked> I am interested in site visits.
+              <label class="adv-check-label">
+                <input type="checkbox" id="advCheckVisit" class="adv-checkbox" checked>
+                <span class="adv-check-text">I am interested in Site Visits</span>
               </label>
-              <label class="adv-checkbox-label">
-                <input type="checkbox" id="advCheckTerms">
-                <span>I agree to the <a href="terms.html" style="color:var(--primary)">Terms & Conditions</a> and <a
-                    href="privacy.html" style="color:var(--primary)">Privacy Policy</a></span>
+              <label class="adv-check-label" style="margin-top:12px;">
+                <input type="checkbox" id="advCheckTerms" class="adv-checkbox">
+                <span class="adv-check-text">I agree to the <a href="terms.html">Terms</a> & <a
+                    href="privacy.html">Privacy Policy</a></span>
               </label>
             </div>
 
-            <button class="adv-btn-submit" id="advBtnSubmit">View Advertiser Details</button>
-            <div id="advSuccessMsg" class="adv-success-msg"><i class="fa-solid fa-circle-check"></i> Details shared
-              successfully. Contact info revealed above!</div>
+            <button class="adv-submit-btn" id="advBtnSubmit">Get Contact Details</button>
+            <div id="advSuccessMsg" class="adv-success-box" style="display:none;">
+              <i class="fa-solid fa-circle-check"></i> Details shared! Contact information is now visible above.
+            </div>
           </div>
+
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    // Simple script to handle chip selection clicks securely without breaking scope
+    document.addEventListener("DOMContentLoaded", () => {
+      const chipGroups = [
+        { id: 'chipReason', inputId: 'valReason' },
+        { id: 'chipDealer', inputId: 'valDealer' },
+        { id: 'chipTimeframe', inputId: 'valTimeframe' }
+      ];
+
+      chipGroups.forEach(group => {
+        const wrap = document.getElementById(group.id);
+        const input = document.getElementById(group.inputId);
+        if (!wrap || !input) return;
+
+        const chips = wrap.querySelectorAll('.adv-chip');
+        chips.forEach(chip => {
+          chip.addEventListener('click', () => {
+            chips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            input.value = chip.getAttribute('data-val');
+          });
+        });
+      });
+    });
+  </script>
 
   <!-- HEADER -->
 
@@ -1211,10 +1240,10 @@
           const phone = document.getElementById('advInputPhone').value.trim();
           const termsChecked = document.getElementById('advCheckTerms').checked;
 
-          // Extract Radio/Checkbox values
-          const reason = document.querySelector('input[name="advReason"]:checked')?.value || '';
-          const dealer = document.querySelector('input[name="advDealer"]:checked')?.value || '';
-          const timeframe = document.querySelector('input[name="advTimeframe"]:checked')?.value || '';
+          // Extract Chip values
+          const reason = document.getElementById('valReason')?.value || '';
+          const dealer = document.getElementById('valDealer')?.value || '';
+          const timeframe = document.getElementById('valTimeframe')?.value || '';
           const loan = document.getElementById('advCheckLoan').checked ? 'Yes' : 'No';
           const visit = document.getElementById('advCheckVisit').checked ? 'Yes' : 'No';
 
@@ -1265,7 +1294,7 @@ Interested in Site Visit: ${visit}
           } catch (err) {
             alert('Failed to send enquiry: ' + err.message);
             this.disabled = false;
-            this.textContent = 'View Advertiser Details';
+            this.textContent = 'Get Contact Details';
           }
         });
 
