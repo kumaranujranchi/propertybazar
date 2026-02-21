@@ -9,32 +9,95 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body { background: var(--bg); }
-    .dash-wrap { max-width: 960px; margin: 100px auto 60px; padding: 0 16px; }
+    .dash-layout { display: flex; min-height: calc(100vh - 74px); margin-top: 74px; }
+    .dash-sidebar { width: 260px; background: #fff; border-right: 1px solid var(--border); padding: 24px 0; flex-shrink: 0; }
+    .dash-nav-item { padding: 14px 24px; display: flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; font-weight: 600; font-size: 14px; border-left: 3px solid transparent; cursor: pointer; transition: all 0.2s; }
+    .dash-nav-item i { width: 20px; text-align: center; }
+    .dash-nav-item:hover, .dash-nav-item.active { background: rgba(232, 65, 24, 0.05); color: var(--primary); border-left-color: var(--primary); }
+    
+    .dash-content-wrap { flex: 1; padding: 32px 40px; overflow-y: auto; }
+    .dash-section { display: none; }
+    .dash-section.active { display: block; }
     .dash-header { background: linear-gradient(135deg, var(--primary), #ff6b4a); border-radius: var(--radius); padding: 32px; color: #fff; margin-bottom: 28px; }
-    .dash-header h1 { font-size: 24px; margin-bottom: 4px; }
-    .dash-header p { opacity: 0.85; font-size: 14px; margin: 0; }
+    .dash-header h1 { font-size: 24px; margin-bottom: 6px; }
+    .dash-header p { opacity: 0.9; font-size: 14px; margin: 0; }
+    
     .dash-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
     .dash-stat-card { background: #fff; border-radius: var(--radius-sm); padding: 24px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); text-align: center; }
-    .dash-stat-num { font-size: 36px; font-weight: 800; color: var(--primary); }
-    .dash-stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
-    .dash-limit-bar { background: #fff; border-radius: var(--radius-sm); padding: 20px 24px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 28px; }
-    .dash-limit-title { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
-    .progress-bar-bg { background: var(--bg); border-radius: 99px; height: 10px; overflow: hidden; }
+    .dash-stat-num { font-size: 32px; font-weight: 800; color: var(--primary); }
+    .dash-stat-label { font-size: 13px; color: var(--text-muted); margin-top: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    .dash-card { background: #fff; border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow-sm); padding: 24px; margin-bottom: 24px; }
+    .dash-card-title { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+    
+    .dash-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .dash-form-group { display: flex; flex-direction: column; gap: 8px; }
+    .dash-form-group.full { grid-column: 1 / -1; }
+    .dash-label { font-size: 13px; font-weight: 600; color: var(--dark); }
+    .dash-input { padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; outline: none; background: #fff; width: 100%; box-sizing: border-box; }
+    .dash-input:focus { border-color: var(--primary); }
+    .dash-btn { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 14px; }
+    .dash-btn:hover { opacity: 0.9; }
+    .dash-btn-outline { background: transparent; color: var(--dark); border: 1px solid var(--border); }
+    
+    .table-wrap { overflow-x: auto; margin: -10px; padding: 10px; }
+    .dash-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; min-width: 600px; }
+    .dash-table th { padding: 14px 16px; background: #F3F4F6; color: var(--text-muted); font-weight: 600; border-bottom: 2px solid var(--border); }
+    .dash-table td { padding: 16px; border-bottom: 1px solid var(--border); color: var(--dark); vertical-align: middle; }
+    
+    .badge { padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; display: inline-block; }
+    .badge.success { background: #D1FAE5; color: #065F46; }
+    .badge.pending { background: #FEF3C7; color: #92400E; }
+    .badge.danger { background: #FEE2E2; color: #B91C1C; }
+    .badge.primary { background: rgba(232, 65, 24, 0.1); color: var(--primary); }
+    
+    .progress-bar-bg { background: var(--bg); border-radius: 99px; height: 8px; overflow: hidden; margin-top: 12px; }
     .progress-bar-fill { background: var(--primary); height: 100%; border-radius: 99px; transition: width 0.5s; }
-    .dash-section-title { font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 16px; }
-    .dash-empty { text-align: center; padding: 48px 20px; background: #fff; border-radius: var(--radius); border: 1px solid var(--border); color: var(--text-muted); }
-    .dash-prop-card { background: #fff; border-radius: var(--radius-sm); border: 1px solid var(--border); padding: 16px 20px; display: flex; gap: 16px; align-items: center; margin-bottom: 12px; box-shadow: var(--shadow-sm); }
-    .dash-prop-img { width: 80px; height: 64px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: var(--bg); }
+    
+    .dash-empty { text-align: center; padding: 48px 20px; border: 1px dashed var(--border); border-radius: var(--radius); color: var(--text-muted); margin-top:16px;}
+    
+    .dash-prop-card { background: #fff; border-radius: var(--radius-sm); border: 1px solid var(--border); padding: 16px; display: flex; gap: 16px; align-items: center; margin-bottom: 16px; transition: 0.2s; }
+    .dash-prop-card:hover { border-color: var(--primary); box-shadow: var(--shadow-sm); }
+    .dash-prop-img { width: 120px; height: 90px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: var(--bg); }
     .dash-prop-info { flex: 1; }
-    .dash-prop-title { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
-    .dash-prop-loc { font-size: 12px; color: var(--text-muted); }
-    .dash-prop-price { font-size: 15px; font-weight: 800; color: var(--primary); }
-    .upgrade-card { background: linear-gradient(135deg, #1A1A2E, #16213E); border-radius: var(--radius); padding: 28px; color: #fff; text-align: center; margin-top: 28px; }
-    .upgrade-card h3 { font-size: 20px; margin-bottom: 8px; }
-    .upgrade-card p { opacity: 0.7; font-size: 14px; margin-bottom: 20px; }
-    @media(max-width: 600px) { .dash-stats { grid-template-columns: 1fr 1fr; } }
+    .dash-prop-title { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+    .dash-prop-loc { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
+    .dash-prop-actions { display: flex; gap: 8px; }
+    .dash-action-btn { font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 4px; border: 1px solid var(--border); color: var(--dark); text-decoration: none; cursor: pointer; background: #fff; }
+    .dash-action-btn:hover { background: var(--bg); }
+    
+    .notify-item { padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; gap: 16px; align-items: flex-start; }
+    .notify-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .notify-icon { width: 40px; height: 40px; border-radius: 50%; background: #E0E7FF; color: #4F46E5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+    .notify-content p { margin: 0 0 4px; font-size: 14px; color: var(--dark); font-weight: 500; }
+    .notify-content span { font-size: 12px; color: var(--text-muted); }
+    
+    .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .setting-info h4 { font-size: 15px; font-weight: 600; color: var(--dark); margin: 0 0 4px; }
+    .setting-info p { font-size: 13px; color: var(--text-muted); margin: 0; }
+    
+    /* Toggle switch */
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--primary); }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    @media(max-width: 900px) { 
+      .dash-layout { flex-direction: column; } 
+      .dash-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); display: flex; flex-direction: row; overflow-x: auto; padding: 0; } 
+      .dash-nav-item { white-space: nowrap; padding: 16px 20px; border-left: none; border-bottom: 3px solid transparent; } 
+      .dash-nav-item.active { border-left: none; border-bottom-color: var(--primary); background: transparent; } 
+      .dash-content-wrap { padding: 20px 16px; } 
+      .dash-stats { grid-template-columns: 1fr; } 
+      .dash-form-grid { grid-template-columns: 1fr; } 
+      .dash-prop-card { flex-direction: column; align-items: flex-start; }
+      .dash-prop-img { width: 100%; height: 160px; }
+    }
   </style>
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -46,75 +109,297 @@
         <div class="nav-logo-icon">24</div>
         <span class="nav-logo-text">24Dismil.com</span>
       </a>
+      <div class="nav-city">
+        <i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
+      </div>
       <div class="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="properties.html?type=buy" class="nav-link">Buy</a>
         <a href="properties.html?type=rent" class="nav-link">Rent</a>
+        <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+        <a href="pricing.html" class="nav-link">Pricing</a>
         <a href="post-property.html" class="nav-link">Post Property</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
       </div>
       <div class="nav-actions">
         <a href="dashboard.html" class="nav-btn-login" id="dashNavName">My Account</a>
         <a href="#" class="nav-btn-post" id="logoutBtn">Logout</a>
       </div>
-      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
     </nav>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+    <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+    <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
+    <a href="pricing.html"><i class="fa-solid fa-credit-card"></i> Pricing</a>
+    <a href="post-property.html"><i class="fa-solid fa-circle-plus"></i> Post Property</a>
+    <a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
+    <a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a>
+    <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
   </div>
 </header>
 
 <!-- DASHBOARD -->
-<div class="dash-wrap" id="dashWrap" style="display:none">
-  <div class="dash-header">
-    <h1 id="dashGreeting">Welcome back! <i class="fa-solid fa-hand"></i></h1>
-    <p id="dashEmail"></p>
-  </div>
-
-  <div class="dash-stats">
-    <div class="dash-stat-card">
-      <div class="dash-stat-num" id="statPosted">0</div>
-      <div class="dash-stat-label">Properties Posted</div>
+<!-- CROP MODAL -->
+<div class="modal-overlay" id="cropModalOverlay" style="z-index: 2000;">
+  <div class="payment-modal" style="max-width:500px">
+    <h3 style="margin-bottom:16px"><i class="fa-solid fa-crop-simple"></i> Adjust Photo</h3>
+    <div style="width: 100%; max-height: 400px; margin-bottom: 20px;">
+      <img id="cropImage" src="" style="max-width:100%; display:block;">
     </div>
-    <div class="dash-stat-card">
-      <div class="dash-stat-num" id="statFreeLeft">3</div>
-      <div class="dash-stat-label">Free Listings Left</div>
-    </div>
-    <div class="dash-stat-card">
-      <div class="dash-stat-num" id="tierIconContainer"><i class="fa-solid fa-tag"></i></div>
-      <div class="dash-stat-label">Current Plan</div>
-    </div>
-  </div>
-
-  <div class="dash-limit-bar">
-    <div class="dash-limit-title">Free listing usage (<span id="usageText">0 of 3 used</span>)</div>
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="usageBar" style="width:0%"></div>
-    </div>
-    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;margin-bottom:0">Upgrade to Premium for unlimited listings, priority placement &amp; verified badge.</p>
-  </div>
-
-  <div class="dash-tabs" style="display:flex; gap:16px; margin-bottom:16px; border-bottom:1px solid var(--border)">
-    <div class="dash-tab active" id="tabProps" style="padding:10px 16px; font-weight:700; cursor:pointer; border-bottom:2px solid var(--primary); color:var(--primary)">My Properties</div>
-    <div class="dash-tab" id="tabLeads" style="padding:10px 16px; font-weight:600; cursor:pointer; color:var(--text-muted)">My Leads</div>
-  </div>
-
-  <div id="secProps">
-    <div id="myPropertiesList">
-      <div class="dash-empty">Loading your properties...</div>
-    </div>
-    
-    <div class="upgrade-card" id="upgradeCard" style="display:none">
-      <h3><i class="fa-solid fa-bolt"></i> Unlock Premium Listings</h3>
-      <p>Post unlimited properties, get verified badge, priority placement, and lead analytics.</p>
-      <a href="pricing.html" class="btn" style="background:var(--primary);color:#fff;padding:12px 32px;border-radius:var(--radius-sm);font-weight:700;text-decoration:none">Upgrade Now - View Plans</a>
-    </div>
-  </div>
-
-  <div id="secLeads" style="display:none">
-    <div id="myLeadsList">
-      <div class="dash-empty">Loading your leads...</div>
+    <div style="display:flex; justify-content:flex-end; gap:10px;">
+      <button class="dash-btn dash-btn-outline" id="btnCancelCrop">Cancel</button>
+      <button class="dash-btn" id="btnApplyCrop">Apply & Upload</button>
     </div>
   </div>
 </div>
 
+<div class="container">
+<div class="dash-layout" id="dashWrap" style="display:none">
+  <!-- SIDEBAR -->
+  <div class="dash-sidebar">
+    <div class="dash-nav-item active" data-section="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</div>
+    <div class="dash-nav-item" data-section="profile"><i class="fa-solid fa-user"></i> My Profile</div>
+    <div class="dash-nav-item" data-section="properties"><i class="fa-solid fa-house"></i> My Properties</div>
+    <div class="dash-nav-item" data-section="plans"><i class="fa-solid fa-star"></i> Plan & Subscriptions</div>
+    <div class="dash-nav-item" data-section="payments"><i class="fa-solid fa-receipt"></i> Payment History</div>
+    <div class="dash-nav-item" data-section="rera"><i class="fa-solid fa-shield-halved"></i> RERA Verification</div>
+    <div class="dash-nav-item" data-section="notifications"><i class="fa-solid fa-bell"></i> Notifications</div>
+    <div class="dash-nav-item" data-section="settings"><i class="fa-solid fa-gear"></i> Settings</div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="dash-content-wrap">
+  
+    <!-- Section 1: Dashboard Overview -->
+    <div class="dash-section active" id="sec-dashboard">
+      <div class="dash-header">
+        <h1 id="dashGreeting">Welcome back! <i class="fa-solid fa-hand"></i></h1>
+        <p id="dashEmail"></p>
+      </div>
+
+      <div class="dash-stats">
+        <div class="dash-stat-card">
+          <div class="dash-stat-num" id="statPosted">0</div>
+          <div class="dash-stat-label">Properties Posted</div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-num" id="statFreeLeft">3</div>
+          <div class="dash-stat-label">Free Listings Left</div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-num" id="tierIconContainer"><i class="fa-solid fa-tag"></i></div>
+          <div class="dash-stat-label">Current Plan</div>
+        </div>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-card-title">
+          <span>Free listing usage (<span id="usageText" style="color:var(--primary)">0 of 3 used</span>)</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="usageBar" style="width:0%"></div>
+        </div>
+        <p style="font-size:13px;color:var(--text-muted);margin-top:10px;margin-bottom:0">Upgrade to Premium for unlimited listings, priority placement & verified badge.</p>
+        
+        <div class="upgrade-card" id="upgradeCard" style="display:none; background: linear-gradient(135deg, #1A1A2E, #16213E); border-radius: var(--radius); padding: 28px; color: #fff; text-align: center; margin-top: 24px;">
+          <h3 style="font-size: 20px; margin-bottom: 8px;"><i class="fa-solid fa-bolt"></i> Unlock Premium Listings</h3>
+          <p style="opacity: 0.7; font-size: 14px; margin-bottom: 20px;">Post unlimited properties, get verified badge, priority placement, and lead analytics.</p>
+          <a href="pricing.html" class="dash-btn" style="text-decoration:none; display:inline-block;">Upgrade Now - View Plans</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: My Profile -->
+    <div class="dash-section" id="sec-profile">
+      <div class="dash-card">
+        <div class="dash-card-title">My Profile <button class="dash-btn" id="btnSaveProfile">Save Changes</button></div>
+        
+        <div style="display:flex; gap:24px; margin-bottom: 24px; align-items:center;">
+          <img src="" id="profileImgPreview" style="width:80px; height:80px; border-radius:50%; object-fit:cover; background:var(--bg); border: 1px solid var(--border)">
+          <div>
+            <label class="dash-btn dash-btn-outline" style="cursor:pointer;">
+              <i class="fa-solid fa-camera"></i> Change Photo
+              <input type="file" id="profileUpload" accept="image/*" style="display:none;">
+            </label>
+            <p style="font-size:12px; color:var(--text-muted); margin-top:8px;">JPG, PNG or GIF. Max size of 800K</p>
+          </div>
+        </div>
+        
+        <div class="dash-form-grid">
+          <div class="dash-form-group">
+            <label class="dash-label">Full Name</label>
+            <input type="text" id="profName" class="dash-input" placeholder="Enter full name">
+          </div>
+          <div class="dash-form-group">
+            <label class="dash-label">Email Address (Readonly)</label>
+            <input type="email" id="profEmail" class="dash-input" disabled style="background:#f9fafb">
+          </div>
+          <div class="dash-form-group">
+            <label class="dash-label">Mobile Number</label>
+            <input type="text" id="profMobile" class="dash-input" placeholder="+91 xxxxxxxxxx">
+          </div>
+          <div class="dash-form-group">
+            <label class="dash-label">Company Name</label>
+            <input type="text" id="profCompany" class="dash-input" placeholder="Your agency or firm name">
+          </div>
+          <div class="dash-form-group full">
+            <label class="dash-label">Office Address</label>
+            <input type="text" id="profAddress" class="dash-input" placeholder="Full office address">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: My Properties -->
+    <div class="dash-section" id="sec-properties">
+      <div class="dash-card">
+        <div class="dash-card-title">My Properties 
+          <a href="post-property.html" class="dash-btn" style="text-decoration:none"><i class="fa-solid fa-plus"></i> Post New Property</a>
+        </div>
+        <div id="myPropertiesList">
+          <div class="dash-empty">Loading your properties...</div>
+        </div>
+      </div>
+      
+      <div class="dash-card">
+        <div class="dash-card-title">Leads on My Properties</div>
+        <div id="myLeadsList">
+           <div class="dash-empty">Loading your leads...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Plan & Subscriptions -->
+    <div class="dash-section" id="sec-plans">
+      <div class="dash-card">
+        <div class="dash-card-title">Current Plan</div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h2 style="font-size:24px; color:var(--dark); margin:0 0 6px;" id="planNameDisplay">Free Plan</h2>
+            <p style="color:var(--text-muted); font-size:14px; margin:0;" id="planExpiryDisplay">Basic listing privileges. Featured properties excluded.</p>
+          </div>
+          <a href="pricing.html" class="dash-btn dash-btn-outline" style="text-decoration:none;">Upgrade Plan</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Payment History -->
+    <div class="dash-section" id="sec-payments">
+      <div class="dash-card">
+        <div class="dash-card-title">Payment History</div>
+        <div class="table-wrap">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Invoice ID</th>
+                <th>Date</th>
+                <th>Plan Detail</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="paymentHistoryBody">
+              <tr>
+                <td colspan="5" class="dash-empty" style="padding:24px">No payments found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 6: RERA Verification -->
+    <div class="dash-section" id="sec-rera">
+      <div class="dash-card">
+        <div class="dash-card-title">RERA Verification <span class="badge" id="reraStatusBadge">Unverified</span></div>
+        <p style="font-size:14px; color:var(--text-muted); margin-bottom:20px;">Boost your trust by verifying your real estate license.</p>
+        
+        <div class="dash-form-grid">
+          <div class="dash-form-group full">
+            <label class="dash-label">RERA Registration Number</label>
+            <input type="text" id="reraNumber" class="dash-input" placeholder="Enter Registration No.">
+          </div>
+          <div class="dash-form-group full">
+            <label class="dash-label">Upload Certificate</label>
+            <input type="file" id="reraFile" class="dash-input" accept=".pdf,image/*">
+            <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">Upload PDF or Image copy of your RERA certificate.</p>
+          </div>
+          <div class="dash-form-group full">
+             <button class="dash-btn" id="btnSubmitRera" style="max-width:200px">Submit for Verification</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 7: Notifications -->
+    <div class="dash-section" id="sec-notifications">
+      <div class="dash-card">
+        <div class="dash-card-title">Notifications & Activity</div>
+        <div>
+          <div class="notify-item">
+            <div class="notify-icon"><i class="fa-solid fa-hands-clapping"></i></div>
+            <div class="notify-content">
+              <p>Welcome to 24Dismil.com!</p>
+              <span>Just now</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 8: Settings -->
+    <div class="dash-section" id="sec-settings">
+      <div class="dash-card">
+        <div class="dash-card-title">Account Settings</div>
+        
+        <div class="setting-row">
+          <div class="setting-info">
+            <h4>Email Notifications</h4>
+            <p>Receive alerts about leads and property approvals.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="setToggleEmail" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        
+        <div class="setting-row">
+          <div class="setting-info">
+            <h4>SMS Notifications</h4>
+            <p>Get instant updates on your mobile phone.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="setToggleSms">
+            <span class="slider"></span>
+          </label>
+        </div>
+        
+        <div class="setting-row" style="border-bottom:none; margin-top:16px;">
+          <div class="setting-info">
+            <h4 style="color:#B91C1C">Deactivate Account</h4>
+            <p>Permanently remove your account and all listed properties.</p>
+          </div>
+          <button class="dash-btn" style="background:#FEE2E2; color:#B91C1C;">Deactivate</button>
+        </div>
+        
+        <div class="dash-form-group full" style="margin-top:24px;">
+           <button class="dash-btn" id="btnSaveSettings" style="max-width:200px">Save Settings</button>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <script src="js/properties.js"></script>
 <script src="js/main.js"></script>
 <script type="module">
@@ -136,9 +421,24 @@
   // Stats
   document.getElementById('dashGreeting').innerHTML = `Welcome back, ${user.name.split(' ')[0]}! <i class="fa-solid fa-hand"></i>`;
   document.getElementById('dashEmail').textContent = user.email;
-  document.getElementById('statPosted').textContent = user.propertyCount;
   
-  const limitLeft = Math.max(0, user.limit - user.propertyCount);
+  // Load properties first to calculate counts
+  const token = getToken();
+  let properties = [];
+  try {
+    console.log("Fetching properties...");
+    properties = await convex.query('auth:getMyProperties', { token });
+    console.log("Fetched properties:", properties);
+  } catch (err) {
+    console.error("Failed to fetch properties:", err);
+    console.warn("Failed to fetch properties:", err);
+  }
+  const propertyCount = properties ? properties.length : 0;
+  
+  document.getElementById('statPosted').textContent = propertyCount;
+  
+  const limit = user.limit || 1;
+  const limitLeft = Math.max(0, limit - propertyCount);
   document.getElementById('statFreeLeft').textContent = limitLeft;
   
   // Set Tier Badge
@@ -148,10 +448,11 @@
   else if (t?.startsWith('agent')) iconEl.innerHTML = '<i class="fa-solid fa-briefcase"></i>';
   else iconEl.innerHTML = '<i class="fa-solid fa-tag"></i>';
 
-  document.querySelectorAll('.dash-stat-label')[2].textContent = tierName + ' Plan';
+  const tierName = user.subscriptionTier || 'free';
+  document.querySelectorAll('.dash-stat-label')[2].textContent = (tierName.charAt(0).toUpperCase() + tierName.slice(1)) + ' Plan';
 
-  document.getElementById('usageText').textContent = `${user.propertyCount} of ${user.limit} used`;
-  const pct = Math.min(100, Math.round((user.propertyCount / user.limit) * 100));
+  document.getElementById('usageText').textContent = `${propertyCount} of ${limit} used`;
+  const pct = Math.min(100, Math.round((propertyCount / limit) * 100));
   document.getElementById('usageBar').style.width = pct + '%';
   document.getElementById('usageBar').style.background = pct >= 100 ? '#EF4444' : 'var(--primary)';
 
@@ -159,12 +460,10 @@
   if (user.subscriptionTier === 'free') {
     document.getElementById('upgradeCard').style.display = 'block';
   } else {
-    document.querySelector('.dash-limit-bar p').textContent = `You are on the ${tierName} plan. Your listings will be featured automatically!`;
+    const pStatus = document.querySelector('#sec-dashboard .dash-card p');
+    if (pStatus) pStatus.textContent = `You are on the ${tierName} plan. Your listings will be featured automatically!`;
   }
 
-  // Load properties
-  const token = getToken();
-  const properties = await convex.query('auth:getMyProperties', { token });
   const list = document.getElementById('myPropertiesList');
 
   if (!properties || properties.length === 0) {
@@ -176,7 +475,7 @@
     </div>`;
   } else {
     list.innerHTML = properties.map(p => `
-      <div class="dash-prop-card" style="${p.isFeatured ? 'border: 2px solid var(--primary);' : ''}">
+      <div class="dash-prop-card" style="cursor: pointer; ${p.isFeatured ? 'border: 2px solid var(--primary);' : ''}" onclick="window.location.href='property-detail.html?id=${p._id}'">
         <img class="dash-prop-img" src="${p.photos?.[0] || 'images/property-1.jpg'}" alt="${p.details?.bhk} BHK ${p.propertyType}" onerror="this.src='images/property-1.jpg'">
         <div class="dash-prop-info">
           <div class="dash-prop-title">
@@ -191,7 +490,15 @@
   }
 
   // Load Leads
-  const leads = await convex.query('properties:getMyLeads', { token });
+  let leads = [];
+  try {
+    console.log("Fetching leads...");
+    leads = await convex.query('properties:getMyLeads', { token });
+    console.log("Fetched leads:", leads);
+  } catch (err) {
+    console.error("Failed to fetch leads:", err);
+    console.warn("Failed to fetch leads:", err);
+  }
   const leadsList = document.getElementById('myLeadsList');
   if (!leads || leads.length === 0) {
     leadsList.innerHTML = `<div class="dash-empty">No leads generated yet. Upgrade your plan to boost property visibility!</div>`;
@@ -208,24 +515,187 @@
     `).join('');
   }
 
-  // Tabs Logic
-  const tabP = document.getElementById('tabProps');
-  const tabL = document.getElementById('tabLeads');
-  const secP = document.getElementById('secProps');
-  const secL = document.getElementById('secLeads');
+  // Sidebar Logic
+  const navItems = document.querySelectorAll('.dash-nav-item');
+  const sections = document.querySelectorAll('.dash-section');
 
-  tabP.onclick = () => {
-    tabP.style.borderBottom = '2px solid var(--primary)'; tabP.style.color = 'var(--primary)'; tabP.style.fontWeight = '700';
-    tabL.style.borderBottom = 'none'; tabL.style.color = 'var(--text-muted)'; tabL.style.fontWeight = '600';
-    secP.style.display = 'block'; secL.style.display = 'none';
-  };
-  tabL.onclick = () => {
-    tabL.style.borderBottom = '2px solid var(--primary)'; tabL.style.color = 'var(--primary)'; tabL.style.fontWeight = '700';
-    tabP.style.borderBottom = 'none'; tabP.style.color = 'var(--text-muted)'; tabP.style.fontWeight = '600';
-    secL.style.display = 'block'; secP.style.display = 'none';
-  };
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navItems.forEach(n => n.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      
+      item.classList.add('active');
+      const targetId = 'sec-' + item.getAttribute('data-section');
+      document.getElementById(targetId).classList.add('active');
+      
+      if (window.innerWidth <= 900) {
+        window.scrollTo({ top: document.querySelector('.dash-content-wrap').offsetTop - 20, behavior: 'smooth' });
+      }
+    });
+  });
 
-  document.getElementById('dashWrap').style.display = 'block';
+  // Pre-fill Profile Data
+  if(user.name) document.getElementById('profName').value = user.name;
+  if(user.email) document.getElementById('profEmail').value = user.email;
+  if(user.mobile) document.getElementById('profMobile').value = user.mobile;
+  if(user.companyName) document.getElementById('profCompany').value = user.companyName;
+  if(user.officeAddress) document.getElementById('profAddress').value = user.officeAddress;
+  
+  const defaultAvatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=random';
+  document.getElementById('profileImgPreview').src = user.profilePictureUrl || defaultAvatar;
+
+  // Pre-fill Plan info in section 4
+  document.getElementById('planNameDisplay').textContent = (tierName.charAt(0).toUpperCase() + tierName.slice(1)) + ' Plan';
+  if (user.subscriptionExpiry) {
+    document.getElementById('planExpiryDisplay').textContent = 'Valid until: ' + new Date(user.subscriptionExpiry).toLocaleDateString();
+  } else {
+    document.getElementById('planExpiryDisplay').textContent = tierName === 'free' ? 'Basic listing privileges.' : 'Lifetime Access / No Expiry specified.';
+  }
+
+  // Pre-fill RERA info
+  if(user.reraNumber) document.getElementById('reraNumber').value = user.reraNumber;
+  if(user.reraStatus) {
+    const badge = document.getElementById('reraStatusBadge');
+    badge.textContent = user.reraStatus.toUpperCase();
+    badge.className = 'badge ' + (user.reraStatus === 'verified' ? 'success' : (user.reraStatus==='pending' ? 'pending' : 'danger'));
+  }
+
+  // Pre-fill Settings info
+  if(user.settings) {
+    document.getElementById('setToggleEmail').checked = !!user.settings.emailNotifications;
+    document.getElementById('setToggleSms').checked = !!user.settings.smsNotifications;
+  }
+
+  // --- EVENT LISTENERS FOR SAVING ---
+  let currentProfilePicUrl = user.profilePictureUrl || '';
+  let cropper;
+  
+  document.getElementById('profileUpload').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // Show preview and open crop modal
+    const url = URL.createObjectURL(file);
+    document.getElementById('cropImage').src = url;
+    document.getElementById('cropModalOverlay').classList.add('open');
+    
+    if (cropper) cropper.destroy();
+    cropper = new Cropper(document.getElementById('cropImage'), {
+      aspectRatio: 1,
+      viewMode: 1,
+    });
+    
+    e.target.value = ''; // Reset input
+  });
+
+  document.getElementById('btnCancelCrop').addEventListener('click', () => {
+    document.getElementById('cropModalOverlay').classList.remove('open');
+    if (cropper) cropper.destroy();
+  });
+
+  document.getElementById('btnApplyCrop').addEventListener('click', async () => {
+    if (!cropper) return;
+    const btn = document.getElementById('btnApplyCrop');
+    btn.textContent = 'Uploading...'; btn.disabled = true;
+    
+    cropper.getCroppedCanvas({ width: 400, height: 400 }).toBlob(async (blob) => {
+      try {
+        const uploadUrl = await convex.mutation("files:generateUploadUrl", {});
+        const response = await fetch(uploadUrl, {
+          method: "POST",
+          headers: { "Content-Type": "image/jpeg" },
+          body: blob
+        });
+        const { storageId } = await response.json();
+        currentProfilePicUrl = await convex.query("files:getFileUrl", { storageId });
+        
+        // Update final preview
+        document.getElementById('profileImgPreview').src = currentProfilePicUrl;
+        
+        document.getElementById('cropModalOverlay').classList.remove('open');
+        if (typeof window.showToast === 'function') window.showToast("Image cropped & uploaded!", "success");
+      } catch (err) {
+        console.error(err);
+        if (typeof window.showToast === 'function') window.showToast("Failed to upload image", "error");
+      } finally {
+        btn.textContent = 'Apply & Upload'; btn.disabled = false;
+        if (cropper) cropper.destroy();
+      }
+    }, 'image/jpeg', 0.8);
+  });
+
+  document.getElementById('btnSaveProfile').addEventListener('click', async () => {
+    try {
+      const btn = document.getElementById('btnSaveProfile');
+      btn.textContent = 'Saving...'; btn.disabled = true;
+      
+      await convex.mutation('auth:updateProfile', { 
+        token, 
+        name: document.getElementById('profName').value, 
+        mobile: document.getElementById('profMobile').value, 
+        companyName: document.getElementById('profCompany').value, 
+        officeAddress: document.getElementById('profAddress').value,
+        profilePictureUrl: currentProfilePicUrl
+      });
+      
+      // If window.showToast exists from main.js, use it, else alert
+      if (typeof window.showToast === 'function') window.showToast('Profile updated!', 'success');
+      else alert('Profile updated!');
+      
+    } catch(err) {
+      alert('Error: ' + err.message);
+    } finally {
+      document.getElementById('btnSaveProfile').textContent = 'Save Changes';
+      document.getElementById('btnSaveProfile').disabled = false;
+    }
+  });
+
+  document.getElementById('btnSubmitRera').addEventListener('click', async () => {
+    try {
+       const num = document.getElementById('reraNumber').value;
+       if (!num) return alert('Enter RERA Number');
+       
+       const btn = document.getElementById('btnSubmitRera');
+       btn.textContent = 'Submitting...'; btn.disabled = true;
+       
+       await convex.mutation('auth:submitRera', { token, reraNumber: num });
+       
+       const badge = document.getElementById('reraStatusBadge');
+       badge.textContent = 'PENDING';
+       badge.className = 'badge pending';
+       if (typeof window.showToast === 'function') window.showToast('RERA Submitted!', 'success');
+       else alert('RERA Submitted!');
+       
+    } catch (err) {
+       alert('Error: ' + err.message);
+    } finally {
+       document.getElementById('btnSubmitRera').textContent = 'Submit for Verification';
+       document.getElementById('btnSubmitRera').disabled = false;
+    }
+  });
+
+  document.getElementById('btnSaveSettings').addEventListener('click', async () => {
+    try {
+       const btn = document.getElementById('btnSaveSettings');
+       btn.textContent = 'Saving...'; btn.disabled = true;
+       
+       await convex.mutation('auth:updateSettings', { 
+         token, 
+         emailNotifications: document.getElementById('setToggleEmail').checked, 
+         smsNotifications: document.getElementById('setToggleSms').checked 
+       });
+       if (typeof window.showToast === 'function') window.showToast('Settings Saved', 'success');
+       else alert('Settings Saved');
+       
+    } catch (err) {
+       alert('Error: ' + err.message);
+    } finally {
+       document.getElementById('btnSaveSettings').textContent = 'Save Settings';
+       document.getElementById('btnSaveSettings').disabled = false;
+    }
+  });
+
+  document.getElementById('dashWrap').style.display = 'flex';
 </script>
 </body>
 </html>

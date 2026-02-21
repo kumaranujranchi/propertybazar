@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "serve": "live-server . --port=8080",
+    "serve": "python3 -m http.server 8080",
     "convex-dev": "npx convex dev",
-    "dev": "concurrently \"npm run serve\" \"npm run convex-dev\"",
+    "dev": "npm run serve & npm run convex-dev",
     "build": "echo 'No build step needed. Deploying static site...'"
   },
   "keywords": [],
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
+    "http-server": "^14.1.1",
     "live-server": "^1.2.2"
   }
 }

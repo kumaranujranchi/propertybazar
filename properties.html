@@ -21,30 +21,38 @@
         <div class="nav-logo-icon">24</div>
         <span class="nav-logo-text">24Dismil.com</span>
       </a>
-      <div class="nav-city"><i class="fa-solid fa-location-dot"></i> All India <i class="fa-solid fa-chevron-down"></i></div>
+      <div class="nav-city">
+        <i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
+      </div>
       <div class="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="properties.html?type=buy" class="nav-link active">Buy</a>
         <a href="properties.html?type=rent" class="nav-link">Rent</a>
         <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+        <a href="pricing.html" class="nav-link">Pricing</a>
         <a href="post-property.html" class="nav-link">Post Property</a>
         <a href="about.html" class="nav-link">About</a>
         <a href="contact.html" class="nav-link">Contact</a>
       </div>
       <div class="nav-actions">
-        <a href="login.html" class="nav-btn-login">Login / Register</a>
-        <a href="post-property.html" class="nav-btn-post"><i class="fa-solid fa-plus"></i> Post FREE Property</a>
+        <a href="login.html" class="nav-btn-login">Login</a>
+        <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
       </div>
-      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
     </nav>
   </div>
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy</a>
-    <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent</a>
-    <a href="post-property.html"><i class="fa-solid fa-plus"></i> Post Property</a>
-    <a href="about.html"><i class="fa-solid fa-circle-info"></i> About</a>
+    <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+    <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+    <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
+    <a href="pricing.html"><i class="fa-solid fa-credit-card"></i> Pricing</a>
+    <a href="post-property.html"><i class="fa-solid fa-circle-plus"></i> Post Property</a>
+    <a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
     <a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a>
+    <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
   </div>
 </header>
 
@@ -55,22 +63,22 @@
       <a href="index.html">Home</a> › <span>Properties</span>
     </div>
     <h1>Properties for Sale & Rent in India</h1>
-    <p>Explore from 10 Lakh+ verified listings across 500+ cities</p>
+    <p>Explore from 5,000+ verified listings across 50+ cities</p>
   </div>
 </div>
 
 <!-- SEARCH BAR (inline) -->
 <div style="background:#fff;border-bottom:1px solid var(--border);padding:12px 0;position:sticky;top:64px;z-index:100;box-shadow:var(--shadow-sm)">
   <div class="container">
-    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <form class="search-form" id="searchForm" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
       <div class="search-tabs" style="background:transparent;border:none">
         <div class="search-tab active" data-type="buy" style="padding:8px 16px;font-size:13px"><i class="fa-solid fa-house"></i> Buy</div>
         <div class="search-tab" data-type="rent" style="padding:8px 16px;font-size:13px"><i class="fa-solid fa-key"></i> Rent</div>
         <div class="search-tab" data-type="commercial" style="padding:8px 16px;font-size:13px"><i class="fa-solid fa-building"></i> Commercial</div>
       </div>
       <input type="text" id="hero-location" placeholder="🔍 Search city, locality or project..." style="flex:1;padding:8px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;min-width:200px" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
-      <button class="btn btn-primary" style="padding:9px 20px">🔍 Search</button>
-    </div>
+      <button type="submit" class="btn btn-primary" style="padding:9px 20px">🔍 Search</button>
+    </form>
   </div>
 </div>
 
@@ -93,6 +101,7 @@
           <div class="filter-chip" data-val="Plot">Plot</div>
           <div class="filter-chip" data-val="Commercial">Commercial</div>
           <div class="filter-chip" data-val="PG">PG</div>
+          <div class="filter-chip" data-val="Lodge">Lodge</div>
         </div>
       </div>
 
@@ -504,11 +513,11 @@
       <i class="fa-solid fa-circle-info"></i> Disclaimer
     </div>
     <div class="disclaimer-body">
-      <p><i class="fa-solid fa-magnifying-glass"></i> The data presented on 24Dismil.com is made available for <strong>informational purposes only</strong>. We do not make any representations or warranties regarding its absolute accuracy.</p>
-      <p><i class="fa-solid fa-indian-rupee-sign"></i> Any <strong>investment decisions</strong> you make should not rely solely on the information available on this platform.</p>
-      <p><i class="fa-solid fa-scale-balanced"></i> Nothing contained herein shall be deemed to constitute <strong>legal advice, solicitation, or invitation</strong> to acquire property by the developer/builder or any other entity.</p>
-      <p><i class="fa-solid fa-building-columns"></i> You are strongly advised to visit the <strong>relevant RERA website</strong> and contact the builder/advertiser directly to verify the project details before making financial commitments.</p>
-      <p style="font-size:11px;color:var(--text-muted);margin-top:10px;">If you notice any fraudulent activity or have feedback, please write to us at support@24Dismil.com. All trademarks belong to their respective owners.</p>
+      <p><i class="fa-solid fa-magnifying-glass"></i> The information on 24Dismil.com is provided for <strong>informational purposes only</strong>. We make no representations or warranties regarding its accuracy or completeness.</p>
+      <p><i class="fa-solid fa-indian-rupee-sign"></i> Do not base your <strong>investment decisions</strong> solely on the information provided on this platform.</p>
+      <p><i class="fa-solid fa-scale-balanced"></i> Nothing contained herein constitutes <strong>legal advice, a solicitation, or an invitation</strong> by any developer, builder, or other entity to acquire property.</p>
+      <p><i class="fa-solid fa-building-columns"></i> We strongly advise you to verify all project details directly with the builder or advertiser and check the <strong>official RERA website</strong> before making any financial commitments.</p>
+      <p style="font-size:11px;color:var(--text-muted);margin-top:10px;padding-left:0;"><i style="display:none"></i>If you notice any fraudulent activity or have feedback, please write to us at support@24Dismil.com. All trademarks belong to their respective owners.</p>
     </div>
     <div class="disclaimer-footer">
       <label class="disclaimer-confirm" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;cursor:pointer;font-size:14px;color:var(--text)">
@@ -568,16 +577,23 @@
     overflow-y: auto;
   }
   .disclaimer-body p {
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.6;
     color: var(--text);
-    margin-bottom: 12px;
-    display: flex;
-    gap: 10px;
+    margin-bottom: 16px;
+    position: relative;
+    padding-left: 28px;
+  }
+  .disclaimer-body p i {
+    position: absolute;
+    left: 0;
+    top: 3px;
+    font-size: 16px;
+    color: var(--primary);
   }
   .disclaimer-footer {
     padding: 16px 20px;
-    background: #fff;
+    background: #f8fafc;
     border-top: 1px solid var(--border);
   }
 </style>

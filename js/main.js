@@ -52,12 +52,24 @@ function initNav() {
 // ========== SEARCH TABS ==========
 function initSearchTabs() {
   const tabs = document.querySelectorAll('.search-tab');
+  const mobileSelector = document.getElementById('mobileTypeSelector');
+
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
+      if (mobileSelector) mobileSelector.value = tab.dataset.type;
     });
   });
+
+  if (mobileSelector) {
+    mobileSelector.addEventListener('change', () => {
+      const val = mobileSelector.value;
+      tabs.forEach(t => {
+        t.classList.toggle('active', t.dataset.type === val);
+      });
+    });
+  }
 
   const searchForm = document.querySelector('.search-form');
   if (searchForm) {
@@ -221,13 +233,14 @@ function renderFilteredProperties() {
   if (activeFilters.bhks.length) filtered = filtered.filter(p => activeFilters.bhks.includes(p.bhk));
   if (activeFilters.statuses.length) filtered = filtered.filter(p => activeFilters.statuses.includes(p.status));
 
-  // City filter from URL param (set by city-selector.js)
+  // City/Location filter from URL param
   const urlParams = new URLSearchParams(window.location.search);
-  const cityParam = urlParams.get('city');
-  if (cityParam && cityParam !== 'All India') {
+  const searchLoc = urlParams.get('location') || urlParams.get('city');
+  if (searchLoc && searchLoc !== 'All India') {
     filtered = filtered.filter(p =>
-      (p.city || '').toLowerCase().includes(cityParam.toLowerCase()) ||
-      (p.location || '').toLowerCase().includes(cityParam.toLowerCase())
+      (p.city || '').toLowerCase().includes(searchLoc.toLowerCase()) ||
+      (p.location || '').toLowerCase().includes(searchLoc.toLowerCase()) ||
+      (p.title || '').toLowerCase().includes(searchLoc.toLowerCase()) // Also search title for projects
     );
   }
 
@@ -322,18 +335,42 @@ function initPostSteps() {
   const stepLabels = document.querySelectorAll('.step-label');
   const stepLines = document.querySelectorAll('.step-line');
 
+  const progressLine = document.querySelector('.post-progress-fill');
+  const stepText = document.querySelector('.step-counter-text');
+
   function goToStep(n) {
-    steps.forEach((s, i) => s.style.display = i === n ? 'block' : 'none');
-    stepNums.forEach((num, i) => {
-      num.classList.toggle('active', i === n);
-      num.classList.toggle('completed', i < n);
-      num.classList.toggle('pending', i > n);
-      if (i < n) num.textContent = '✓';
-      else num.textContent = i + 1;
-    });
-    stepLabels.forEach((lbl, i) => lbl.classList.toggle('pending', i > n));
-    stepLines.forEach((line, i) => line.classList.toggle('completed', i < n));
+    steps.forEach((s, i) => (s.style.display = i === n ? 'block' : 'none'));
+
+    // Update new Progress Indicator
+    if (progressLine) {
+      const percent = ((n + 1) / steps.length) * 100;
+      progressLine.style.width = percent + '%';
+    }
+    if (stepText) {
+      stepText.textContent = `Step ${n + 1} of ${steps.length}`;
+    }
+
+    // Preserve legacy indicators for compatibility if they exist
+    if (stepNums.length) {
+      stepNums.forEach((num, i) => {
+        num.classList.toggle('active', i === n);
+        num.classList.toggle('completed', i < n);
+        num.classList.toggle('pending', i > n);
+        if (i < n) num.textContent = '✓';
+        else num.textContent = i + 1;
+      });
+    }
+    if (stepLabels.length) {
+      stepLabels.forEach((lbl, i) => lbl.classList.toggle('pending', i > n));
+    }
+    if (stepLines.length) {
+      stepLines.forEach((line, i) => line.classList.toggle('completed', i < n));
+    }
+
     currentStep = n;
+
+    // SCROLL TO TOP - App-style feel
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function validateStep(index) {
@@ -493,4 +530,110 @@ function initTypingEffect() {
   }
 
   type();
+}
+
+// ========== GLOBAL TOAST NOTIFICATIONS ==========
+window.showToast = function(message, type = 'success') {
+  let container = document.querySelector('.toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = `toast-notification ${type}`;
+  
+  const icon = type === 'success' ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-circle-exclamation"></i>';
+  const titleText = type === 'success' ? 'Success' : 'Error';
+
+  toast.innerHTML = `
+    <div class="toast-icon">${icon}</div>
+    <div class="toast-content">
+      <div class="toast-title">${titleText}</div>
+      <div class="toast-message">${message}</div>
+    </div>
+    <div class="toast-close"><i class="fa-solid fa-xmark"></i></div>
+  `;
+
+  container.appendChild(toast);
+
+  // Trigger animation after next repaint
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      toast.classList.add('show');
+    });
+  });
+
+  const closeBtn = toast.querySelector('.toast-close');
+  const removeToast = () => {
+    toast.classList.remove('show');
+    // Wait for the slide out animation to finish before removing
+    setTimeout(() => {
+      toast.remove();
+      if (document.querySelectorAll('.toast-notification').length === 0) {
+         container.remove();
+      }
+    }, 450);
+  };
+
+  closeBtn.addEventListener('click', removeToast);
+  
+  // Auto-remove after 4.5 seconds
+  setTimeout(removeToast, 4500);
+};
+
+// ==========================================================================
+// 8. INAUGURAL OFFER POP-UP
+// ==========================================================================
+function initInauguralPopup() {
+  // Check if we already showed it this session
+  if (sessionStorage.getItem('inauguralPopupShown')) {
+    return;
+  }
+
+  // Create overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'inaugural-modal-overlay';
+  overlay.innerHTML = `
+    <div class="inaugural-modal">
+      <button class="inaugural-modal-close" aria-label="Close">&times;</button>
+      <div class="inaugural-icon-wrap">
+        <i class="fa-solid fa-gift"></i>
+      </div>
+      <h3 class="inaugural-title">Special Offer</h3>
+      <p class="inaugural-text">
+        As an inaugural offer, you can post any number of properties for 30 days free of charge.
+      </p>
+      <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="window.location.href='post-property.html'">Post Property Now</button>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Show it with a slight delay so it transitions nicely
+  setTimeout(() => {
+    overlay.classList.add('open');
+    sessionStorage.setItem('inauguralPopupShown', 'true');
+  }, 1000); // 1.0 second delay after page load
+
+  // Close logic
+  const closeBtn = overlay.querySelector('.inaugural-modal-close');
+  const closeModal = () => {
+    overlay.classList.remove('open');
+    setTimeout(() => overlay.remove(), 400); // Wait for transition
+  };
+
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+}
+
+// Ensure initInauguralPopup runs after DOM is loaded. 
+// Note: Since main.js often loads deferred or at EOF, DOM might already be loaded.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initInauguralPopup);
+} else {
+  initInauguralPopup();
 }
