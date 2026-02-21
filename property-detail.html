@@ -386,17 +386,11 @@
         <div class="detail-card">
           <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
             <div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
-                <span class="badge badge-primary">BUY</span>
-                <span class="badge badge-verified"><i class="fa-solid fa-circle-check"></i> Verified</span>
-                <span class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</span>
-                <span
-                  style="background:#EFF6FF;color:#3B82F6;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">RERA:
-                  UP/2024/12345</span>
+              <div id="topTags" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+                <!-- Dynamic Tags (BUY/RENT, Verified, RERA, etc.) injected here -->
               </div>
-              <div class="detail-price">₹85 Lakh</div>
-              <div style="font-size:13px;color:var(--text-muted);margin-top:2px">₹5,862 per sq.ft · EMI starts at
-                ₹54,000/mo</div>
+              <div class="detail-price">₹--</div>
+              <div id="priceStats" style="font-size:13px;color:var(--text-muted);margin-top:2px"></div>
               <h1 class="detail-title">Luxurious 3 BHK Flat in Premium Society</h1>
               <div class="detail-location"><i class="fa-solid fa-location-dot"></i> <a href="#"
                   style="color:var(--primary)">Sector 62</a>, Noida, Uttar Pradesh</div>
@@ -987,11 +981,20 @@
 
 
         // ---- Price & Title card ----
-        document.querySelector('.detail-price')?.textContent && (
-          document.querySelector('.detail-price').textContent = priceStr
-        );
-        const priceSub = document.querySelector('.detail-price + div');
-        if (priceSub) priceSub.textContent = ppsf > 0 ? `₹${ppsf.toLocaleString('en-IN')} per sq.ft` : '';
+        const priceEl = document.querySelector('.detail-price');
+        if (priceEl) priceEl.textContent = priceStr;
+
+        const priceStats = document.getElementById('priceStats');
+        if (priceStats) {
+          let stats = [];
+          if (ppsf > 0) stats.push(`₹${ppsf.toLocaleString('en-IN')} per sq.ft`);
+          if (p.pricing?.expectedPrice > 500000) {
+            // Basic EMI math (approx 8.5% for 20y)
+            const emi = Math.round((p.pricing.expectedPrice * 0.8) * 0.008678);
+            stats.push(`EMI starts at ₹${emi.toLocaleString('en-IN')}/mo`);
+          }
+          priceStats.textContent = stats.join(' · ');
+        }
         const detailTitle = document.querySelector('.detail-title');
         if (detailTitle) detailTitle.textContent = `${title} in ${p.location?.society || p.location?.locality || ''}`;
         const detailLoc = document.querySelector('.detail-location');
@@ -1028,15 +1031,27 @@
           descEl.textContent = p.details.description;
         }
 
-        // ---- Dynamic Property Tags ----
-        const tagsContainer = document.getElementById('detailTags');
-        if (tagsContainer) {
-          let tagsHtml = '';
-          if (p.details?.rera) tagsHtml += `<span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-file-contract"></i> RERA Registered</span>`;
-          if (p.contactDesc?.role === 'Owner') tagsHtml += `<span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-user-check"></i> Owner Listing</span>`;
-          if (p.verified) tagsHtml += `<span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-shield-halved"></i> Verified</span>`;
-          if (p.status === 'ready') tagsHtml += `<span style="background:var(--bg);padding:5px 12px;border-radius:20px;font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-check"></i> Ready to Move</span>`;
-          tagsContainer.innerHTML = tagsHtml;
+        // ---- Dynamic Property Tags (Consolidated) ----
+        function buildTag(icon, text, colorClass = 'primary') {
+          return `<span class="badge badge-${colorClass}" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700"><i class="fa-solid ${icon}"></i> ${text}</span>`;
+        }
+
+        const topTags = document.getElementById('topTags');
+        const detailTags = document.getElementById('detailTags'); // tags under description
+
+        let commonTags = '';
+        const isRent = p.transactionType?.toLowerCase().includes('rent');
+        commonTags += buildTag(isRent ? 'fa-key' : 'fa-house', isRent ? 'RENT' : 'BUY', isRent ? 'warning' : 'primary');
+        if (p.verified) commonTags += buildTag('fa-circle-check', 'Verified', 'verified');
+        if (p.details?.status === 'Ready to Move' || p.status === 'ready') commonTags += buildTag('fa-check', 'Ready to Move', 'success');
+        if (p.details?.rera) commonTags += `<span style="background:#EFF6FF;color:#3B82F6;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700"><i class="fa-solid fa-file-contract"></i> RERA: ${p.details.rera}</span>`;
+
+        if (topTags) topTags.innerHTML = commonTags;
+        if (detailTags) {
+          // Add some specific tags for description area if needed
+          let descTags = commonTags;
+          if (p.contactDesc?.role === 'Owner') descTags += buildTag('fa-user-check', 'Owner Listing', 'info');
+          detailTags.innerHTML = descTags;
         }
 
         // ---- Key Highlights ----
