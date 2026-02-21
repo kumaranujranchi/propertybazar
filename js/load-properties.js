@@ -166,23 +166,44 @@ function buildPropertyCardHTML(p) {
 
 /**
  * Calculates a property's quality score for ranking/sorting.
- * Factors: Verification (+30), Featured (+25), RERA (+20), Photos (max 25), Description (+15), Owner Listing (+10)
+ * Factors: 
+ * - Verification (+30)
+ * - Paid Plans: Gold (+50), Silver (+30), Basic (+15)
+ * - RERA Compliance (+20)
+ * - Visuals (+5 per unique photo, max 25)
+ * - Descriptions (+5 to +15 based on length)
+ * - Owner Listings (+10)
+ * - PENALTY: Placeholder Images (-50)
  */
 function calculateQualityScore(p) {
     let score = 0;
     
-    // 1. Verification (Highest Trust)
-    if (p.verified) score += 30;
+    // 1. Paid Plan Weightage (New)
+    const plan = (p.plan || 'none').toLowerCase();
+    if (plan === 'gold') score += 50;
+    else if (plan === 'silver') score += 30;
+    else if (plan === 'basic') score += 15;
+    else if (p.featured) score += 25; // Fallback for legacy featured flag
     
-    // 2. Featured/Premium Promotion
-    if (p.featured) score += 25;
+    // 2. Verification (Highest Trust)
+    if (p.verified) score += 30;
     
     // 3. Legal Compliance: RERA
     if (p.details?.rera) score += 20;
     
-    // 4. Visual Completeness (Max 25)
+    // 4. Visual Completeness & Placeholder Penalty (Updated)
     if (p.photos && p.photos.length > 0) {
-        score += Math.min(p.photos.length * 5, 25);
+        const hasPlaceholder = p.photos.some(url => 
+            /property-1\.jpg|city-mumbai\.jpg|hero-bg\.jpg|placeholder/i.test(url)
+        );
+        
+        if (hasPlaceholder) {
+            score -= 50; // Heavy penalty for generic placeholders
+        } else {
+            score += Math.min(p.photos.length * 5, 25);
+        }
+    } else {
+        score -= 20; // Penalty for no photos at all
     }
     
     // 5. Contextual Completeness: Description (Max 15)
@@ -193,9 +214,6 @@ function calculateQualityScore(p) {
     
     // 6. Direct Connect: Owner Listings
     if (p.contactDesc?.role === 'Owner') score += 10;
-    
-    // 7. Freshness (Simulated)
-    // For now, newer Convex _id or timestamp would go here.
     
     return score;
 }

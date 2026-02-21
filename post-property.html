@@ -1,763 +1,969 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Post FREE Property | 24Dismil.com — Sell or Rent Your Property</title>
-  <meta name="description" content="Post your property for free on 24Dismil.com. Reach lakhs of genuine buyers and tenants. RERA compliant, verified listing with maximum exposure.">
+  <meta name="description"
+    content="Post your property for free on 24Dismil.com. Reach lakhs of genuine buyers and tenants. RERA compliant, verified listing with maximum exposure.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 </head>
+
 <body>
 
-<!-- HEADER -->
-<header class="header" id="header">
-  <div class="container">
-    <nav class="nav">
-      <a href="index.html" class="nav-logo">
-        <div class="nav-logo-icon">24</div>
-        <span class="nav-logo-text">24Dismil.com</span>
-      </a>
-      <div class="nav-city">
-        <i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
-      </div>
-      <div class="nav-links">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="properties.html?type=buy" class="nav-link">Buy</a>
-        <a href="properties.html?type=rent" class="nav-link">Rent</a>
-        <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
-        <a href="pricing.html" class="nav-link">Pricing</a>
-        <a href="post-property.html" class="nav-link active">Post Property</a>
-        <a href="about.html" class="nav-link">About</a>
-        <a href="contact.html" class="nav-link">Contact</a>
-      </div>
-      <div class="nav-actions">
-        <a href="login.html" class="nav-btn-login">Login</a>
-        <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
-      </div>
-      <div class="hamburger" id="hamburger">
-        <span></span><span></span><span></span>
-      </div>
-    </nav>
-  </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
-    <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
-    <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
-    <a href="pricing.html"><i class="fa-solid fa-credit-card"></i> Pricing</a>
-    <a href="post-property.html"><i class="fa-solid fa-circle-plus"></i> Post Property</a>
-    <a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
-    <a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a>
-    <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
-  </div>
-</header>
-
-<!-- POST HERO -->
-<div class="post-hero">
-  <div class="container">
-    <h1><i class="fa-solid fa-house"></i> Post Your Property for FREE</h1>
-    <p>Reach 50 Lakh+ genuine buyers and tenants. 100% FREE listing. Maximum exposure guaranteed.</p>
-
-    <!-- MODERN PROGRESS BAR -->
-    <div class="post-progress-container">
-      <div class="post-progress-bar">
-        <div class="post-progress-fill" style="width: 20%"></div>
-      </div>
-      <div class="step-counter-text">Step 1 of 5</div>
-    </div>
-
-    <!-- BENEFITS STRIP -->
-    <div style="display:flex;gap:24px;justify-content:center;margin-top:28px;flex-wrap:wrap">
-      <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px"><i class="fa-solid fa-circle-check"></i> 100% FREE Listing</div>
-      <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px"><i class="fa-solid fa-circle-check"></i> 50 Lakh+ Buyers</div>
-      <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px"><i class="fa-solid fa-circle-check"></i> Instant Visibility</div>
-      <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px"><i class="fa-solid fa-circle-check"></i> RERA Compliant</div>
-    </div>
-  </div>
-</div>
-
-<!-- FORM BODY -->
-<div class="post-body">
-
-  <!-- STEP 1: Property Type -->
-  <div class="form-card form-step" id="formStep1">
-    <h2 class="form-card-title">Step 1: What are you listing?</h2>
-    <p class="form-card-subtitle">Select the transaction type and property type</p>
-
-    <div style="margin-bottom:24px">
-      <div class="filter-group-title" style="margin-bottom:12px">Transaction Type</div>
-      <div class="form-type-grid" style="grid-template-columns:repeat(3,1fr)">
-        <div class="form-type-option active">
-          <div class="icon"><i class="fa-solid fa-cart-shopping"></i></div>
-          <div class="name">For Sale</div>
-        </div>
-        <div class="form-type-option">
-          <div class="icon"><i class="fa-solid fa-key"></i></div>
-          <div class="name">For Rent</div>
-        </div>
-        <div class="form-type-option">
-          <div class="icon"><i class="fa-solid fa-flag"></i></div>
-          <div class="name">PG / Co-living</div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div class="filter-group-title" style="margin-bottom:12px">Property Type</div>
-      <div class="form-type-grid">
-        <div class="form-type-option active">
-          <div class="icon"><i class="fa-solid fa-building"></i></div>
-          <div class="name">Apartment</div>
-        </div>
-        <div class="form-type-option">
-          <div class="icon"><i class="fa-solid fa-house"></i></div>
-          <div class="name">Villa / House</div>
-        </div>
-        <div class="form-type-option">
-          <div class="icon"><i class="fa-solid fa-seedling"></i></div>
-          <div class="name">Plot / Land</div>
-        </div>
-        <div class="form-type-option">
-          <div class="icon"><i class="fa-solid fa-trowel-bricks"></i></div>
-          <div class="name">Builder Floor</div>
-        </div>
-        <div class="form-type-option">
-          <div class="icon"><i class="fa-solid fa-store"></i></div>
-          <div class="name">Commercial</div>
-        </div>
-        <div class="form-type-option">
-          <div class="icon"><i class="fa-solid fa-couch"></i></div>
-          <div class="name">PG Room</div>
-        </div>
-        <div class="form-type-option">
-          <div class="icon"><i class="fa-solid fa-industry"></i></div>
-          <div class="name">Warehouse</div>
-        </div>
-        <div class="form-type-option">
-          <div class="icon"><i class="fa-solid fa-hotel"></i></div>
-          <div class="name">Hotel / Resort</div>
-        </div>
-        <div class="form-type-option">
-          <div class="icon"><i class="fa-solid fa-bed"></i></div>
-          <div class="name">Lodge</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-actions">
-      <span></span>
-      <button class="btn btn-primary btn-app-nav btn-next-step">Next: Location <i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-  </div>
-
-  <!-- STEP 2: Location -->
-  <div class="form-card form-step" id="formStep2" style="display:none">
-    <h2 class="form-card-title">Step 2: Where is your property?</h2>
-    <p class="form-card-subtitle">Add the exact location for better visibility</p>
-
-    <div class="form-grid">
-      <div class="form-group">
-        <label class="form-label">State *</label>
-        <select class="form-input form-select" id="stateSelect">
-          <option value="">Select State</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">City *</label>
-        <select class="form-input form-select" id="citySelect" disabled>
-          <option value="">First Select State</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Locality / Area *</label>
-        <input type="text" class="form-input" placeholder="e.g. Sector 62, Koramangala">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Society / Project Name</label>
-        <input type="text" class="form-input" placeholder="e.g. Prestige Lakeside Habitat">
-      </div>
-      <div class="form-group full">
-        <label class="form-label">Full Address</label>
-        <textarea class="form-input" rows="3" placeholder="Flat No., Building Name, Street, Landmark..."></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">PIN Code *</label>
-        <input type="text" class="form-input" placeholder="6-digit PIN code">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Landmark (Optional)</label>
-        <input type="text" class="form-input" placeholder="Near Metro Station, Mall, etc.">
-      </div>
-    </div>
-    <h3 style="font-size:16px;font-weight:700;margin-top:20px;margin-bottom:12px;color:var(--dark);padding-bottom:8px;border-bottom:1px solid var(--border)">Nearby Distances (Optional)</h3>
-    <div class="form-grid">
-      <div class="form-group">
-        <label class="form-label">Distance from Metro (km)</label>
-        <input type="number" class="form-input" id="metroDistance" placeholder="e.g. 0.5" step="0.1" min="0">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Distance from School (km)</label>
-        <input type="number" class="form-input" id="schoolDistance" placeholder="e.g. 1.2" step="0.1" min="0">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Distance from Mall (km)</label>
-        <input type="number" class="form-input" id="mallDistance" placeholder="e.g. 2.5" step="0.1" min="0">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Distance from Hospital (km)</label>
-        <input type="number" class="form-input" id="hospitalDistance" placeholder="e.g. 1.0" step="0.1" min="0">
-      </div>
-    </div>
-
-    <div class="form-actions">
-      <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
-      <button class="btn btn-primary btn-app-nav btn-next-step">Next: Details <i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-  </div>
-
-  <!-- STEP 3: Details -->
-  <div class="form-card form-step" id="formStep3" style="display:none">
-    <h2 class="form-card-title">Step 3: Property Details</h2>
-    <p class="form-card-subtitle">More details = more inquiries. Fill as much as possible.</p>
-
-    <div class="form-grid">
-      <div class="form-group" id="fgBhk">
-        <label class="form-label">BHK Type *</label>
-        <select class="form-input form-select">
-          <option>1 BHK</option><option selected>2 BHK</option><option>3 BHK</option><option>4 BHK</option><option>4+ BHK</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Property Status *</label>
-        <select class="form-input form-select">
-          <option>Ready to Move</option>
-          <option>Under Construction</option>
-          <option>New Launch</option>
-        </select>
-      </div>
-      <div class="form-group" id="fgBuiltUpArea">
-        <label class="form-label">Built-up Area (sq.ft) *</label>
-        <input type="number" class="form-input" placeholder="e.g. 1450">
-      </div>
-      <div class="form-group" id="fgCarpetArea">
-        <label class="form-label">Carpet Area (sq.ft)</label>
-        <input type="number" class="form-input" placeholder="e.g. 1100">
-      </div>
-      
-      <!-- New Plot/Land Specific Fields -->
-      <div class="form-group" id="fgRatePerSqFt" style="display:none">
-        <label class="form-label">Rate Per Sq Ft (₹) *</label>
-        <input type="number" class="form-input" placeholder="e.g. 1100">
-      </div>
-      <div class="form-group" id="fgDevCharges" style="display:none">
-        <label class="form-label">Development Charges (₹)</label>
-        <input type="number" class="form-input" placeholder="e.g. 50000">
-      </div>
-      
-      <!-- New Lodge Specific Fields -->
-      <div class="form-group" id="fgRoomType" style="display:none">
-        <label class="form-label">Room Type *</label>
-        <select class="form-input form-select">
-          <option>Single Bed</option>
-          <option>2 Seater</option>
-          <option>3 Seater</option>
-          <option>4 Seater</option>
-        </select>
-      </div>
-      <div class="form-group" id="fgAcNonAc" style="display:none">
-        <label class="form-label">AC / Non-AC *</label>
-        <select class="form-input form-select">
-          <option>AC</option>
-          <option>Non-AC</option>
-        </select>
-      </div>
-      <div class="form-group" id="fgAttachedBathroom" style="display:none">
-        <label class="form-label">Bathroom Type *</label>
-        <select class="form-input form-select">
-          <option>Attached</option>
-          <option>Common</option>
-        </select>
-      </div>
-      <div class="form-group" id="fgBedType" style="display:none">
-        <label class="form-label">Bed Type *</label>
-        <select class="form-input form-select">
-          <option>Single</option>
-          <option>Double</option>
-          <option>Bunk Bed</option>
-        </select>
-      </div>
-      <div class="form-group" id="fgRoomSize" style="display:none">
-        <label class="form-label">Room Size (sq.ft) (Optional)</label>
-        <input type="number" class="form-input" placeholder="e.g. 120">
-      </div>
-      <!-- End Lodge Specific Fields -->
-      <!-- Shared Field: Facing Direction -->
-      <div class="form-group full" id="fgFacing">
-        <label class="form-label">Facing Direction</label>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:6px;">
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="East" style="accent-color:var(--primary)"> East</label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="West" style="accent-color:var(--primary)"> West</label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="North" style="accent-color:var(--primary)"> North</label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="South" style="accent-color:var(--primary)"> South</label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="North-East" style="accent-color:var(--primary)"> North-East</label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="North-West" style="accent-color:var(--primary)"> North-West</label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="South-East" style="accent-color:var(--primary)"> South-East</label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" value="South-West" style="accent-color:var(--primary)"> South-West</label>
-        </div>
-      </div>
-      <!-- PLC, Loan, EMI -->
-      <div class="form-group" id="fgPlc" style="display:none">
-        <label class="form-label">Preferred Location Charges (PLC) / Describe</label>
-        <input type="text" class="form-input" placeholder="e.g. 10% for Corner Plot, ₹50/sqft for Park Facing">
-      </div>
-      <div class="form-group" id="fgLoan" style="display:none">
-        <label class="form-label">Loan Facility Available?</label>
-        <select class="form-input form-select">
-          <option>Yes</option><option>No</option>
-        </select>
-      </div>
-      <div class="form-group" id="fgEmi" style="display:none">
-        <label class="form-label">EMI Facility Available?</label>
-        <select class="form-input form-select">
-          <option>Yes</option><option>No</option>
-        </select>
-      </div>
-
-      <!-- Flat/Apartment Specific Fields -->
-      <div class="form-group" id="fgFloor">
-        <label class="form-label">Floor Number</label>
-        <input type="number" class="form-input" placeholder="e.g. 5">
-      </div>
-      <div class="form-group" id="fgTotalFloors">
-        <label class="form-label">Total Floors in Building</label>
-        <input type="number" class="form-input" placeholder="e.g. 18">
-      </div>
-      <div class="form-group" id="fgFurnishing">
-        <label class="form-label">Furnishing Status</label>
-        <select class="form-input form-select">
-          <option>Unfurnished</option>
-          <option>Semi-Furnished</option>
-          <option>Fully Furnished</option>
-        </select>
-      </div>
-      <div class="form-group" id="fgParking">
-        <label class="form-label">Car Parking</label>
-        <select class="form-input form-select">
-          <option>None</option><option>1 Covered</option><option>1 Open</option><option>2 Covered</option><option>2+ Parking</option>
-        </select>
-      </div>
-      <div class="form-group" id="fgYear">
-        <label class="form-label">Year of Construction</label>
-        <input type="number" class="form-input" placeholder="e.g. 2020">
-      </div>
-      <div class="form-group full">
-        <label class="form-label">Property Description *</label>
-        <textarea class="form-input" rows="4" placeholder="Describe your property - location advantages, interior highlights, nearby amenities, special features..."></textarea>
-      </div>
-    </div>
-
-    <div style="margin-top:20px">
-      <div class="filter-group-title" style="margin-bottom:12px">Amenities Available</div>
-      <div style="display:flex;flex-wrap:wrap;gap:10px">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Swimming Pool</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Gymnasium</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Clubhouse</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> 24x7 Security</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Power Backup</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Lift</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Garden / Park</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Water Supply</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> CCTV</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Intercom</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Fire Safety</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Solar Energy</label>
-        
-        <!-- New Amenities -->
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Outside Boundary</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Central Drainage System</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Street Light</label>
-
-        <!-- Lodge Specific Amenities -->
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Free WiFi</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Room Service</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> Daily Housekeeping</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> RO / Drinking Water</label>
-      </div>
-    </div>
-
-    <div class="form-actions" style="margin-top:28px">
-      <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
-      <button class="btn btn-primary btn-app-nav btn-next-step">Next: Photos <i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-  </div>
-
-  <!-- STEP 4: Photos -->
-  <div class="form-card form-step" id="formStep4" style="display:none">
-    <h2 class="form-card-title">Step 4: Upload Property Photos</h2>
-    <p class="form-card-subtitle">Properties with photos get 5X more inquiries. Upload at least 5 clear photos.</p>
-    <div class="photo-upload-area" id="photoUploadArea">
-      <input type="file" id="photoFileInput" multiple accept="image/*" style="display:none">
-      <input type="file" id="cameraFileInput" accept="image/*" capture="camera" style="display:none">
-      <div class="photo-upload-icon"><i class="fa-solid fa-camera"></i></div>
-      <div class="photo-upload-text">Upload property photos</div>
-      <div class="photo-upload-sub">Add at least 5 clear photos for better reach</div>
-      <div style="margin-top:20px;display:flex;gap:12px;justify-content:center">
-        <span class="btn btn-primary btn-app-nav" style="cursor:pointer;flex:1" onclick="document.getElementById('cameraFileInput').click()">
-          <i class="fa-solid fa-camera-retro"></i> Take Photo
-        </span>
-        <span class="btn btn-outline btn-app-nav" style="cursor:pointer;flex:1" onclick="document.getElementById('photoFileInput').click()">
-          <i class="fa-solid fa-images"></i> Gallery
-        </span>
-      </div>
-    </div>
-    <!-- Preview grid -->
-    <div id="photoPreviewGrid" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"></div>
-    <div style="margin-top:20px;background:rgba(232,65,24,0.05);border:1px solid rgba(232,65,24,0.15);border-radius:var(--radius-sm);padding:14px">
-      <h4 style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px"><i class="fa-solid fa-clipboard-list"></i> Photo Tips for Maximum Inquiries:</h4>
-      <ul style="font-size:13px;color:var(--text-muted);line-height:2;list-style:inside disc">
-        <li>Take photos during daylight for bright, clear images</li>
-        <li>Include all rooms, kitchen, bathrooms, and balcony</li>
-        <li>Show the building exterior, common areas, and parking</li>
-        <li>Keep the property neat and clutter-free before shooting</li>
-      </ul>
-    </div>
-    <div class="form-actions" style="margin-top:28px">
-      <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
-      <button class="btn btn-primary btn-app-nav btn-next-step">Next: Pricing <i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-  </div>
-
-  <!-- STEP 5: Pricing & Contact -->
-  <div class="form-card form-step" id="formStep5" style="display:none">
-    <h2 class="form-card-title">Step 5: Pricing & Your Details</h2>
-    <p class="form-card-subtitle">Set a competitive price to attract serious buyers.</p>
-
-    <div class="form-grid">
-      <!-- Standard Pricing Fields (Hidden for Lodge) -->
-      <div class="form-group" id="fgExpectedPrice">
-        <label class="form-label">Expected Price (₹) *</label>
-        <input type="number" class="form-input" placeholder="e.g. 8500000">
-      </div>
-      <div class="form-group" id="fgPriceType">
-        <label class="form-label">Price Type</label>
-        <select class="form-input form-select">
-          <option>Fixed</option><option>Negotiable</option><option>Price on request</option>
-        </select>
-      </div>
-      <div class="form-group" id="fgMaintCharges">
-        <label class="form-label">Maintenance Charges (₹/mo)</label>
-        <input type="number" class="form-input" placeholder="e.g. 5000">
-      </div>
-      <div class="form-group" id="fgTokenAmt">
-        <label class="form-label">Token Amount (For Rent)</label>
-        <input type="number" class="form-input" placeholder="e.g. 100000">
-      </div>
-
-      <!-- New Lodge Pricing Fields -->
-      <div class="form-group" id="fgPricePerDay" style="display:none">
-        <label class="form-label">Price per Day (₹) *</label>
-        <input type="number" class="form-input" placeholder="e.g. 500">
-      </div>
-      <div class="form-group" id="fgPricePerWeek" style="display:none">
-        <label class="form-label">Price per Week (₹) (Optional)</label>
-        <input type="number" class="form-input" placeholder="e.g. 3000">
-      </div>
-      <div class="form-group" id="fgPricePerMonth" style="display:none">
-        <label class="form-label">Price per Month (₹) (Optional)</label>
-        <input type="number" class="form-input" placeholder="e.g. 10000">
-      </div>
-      <div class="form-group" id="fgSecurityDeposit" style="display:none">
-        <label class="form-label">Security Deposit (₹) (if any)</label>
-        <input type="number" class="form-input" placeholder="e.g. 1500">
-      </div>
-      <div class="form-group" id="fgElectricityExtra" style="display:none">
-        <label class="form-label">Electricity Charges</label>
-        <select class="form-input form-select">
-          <option>Included</option>
-          <option>Extra</option>
-        </select>
-      </div>
-      <div class="form-group" id="fgGstExtra" style="display:none">
-        <label class="form-label">GST Charges</label>
-        <select class="form-input form-select">
-          <option>Included</option>
-          <option>Extra</option>
-        </select>
-      </div>
-      <!-- End Lodge Pricing Fields -->
-    </div>
-
-    <hr style="border:none;border-top:1px solid var(--border);margin:24px 0">
-    <h3 style="font-size:16px;font-weight:700;color:var(--dark);margin-bottom:18px">Your Contact Details</h3>
-
-    <div class="form-grid">
-      <div class="form-group">
-        <label class="form-label">Your Name *</label>
-        <input type="text" class="form-input" placeholder="Full Name">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Mobile Number *</label>
-        <input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email Address *</label>
-        <input type="email" class="form-input" placeholder="your@email.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">You are</label>
-        <select class="form-input form-select">
-          <option>Property Owner</option>
-          <option>Builder / Developer</option>
-          <option>Authorised Agent</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">RERA Number (Optional)</label>
-        <input type="text" class="form-input" placeholder="e.g. MH/2023/12345">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Preferred Contact Time</label>
-        <select class="form-input form-select">
-          <option>Any Time</option>
-          <option>Morning (9AM - 12PM)</option>
-          <option>Afternoon (12PM - 4PM)</option>
-          <option>Evening (4PM - 8PM)</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-actions" style="margin-top:28px">
-      <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
-      <button class="btn btn-primary btn-app-nav" id="btnSubmitProperty"><i class="fa-solid fa-rocket"></i> Post Property FREE</button>
-    </div>
-  </div>
-
-</div>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="footer-logo">
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container">
+      <nav class="nav">
+        <a href="index.html" class="nav-logo">
           <div class="nav-logo-icon">24</div>
-          24Dismil.com
+          <span class="nav-logo-text">24Dismil.com</span>
+        </a>
+        <div class="nav-city">
+          <i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down"
+            style="font-size: 0.8em;"></i>
         </div>
-        <p class="footer-tagline">
-          India's most trusted real estate portal. Find your dream property
-          with verified listings, expert guidance, and market insights. Your
-          home journey starts here.
-        </p>
-        <div class="footer-socials">
-          <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
-          <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
-          <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
-          <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="properties.html?type=buy" class="nav-link">Buy</a>
+          <a href="properties.html?type=rent" class="nav-link">Rent</a>
+          <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+          <a href="pricing.html" class="nav-link">Pricing</a>
+          <a href="post-property.html" class="nav-link active">Post Property</a>
+          <a href="about.html" class="nav-link">About</a>
+          <a href="contact.html" class="nav-link">Contact</a>
         </div>
-      </div>
-      <div class="footer-col">
-        <h4>Quick Links</h4>
-        <div class="footer-links">
-          <a href="properties.html?type=buy">Buy Properties</a>
-          <a href="properties.html?type=rent">Rent Properties</a>
-          <a href="properties.html?type=commercial">Commercial</a>
-          <a href="post-property.html">Post Free Property</a>
-          <a href="properties.html?newLaunch=true">New Projects</a>
-          <a href="about.html">About Us</a>
-          <a href="contact.html">Contact</a>
+        <div class="nav-actions">
+          <a href="login.html" class="nav-btn-login">Login</a>
+          <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
         </div>
-      </div>
-      <div class="footer-col">
-        <h4>Top Cities</h4>
-        <div class="footer-links">
-          <a href="properties.html?city=Mumbai">Mumbai</a>
-          <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
-          <a href="properties.html?city=Bangalore">Bangalore</a>
-          <a href="properties.html?city=Hyderabad">Hyderabad</a>
-          <a href="properties.html?city=Pune">Pune</a>
-          <a href="properties.html?city=Chennai">Chennai</a>
-          <a href="properties.html?city=Kolkata">Kolkata</a>
-          <a href="properties.html?city=Noida">Noida</a>
+        <div class="hamburger" id="hamburger">
+          <span></span><span></span><span></span>
         </div>
-      </div>
-      <div class="footer-col">
-        <h4>Resources</h4>
-        <div class="footer-links">
-          <a href="#">EMI Calculator</a>
-          <a href="#">Property Rates</a>
-          <a href="#">RERA Guide</a>
-          <a href="#">Home Loan</a>
-          <a href="#">Legal Guide</a>
-          <a href="#">Vastu Tips</a>
-          <a href="#">Blog & News</a>
-          <a href="#">FAQ</a>
-        </div>
-      </div>
+      </nav>
     </div>
-    <div class="footer-bottom">
-      <span>© 2025 24Dismil.com. All rights reserved. | India's #1 Real Estate Portal</span>
-      <div class="footer-bottom-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Use</a>
-        <a href="#">Sitemap</a>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+      <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+      <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
+      <a href="pricing.html"><i class="fa-solid fa-credit-card"></i> Pricing</a>
+      <a href="post-property.html"><i class="fa-solid fa-circle-plus"></i> Post Property</a>
+      <a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
+      <a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a>
+      <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i>
+        Login</a>
+    </div>
+  </header>
+
+  <!-- POST HERO -->
+  <div class="post-hero">
+    <div class="container">
+      <h1><i class="fa-solid fa-house"></i> Post Your Property for FREE</h1>
+      <p>Reach 50 Lakh+ genuine buyers and tenants. 100% FREE listing. Maximum exposure guaranteed.</p>
+
+      <!-- MODERN PROGRESS BAR -->
+      <div class="post-progress-container">
+        <div class="post-progress-bar">
+          <div class="post-progress-fill" style="width: 20%"></div>
+        </div>
+        <div class="step-counter-text">Step 1 of 5</div>
+      </div>
+
+      <!-- BENEFITS STRIP -->
+      <div style="display:flex;gap:24px;justify-content:center;margin-top:28px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px"><i
+            class="fa-solid fa-circle-check"></i> 100% FREE Listing</div>
+        <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px"><i
+            class="fa-solid fa-circle-check"></i> 50 Lakh+ Buyers</div>
+        <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px"><i
+            class="fa-solid fa-circle-check"></i> Instant Visibility</div>
+        <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.85);font-size:13px"><i
+            class="fa-solid fa-circle-check"></i> RERA Compliant</div>
       </div>
     </div>
   </div>
-</footer>
 
-<script src="js/properties.js"></script>
-<script src="js/main.js"></script>
-<script type="module" src="js/submit-property.js"></script>
-<script type="module">
-  import { initNavAuth } from './js/auth.js';
-  initNavAuth();
-</script>
-<script>
-  // ---- Property-type-aware Step 3 fields ----
-  function applyPropertyTypeUX() {
-    // Get selected property type from step 1 (2nd grid)
-    const step1Grids = document.querySelectorAll('#formStep1 .form-type-grid');
-    if (!step1Grids[1]) return;
-    const activeType = step1Grids[1].querySelector('.active .name');
-    const propType = activeType ? activeType.innerText.toLowerCase() : '';
+  <!-- FORM BODY -->
+  <div class="post-body container"
+    style="display: grid; grid-template-columns: 1fr 340px; gap: 30px; align-items: start;">
 
-    const isLand = /plot|land/i.test(propType);
-    const isCommercial = /commercial|shop|office|warehouse/i.test(propType);
-    const isLodge = /lodge/i.test(propType);
-    const hideResidential = isLand || isCommercial || isLodge;
+    <div> <!-- Form Steps Container -->
 
-    const hide = (id, hidden) => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.style.display = hidden ? 'none' : '';
-        // Clear value when hiding so it doesn't get submitted
-        if (hidden) {
-          const input = el.querySelector('input,select,textarea');
-          if (input) input.value = '';
+
+      <!-- STEP 1: Property Type -->
+      <div class="form-card form-step" id="formStep1">
+        <h2 class="form-card-title">Step 1: What are you listing?</h2>
+        <p class="form-card-subtitle">Select the transaction type and property type</p>
+
+        <div style="margin-bottom:24px">
+          <div class="filter-group-title" style="margin-bottom:12px">Transaction Type</div>
+          <div class="form-type-grid" style="grid-template-columns:repeat(3,1fr)">
+            <div class="form-type-option active">
+              <div class="icon"><i class="fa-solid fa-cart-shopping"></i></div>
+              <div class="name">For Sale</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-key"></i></div>
+              <div class="name">For Rent</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-flag"></i></div>
+              <div class="name">PG / Co-living</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="filter-group-title" style="margin-bottom:12px">Property Type</div>
+          <div class="form-type-grid">
+            <div class="form-type-option active">
+              <div class="icon"><i class="fa-solid fa-building"></i></div>
+              <div class="name">Apartment</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-house"></i></div>
+              <div class="name">Villa / House</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-seedling"></i></div>
+              <div class="name">Plot / Land</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-trowel-bricks"></i></div>
+              <div class="name">Builder Floor</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-store"></i></div>
+              <div class="name">Commercial</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-couch"></i></div>
+              <div class="name">PG Room</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-industry"></i></div>
+              <div class="name">Warehouse</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-hotel"></i></div>
+              <div class="name">Hotel / Resort</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-bed"></i></div>
+              <div class="name">Lodge</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <span></span>
+          <button class="btn btn-primary btn-app-nav btn-next-step">Next: Location <i
+              class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Location -->
+      <div class="form-card form-step" id="formStep2" style="display:none">
+        <h2 class="form-card-title">Step 2: Where is your property?</h2>
+        <p class="form-card-subtitle">Add the exact location for better visibility</p>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">State *</label>
+            <select class="form-input form-select" id="stateSelect">
+              <option value="">Select State</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">City *</label>
+            <select class="form-input form-select" id="citySelect" disabled>
+              <option value="">First Select State</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Locality / Area *</label>
+            <input type="text" class="form-input" placeholder="e.g. Sector 62, Koramangala">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Society / Project Name</label>
+            <input type="text" class="form-input" placeholder="e.g. Prestige Lakeside Habitat">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Full Address</label>
+            <textarea class="form-input" rows="3" placeholder="Flat No., Building Name, Street, Landmark..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">PIN Code *</label>
+            <input type="text" class="form-input" placeholder="6-digit PIN code">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Landmark (Optional)</label>
+            <input type="text" class="form-input" placeholder="Near Metro Station, Mall, etc.">
+          </div>
+        </div>
+        <h3
+          style="font-size:16px;font-weight:700;margin-top:20px;margin-bottom:12px;color:var(--dark);padding-bottom:8px;border-bottom:1px solid var(--border)">
+          Nearby Distances (Optional)</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Distance from Metro (km)</label>
+            <input type="number" class="form-input" id="metroDistance" placeholder="e.g. 0.5" step="0.1" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Distance from School (km)</label>
+            <input type="number" class="form-input" id="schoolDistance" placeholder="e.g. 1.2" step="0.1" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Distance from Mall (km)</label>
+            <input type="number" class="form-input" id="mallDistance" placeholder="e.g. 2.5" step="0.1" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Distance from Hospital (km)</label>
+            <input type="number" class="form-input" id="hospitalDistance" placeholder="e.g. 1.0" step="0.1" min="0">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary btn-app-nav btn-next-step">Next: Details <i
+              class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Details -->
+      <div class="form-card form-step" id="formStep3" style="display:none">
+        <h2 class="form-card-title">Step 3: Property Details</h2>
+        <p class="form-card-subtitle">More details = more inquiries. Fill as much as possible.</p>
+
+        <div class="form-grid">
+          <div class="form-group" id="fgBhk">
+            <label class="form-label">BHK Type *</label>
+            <select class="form-input form-select">
+              <option>1 BHK</option>
+              <option selected>2 BHK</option>
+              <option>3 BHK</option>
+              <option>4 BHK</option>
+              <option>4+ BHK</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Property Status *</label>
+            <select class="form-input form-select">
+              <option>Ready to Move</option>
+              <option>Under Construction</option>
+              <option>New Launch</option>
+            </select>
+          </div>
+          <div class="form-group" id="fgBuiltUpArea">
+            <label class="form-label">Built-up Area (sq.ft) *</label>
+            <input type="number" class="form-input" placeholder="e.g. 1450">
+          </div>
+          <div class="form-group" id="fgCarpetArea">
+            <label class="form-label">Carpet Area (sq.ft)</label>
+            <input type="number" class="form-input" placeholder="e.g. 1100">
+          </div>
+
+          <!-- New Plot/Land Specific Fields -->
+          <div class="form-group" id="fgRatePerSqFt" style="display:none">
+            <label class="form-label">Rate Per Sq Ft (₹) *</label>
+            <input type="number" class="form-input" placeholder="e.g. 1100">
+          </div>
+          <div class="form-group" id="fgDevCharges" style="display:none">
+            <label class="form-label">Development Charges (₹)</label>
+            <input type="number" class="form-input" placeholder="e.g. 50000">
+          </div>
+
+          <!-- New Lodge Specific Fields -->
+          <div class="form-group" id="fgRoomType" style="display:none">
+            <label class="form-label">Room Type *</label>
+            <select class="form-input form-select">
+              <option>Single Bed</option>
+              <option>2 Seater</option>
+              <option>3 Seater</option>
+              <option>4 Seater</option>
+            </select>
+          </div>
+          <div class="form-group" id="fgAcNonAc" style="display:none">
+            <label class="form-label">AC / Non-AC *</label>
+            <select class="form-input form-select">
+              <option>AC</option>
+              <option>Non-AC</option>
+            </select>
+          </div>
+          <div class="form-group" id="fgAttachedBathroom" style="display:none">
+            <label class="form-label">Bathroom Type *</label>
+            <select class="form-input form-select">
+              <option>Attached</option>
+              <option>Common</option>
+            </select>
+          </div>
+          <div class="form-group" id="fgBedType" style="display:none">
+            <label class="form-label">Bed Type *</label>
+            <select class="form-input form-select">
+              <option>Single</option>
+              <option>Double</option>
+              <option>Bunk Bed</option>
+            </select>
+          </div>
+          <div class="form-group" id="fgRoomSize" style="display:none">
+            <label class="form-label">Room Size (sq.ft) (Optional)</label>
+            <input type="number" class="form-input" placeholder="e.g. 120">
+          </div>
+          <!-- End Lodge Specific Fields -->
+          <!-- Shared Field: Facing Direction -->
+          <div class="form-group full" id="fgFacing">
+            <label class="form-label">Facing Direction</label>
+            <div
+              style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:6px;">
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
+                  type="checkbox" value="East" style="accent-color:var(--primary)"> East</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
+                  type="checkbox" value="West" style="accent-color:var(--primary)"> West</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
+                  type="checkbox" value="North" style="accent-color:var(--primary)"> North</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
+                  type="checkbox" value="South" style="accent-color:var(--primary)"> South</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
+                  type="checkbox" value="North-East" style="accent-color:var(--primary)"> North-East</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
+                  type="checkbox" value="North-West" style="accent-color:var(--primary)"> North-West</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
+                  type="checkbox" value="South-East" style="accent-color:var(--primary)"> South-East</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
+                  type="checkbox" value="South-West" style="accent-color:var(--primary)"> South-West</label>
+            </div>
+          </div>
+          <!-- PLC, Loan, EMI -->
+          <div class="form-group" id="fgPlc" style="display:none">
+            <label class="form-label">Preferred Location Charges (PLC) / Describe</label>
+            <input type="text" class="form-input" placeholder="e.g. 10% for Corner Plot, ₹50/sqft for Park Facing">
+          </div>
+          <div class="form-group" id="fgLoan" style="display:none">
+            <label class="form-label">Loan Facility Available?</label>
+            <select class="form-input form-select">
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+          <div class="form-group" id="fgEmi" style="display:none">
+            <label class="form-label">EMI Facility Available?</label>
+            <select class="form-input form-select">
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+
+          <!-- Flat/Apartment Specific Fields -->
+          <div class="form-group" id="fgFloor">
+            <label class="form-label">Floor Number</label>
+            <input type="number" class="form-input" placeholder="e.g. 5">
+          </div>
+          <div class="form-group" id="fgTotalFloors">
+            <label class="form-label">Total Floors in Building</label>
+            <input type="number" class="form-input" placeholder="e.g. 18">
+          </div>
+          <div class="form-group" id="fgFurnishing">
+            <label class="form-label">Furnishing Status</label>
+            <select class="form-input form-select">
+              <option>Unfurnished</option>
+              <option>Semi-Furnished</option>
+              <option>Fully Furnished</option>
+            </select>
+          </div>
+          <div class="form-group" id="fgParking">
+            <label class="form-label">Car Parking</label>
+            <select class="form-input form-select">
+              <option>None</option>
+              <option>1 Covered</option>
+              <option>1 Open</option>
+              <option>2 Covered</option>
+              <option>2+ Parking</option>
+            </select>
+          </div>
+          <div class="form-group" id="fgYear">
+            <label class="form-label">Year of Construction</label>
+            <input type="number" class="form-input" placeholder="e.g. 2020">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Property Description *</label>
+            <textarea class="form-input" rows="4"
+              placeholder="Describe your property - location advantages, interior highlights, nearby amenities, special features..."></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top:20px">
+          <div class="filter-group-title" style="margin-bottom:12px">Amenities Available</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Swimming Pool</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Gymnasium</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Clubhouse</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> 24x7 Security</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Power Backup</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Lift</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Garden / Park</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Water Supply</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> CCTV</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Intercom</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Fire Safety</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Solar Energy</label>
+
+            <!-- New Amenities -->
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Outside Boundary</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Central Drainage System</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Street Light</label>
+
+            <!-- Lodge Specific Amenities -->
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Free WiFi</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Room Service</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> Daily Housekeeping</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
+                style="accent-color:var(--primary)"> RO / Drinking Water</label>
+          </div>
+        </div>
+
+        <div class="form-actions" style="margin-top:28px">
+          <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary btn-app-nav btn-next-step">Next: Photos <i
+              class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Photos -->
+      <div class="form-card form-step" id="formStep4" style="display:none">
+        <h2 class="form-card-title">Step 4: Upload Property Photos</h2>
+        <p class="form-card-subtitle">Properties with photos get 5X more inquiries. Upload at least 5 clear photos.</p>
+        <div class="photo-upload-area" id="photoUploadArea">
+          <input type="file" id="photoFileInput" multiple accept="image/*" style="display:none">
+          <input type="file" id="cameraFileInput" accept="image/*" capture="camera" style="display:none">
+          <div class="photo-upload-icon"><i class="fa-solid fa-camera"></i></div>
+          <div class="photo-upload-text">Upload property photos</div>
+          <div class="photo-upload-sub">Add at least 5 clear photos for better reach</div>
+          <div style="margin-top:20px;display:flex;gap:12px;justify-content:center">
+            <span class="btn btn-primary btn-app-nav" style="cursor:pointer;flex:1"
+              onclick="document.getElementById('cameraFileInput').click()">
+              <i class="fa-solid fa-camera-retro"></i> Take Photo
+            </span>
+            <span class="btn btn-outline btn-app-nav" style="cursor:pointer;flex:1"
+              onclick="document.getElementById('photoFileInput').click()">
+              <i class="fa-solid fa-images"></i> Gallery
+            </span>
+          </div>
+        </div>
+        <!-- Preview grid -->
+        <div id="photoPreviewGrid" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"></div>
+        <div
+          style="margin-top:20px;background:rgba(232,65,24,0.05);border:1px solid rgba(232,65,24,0.15);border-radius:var(--radius-sm);padding:14px">
+          <h4 style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px"><i
+              class="fa-solid fa-clipboard-list"></i> Photo Tips for Maximum Inquiries:</h4>
+          <ul style="font-size:13px;color:var(--text-muted);line-height:2;list-style:inside disc">
+            <li>Take photos during daylight for bright, clear images</li>
+            <li>Include all rooms, kitchen, bathrooms, and balcony</li>
+            <li>Show the building exterior, common areas, and parking</li>
+            <li>Keep the property neat and clutter-free before shooting</li>
+          </ul>
+        </div>
+        <div class="form-actions" style="margin-top:28px">
+          <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary btn-app-nav btn-next-step">Next: Pricing <i
+              class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- STEP 5: Pricing & Contact -->
+      <div class="form-card form-step" id="formStep5" style="display:none">
+        <h2 class="form-card-title">Step 5: Pricing & Your Details</h2>
+        <p class="form-card-subtitle">Set a competitive price to attract serious buyers.</p>
+
+        <div class="form-grid">
+          <!-- Standard Pricing Fields (Hidden for Lodge) -->
+          <div class="form-group" id="fgExpectedPrice">
+            <label class="form-label">Expected Price (₹) *</label>
+            <input type="number" class="form-input" placeholder="e.g. 8500000">
+          </div>
+          <div class="form-group" id="fgPriceType">
+            <label class="form-label">Price Type</label>
+            <select class="form-input form-select">
+              <option>Fixed</option>
+              <option>Negotiable</option>
+              <option>Price on request</option>
+            </select>
+          </div>
+          <div class="form-group" id="fgMaintCharges">
+            <label class="form-label">Maintenance Charges (₹/mo)</label>
+            <input type="number" class="form-input" placeholder="e.g. 5000">
+          </div>
+          <div class="form-group" id="fgTokenAmt">
+            <label class="form-label">Token Amount (For Rent)</label>
+            <input type="number" class="form-input" placeholder="e.g. 100000">
+          </div>
+
+          <!-- New Lodge Pricing Fields -->
+          <div class="form-group" id="fgPricePerDay" style="display:none">
+            <label class="form-label">Price per Day (₹) *</label>
+            <input type="number" class="form-input" placeholder="e.g. 500">
+          </div>
+          <div class="form-group" id="fgPricePerWeek" style="display:none">
+            <label class="form-label">Price per Week (₹) (Optional)</label>
+            <input type="number" class="form-input" placeholder="e.g. 3000">
+          </div>
+          <div class="form-group" id="fgPricePerMonth" style="display:none">
+            <label class="form-label">Price per Month (₹) (Optional)</label>
+            <input type="number" class="form-input" placeholder="e.g. 10000">
+          </div>
+          <div class="form-group" id="fgSecurityDeposit" style="display:none">
+            <label class="form-label">Security Deposit (₹) (if any)</label>
+            <input type="number" class="form-input" placeholder="e.g. 1500">
+          </div>
+          <div class="form-group" id="fgElectricityExtra" style="display:none">
+            <label class="form-label">Electricity Charges</label>
+            <select class="form-input form-select">
+              <option>Included</option>
+              <option>Extra</option>
+            </select>
+          </div>
+          <div class="form-group" id="fgGstExtra" style="display:none">
+            <label class="form-label">GST Charges</label>
+            <select class="form-input form-select">
+              <option>Included</option>
+              <option>Extra</option>
+            </select>
+          </div>
+          <!-- End Lodge Pricing Fields -->
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:24px 0">
+        <h3 style="font-size:16px;font-weight:700;color:var(--dark);margin-bottom:18px">Your Contact Details</h3>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Your Name *</label>
+            <input type="text" class="form-input" placeholder="Full Name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mobile Number *</label>
+            <input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" class="form-input" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">You are</label>
+            <select class="form-input form-select">
+              <option>Property Owner</option>
+              <option>Builder / Developer</option>
+              <option>Authorised Agent</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">RERA Number (Optional)</label>
+            <input type="text" class="form-input" placeholder="e.g. MH/2023/12345">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Contact Time</label>
+            <select class="form-input form-select">
+              <option>Any Time</option>
+              <option>Morning (9AM - 12PM)</option>
+              <option>Afternoon (12PM - 4PM)</option>
+              <option>Evening (4PM - 8PM)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions" style="margin-top:28px">
+          <button class="btn btn-outline btn-app-nav btn-prev-step"><i class="fa-solid fa-arrow-left"></i> Back</button>
+          <button class="btn btn-primary btn-app-nav" id="btnSubmitProperty"><i class="fa-solid fa-rocket"></i> Post
+            Property FREE</button>
+        </div>
+      </div> <!-- End Form Steps Container -->
+
+      <!-- SIDEBAR: Opportunity Score -->
+      <aside class="post-sidebar" style="position: sticky; top: 100px;">
+        <div class="form-card" style="padding: 24px; border: 2px solid var(--primary); background: #fff;">
+          <h3
+            style="font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--dark); display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-chart-line" style="color: var(--primary)"></i> Opportunity Score
+          </h3>
+
+          <div style="text-align: center; margin-bottom: 24px;">
+            <div
+              style="width: 120px; height: 120px; margin: 0 auto; border-radius: 50%; border: 8px solid #f3f4f6; display: flex; align-items: center; justify-content: center; position: relative;">
+              <div id="scoreRing"
+                style="position: absolute; inset: -8px; border-radius: 50%; border: 8px solid var(--primary); border-top-color: transparent; border-right-color: transparent; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: rotate(0deg);">
+              </div>
+              <span id="scoreValue" style="font-size: 32px; font-weight: 800; color: var(--dark);">0</span>
+            </div>
+            <div id="scoreLabel"
+              style="margin-top: 12px; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+              Needs Improvement</div>
+          </div>
+
+          <div style="background: #f8fafc; border-radius: 12px; padding: 16px;">
+            <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 12px; color: var(--text);">How to rank higher:
+            </h4>
+            <ul id="scoreTips"
+              style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+              <!-- Tips will be injected by JS -->
+            </ul>
+          </div>
+
+          <div
+            style="margin-top: 20px; font-size: 11px; color: var(--text-muted); line-height: 1.5; text-align: center;">
+            <i class="fa-solid fa-circle-info"></i> High-score properties appear first in search results and get 10x
+            more leads.
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <div class="nav-logo-icon">24</div>
+              24Dismil.com
+            </div>
+            <p class="footer-tagline">
+              India's most trusted real estate portal. Find your dream property
+              with verified listings, expert guidance, and market insights. Your
+              home journey starts here.
+            </p>
+            <div class="footer-socials">
+              <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+              <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+              <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+              <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <div class="footer-links">
+              <a href="properties.html?type=buy">Buy Properties</a>
+              <a href="properties.html?type=rent">Rent Properties</a>
+              <a href="properties.html?type=commercial">Commercial</a>
+              <a href="post-property.html">Post Free Property</a>
+              <a href="properties.html?newLaunch=true">New Projects</a>
+              <a href="about.html">About Us</a>
+              <a href="contact.html">Contact</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Top Cities</h4>
+            <div class="footer-links">
+              <a href="properties.html?city=Mumbai">Mumbai</a>
+              <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
+              <a href="properties.html?city=Bangalore">Bangalore</a>
+              <a href="properties.html?city=Hyderabad">Hyderabad</a>
+              <a href="properties.html?city=Pune">Pune</a>
+              <a href="properties.html?city=Chennai">Chennai</a>
+              <a href="properties.html?city=Kolkata">Kolkata</a>
+              <a href="properties.html?city=Noida">Noida</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <div class="footer-links">
+              <a href="#">EMI Calculator</a>
+              <a href="#">Property Rates</a>
+              <a href="#">RERA Guide</a>
+              <a href="#">Home Loan</a>
+              <a href="#">Legal Guide</a>
+              <a href="#">Vastu Tips</a>
+              <a href="#">Blog & News</a>
+              <a href="#">FAQ</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2025 24Dismil.com. All rights reserved. | India's #1 Real Estate Portal</span>
+          <div class="footer-bottom-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Sitemap</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/properties.js"></script>
+    <script src="js/main.js"></script>
+    <script type="module" src="js/submit-property.js"></script>
+    <script type="module">
+      import { initNavAuth } from './js/auth.js';
+      initNavAuth();
+    </script>
+    <script>
+      // ---- Property-type-aware Step 3 fields ----
+      function applyPropertyTypeUX() {
+        // Get selected property type from step 1 (2nd grid)
+        const step1Grids = document.querySelectorAll('#formStep1 .form-type-grid');
+        if (!step1Grids[1]) return;
+        const activeType = step1Grids[1].querySelector('.active .name');
+        const propType = activeType ? activeType.innerText.toLowerCase() : '';
+
+        const isLand = /plot|land/i.test(propType);
+        const isCommercial = /commercial|shop|office|warehouse/i.test(propType);
+        const isLodge = /lodge/i.test(propType);
+        const hideResidential = isLand || isCommercial || isLodge;
+
+        const hide = (id, hidden) => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.style.display = hidden ? 'none' : '';
+            // Clear value when hiding so it doesn't get submitted
+            if (hidden) {
+              const input = el.querySelector('input,select,textarea');
+              if (input) input.value = '';
+            }
+          }
+        };
+
+        // Residential fields to hide for Land/Commercial/Lodge
+        hide('fgBhk', hideResidential);
+        hide('fgFloor', hideResidential);
+        hide('fgTotalFloors', hideResidential);
+        hide('fgFurnishing', hideResidential);
+        hide('fgParking', hideResidential);
+        hide('fgYear', hideResidential);
+        hide('fgBuiltUpArea', isLand || isLodge); // Land uses plot area, Lodge uses rooms/size
+        hide('fgCarpetArea', isLand || isLodge);
+
+        // Land specific fields to show only for Land
+        hide('fgRatePerSqFt', !isLand);
+        hide('fgDevCharges', !isLand);
+        hide('fgPlc', !isLand);
+        hide('fgLoan', !isLand);
+        hide('fgEmi', !isLand);
+
+        // Lodge specific room fields to show only for Lodge
+        hide('fgRoomType', !isLodge);
+        hide('fgAcNonAc', !isLodge);
+        hide('fgAttachedBathroom', !isLodge);
+        hide('fgBedType', !isLodge);
+        hide('fgRoomSize', !isLodge);
+
+        // Lodge specific pricing fields (Step 5)
+        hide('fgPricePerDay', !isLodge);
+        hide('fgPricePerWeek', !isLodge);
+        hide('fgPricePerMonth', !isLodge);
+        hide('fgSecurityDeposit', !isLodge);
+        hide('fgElectricityExtra', !isLodge);
+        hide('fgGstExtra', !isLodge);
+
+        // Standard pricing fields to hide for Lodge
+        hide('fgExpectedPrice', isLodge);
+        hide('fgPriceType', isLodge);
+        hide('fgMaintCharges', isLodge);
+        hide('fgTokenAmt', isLodge);
+
+        // Also update Step 3 title to match context
+        const step3Title = document.querySelector('#formStep3 .form-card-title');
+        if (step3Title) {
+          if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
+          else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
+          else if (isLodge) step3Title.textContent = 'Step 3: Lodge Details';
+          else step3Title.textContent = 'Step 3: Property Details';
         }
       }
-    };
 
-    // Residential fields to hide for Land/Commercial/Lodge
-    hide('fgBhk', hideResidential);
-    hide('fgFloor', hideResidential);
-    hide('fgTotalFloors', hideResidential);
-    hide('fgFurnishing', hideResidential);
-    hide('fgParking', hideResidential);
-    hide('fgYear', hideResidential);
-    hide('fgBuiltUpArea', isLand || isLodge); // Land uses plot area, Lodge uses rooms/size
-    hide('fgCarpetArea', isLand || isLodge);
+      // ---- State / City Dropdown Logic ----
+      const LOCATIONS = {
+        "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Rajahmundry", "Tirupati", "Kadapa", "Kakinada", "Anantapur"],
+        "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon", "Tinsukia", "Tezpur", "Bongaigaon"],
+        "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Bihar Sharif", "Ara", "Begusarai", "Katihar", "Bihta"],
+        "Chandigarh": ["Chandigarh"],
+        "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Raigarh", "Jagdalpur", "Ambikapur"],
+        "Delhi": ["New Delhi", "North Delhi", "South Delhi", "West Delhi", "East Delhi", "Dwarka", "Rohini"],
+        "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Porvorim"],
+        "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Gandhinagar", "Junagadh", "Anand", "Navsari", "Morbi", "Bharuch"],
+        "Haryana": ["Gurgaon", "Faridabad", "Panipat", "Ambala", "Yamunanagar", "Rohtak", "Hisar", "Karnal", "Sonipat", "Panchkula"],
+        "Himachal Pradesh": ["Shimla", "Dharamshala", "Solan", "Mandi", "Palampur", "Baddi"],
+        "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Deoghar", "Hazaribagh", "Giridih", "Ramgarh"],
+        "Karnataka": ["Bangalore", "Mysore", "Hubli-Dharwad", "Mangalore", "Belagavi", "Gulbarga", "Davanagere", "Bellary", "Bijapur", "Shimoga", "Tumkur", "Udupi"],
+        "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Kollam", "Thrissur", "Kannur", "Alappuzha", "Kottayam", "Palakkad", "Malappuram"],
+        "Madhya Pradesh": ["Indore", "Bhopal", "Jabalpur", "Gwalior", "Ujjain", "Sagar", "Dewas", "Satna", "Ratlam", "Rewa"],
+        "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Kalyan-Dombivli", "Vasai-Virar", "Aurangabad", "Navi Mumbai", "Solapur", "Mira-Bhayandar", "Bhiwandi", "Amravati", "Nanded", "Kolhapur", "Akola", "Jalgaon", "Latur", "Dhule", "Ahmednagar"],
+        "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Brahmapur", "Sambalpur", "Puri", "Balasore", "Bhadrak", "Baripada"],
+        "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Hoshiarpur", "Mohali", "Pathankot", "Moga", "Abohar"],
+        "Rajasthan": ["Jaipur", "Jodhpur", "Kota", "Bikaner", "Ajmer", "Udaipur", "Bhilwara", "Alwar", "Bharatpur", "Sikar"],
+        "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli", "Tiruppur", "Vellore", "Erode", "Thoothukudi", "Dindigul", "Thanjavur"],
+        "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Ramagundam", "Khammam", "Mahbubnagar"],
+        "Uttar Pradesh": ["Lucknow", "Kanpur", "Ghaziabad", "Agra", "Varanasi", "Meerut", "Allahabad", "Bareilly", "Aligarh", "Moradabad", "Saharanpur", "Gorakhpur", "Noida", "Firozabad", "Jhansi", "Muzaffarnagar", "Mathura"],
+        "Uttarakhand": ["Dehradun", "Haridwar", "Roorkee", "Haldwani-cum-Kathgodam", "Rudrapur", "Kashipur", "Rishikesh"],
+        "West Bengal": ["Kolkata", "Howrah", "Asansol", "Siliguri", "Durgapur", "Kharagpur", "Burdwan", "Haldia"]
+      };
 
-    // Land specific fields to show only for Land
-    hide('fgRatePerSqFt', !isLand);
-    hide('fgDevCharges', !isLand);
-    hide('fgPlc', !isLand);
-    hide('fgLoan', !isLand);
-    hide('fgEmi', !isLand);
+      const stateSelect = document.getElementById('stateSelect');
+      const citySelect = document.getElementById('citySelect');
 
-    // Lodge specific room fields to show only for Lodge
-    hide('fgRoomType', !isLodge);
-    hide('fgAcNonAc', !isLodge);
-    hide('fgAttachedBathroom', !isLodge);
-    hide('fgBedType', !isLodge);
-    hide('fgRoomSize', !isLodge);
-
-    // Lodge specific pricing fields (Step 5)
-    hide('fgPricePerDay', !isLodge);
-    hide('fgPricePerWeek', !isLodge);
-    hide('fgPricePerMonth', !isLodge);
-    hide('fgSecurityDeposit', !isLodge);
-    hide('fgElectricityExtra', !isLodge);
-    hide('fgGstExtra', !isLodge);
-
-    // Standard pricing fields to hide for Lodge
-    hide('fgExpectedPrice', isLodge);
-    hide('fgPriceType', isLodge);
-    hide('fgMaintCharges', isLodge);
-    hide('fgTokenAmt', isLodge);
-
-    // Also update Step 3 title to match context
-    const step3Title = document.querySelector('#formStep3 .form-card-title');
-    if (step3Title) {
-      if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
-      else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
-      else if (isLodge) step3Title.textContent = 'Step 3: Lodge Details';
-      else step3Title.textContent = 'Step 3: Property Details';
-    }
-  }
-
-  // ---- State / City Dropdown Logic ----
-  const LOCATIONS = {
-    "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Rajahmundry", "Tirupati", "Kadapa", "Kakinada", "Anantapur"],
-    "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon", "Tinsukia", "Tezpur", "Bongaigaon"],
-    "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Bihar Sharif", "Ara", "Begusarai", "Katihar", "Bihta"],
-    "Chandigarh": ["Chandigarh"],
-    "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Raigarh", "Jagdalpur", "Ambikapur"],
-    "Delhi": ["New Delhi", "North Delhi", "South Delhi", "West Delhi", "East Delhi", "Dwarka", "Rohini"],
-    "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Porvorim"],
-    "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Gandhinagar", "Junagadh", "Anand", "Navsari", "Morbi", "Bharuch"],
-    "Haryana": ["Gurgaon", "Faridabad", "Panipat", "Ambala", "Yamunanagar", "Rohtak", "Hisar", "Karnal", "Sonipat", "Panchkula"],
-    "Himachal Pradesh": ["Shimla", "Dharamshala", "Solan", "Mandi", "Palampur", "Baddi"],
-    "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Deoghar", "Hazaribagh", "Giridih", "Ramgarh"],
-    "Karnataka": ["Bangalore", "Mysore", "Hubli-Dharwad", "Mangalore", "Belagavi", "Gulbarga", "Davanagere", "Bellary", "Bijapur", "Shimoga", "Tumkur", "Udupi"],
-    "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Kollam", "Thrissur", "Kannur", "Alappuzha", "Kottayam", "Palakkad", "Malappuram"],
-    "Madhya Pradesh": ["Indore", "Bhopal", "Jabalpur", "Gwalior", "Ujjain", "Sagar", "Dewas", "Satna", "Ratlam", "Rewa"],
-    "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Kalyan-Dombivli", "Vasai-Virar", "Aurangabad", "Navi Mumbai", "Solapur", "Mira-Bhayandar", "Bhiwandi", "Amravati", "Nanded", "Kolhapur", "Akola", "Jalgaon", "Latur", "Dhule", "Ahmednagar"],
-    "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Brahmapur", "Sambalpur", "Puri", "Balasore", "Bhadrak", "Baripada"],
-    "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Hoshiarpur", "Mohali", "Pathankot", "Moga", "Abohar"],
-    "Rajasthan": ["Jaipur", "Jodhpur", "Kota", "Bikaner", "Ajmer", "Udaipur", "Bhilwara", "Alwar", "Bharatpur", "Sikar"],
-    "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli", "Tiruppur", "Vellore", "Erode", "Thoothukudi", "Dindigul", "Thanjavur"],
-    "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Ramagundam", "Khammam", "Mahbubnagar"],
-    "Uttar Pradesh": ["Lucknow", "Kanpur", "Ghaziabad", "Agra", "Varanasi", "Meerut", "Allahabad", "Bareilly", "Aligarh", "Moradabad", "Saharanpur", "Gorakhpur", "Noida", "Firozabad", "Jhansi", "Muzaffarnagar", "Mathura"],
-    "Uttarakhand": ["Dehradun", "Haridwar", "Roorkee", "Haldwani-cum-Kathgodam", "Rudrapur", "Kashipur", "Rishikesh"],
-    "West Bengal": ["Kolkata", "Howrah", "Asansol", "Siliguri", "Durgapur", "Kharagpur", "Burdwan", "Haldia"]
-  };
-
-  const stateSelect = document.getElementById('stateSelect');
-  const citySelect = document.getElementById('citySelect');
-
-  if (stateSelect && citySelect) {
-    // Populate states
-    Object.keys(LOCATIONS).sort().forEach(state => {
-      stateSelect.add(new Option(state, state));
-    });
-
-    stateSelect.addEventListener('change', () => {
-      const state = stateSelect.value;
-      citySelect.innerHTML = '<option value="">Select City</option>';
-      
-      if (state && LOCATIONS[state]) {
-        citySelect.disabled = false;
-        LOCATIONS[state].sort().forEach(city => {
-          citySelect.add(new Option(city, city));
+      if (stateSelect && citySelect) {
+        // Populate states
+        Object.keys(LOCATIONS).sort().forEach(state => {
+          stateSelect.add(new Option(state, state));
         });
-      } else {
-        citySelect.innerHTML = '<option value="">First Select State</option>';
-        citySelect.disabled = true;
-      }
-    });
-  }
 
-  // Run when navigating to Step 3
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('.btn-next-step')) {
-      const currentStep = document.querySelector('.form-step:not([style*="display:none"])');
-      if (currentStep && currentStep.id === 'formStep1') {
-        // About to go to step 2, which leads to 3 - update on step 1 next click
-        setTimeout(applyPropertyTypeUX, 50);
+        stateSelect.addEventListener('change', () => {
+          const state = stateSelect.value;
+          citySelect.innerHTML = '<option value="">Select City</option>';
+
+          if (state && LOCATIONS[state]) {
+            citySelect.disabled = false;
+            LOCATIONS[state].sort().forEach(city => {
+              citySelect.add(new Option(city, city));
+            });
+          } else {
+            citySelect.innerHTML = '<option value="">First Select State</option>';
+            citySelect.disabled = true;
+          }
+        });
       }
-      if (currentStep && currentStep.id === 'formStep2') {
-        setTimeout(applyPropertyTypeUX, 50);
+
+      // Run when navigating to Step 3
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-next-step')) {
+          const currentStep = document.querySelector('.form-step:not([style*="display:none"])');
+          if (currentStep && currentStep.id === 'formStep1') {
+            // About to go to step 2, which leads to 3 - update on step 1 next click
+            setTimeout(applyPropertyTypeUX, 50);
+          }
+          if (currentStep && currentStep.id === 'formStep2') {
+            setTimeout(applyPropertyTypeUX, 50);
+          }
+        }
+        // Also update when type tiles are clicked
+        const tile = e.target.closest('#formStep1 .form-type-grid .type-card');
+        if (tile) setTimeout(applyPropertyTypeUX, 50);
+      });
+      // ---- Opportunity Score Logic ----
+      function updateOpportunityScore() {
+        let score = 0;
+        const tips = [];
+
+        // 1. Photos (Biggest Factor)
+        const photoCount = document.getElementById('photoPreviewGrid')?.children.length || 0;
+        if (photoCount > 0) {
+          const photoScore = Math.min(photoCount * 5, 25);
+          score += photoScore;
+          if (photoCount < 5) tips.push({ text: `Add ${5 - photoCount} more photos for +${(5 - photoCount) * 5} pts`, icon: 'fa-camera' });
+        } else {
+          tips.push({ text: 'Add at least 5 photos for +25 pts', icon: 'fa-camera', highlight: true });
+        }
+
+        // 2. Description
+        const desc = document.querySelector('textarea[placeholder*="Describe your property"]')?.value || "";
+        if (desc.length > 300) {
+          score += 15;
+        } else if (desc.length > 100) {
+          score += 10;
+          tips.push({ text: 'Make description longer (>300 chars) for +5 pts', icon: 'fa-align-left' });
+        } else if (desc.length > 0) {
+          score += 5;
+          tips.push({ text: 'Add detailed description for +10 pts', icon: 'fa-align-left' });
+        } else {
+          tips.push({ text: 'Add property description for +15 pts', icon: 'fa-align-left' });
+        }
+
+        // 3. RERA
+        const rera = document.querySelector('input[placeholder*="MH/2023/12345"]')?.value;
+        if (rera && rera.trim().length > 5) {
+          score += 20;
+        } else {
+          tips.push({ text: 'Add RERA Number for +20 pts', icon: 'fa-file-contract' });
+        }
+
+        // 4. Amenities
+        const amenitiesCount = document.querySelectorAll('#formStep3 input[type="checkbox"]:checked').length;
+        if (amenitiesCount > 5) score += 10;
+        else if (amenitiesCount > 0) tips.push({ text: 'Select more amenities for +10 pts', icon: 'fa-list-check' });
+
+        // 5. Basic Details (Project Name, Locality)
+        const project = document.querySelector('input[placeholder*="Prestige Lakeside"]')?.value;
+        const locality = document.querySelector('input[placeholder*="Sector 62"]')?.value;
+        if (project && locality) score += 10;
+
+        // UI Update
+        const scoreValEl = document.getElementById('scoreValue');
+        const scoreRingEl = document.getElementById('scoreRing');
+        const scoreLabelEl = document.getElementById('scoreLabel');
+        const tipsEl = document.getElementById('scoreTips');
+
+        if (scoreValEl) scoreValEl.textContent = score;
+        if (scoreRingEl) {
+          const rotation = (score / 100) * 180; // Simple semi-circle or limited ring
+          scoreRingEl.style.transform = `rotate(${rotation}deg)`;
+
+          // Color coding
+          if (score > 70) {
+            scoreRingEl.style.borderColor = '#10B981'; // Green
+            scoreLabelEl.textContent = 'Excellent';
+            scoreLabelEl.style.color = '#10B981';
+          } else if (score > 40) {
+            scoreRingEl.style.borderColor = '#F59E0B'; // Amber
+            scoreLabelEl.textContent = 'Good';
+            scoreLabelEl.style.color = '#F59E0B';
+          } else {
+            scoreRingEl.style.borderColor = '#EF4444'; // Red
+            scoreLabelEl.textContent = 'Needs Improvement';
+            scoreLabelEl.style.color = '#EF4444';
+          }
+        }
+
+        if (tipsEl) {
+          tipsEl.innerHTML = tips.slice(0, 3).map(tip => `
+            <li style="font-size: 12px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 8px;">
+              <i class="fa-solid ${tip.icon}" style="margin-top: 2px; color: ${tip.highlight ? 'var(--primary)' : '#94a3b8'}"></i>
+              ${tip.text}
+            </li>
+          `).join('');
+        }
       }
-    }
-    // Also update when type tiles are clicked
-    const tile = e.target.closest('#formStep1 .form-type-grid .type-card');
-    if (tile) setTimeout(applyPropertyTypeUX, 50);
-  });
-</script>
+
+      // Listen for all inputs
+      document.addEventListener('input', (e) => {
+        if (e.target.closest('.post-body')) {
+          updateOpportunityScore();
+        }
+      });
+
+      // Also run on certain clicks
+      document.addEventListener('click', (e) => {
+        if (e.target.type === 'checkbox' || e.target.closest('.btn-app-nav')) {
+          setTimeout(updateOpportunityScore, 100);
+        }
+      });
+
+      // Initial run
+      window.addEventListener('load', updateOpportunityScore);
+    </script>
 </body>
+
+
 </html>
