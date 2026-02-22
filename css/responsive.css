@@ -50,6 +50,10 @@
   .section { padding: 40px 0; }
   .section-header h2 { font-size: 22px; }
 
+  /* Testimonials */
+  .testimonial-card { min-width: 280px; padding: 20px; }
+  .testimonial-text { font-size: 14px; }
+
   /* Advantage Section */
   .advantage-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
 

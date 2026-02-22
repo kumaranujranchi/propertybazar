@@ -1103,6 +1103,8 @@ textarea {
   border-radius: var(--radius);
   padding: 28px;
   transition: var(--transition);
+  min-width: 340px;
+  flex-shrink: 0;
 }
 .testimonial-card:hover {
   background: rgba(255, 255, 255, 0.1);
