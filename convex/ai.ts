@@ -8,20 +8,25 @@ import { v } from "convex/values";
 export const parseSearchQuery = action({
   args: {
     query: v.string(),
+    history: v.optional(v.array(v.object({ role: v.string(), content: v.string() }))),
   },
   handler: async (ctx, args) => {
     const apiKey = process.env.SARVAM_API_KEY;
     if (!apiKey) {
       console.error("SARVAM_API_KEY is not set in environment variables");
-      // Return a basic fallback or error
       return { success: false, error: "AI search is currently unavailable. Please check backend config.", filters: {} };
     }
 
     try {
-      const systemPrompt = `You are an expert real estate search assistant for "24Dismil.com", a property portal in India.
-Your task is to parse user queries and return ONLY a structured JSON object representing their search criteria.
+      const systemPrompt = `You are "Dismil", a friendly and helpful real estate assistant for 24Dismil.com.
+Your goal is to help users find properties in India and answer their real estate questions.
 
-SCHEMA:
+WORKFLOW:
+1. Parse the user's latest message for search criteria (type, property type, BHK, city, price, amenities).
+2. If the user asks a general question (e.g., "What are property rates in Patna?"), answer it naturally while keeping the previous search filters if applicable.
+3. ALWAYS return a JSON object at the end of your response inside a block.
+
+JSON SCHEMA:
 {
   "type": "buy" | "rent",
   "propType": "Apartment" | "Villa" | "Plot" | "Commercial" | "PG" | "Lodge",
@@ -29,19 +34,20 @@ SCHEMA:
   "city": string,
   "maxPrice": number,
   "amenities": string[],
-  "explanation": string (A brief, friendly message in the user's language explaining what you found)
+  "explanation": "Your natural language response to the user. Talk like a human, not a robot. Answer their questions directly here."
 }
 
 RULES:
-1. Return ONLY the JSON object. No other text.
-2. If "type" (buy/rent) is not specified, default to "buy".
-3. Use Indian Numbering System: 1 Lac = 100000, 1 Cr = 10000000.
-4. "city" should be the name of the city or locality mentioned.
-5. If some criteria are missing, omit the field or set to null/empty.
-6. The "explanation" should be professional and encouraging.
+- Maintain context from the history. If they say "Show flats in Patna" then "What about Noida?", update city to "Noida".
+- Current Date: ${new Date().toLocaleDateString()}
+- Use Indian numbering (1 Lac = 100,000, 1 Cr = 10,000,000).
+- Be polite, professional, and use a mix of English and Hindi if the user does.`;
 
-Example: "Patna mein 2bhk flat chahiye 40 lakh ke andar"
-Output: {"type": "buy", "propType": "Apartment", "bhk": 2, "city": "Patna", "maxPrice": 4000000, "explanation": "Sure! I am searching for 2 BHK apartments in Patna within ₹40 Lacs for you."}`;
+      const messages = [
+        { role: "system", content: systemPrompt },
+        ...(args.history || []),
+        { role: "user", content: args.query }
+      ];
 
       const response = await fetch("https://api.sarvam.ai/v1/chat/completions", {
         method: "POST",
@@ -51,10 +57,7 @@ Output: {"type": "buy", "propType": "Apartment", "bhk": 2, "city": "Patna", "max
         },
         body: JSON.stringify({
           model: "sarvam-m",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: args.query }
-          ],
+          messages: messages,
         }),
       });
 
@@ -65,14 +68,17 @@ Output: {"type": "buy", "propType": "Apartment", "bhk": 2, "city": "Patna", "max
       const data = await response.json();
       const aiResponse = data.choices[0]?.message?.content;
 
-      // Extract JSON from response (handling potential markdown fences)
       const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        const filters = JSON.parse(jsonMatch[0]);
-        return { success: true, filters };
+        try {
+          const filters = JSON.parse(jsonMatch[0]);
+          return { success: true, filters };
+        } catch (e) {
+          return { success: true, filters: { explanation: aiResponse } };
+        }
       }
 
-      return { success: false, error: "Failed to parse AI response", raw: aiResponse };
+      return { success: true, filters: { explanation: aiResponse } };
 
     } catch (error: any) {
       console.error("AI Search Error:", error);
