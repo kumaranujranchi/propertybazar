@@ -8,7 +8,42 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initAISearchAssistant() {
-  // ... (bubble and drawer creation code) ...
+  // 1. Create Floating Bubble
+  const bubble = document.createElement('div');
+  bubble.id = 'ai-bubble';
+  bubble.className = 'ai-bubble';
+  bubble.innerHTML = `
+    <div class="ai-bubble-icon">
+      <i class="fa-solid fa-robot"></i>
+    </div>
+    <div class="ai-bubble-label">AI Search</div>
+  `;
+  document.body.appendChild(bubble);
+
+  // 2. Create Chat Drawer
+  const drawer = document.createElement('div');
+  drawer.id = 'ai-chat-drawer';
+  drawer.className = 'ai-chat-drawer';
+  drawer.innerHTML = `
+    <div class="ai-chat-header">
+      <div class="ai-chat-title">
+        <i class="fa-solid fa-robot" style="color:var(--primary)"></i>
+        <span>24Dismil AI Assistant</span>
+      </div>
+      <button class="ai-chat-close">&times;</button>
+    </div>
+    <div class="ai-chat-messages" id="ai-chat-messages">
+      <div class="ai-msg bot">
+        Namaste! I can help you find your dream property. How can I assist you today? 
+        <div style="font-size:11px; margin-top:8px; opacity:0.7">Examples:<br>• "Patna mein 2bhk flat chahiye"<br>• "Commercial shop in Delhi under 1 Cr"</div>
+      </div>
+    </div>
+    <div class="ai-chat-input-wrap">
+      <input type="text" id="ai-chat-input" placeholder="Type your requirement in any language..." />
+      <button id="ai-chat-send" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  `;
+  document.body.appendChild(drawer);
   let chatHistory = [];
 
   // 3. Toggle Logic
