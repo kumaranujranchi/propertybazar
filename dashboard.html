@@ -120,6 +120,12 @@
     .btn-wa-lead { background: #25D366; color: #fff; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.2); }
     .btn-wa-lead:hover { background: #128C7E; transform: translateY(-2px); }
 
+    .enquiry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .enquiry-chip { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; }
+    .enquiry-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .enquiry-value { font-size: 13px; font-weight: 600; color: var(--dark); }
+    .enquiry-raw-msg { font-size: 14px; line-height: 1.6; color: #475569; padding: 16px; background: #fffaf5; border-radius: 10px; border-left: 4px solid var(--primary); margin-bottom: 20px; }
+
     @media(max-width: 900px) { 
       .dash-layout { flex-direction: column; } 
       .dash-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); display: flex; flex-direction: row; overflow-x: auto; padding: 0; } 
@@ -588,6 +594,29 @@
       const initials = l.inquirerName ? l.inquirerName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : '?';
       const waMsg = encodeURIComponent(`Hi ${l.inquirerName}, I am the owner of the property "${l.propertyTitle}" you enquired about on 24Dismil.com. Are you interested in discussing further?`);
       
+      // Helper to parse the structured message
+      const parseLeadMessage = (msg) => {
+        if (!msg) return { chips: [], raw: '' };
+        if (!msg.includes('--- Advertiser Modal Enquiry ---')) return { chips: [], raw: msg };
+        
+        const cleanMsg = msg.replace('--- Advertiser Modal Enquiry ---', '').trim();
+        const parts = cleanMsg.split(/Reason to Buy:|Property Dealer:|Planning to Buy In:|Interested in Home Loan:|Interested in Site Visit:/g).map(p => p.trim()).filter(Boolean);
+        const keys = ['Reason to Buy', 'Property Dealer', 'Planning to Buy In', 'Interested in Home Loan', 'Interested in Site Visit'];
+        
+        // Re-extract since split loses the key names
+        const chips = [];
+        keys.forEach(k => {
+          const match = cleanMsg.match(new RegExp(`${k}:\\s*(.*?)(?=${keys.join(':|')}:|$)`, 'i'));
+          if (match && match[1]) {
+            chips.push({ label: k, value: match[1].trim() });
+          }
+        });
+        
+        return { chips, raw: chips.length === 0 ? cleanMsg : '' };
+      };
+
+      const parsed = parseLeadMessage(l.message);
+      
       return `
         <div class="lead-card">
           <div class="lead-header">
@@ -614,7 +643,16 @@
               ${l.inquirerEmail ? `<a href="mailto:${l.inquirerEmail}" class="lead-meta-item"><i class="fa-solid fa-envelope-open"></i> ${l.inquirerEmail}</a>` : ''}
             </div>
             
-            ${l.message ? `<div class="lead-msg-box">${l.message}</div>` : ''}
+            ${parsed.chips.length > 0 ? `
+              <div class="enquiry-grid">
+                ${parsed.chips.map(c => `
+                  <div class="enquiry-chip">
+                    <span class="enquiry-label">${c.label}</span>
+                    <span class="enquiry-value">${c.value}</span>
+                  </div>
+                `).join('')}
+              </div>
+            ` : parsed.raw ? `<div class="enquiry-raw-msg">${parsed.raw}</div>` : ''}
           </div>
           
           <div class="lead-footer-actions">
