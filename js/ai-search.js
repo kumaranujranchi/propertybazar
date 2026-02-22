@@ -97,11 +97,24 @@ function initAISearchAssistant() {
   }
 
   function applyAIFilters(filters) {
-    // Access global activeFilters and window.renderFilteredProperties from main.js
-    if (typeof window.renderFilteredProperties !== 'function') return;
+    const isListingPage = !!document.querySelector('.listings-grid');
+    
+    if (!isListingPage) {
+        // Build URL params and redirect
+        const params = new URLSearchParams();
+        if (filters.type) params.set('type', filters.type);
+        if (filters.city) params.set('location', filters.city);
+        if (filters.propType) params.set('propType', filters.propType);
+        if (filters.bhk) params.set('bhk', filters.bhk);
+        
+        addMessage("Redirecting you to the results...", 'bot');
+        setTimeout(() => {
+            window.location.href = `properties.html?${params.toString()}`;
+        }, 1500);
+        return;
+    }
 
-    // Map AI JSON to activeFilters schema
-    // Reset specific filters if found
+    // Existing logic for listing page
     if (filters.type) {
         const tabs = document.querySelectorAll('.search-tab');
         tabs.forEach(t => t.classList.toggle('active', t.dataset.type === filters.type));
