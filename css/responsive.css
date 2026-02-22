@@ -51,8 +51,13 @@
   .section-header h2 { font-size: 22px; }
 
   /* Testimonials */
-  .testimonial-card { min-width: 280px; padding: 20px; }
-  .testimonial-text { font-size: 14px; }
+  .testimonials-slider { padding: 10px 16px 30px; gap: 16px; }
+  .testimonial-card { 
+    min-width: calc(100vw - 48px) !important; 
+    width: calc(100vw - 48px) !important;
+    padding: 24px !important; 
+  }
+  .testimonial-text { font-size: 14px !important; line-height: 1.5 !important; }
 
   /* Advantage Section */
   .advantage-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }

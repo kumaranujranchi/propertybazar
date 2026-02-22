@@ -1101,10 +1101,11 @@ textarea {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius);
-  padding: 28px;
+  padding: 32px;
   transition: var(--transition);
-  min-width: 340px;
+  min-width: 380px;
   flex-shrink: 0;
+  scroll-snap-align: center;
 }
 .testimonial-card:hover {
   background: rgba(255, 255, 255, 0.1);
@@ -1126,6 +1127,11 @@ textarea {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+.testimonials-slider {
+  gap: 24px;
+  padding: 10px 20px 40px;
+  scroll-padding: 0 20px;
 }
 .testimonial-avatar {
   width: 44px;
