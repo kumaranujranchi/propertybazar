@@ -173,6 +173,67 @@ export const createProperty = mutation({
   },
 });
 
+export const deleteProperty = mutation({
+  args: { token: v.string(), id: v.id("properties") },
+  handler: async (ctx, args) => {
+    const session = await ctx.db
+      .query("sessions")
+      .withIndex("by_token", (q) => q.eq("token", args.token))
+      .first();
+    if (!session || session.expiresAt < Date.now()) throw new Error("Unauthorized");
+
+    const prop = await ctx.db.get(args.id);
+    if (!prop) throw new Error("Property not found");
+    if (prop.userId !== session.userId) throw new Error("Unauthorized: You do not own this property");
+
+    // Delete photos from storage
+    for (const storageId of prop.photos || []) {
+      try { await ctx.storage.delete(storageId as any); } catch (e) { console.error(e); }
+    }
+    
+    await ctx.db.delete(args.id);
+    return { success: true };
+  },
+});
+
+export const updateProperty = mutation({
+  args: {
+    token: v.string(),
+    id: v.id("properties"),
+    transactionType: v.string(),
+    propertyType: v.string(),
+    location: v.any(),
+    details: v.any(),
+    amenities: v.array(v.string()),
+    photos: v.array(v.string()),
+    pricing: v.any(),
+    contactDesc: v.any(),
+  },
+  handler: async (ctx, args) => {
+    const session = await ctx.db
+      .query("sessions")
+      .withIndex("by_token", (q) => q.eq("token", args.token))
+      .first();
+    if (!session || session.expiresAt < Date.now()) throw new Error("Unauthorized");
+
+    const prop = await ctx.db.get(args.id);
+    if (!prop) throw new Error("Property not found");
+    if (prop.userId !== session.userId) throw new Error("Unauthorized: You do not own this property");
+
+    await ctx.db.patch(args.id, {
+      transactionType: args.transactionType,
+      propertyType: args.propertyType,
+      location: args.location,
+      details: args.details,
+      amenities: args.amenities,
+      photos: args.photos,
+      pricing: args.pricing,
+      contactDesc: args.contactDesc,
+    });
+    return { success: true };
+  },
+});
+
 export const deleteOldProperties = internalMutation({
   args: {},
   handler: async (ctx) => {
