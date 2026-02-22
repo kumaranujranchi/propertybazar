@@ -832,16 +832,12 @@ textarea {
   gap: 24px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding-bottom: 12px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  padding-bottom: 20px;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
 }
 .cards-slider::-webkit-scrollbar {
-  height: 4px;
-}
-.cards-slider::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 2px;
+  display: none; /* Hide scrollbar for Chrome/Safari/Opera */
 }
 .cards-slider .property-card {
   min-width: 300px;
