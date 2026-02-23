@@ -457,7 +457,7 @@
 
   // Nav
   document.getElementById('dashNavName').innerHTML = `<i class="fa-solid fa-user"></i> ${user.name.split(' ')[0]}`;
-  document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+  document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
     e.preventDefault();
     await logout();
     window.location.href = 'index.html';
