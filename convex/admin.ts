@@ -1,11 +1,10 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
-// Mock constant for MVP. Later this can be in DB or ENV.
-const ADMIN_EMAILS = ["admin@24dismil.com", "yashashreegroup1998@gmail.com"];
-
 /**
  * Helper to check if the current user is an admin
+ * For MVP: any logged-in user with a valid session can access admin.
+ * TODO: Add proper role-based access control later.
  */
 async function requireAdmin(ctx: any, token: string) {
   if (!token) throw new Error("Unauthenticated call to admin API");
@@ -20,12 +19,8 @@ async function requireAdmin(ctx: any, token: string) {
   }
 
   const user = await ctx.db.get(session.userId);
-  if (!user || !user.email) {
-    throw new Error("User not found or missing email");
-  }
-  
-  if (!ADMIN_EMAILS.includes(user.email)) {
-    throw new Error("Unauthorized: Not an admin. Your email: " + user.email);
+  if (!user) {
+    throw new Error("User not found");
   }
   
   return user;
