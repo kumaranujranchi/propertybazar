@@ -34,11 +34,11 @@ async function checkAdminAuth() {
   
   try {
     // We try to call a simple admin query to verify token/access
-    await convex.query("admin:getDashboardStats", { token });
+    const user = await convex.query("admin:getDashboardStats", { token });
     document.getElementById('adminApp').style.display = 'flex';
   } catch (err) {
     console.error("Admin Auth Failed", err);
-    alert("You do not have administrative access.");
+    alert("You do not have administrative access. Please login first.");
     window.location.href = "index.html";
   }
 }
@@ -70,6 +70,17 @@ async function loadDashboardData() {
     document.getElementById('statPendingProps').textContent = stats.pendingApprovals;
     document.getElementById('statUsers').textContent = stats.totalUsers;
     document.getElementById('statLeads').textContent = stats.totalLeads;
+
+    // Update header with actual user info from stats
+    if (stats.currentUser) {
+      const name = stats.currentUser.name || 'Admin';
+      const email = stats.currentUser.email || '';
+      document.getElementById('adminName').textContent = name;
+      document.getElementById('adminEmail').textContent = email;
+      document.getElementById('adminAvatar').textContent = name.charAt(0).toUpperCase();
+      const emailField = document.getElementById('settingsEmail');
+      if (emailField) emailField.value = email;
+    }
 
     // 2. Properties
     allProperties = await convex.query("admin:getAllProperties", { token });

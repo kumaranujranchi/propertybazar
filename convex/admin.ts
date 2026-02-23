@@ -30,14 +30,13 @@ export const getDashboardStats = query({
   args: { token: v.string() },
   handler: async (ctx, args) => {
     // Requires Admin
-    await requireAdmin(ctx, args.token);
+    const currentUser = await requireAdmin(ctx, args.token);
 
     const properties = await ctx.db.query("properties").collect();
     const users = await ctx.db.query("users").collect();
     const leads = await ctx.db.query("leads").collect();
 
     const totalProps = properties.length;
-    // Assume properties without approvalStatus are pending for now, or check explicit status
     const pendingProps = properties.filter(p => p.approvalStatus === "pending" || !p.approvalStatus).length;
     const activeProps = properties.length - pendingProps; 
 
@@ -46,7 +45,8 @@ export const getDashboardStats = query({
       pendingApprovals: pendingProps,
       activeListings: activeProps,
       totalUsers: users.length,
-      totalLeads: leads.length
+      totalLeads: leads.length,
+      currentUser: { name: currentUser.name, email: currentUser.email },
     };
   },
 });
@@ -56,11 +56,19 @@ export const getAllProperties = query({
   handler: async (ctx, args) => {
     await requireAdmin(ctx, args.token);
     
-    // Fetch all properties, ordered by newest first (default internal ID ordering usually suffices, but can add timestamp)
     const properties = await ctx.db.query("properties").order("desc").collect();
     
-    // We might want to join with User data if we have ownership relation
-    return properties;
+    // Resolve storage IDs to actual URLs
+    return await Promise.all(
+      properties.map(async (p) => {
+        const resolvedPhotos = await Promise.all(
+          (p.photos || []).map(async (sid: string) => {
+            try { return (await ctx.storage.getUrl(sid as any)) ?? null; } catch { return null; }
+          })
+        );
+        return { ...p, photos: resolvedPhotos.filter(Boolean) };
+      })
+    );
   },
 });
 
