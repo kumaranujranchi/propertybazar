@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | 24Dismil.com</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" href="images/favicon.png" type="image/png">
+</head>
+<body>
+
+  <!-- Protect page immediately before body renders -->
+  <script>
+    // Just a placeholder check, actual auth will be done by Convex
+    const hasAdminAccess = localStorage.getItem('has_admin_access');
+    // If we wanted to lock down fully before render, we would do it here.
+    // We will do it in admin.js via Convex
+  </script>
+
+  <div class="admin-layout" id="adminApp" style="display: none;">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="admin-logo">
+        <div class="nav-logo-icon">24</div>
+        Admin Panel
+      </div>
+      <nav class="admin-nav">
+        <div class="admin-nav-item active" data-target="dashboard">
+          <i class="fa-solid fa-chart-column"></i> Dashboard
+        </div>
+        <div class="admin-nav-item" data-target="properties">
+          <i class="fa-solid fa-house-flag"></i> Properties
+        </div>
+        <div class="admin-nav-item" data-target="users">
+          <i class="fa-solid fa-users"></i> Users
+        </div>
+        <div class="admin-nav-item" data-target="settings">
+          <i class="fa-solid fa-gear"></i> Settings
+        </div>
+      </nav>
+      <div class="admin-nav-logout" id="logoutBtn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <h2 class="admin-header-title" id="pageTitle">Dashboard Overview</h2>
+        <div class="admin-header-user">
+          <div style="text-align: right; line-height: 1.2;">
+            <div style="font-weight: 600; font-size: 14px; color: var(--dark);" id="adminName">Admin User</div>
+            <div style="font-size: 12px; color: var(--text-muted);" id="adminEmail">admin@24dismil.com</div>
+          </div>
+          <img src="images/favicon.png" alt="Admin" id="adminAvatar">
+        </div>
+      </header>
+
+      <div class="admin-content">
+        
+        <!-- SECTION: DASHBOARD -->
+        <section id="section-dashboard" class="admin-section active">
+          <div class="admin-stats-grid">
+            <div class="admin-stat-card">
+              <div class="admin-stat-info">
+                <h3>Total Properties</h3>
+                <div class="admin-stat-value" id="statTotalProps">0</div>
+              </div>
+              <div class="admin-stat-icon icon-primary"><i class="fa-solid fa-building"></i></div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-info">
+                <h3>Pending Approvals</h3>
+                <div class="admin-stat-value" id="statPendingProps">0</div>
+              </div>
+              <div class="admin-stat-icon icon-warning"><i class="fa-solid fa-clock"></i></div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-info">
+                <h3>Total Users</h3>
+                <div class="admin-stat-value" id="statUsers">0</div>
+              </div>
+              <div class="admin-stat-icon icon-info"><i class="fa-solid fa-users"></i></div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-info">
+                <h3>Total Leads</h3>
+                <div class="admin-stat-value" id="statLeads">0</div>
+              </div>
+              <div class="admin-stat-icon icon-success"><i class="fa-solid fa-chart-line"></i></div>
+            </div>
+          </div>
+
+          <div class="admin-panel-card">
+            <div class="admin-panel-header">
+              <h3>Recent Properties Awaiting Approval</h3>
+              <button class="btn btn-outline btn-sm" onclick="document.querySelector('[data-target=properties]').click()">View All</button>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Property</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Date Posted</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="recentPropertiesTable">
+                  <!-- JS Injected -->
+                  <tr><td colspan="6" style="text-align: center; padding: 40px;">Loading data...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- SECTION: PROPERTIES -->
+        <section id="section-properties" class="admin-section">
+          <div class="admin-panel-card" style="height: calc(100vh - 150px); display: flex; flex-direction: column;">
+            <div class="admin-panel-header">
+              <h3>Manage Property Listings</h3>
+              <div class="admin-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search properties by ID, Title, or City..." id="propSearch">
+              </div>
+            </div>
+            
+            <!-- Filters -->
+            <div style="padding: 16px 24px; border-bottom: 1px solid var(--border-light); background: var(--bg); display: flex; gap: 12px;">
+              <select class="btn btn-outline" style="padding: 6px 12px; font-weight: normal; background: #fff;" id="filterPropStatus">
+                <option value="all">All Statuses</option>
+                <option value="pending" selected>Pending Approval</option>
+                <option value="active">Active</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+
+            <div class="admin-table-wrap" style="flex: 1; overflow-y: auto;">
+              <table class="admin-table">
+                <thead style="position: sticky; top: 0; z-index: 2;">
+                  <tr>
+                    <th>ID</th>
+                    <th>Property Info</th>
+                    <th>Owner/Agent</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="allPropertiesTable">
+                  <!-- JS Injected -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- SECTION: USERS -->
+        <section id="section-users" class="admin-section">
+          <div class="admin-panel-card" style="height: calc(100vh - 150px); display: flex; flex-direction: column;">
+            <div class="admin-panel-header">
+              <h3>Registered Users</h3>
+              <div class="admin-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search by name, email, or phone..." id="userSearch">
+              </div>
+            </div>
+            
+            <div class="admin-table-wrap" style="flex: 1; overflow-y: auto;">
+              <table class="admin-table">
+                <thead style="position: sticky; top: 0; z-index: 2;">
+                  <tr>
+                    <th>Profile</th>
+                    <th>Contact Info</th>
+                    <th>Role</th>
+                    <th>Join Date</th>
+                    <th>Listings</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTable">
+                  <!-- JS Injected -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: SETTINGS -->
+        <section id="section-settings" class="admin-section">
+          <div class="admin-panel-card">
+            <div class="admin-panel-header">
+              <h3>Admin Settings</h3>
+            </div>
+            <div style="padding: 32px; max-width: 600px;">
+              <p style="color: var(--text-muted); margin-bottom: 24px;">Manage core site settings and access controls.</p>
+              
+              <div style="margin-bottom: 30px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 8px;">Authorized Admin Emails</label>
+                <p style="font-size: 13px; color: var(--text-light); margin-bottom: 12px;">These emails have full access to this dashboard.</p>
+                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                  <input type="text" value="admin@24dismil.com" class="form-control" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px;" readonly>
+                </div>
+              </div>
+              
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: rgba(245, 158, 11, 0.1); border: 1px solid var(--warning); border-radius: 8px;">
+                <div>
+                  <h4 style="color: #92400e; margin-bottom: 4px;">Maintenance Mode</h4>
+                  <p style="font-size: 13px; color: #b45309;">Turn off the public facing website.</p>
+                </div>
+                <label style="position: relative; display: inline-block; width: 48px; height: 26px;">
+                  <input type="checkbox" style="opacity: 0; width: 0; height: 0;">
+                  <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;">
+                    <span style="position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%;"></span>
+                  </span>
+                </label>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script type="module" src="js/admin.js"></script>
+  <script>
+    // Very basic UI logic for Tabs (Will move to admin.js)
+    document.querySelectorAll('.admin-nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        // Update styling
+        document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+        
+        // Update Title
+        document.getElementById('pageTitle').innerText = item.innerText.trim();
+        
+        // Show correct section
+        const target = item.dataset.target;
+        document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(`section-${target}`).classList.add('active');
+      });
+    });
+    
+    // Unhide layout (auth check logic goes here)
+    document.getElementById('adminApp').style.display = 'flex';
+  </script>
+</body>
+</html>

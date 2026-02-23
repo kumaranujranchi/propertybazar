@@ -168,6 +168,7 @@ export const createProperty = mutation({
       pricing: args.pricing,
       contactDesc: args.contactDesc,
       isFeatured: isFeatured,
+      approvalStatus: "pending",
     });
     return propertyId;
   },

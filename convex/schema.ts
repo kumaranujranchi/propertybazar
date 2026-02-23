@@ -49,9 +49,11 @@ export default defineSchema({
       contactTime: v.optional(v.string()),
     }),
     isFeatured: v.optional(v.boolean()),
+    approvalStatus: v.optional(v.string()), // 'pending', 'approved', 'rejected'
   }).index("by_transactionType", ["transactionType"])
     .index("by_city", ["location.city"])
-    .index("by_featured", ["isFeatured"]),
+    .index("by_featured", ["isFeatured"])
+    .index("by_approvalStatus", ["approvalStatus"]),
 
   users: defineTable({
     name: v.string(),
