@@ -78,26 +78,13 @@ export async function initNavAuth() {
   if (!loginBtn) return;
 
   if (user) {
+    // Show user's first name — clicking takes them to dashboard
     loginBtn.innerHTML = `<i class="fa-solid fa-user" style="margin-right: 6px;"></i>${user.name.split(' ')[0]}`;
     loginBtn.style.display = 'inline-flex';
     loginBtn.style.alignItems = 'center';
     loginBtn.style.whiteSpace = 'nowrap';
     loginBtn.href = 'dashboard.html';
-
-    // Add logout button next to it
-    const logoutBtn = document.createElement('a');
-    logoutBtn.href = '#';
-    logoutBtn.className = 'nav-btn-login';
-    logoutBtn.textContent = 'Logout';
-    logoutBtn.style.marginLeft = '8px';
-    logoutBtn.style.background = 'transparent';
-    logoutBtn.style.color = 'var(--text-muted)';
-    logoutBtn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      await logout();
-      window.location.reload();
-    });
-    loginBtn.parentElement.insertBefore(logoutBtn, loginBtn.nextSibling);
+    // No logout button in nav — user logs out from inside the dashboard
   } else {
     loginBtn.textContent = 'Login / Register';
     loginBtn.href = 'login.html';
