@@ -151,17 +151,6 @@ function initAISearchAssistant() {
     } else {
         window.renderFilteredProperties();
     }
-
-    // Feedback message after applying filters (delay slightly for realism)
-    setTimeout(() => {
-        const visibleProperties = document.querySelectorAll('.property-card:not([style*="display: none"])');
-        // if properties array is globally available or checking DOM elements
-        if (visibleProperties.length > 0) {
-            addMessage("Maine properties filter kar di hain, aap page par dekh sakte hain. Kya mujhe aapka naam aur number mil sakta hai taaki main inki details bhej sakoon?", 'bot');
-        } else {
-            addMessage("Maaf kijiyega, aapke search ke hisab se abhi koi property nahi mili. Aap chahein to kuch aur search kar sakte hain.", 'bot');
-        }
-    }, 1000);
   }
 
   sendBtn.addEventListener('click', handleSendMessage);
