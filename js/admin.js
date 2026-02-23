@@ -20,13 +20,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   // Logout
   document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem("pb_token");
+    localStorage.removeItem("pb_session");
     window.location.href = "login.html";
   });
 });
 
 async function checkAdminAuth() {
-  const token = localStorage.getItem("pb_token");
+  const token = localStorage.getItem("pb_session");
   if (!token) {
     window.location.href = "login.html?redirect=admin";
     return;
@@ -34,7 +34,7 @@ async function checkAdminAuth() {
   
   try {
     // We try to call a simple admin query to verify token/access
-    await convex.query("admin:getDashboardStats", {});
+    await convex.query("admin:getDashboardStats", { token });
     document.getElementById('adminApp').style.display = 'flex';
   } catch (err) {
     console.error("Admin Auth Failed", err);
@@ -62,21 +62,22 @@ function initAdminNav() {
 }
 
 async function loadDashboardData() {
+  const token = localStorage.getItem("pb_session");
   try {
     // 1. Stats
-    const stats = await convex.query("admin:getDashboardStats", {});
+    const stats = await convex.query("admin:getDashboardStats", { token });
     document.getElementById('statTotalProps').textContent = stats.totalProperties;
     document.getElementById('statPendingProps').textContent = stats.pendingApprovals;
     document.getElementById('statUsers').textContent = stats.totalUsers;
     document.getElementById('statLeads').textContent = stats.totalLeads;
 
     // 2. Properties
-    allProperties = await convex.query("admin:getAllProperties", {});
+    allProperties = await convex.query("admin:getAllProperties", { token });
     renderPropertiesTable();
     renderRecentProperties(allProperties.filter(p => p.approvalStatus === 'pending' || !p.approvalStatus).slice(0, 5));
 
     // 3. Users
-    allUsers = await convex.query("admin:getAllUsers", {});
+    allUsers = await convex.query("admin:getAllUsers", { token });
     renderUsersTable();
 
   } catch (err) {
@@ -226,8 +227,9 @@ function renderUsersTable() {
 // Admin Actions global expose
 window.updatePropertyStatus = async (id, status) => {
   if (!confirm(`Are you sure you want to mark this property as ${status}?`)) return;
+  const token = localStorage.getItem("pb_session");
   try {
-    await convex.mutation("admin:updatePropertyStatus", { propertyId: id, status: status });
+    await convex.mutation("admin:updatePropertyStatus", { token, propertyId: id, status: status });
     if(window.showToast) window.showToast(`Property marked as ${status}`);
     await loadDashboardData(); // Refresh UI
   } catch (err) {
@@ -240,8 +242,9 @@ window.deletePropertyAdmin = async (id) => {
   const pass = prompt("Type 'DELETE' to confirm deletion of this property permanently.");
   if (pass !== 'DELETE') return;
   
+  const token = localStorage.getItem("pb_session");
   try {
-    await convex.mutation("admin:deleteProperty", { propertyId: id });
+    await convex.mutation("admin:deleteProperty", { token, propertyId: id });
     if(window.showToast) window.showToast("Property deleted successfully");
     await loadDashboardData();
   } catch (err) {
