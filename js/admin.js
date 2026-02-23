@@ -106,21 +106,21 @@ function renderRecentProperties(recentProps) {
   
   tbody.innerHTML = recentProps.map(p => `
     <tr>
-      <td class="td-property">
-        <img src="${p.photos && p.photos.length ? 'https://happy-leopard-557.convex.cloud/api/storage/' + p.photos[0] : 'images/placeholder.jpg'}" alt="Prop">
-        <div class="td-prop-info">
+      <td class="td-prop">
+        <img src="${p.photos && p.photos.length ? p.photos[0] : 'images/placeholder.jpg'}" alt="Property" onerror="this.src='images/placeholder.jpg'">
+        <div>
           <div class="td-prop-title">${p.details?.bhk || ''} ${p.propertyType}</div>
           <div class="td-prop-loc">${p.location?.locality}, ${p.location?.city}</div>
         </div>
       </td>
-      <td><span class="badge ${p.transactionType === 'rent' ? 'badge-warning' : 'badge-primary'}">${p.transactionType.toUpperCase()}</span></td>
+      <td><span class="badge badge-sale">${p.transactionType?.toUpperCase()}</span></td>
       <td style="font-weight: 600;">₹${p.pricing?.expectedPrice?.toLocaleString('en-IN') || 'N/A'}</td>
       <td>${new Date(p._creationTime).toLocaleDateString()}</td>
-      <td><span class="status-badge status-pending">Pending</span></td>
+      <td><span class="status-badge s-pending">Pending</span></td>
       <td>
-        <div class="td-actions">
-          <button class="action-btn approve" title="Approve" onclick="updatePropertyStatus('${p._id}', 'active')"><i class="fa-solid fa-check"></i></button>
-          <button class="action-btn view" title="View Details" onclick="window.open('property-detail.html?id=${p._id}', '_blank')"><i class="fa-solid fa-eye"></i></button>
+        <div class="action-btns">
+          <button class="act-btn approve" title="Approve & Make Live" onclick="updatePropertyStatus('${p._id}', 'active')"><i class="fa-solid fa-check"></i></button>
+          <button class="act-btn view" title="View on Site" onclick="window.open('property-detail.html?id=${p._id}', '_blank')"><i class="fa-solid fa-eye"></i></button>
         </div>
       </td>
     </tr>
@@ -153,35 +153,34 @@ function renderPropertiesTable() {
 
   tbody.innerHTML = filtered.map(p => {
     const status = p.approvalStatus || 'pending';
-    let statusClass = 'status-pending';
-    let statusLabel = 'Pending';
-    if (status === 'active') { statusClass = 'status-active'; statusLabel = 'Active'; }
-    if (status === 'rejected') { statusClass = 'status-rejected'; statusLabel = 'Rejected'; }
+    let statusClass = 's-pending', statusLabel = 'Pending';
+    if (status === 'active') { statusClass = 's-active'; statusLabel = '🟢 Live'; }
+    if (status === 'rejected') { statusClass = 's-rejected'; statusLabel = 'Rejected'; }
+
+    const photoSrc = p.photos && p.photos.length ? p.photos[0] : 'images/placeholder.jpg';
 
     return `
     <tr>
-      <td style="font-family: monospace; font-size: 12px; color: var(--text-light);">${p._id.substring(0,8)}...</td>
-      <td class="td-property">
-        <img src="${p.photos && p.photos.length ? 'https://happy-leopard-557.convex.cloud/api/storage/' + p.photos[0] : 'images/placeholder.jpg'}" alt="Prop">
-        <div class="td-prop-info">
+      <td class="td-prop">
+        <img src="${photoSrc}" alt="Property" onerror="this.src='images/placeholder.jpg'" style="width:56px;height:44px;border-radius:6px;object-fit:cover;">
+        <div>
           <div class="td-prop-title">${p.details?.bhk || ''} ${p.propertyType}</div>
           <div class="td-prop-loc">${p.location?.locality}, ${p.location?.city}</div>
         </div>
       </td>
       <td>
-        <div class="td-prop-info">
-          <div class="td-prop-title">${p.contactDesc?.name || 'Unknown'}</div>
-          <div class="td-prop-loc" style="font-family: monospace;">${p.contactDesc?.mobile || 'No Phone'}</div>
-        </div>
+        <div style="font-size:14px;font-weight:600;">${p.contactDesc?.name || 'Unknown'}</div>
+        <div style="font-size:12px;color:#6b7280;font-family:monospace;">${p.contactDesc?.mobile || ''}</div>
       </td>
       <td style="font-weight: 600;">₹${p.pricing?.expectedPrice?.toLocaleString('en-IN') || 'N/A'}</td>
       <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+      <td style="font-size:13px;color:#6b7280;">${new Date(p._creationTime).toLocaleDateString()}</td>
       <td>
-        <div class="td-actions">
-          ${status !== 'active' ? `<button class="action-btn approve" title="Approve" onclick="updatePropertyStatus('${p._id}', 'active')"><i class="fa-solid fa-check"></i></button>` : ''}
-          ${status !== 'rejected' ? `<button class="action-btn reject" title="Reject" onclick="updatePropertyStatus('${p._id}', 'rejected')"><i class="fa-solid fa-xmark"></i></button>` : ''}
-          <button class="action-btn view" title="View Property" onclick="window.open('property-detail.html?id=${p._id}', '_blank')"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
-          <button class="action-btn reject" title="Delete Property" onclick="deletePropertyAdmin('${p._id}')"><i class="fa-solid fa-trash"></i></button>
+        <div class="action-btns">
+          ${status !== 'active' ? `<button class="act-btn approve" title="Approve - Make Live" onclick="updatePropertyStatus('${p._id}', 'active')"><i class="fa-solid fa-check"></i></button>` : ''}
+          ${status === 'active' ? `<button class="act-btn" title="Disable - Remove from Site" onclick="updatePropertyStatus('${p._id}', 'rejected')" style="color:#f59e0b;" onmouseover="this.style.color='#d97706';this.style.borderColor='#d97706';" onmouseout="this.style.color='#f59e0b';this.style.borderColor='#e0e3e9';"><i class="fa-solid fa-circle-pause"></i></button>` : ''}
+          <button class="act-btn view" title="View on Site" onclick="window.open('property-detail.html?id=${p._id}', '_blank')"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+          <button class="act-btn reject" title="Delete Permanently" onclick="deletePropertyAdmin('${p._id}')"><i class="fa-solid fa-trash"></i></button>
         </div>
       </td>
     </tr>

@@ -16,8 +16,12 @@ export const getProperties = query({
     }
     const results = await propertiesQuery.order("desc").collect();
     
+    // Only show properties that are NOT rejected (disabled)
+    // Properties with no approvalStatus are visible by default (older listings)
+    const visibleResults = results.filter(p => p.approvalStatus !== "rejected");
+    
     // Sort so featured comes first, while keeping descending order for the rest
-    const properties = results.sort((a, b) => {
+    const properties = visibleResults.sort((a, b) => {
       if (a.isFeatured && !b.isFeatured) return -1;
       if (!a.isFeatured && b.isFeatured) return 1;
       return 0; 
