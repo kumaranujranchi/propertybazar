@@ -78,11 +78,28 @@ export async function initNavAuth() {
   if (!loginBtn) return;
 
   if (user) {
-    // Show user's first name — clicking takes them to dashboard
-    loginBtn.innerHTML = `<i class="fa-solid fa-user" style="margin-right: 6px;"></i>${user.name.split(' ')[0]}`;
-    loginBtn.style.display = 'inline-flex';
-    loginBtn.style.alignItems = 'center';
-    loginBtn.style.whiteSpace = 'nowrap';
+    const firstName = user.name.split(' ')[0];
+    const initial = firstName.charAt(0).toUpperCase();
+    // Clean avatar chip: colored circle + name, goes to dashboard on click
+    loginBtn.innerHTML = `
+      <span style="
+        display:inline-flex; align-items:center; gap:8px;
+        background:#fff; border:1px solid #e0e3e9;
+        border-radius:99px; padding:5px 14px 5px 6px;
+        font-size:14px; font-weight:600; color:#1a2230;
+        box-shadow:0 1px 3px rgba(0,0,0,0.06); cursor:pointer;
+        transition:box-shadow 0.2s;
+      " onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.12)'"
+         onmouseout="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.06)'">
+        <span style="
+          width:26px; height:26px; border-radius:50%;
+          background:#e84118; color:#fff;
+          display:flex; align-items:center; justify-content:center;
+          font-size:12px; font-weight:800; flex-shrink:0;
+        ">${initial}</span>
+        ${firstName}
+      </span>`;
+    loginBtn.style.cssText = 'border:none; background:none; padding:0;';
     loginBtn.href = 'dashboard.html';
     // No logout button in nav — user logs out from inside the dashboard
   } else {
