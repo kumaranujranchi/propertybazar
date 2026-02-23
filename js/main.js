@@ -1,6 +1,11 @@
 // ========== MAIN.JS — Core site functionality ==========
 
 document.addEventListener('DOMContentLoaded', () => {
+  // *** AUTH: Update nav login button on every page ***
+  import('./auth.js').then(({ initNavAuth }) => {
+    initNavAuth();
+  }).catch(() => {}); // Silently fail if not applicable
+
   initNav();
   initSearchTabs();
   initCityAutocomplete();
