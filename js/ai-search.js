@@ -34,7 +34,7 @@ function initAISearchAssistant() {
     </div>
     <div class="ai-chat-messages" id="ai-chat-messages">
       <div class="ai-msg bot">
-        Namaste! I can help you find your dream property. How can I assist you today? 
+        Namaste! I can help you find your dream property. Aap kis bhasha mein baat karna pasand karenge? (Hindi / English / Hinglish)
         <div style="font-size:11px; margin-top:8px; opacity:0.7">Examples:<br>• "Patna mein 2bhk flat chahiye"<br>• "Commercial shop in Delhi under 1 Cr"</div>
       </div>
     </div>
@@ -151,6 +151,17 @@ function initAISearchAssistant() {
     } else {
         window.renderFilteredProperties();
     }
+
+    // Feedback message after applying filters (delay slightly for realism)
+    setTimeout(() => {
+        const visibleProperties = document.querySelectorAll('.property-card:not([style*="display: none"])');
+        // if properties array is globally available or checking DOM elements
+        if (visibleProperties.length > 0) {
+            addMessage("Maine properties filter kar di hain, aap page par dekh sakte hain. Kya mujhe aapka naam aur number mil sakta hai taaki main inki details bhej sakoon?", 'bot');
+        } else {
+            addMessage("Maaf kijiyega, aapke search ke hisab se abhi koi property nahi mili. Aap chahein to kuch aur search kar sakte hain.", 'bot');
+        }
+    }, 1000);
   }
 
   sendBtn.addEventListener('click', handleSendMessage);
