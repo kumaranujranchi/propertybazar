@@ -50,11 +50,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         id: p._id,
         convexId: p._id,
         qualityScore: score,
-        type: (p.transactionType || '').toLowerCase().includes('rent') ? 'rent' : 'buy',
+        type: (/commercial|shop|office|warehouse/i.test(p.propertyType || '')) ? 'commercial' : ((p.transactionType || '').toLowerCase().includes('rent') || (p.transactionType || '').toLowerCase().includes('pg') ? 'rent' : 'buy'),
         propType: p.propertyType,
         bhk: parseInt(p.details?.bhk) || 0,
         price,
-        priceDisplay: '₹' + price.toLocaleString('en-IN') + ((p.transactionType || '').toLowerCase().includes('rent') ? '/mo' : ''),
+        priceDisplay: '₹' + price.toLocaleString('en-IN') + (((p.transactionType || '').toLowerCase().includes('rent') || (p.transactionType || '').toLowerCase().includes('pg')) ? '/mo' : ''),
         title,
         specs,   // property-type-aware specs
         location: `${p.location?.locality || ''}, ${p.location?.city || ''}`,

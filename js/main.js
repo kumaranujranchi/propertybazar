@@ -234,7 +234,18 @@ function renderFilteredProperties() {
   const tab = document.querySelector('.search-tab.active')?.dataset?.type || 'buy';
   let filtered = window.properties.filter(p => p.type === tab || tab === 'all');
 
-  if (activeFilters.types.length) filtered = filtered.filter(p => activeFilters.types.includes(p.propType));
+  if (activeFilters.types.length) {
+    filtered = filtered.filter(p => {
+      const typeStr = (p.propType || '').toLowerCase();
+      return activeFilters.types.some(t => {
+        const filterStr = t.toLowerCase();
+        if (filterStr === 'villa') return typeStr.includes('villa');
+        if (filterStr === 'plot') return typeStr.includes('plot') || typeStr.includes('land');
+        if (filterStr === 'pg') return typeStr.includes('pg');
+        return typeStr.includes(filterStr);
+      });
+    });
+  }
   if (activeFilters.bhks.length) filtered = filtered.filter(p => activeFilters.bhks.includes(p.bhk));
   if (activeFilters.statuses.length) filtered = filtered.filter(p => activeFilters.statuses.includes(p.status));
 
