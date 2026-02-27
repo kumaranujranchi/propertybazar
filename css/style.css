@@ -1714,7 +1714,65 @@ textarea {
   color: var(--primary);
 }
 
-/* ========== PROPERTIES PAGE ========== */
+/* ========== FOOTER DOWNLOAD APP ========== */
+.footer-download {
+  background: linear-gradient(135deg, rgba(229, 83, 45, 0.12), rgba(255, 168, 0, 0.08));
+  border: 1px solid rgba(229, 83, 45, 0.2);
+  border-radius: 12px;
+  padding: 20px 16px;
+  position: relative;
+  overflow: hidden;
+}
+.footer-download::before {
+  content: '\f10b';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 80px;
+  color: rgba(229, 83, 45, 0.07);
+  pointer-events: none;
+}
+.footer-download h4 {
+  color: #fff !important;
+  font-size: 14px !important;
+  margin-bottom: 8px !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.footer-download h4::before {
+  content: '\f3cd';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  color: var(--primary);
+  font-size: 14px;
+}
+.footer-download-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.footer-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.app-badge {
+  height: 36px;
+  width: auto;
+  border-radius: 6px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: block;
+}
+.app-badge:hover {
+  transform: scale(1.05) translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.3);
+}
+
 .page-hero {
   background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 100%);
   padding: 40px 0;
