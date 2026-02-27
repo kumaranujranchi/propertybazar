@@ -442,7 +442,7 @@ textarea {
   position: relative;
   display: flex;
   align-items: flex-end;
-  padding-bottom: 80px;
+  padding-bottom: 0;
   overflow: hidden;
   margin-top: 64px;
 }
@@ -470,13 +470,14 @@ textarea {
   z-index: 2;
   max-width: 1000px;
   width: calc(100% - 40px);
-  margin: 0 20px 80px 20px;
-  padding: 60px 50px;
+  margin: 0 auto 0 auto;
+  padding: 60px 40px 40px;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: var(--radius-lg);
+  border-bottom: none;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 @media (max-width: 768px) {
@@ -1276,48 +1277,6 @@ textarea {
   font-size: 16px;
   max-width: 420px;
 }
-.app-store-btns {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-}
-.store-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: var(--radius-sm);
-  transition: var(--transition);
-}
-.store-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-.store-btn-icon {
-  font-size: 26px;
-}
-.store-btn-text {
-  text-align: left;
-}
-.store-btn-sub {
-  font-size: 10px;
-  opacity: 0.75;
-  display: block;
-}
-.store-btn-name {
-  font-size: 15px;
-  font-weight: 700;
-  display: block;
-}
-.app-phones {
-  font-size: 80px;
-  text-align: right;
-}
-
-/* ========== ADVERTISER MODAL (Modern Redesign) ========== */
 .adv-modal-overlay {
   display: none;
   position: fixed;
