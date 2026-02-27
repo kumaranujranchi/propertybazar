@@ -459,10 +459,10 @@ textarea {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    135deg,
-    rgba(26, 26, 46, 0.82) 0%,
-    rgba(26, 26, 46, 0.55) 60%,
-    rgba(26, 26, 46, 0.3) 100%
+    to top,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0) 100%
   );
 }
 .hero-content {
