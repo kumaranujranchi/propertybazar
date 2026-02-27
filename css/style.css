@@ -345,7 +345,7 @@ textarea {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 28px;
 }
 .nav-link {
   padding: 6px 12px;
