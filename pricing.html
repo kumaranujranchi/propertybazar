@@ -272,7 +272,7 @@
             <div class="nav-logo-icon">24</div>
             <span class="nav-logo-text">24Dismil.com</span>
           </a>
-          <div class="nav-city">
+          <button class="nav-city" id="citySelectorBtn">
             <i class="fa-solid fa-location-dot"></i> Delhi NCR
             <i class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
           </div>
@@ -406,15 +406,15 @@
             class="btn-plan btn-primary upgrade-btn"
             data-tier="standard_individual"
             data-days="30"
-            data-price="249"
+            data-price="0"
           >
-            Buy Standard Plan
+            Get Standard Plan - <span style="text-decoration: underline;">Free Now</span>
           </button>
         </div>
 
         <!-- Premium -->
         <div class="pricing-card featured">
-          <div class="featured-badge">Most Popular</div>
+          <div class="featured-badge">Most Popular - <span style="background: #fff; color: var(--primary); padding: 2px 6px; border-radius: 4px; margin-left: 5px;">FREE NOW</span></div>
           <div class="plan-name">Premium</div>
           <div class="plan-desc">
             For serious sellers who want fast closures.
@@ -460,9 +460,9 @@
             class="btn-plan btn-primary upgrade-btn"
             data-tier="premium"
             data-days="90"
-            data-price="499"
+            data-price="0"
           >
-            Upgrade to Premium
+            Upgrade to Premium - <span style="text-decoration: underline;">Free Now</span>
           </button>
         </div>
       </section>
@@ -691,8 +691,8 @@
     <!-- MOCK PAYMENT MODAL -->
     <div class="modal-overlay" id="paymentModal">
       <div class="payment-modal">
-        <h3 id="paymentTitle">Complete Payment</h3>
-        <p id="paymentDesc">You will be charged ₹499 securely.</p>
+        <h3 id="paymentTitle">Confirm Free Upgrade</h3>
+        <p id="paymentDesc">This upgrade is currently free for all users!</p>
 
         <div class="loader" id="paymentLoader"></div>
 
@@ -702,7 +702,7 @@
             id="btnConfirmPay"
             style="width: 100%; margin-bottom: 12px"
           >
-            Mock Pay Now
+            Upgrade for Free
           </button>
           <button class="btn btn-outline" id="btnCancelPay" style="width: 100%">
             Cancel
@@ -718,7 +718,7 @@
             margin-top: 20px;
           "
         >
-          <i class="fa-solid fa-circle-check"></i> Payment Successful!
+          <i class="fa-solid fa-circle-check"></i> Upgrade Successful!
           Redirecting...
         </div>
       </div>
@@ -810,9 +810,130 @@
       </div>
     </footer>
 
+    <!-- CITY SELECTION MODAL -->
+    <div class="city-modal-overlay" id="cityModal">
+      <div class="city-modal">
+        <div class="city-modal-header">
+          <h3>Select your preferred City</h3>
+          <button class="city-modal-close" id="closeCityModal"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div class="city-modal-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="citySearchInput" placeholder="Search your city...">
+        </div>
+
+        <div class="city-popular-section">
+          <div class="city-popular-grid">
+            <div class="city-popular-item" data-city="Ahmedabad">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/taj-mahal.png" alt="Ahmedabad"></div>
+              <span>Ahmedabad</span>
+            </div>
+            <div class="city-popular-item" data-city="Bangalore">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/vidhana-soudha.png" alt="Bangalore"></div>
+              <span>Bangalore</span>
+            </div>
+            <div class="city-popular-item" data-city="Gurgaon">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/skyscrapers.png" alt="Gurgaon"></div>
+              <span>Gurgaon</span>
+            </div>
+            <div class="city-popular-item" data-city="Hyderabad">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/charminar.png" alt="Hyderabad"></div>
+              <span>Hyderabad</span>
+            </div>
+            <div class="city-popular-item" data-city="Mumbai">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/gateway-of-india.png" alt="Mumbai"></div>
+              <span>Mumbai</span>
+            </div>
+            <div class="city-popular-item" data-city="New Delhi">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/india-gate.png" alt="New Delhi"></div>
+              <span>New Delhi</span>
+            </div>
+            <div class="city-popular-item" data-city="Noida">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/office-building.png" alt="Noida"></div>
+              <span>Noida</span>
+            </div>
+            <div class="city-popular-item" data-city="Pune">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/temple.png" alt="Pune"></div>
+              <span>Pune</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="city-more-info">
+          <span>More Cities</span> <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        <div class="city-list-grid" id="allCitiesList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+
     <script src="js/properties.js"></script>
+    <!-- CITY SELECTION MODAL -->
+    <div class="city-modal-overlay" id="cityModal">
+      <div class="city-modal">
+        <div class="city-modal-header">
+          <h3>Select your preferred City</h3>
+          <button class="city-modal-close" id="closeCityModal"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div class="city-modal-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="citySearchInput" placeholder="Search your city...">
+        </div>
+
+        <div class="city-popular-section">
+          <div class="city-popular-grid">
+            <div class="city-popular-item" data-city="Ahmedabad">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/taj-mahal.png" alt="Ahmedabad"></div>
+              <span>Ahmedabad</span>
+            </div>
+            <div class="city-popular-item" data-city="Bangalore">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/vidhana-soudha.png" alt="Bangalore"></div>
+              <span>Bangalore</span>
+            </div>
+            <div class="city-popular-item" data-city="Gurgaon">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/skyscrapers.png" alt="Gurgaon"></div>
+              <span>Gurgaon</span>
+            </div>
+            <div class="city-popular-item" data-city="Hyderabad">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/charminar.png" alt="Hyderabad"></div>
+              <span>Hyderabad</span>
+            </div>
+            <div class="city-popular-item" data-city="Mumbai">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/gateway-of-india.png" alt="Mumbai"></div>
+              <span>Mumbai</span>
+            </div>
+            <div class="city-popular-item" data-city="New Delhi">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/india-gate.png" alt="New Delhi"></div>
+              <span>New Delhi</span>
+            </div>
+            <div class="city-popular-item" data-city="Noida">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/office-building.png" alt="Noida"></div>
+              <span>Noida</span>
+            </div>
+            <div class="city-popular-item" data-city="Pune">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/temple.png" alt="Pune"></div>
+              <span>Pune</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="city-more-info">
+          <span>More Cities</span> <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        <div class="city-list-grid" id="allCitiesList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
     <script src="js/main.js"></script>
     <script src="js/city-selector.js"></script>
     <script type="module" src="js/pricing.js"></script>
+<script src="js/city-selector.js"></script>
+
   </body>
 </html>

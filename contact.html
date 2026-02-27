@@ -20,9 +20,9 @@
         <div class="nav-logo-icon">24</div>
         <span class="nav-logo-text">24Dismil.com</span>
       </a>
-      <div class="nav-city">
-        <i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
-      </div>
+      <button class="nav-city" id="citySelectorBtn">
+        <i class="fa-solid fa-location-dot"></i> <span id="currentCityText">Select City</span> <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
+      </button>
       <div class="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="properties.html?type=buy" class="nav-link">Buy</a>
@@ -211,6 +211,67 @@
 </footer>
 
 <script src="js/properties.js"></script>
+    <!-- CITY SELECTION MODAL -->
+    <div class="city-modal-overlay" id="cityModal">
+      <div class="city-modal">
+        <div class="city-modal-header">
+          <h3>Select your preferred City</h3>
+          <button class="city-modal-close" id="closeCityModal"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div class="city-modal-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="citySearchInput" placeholder="Search your city...">
+        </div>
+
+        <div class="city-popular-section">
+          <div class="city-popular-grid">
+            <div class="city-popular-item" data-city="Ahmedabad">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/taj-mahal.png" alt="Ahmedabad"></div>
+              <span>Ahmedabad</span>
+            </div>
+            <div class="city-popular-item" data-city="Bangalore">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/vidhana-soudha.png" alt="Bangalore"></div>
+              <span>Bangalore</span>
+            </div>
+            <div class="city-popular-item" data-city="Gurgaon">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/skyscrapers.png" alt="Gurgaon"></div>
+              <span>Gurgaon</span>
+            </div>
+            <div class="city-popular-item" data-city="Hyderabad">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/charminar.png" alt="Hyderabad"></div>
+              <span>Hyderabad</span>
+            </div>
+            <div class="city-popular-item" data-city="Mumbai">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/gateway-of-india.png" alt="Mumbai"></div>
+              <span>Mumbai</span>
+            </div>
+            <div class="city-popular-item" data-city="New Delhi">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/india-gate.png" alt="New Delhi"></div>
+              <span>New Delhi</span>
+            </div>
+            <div class="city-popular-item" data-city="Noida">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/office-building.png" alt="Noida"></div>
+              <span>Noida</span>
+            </div>
+            <div class="city-popular-item" data-city="Pune">
+              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/temple.png" alt="Pune"></div>
+              <span>Pune</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="city-more-info">
+          <span>More Cities</span> <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        <div class="city-list-grid" id="allCitiesList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
 <script src="js/main.js"></script>
+<script src="js/city-selector.js"></script>
+
 </body>
 </html>
