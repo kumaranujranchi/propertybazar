@@ -260,6 +260,56 @@
           transform: rotate(360deg);
         }
       }
+      /* ===== FREE Now Tooltip ===== */
+      .free-tooltip-wrap {
+        position: relative;
+        display: block;
+      }
+      .free-tooltip {
+        position: absolute;
+        bottom: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #ff6b00, #ffa800);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 6px 14px;
+        border-radius: 20px;
+        white-space: nowrap;
+        box-shadow: 0 4px 14px rgba(255, 107, 0, 0.4);
+        overflow: hidden;
+        z-index: 1;
+        animation: tooltip-bounce 2s ease-in-out infinite;
+      }
+      .free-tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: #ffa800;
+      }
+      /* Glowing line animation */
+      .free-tooltip-glow {
+        position: absolute;
+        top: 0;
+        left: -60%;
+        width: 40%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+        animation: glow-sweep 2s linear infinite;
+        border-radius: 20px;
+      }
+      @keyframes glow-sweep {
+        0%   { left: -60%; }
+        100% { left: 120%; }
+      }
+      @keyframes tooltip-bounce {
+        0%, 100% { transform: translateX(-50%) translateY(0px); }
+        50%       { transform: translateX(-50%) translateY(-4px); }
+      }
     </style>
     <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
   </head>
@@ -275,7 +325,7 @@
           <button class="nav-city" id="citySelectorBtn">
             <i class="fa-solid fa-location-dot"></i> Delhi NCR
             <i class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
-          </div>
+          </button>
           <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
             <a href="properties.html?type=buy" class="nav-link">Buy</a>
@@ -402,19 +452,25 @@
               Standard search ranking
             </li>
           </ul>
-          <button
-            class="btn-plan btn-primary upgrade-btn"
-            data-tier="standard_individual"
-            data-days="30"
-            data-price="0"
-          >
-            Get Standard Plan - <span style="text-decoration: underline;">Free Now</span>
-          </button>
+          <div class="free-tooltip-wrap">
+            <div class="free-tooltip">
+              <span class="free-tooltip-glow"></span>
+              ✨ FREE Now!
+            </div>
+            <button
+              class="btn-plan btn-primary upgrade-btn"
+              data-tier="standard_individual"
+              data-days="30"
+              data-price="0"
+            >
+              Get Standard Plan
+            </button>
+          </div>
         </div>
 
         <!-- Premium -->
         <div class="pricing-card featured">
-          <div class="featured-badge">Most Popular - <span style="background: #fff; color: var(--primary); padding: 2px 6px; border-radius: 4px; margin-left: 5px;">FREE NOW</span></div>
+          <div class="featured-badge">Most Popular</div>
           <div class="plan-name">Premium</div>
           <div class="plan-desc">
             For serious sellers who want fast closures.
@@ -456,14 +512,20 @@
               Upload up to 15 photos
             </li>
           </ul>
-          <button
-            class="btn-plan btn-primary upgrade-btn"
-            data-tier="premium"
-            data-days="90"
-            data-price="0"
-          >
-            Upgrade to Premium - <span style="text-decoration: underline;">Free Now</span>
-          </button>
+          <div class="free-tooltip-wrap">
+            <div class="free-tooltip">
+              <span class="free-tooltip-glow"></span>
+              ✨ FREE Now!
+            </div>
+            <button
+              class="btn-plan btn-primary upgrade-btn"
+              data-tier="premium"
+              data-days="90"
+              data-price="0"
+            >
+              Upgrade to Premium
+            </button>
+          </div>
         </div>
       </section>
 
