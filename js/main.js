@@ -24,12 +24,45 @@ function initNav() {
   const header = document.querySelector('.header');
   const hamburger = document.querySelector('.hamburger');
   const mobileMenu = document.querySelector('.mobile-menu');
+  const navLinks = document.querySelectorAll('.nav-links .nav-link');
 
   if (header) {
     window.addEventListener('scroll', () => {
       header.classList.toggle('scrolled', window.scrollY > 30);
     });
   }
+
+  // Header dynamic filtering on properties page
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const url = new URL(link.href, window.location.origin);
+      const type = url.searchParams.get('type');
+      
+      if (type && window.location.pathname.includes('properties.html')) {
+        e.preventDefault();
+        
+        // Update URL without reload
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.set('type', type);
+        window.history.pushState({}, '', newUrl);
+
+        // Update search tabs
+        const tabs = document.querySelectorAll('.search-tab');
+        tabs.forEach(t => {
+          t.classList.toggle('active', t.dataset.type === type);
+        });
+
+        // Update header active state
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+
+        // Trigger filter
+        if (typeof window.renderFilteredProperties === 'function') {
+          window.renderFilteredProperties();
+        }
+      }
+    });
+  });
 
   if (hamburger && mobileMenu) {
     hamburger.addEventListener('click', () => {
@@ -58,12 +91,48 @@ function initNav() {
 function initSearchTabs() {
   const tabs = document.querySelectorAll('.search-tab');
   const mobileSelector = document.getElementById('mobileTypeSelector');
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlType = urlParams.get('type');
+
+  // Sync tabs with URL parameter on load
+  if (urlType) {
+    tabs.forEach(t => {
+      t.classList.toggle('active', t.dataset.type === urlType);
+    });
+    // Also update header active state
+    const navLinks = document.querySelectorAll('.nav-links .nav-link');
+    navLinks.forEach(link => {
+      const linkUrl = new URL(link.href, window.location.origin);
+      if (linkUrl.searchParams.get('type') === urlType) {
+        navLinks.forEach(nl => nl.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       if (mobileSelector) mobileSelector.value = tab.dataset.type;
+      
+      // Update header links state to match tabs
+      const type = tab.dataset.type;
+      const navLinks = document.querySelectorAll('.nav-links .nav-link');
+      navLinks.forEach(link => {
+        const linkUrl = new URL(link.href, window.location.origin);
+        link.classList.toggle('active', linkUrl.searchParams.get('type') === type);
+      });
+
+      // Update URL if on properties page
+      if (window.location.pathname.includes('properties.html')) {
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.set('type', type);
+        window.history.pushState({}, '', newUrl);
+        if (typeof window.renderFilteredProperties === 'function') {
+          window.renderFilteredProperties();
+        }
+      }
     });
   });
 
