@@ -654,6 +654,57 @@ textarea {
   transform: translateY(-1px);
 }
 
+@media (max-width: 768px) {
+  .search-tabs {
+    display: none;
+  }
+  .search-mobile-selector {
+    display: block;
+    position: relative;
+    background: var(--bg);
+    padding: 2px;
+    border-bottom: 1px solid var(--border);
+  }
+  .search-mobile-selector select {
+    width: 100%;
+    padding: 14px 40px 14px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary);
+    border: none;
+    background: #fff;
+    appearance: none;
+    outline: none;
+  }
+  .search-mobile-selector i {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary);
+    pointer-events: none;
+  }
+  .search-body {
+    flex-direction: column;
+    padding: 16px;
+    gap: 12px;
+  }
+  .search-field {
+    width: 100%;
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .search-divider {
+    display: none;
+  }
+  .search-btn {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 4px;
+  }
+}
+
 /* Stats Bar */
 .hero-stats {
   display: flex;
