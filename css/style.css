@@ -470,14 +470,14 @@ textarea {
   z-index: 2;
   max-width: 1000px;
   width: calc(100% - 40px);
-  margin: 0 auto 0 auto;
+  margin: 0 auto 30px auto;
   padding: 60px 40px 40px;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-bottom: none;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-radius: var(--radius-lg);
+
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 @media (max-width: 768px) {
