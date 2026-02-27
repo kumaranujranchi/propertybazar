@@ -290,6 +290,10 @@ textarea {
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
 }
+.header .container {
+  max-width: 100%;
+  padding: 0 40px;
+}
 .header.scrolled {
   box-shadow: var(--shadow);
 }
@@ -345,7 +349,7 @@ textarea {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 32px;
   margin-left: auto;
 }
 .nav-link {
