@@ -346,6 +346,7 @@ textarea {
   display: flex;
   align-items: center;
   gap: 28px;
+  margin-left: auto;
 }
 .nav-link {
   padding: 6px 12px;
@@ -365,7 +366,6 @@ textarea {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-left: auto;
 }
 .nav-btn-post {
   background: var(--primary);
