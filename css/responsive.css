@@ -6,8 +6,10 @@
 /* ---- Large screens ---- */
 @media (max-width: 1200px) {
   .properties-grid { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: 1.5fr 1fr 1fr; }
-  .footer-grid .footer-col:last-child { grid-column: 1 / -1; }
+  .footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 20px; }
+  .footer-grid .footer-download { grid-column: 1 / -1; }
+  .footer-download { flex-direction: row; align-items: flex-start; gap: 24px; }
+  .footer-badges { flex-direction: row; }
   .team-grid { grid-template-columns: repeat(3, 1fr); }
   .prop-types-grid { grid-template-columns: repeat(4, 1fr); }
 }
