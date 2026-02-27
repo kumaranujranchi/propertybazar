@@ -441,8 +441,8 @@ textarea {
   min-height: 100vh;
   position: relative;
   display: flex;
-  align-items: flex-start;
-  padding-top: 180px;
+  align-items: flex-end;
+  padding-bottom: 80px;
   overflow: hidden;
   margin-top: 64px;
 }
