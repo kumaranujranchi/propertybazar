@@ -1,873 +1,1265 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      24Dismil.com - India's No.1 Real Estate Portal | Buy, Sell & Rent
+      Properties
+    </title>
+    <meta
+      name="description"
+      content="Find your dream property on 24Dismil.com. Search from 10 Lakh+ verified listings. Buy, sell or rent apartments, villas, plots & commercial properties across India."
+    />
+    <link rel="canonical" href="https://24Dismil.com/" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/city-dropdown.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>
-    24Dismil.com - India's No.1 Real Estate Portal | Buy, Sell & Rent
-    Properties
-  </title>
-  <meta name="description"
-    content="Find your dream property on 24Dismil.com. Search from 10 Lakh+ verified listings. Buy, sell or rent apartments, villas, plots & commercial properties across India." />
-  <link rel="canonical" href="https://24Dismil.com/" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/responsive.css" />
-  <link rel="stylesheet" href="css/city-dropdown.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-</head>
-
-<body>
-  <!-- HEADER -->
-  <header class="header" id="header">
-    <div class="container">
-      <nav class="nav">
-        <a href="index.html" class="nav-logo">
-          <div class="nav-logo-icon">24</div>
-          <span class="nav-logo-text">24Dismil.com</span>
-        </a>
-        <div class="nav-city">
-          <i class="fa-solid fa-location-dot"></i> Delhi NCR <i class="fa-solid fa-chevron-down"
-            style="font-size: 0.8em;"></i>
-        </div>
-        <div class="nav-links">
-          <a href="index.html" class="nav-link active">Home</a>
-          <a href="properties.html?type=buy" class="nav-link">Buy</a>
-          <a href="properties.html?type=rent" class="nav-link">Rent</a>
-          <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
-          <a href="pricing.html" class="nav-link">Pricing</a>
-          <a href="post-property.html" class="nav-link">Post Property</a>
-          <a href="about.html" class="nav-link">About</a>
-          <a href="contact.html" class="nav-link">Contact</a>
-        </div>
-        <div class="nav-actions">
-          <a href="login.html" class="nav-btn-login">Login</a>
-          <a href="post-property.html" class="nav-btn-post">+ Post Property</a>
-        </div>
-        <div class="hamburger" id="hamburger">
-          <span></span><span></span><span></span>
-        </div>
-      </nav>
-    </div>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-      <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
-      <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
-      <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
-      <a href="pricing.html"><i class="fa-solid fa-credit-card"></i> Pricing</a>
-      <a href="post-property.html"><i class="fa-solid fa-circle-plus"></i> Post Property</a>
-      <a href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
-      <a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a>
-      <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i>
-        Login</a>
-    </div>
-  </header>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-badge">
-          <i class="fa-solid fa-trophy"></i> India's Most Trusted Real Estate Portal
-        </div>
-        <h1 class="hero-title">Find Your Perfect <span>Dream Home</span> in India</h1>
-        <p class="hero-subtitle">
-          Search from 5,000+ verified property listings. Buy, sell, or rent
-          apartments, villas, plots & commercial spaces across top Indian
-          cities.
-        </p>
-
-        <div class="search-box">
-          <form class="search-form" id="searchForm">
-            <div class="search-tabs">
-              <div class="search-tab active" data-type="buy"><i class="fa-solid fa-house"></i> Buy</div>
-              <div class="search-tab" data-type="rent"><i class="fa-solid fa-key"></i> Rent</div>
-              <div class="search-tab" data-type="commercial">
-                <i class="fa-solid fa-building"></i> Commercial
-              </div>
-              <div class="search-tab" data-type="pg"><i class="fa-solid fa-couch"></i> PG / Co-living</div>
-              <div class="search-tab" data-type="plot"><i class="fa-solid fa-seedling"></i> Plots</div>
-            </div>
-
-            <!-- Mobile Search Type Dropdown -->
-            <div class="search-mobile-selector">
-              <select id="mobileTypeSelector">
-                <option value="buy">Looking to Buy</option>
-                <option value="rent">Looking for Rent</option>
-                <option value="commercial">Commercial Space</option>
-                <option value="pg">PG / Co-living</option>
-                <option value="plot">Plots / Land</option>
-              </select>
-              <i class="fa-solid fa-chevron-down"></i>
-            </div>
-
-            <div class="search-body">
-              <div class="search-field" style="flex: 2">
-                <input type="text" id="hero-location" placeholder="Search city, locality or project..."
-                  autocomplete="off" />
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-              </div>
-              <div class="search-divider"></div>
-              <div class="search-field">
-                <select>
-                  <option value="">Property Type</option>
-                  <option>Apartment / Flat</option>
-                  <option>Independent Villa</option>
-                  <option>Plot / Land</option>
-
-                  <option>Commercial Space</option>
-                  <option>PG / Hostel</option>
-                </select>
-              </div>
-              <div class="search-divider"></div>
-              <div class="search-field">
-                <select>
-                  <option value="">Budget</option>
-                  <option>Under ₹20 Lakh</option>
-                  <option>₹20 - ₹50 Lakh</option>
-                  <option>₹50 Lakh - ₹1 Cr</option>
-                  <option>₹1 Cr - ₹2 Cr</option>
-                  <option>₹2 Cr - ₹5 Cr</option>
-                  <option>Above ₹5 Cr</option>
-                </select>
-              </div>
-              <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <div class="hero-stat-num">10L+</div>
-            <div class="hero-stat-label">Active Listings</div>
-          </div>
-          <div class="hero-stat">
-            <div class="hero-stat-num">2L+</div>
-            <div class="hero-stat-label">Verified Properties</div>
-          </div>
-          <div class="hero-stat">
-            <div class="hero-stat-num">500+</div>
-            <div class="hero-stat-label">Cities Covered</div>
-          </div>
-          <div class="hero-stat">
-            <div class="hero-stat-num">50K+</div>
-            <div class="hero-stat-label">Happy Customers</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATS STRIP -->
-  <section class="stats-strip">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-num" data-target="5000" data-suffix="+">
-            5,000+
-          </div>
-          <div class="stat-label">Properties Listed</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num" data-target="2000" data-suffix="+">
-            2,000+
-          </div>
-          <div class="stat-label">Verified Listings</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num" data-target="50" data-suffix="+">50+</div>
-          <div class="stat-label">Cities & Towns</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num" data-target="1500" data-suffix="+">
-            1,500+
-          </div>
-          <div class="stat-label">Happy Home Buyers</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURED PROPERTIES -->
-  <section class="section featured-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">Featured Properties</span>
-        <h2>Handpicked Premium Listings</h2>
-        <p>
-          Explore verified and premium properties handpicked by our experts
-          across top Indian cities.
-        </p>
-        <div class="section-title-line"></div>
-      </div>
-      <div class="cards-slider-wrap">
-        <button class="slider-btn slider-prev">‹</button>
-        <div class="cards-slider" id="featuredSlider">
-          <div class="property-card">
-            <div class="prop-img-wrap">
-              <img src="images/property-1.jpg" alt="3 BHK Apartment in Noida" loading="lazy" />
-              <div class="prop-type-badge">
-                <span class="badge badge-primary">BUY</span>
-              </div>
-              <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
-              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-            </div>
-            <div class="prop-body">
-              <div class="prop-price">
-                ₹85 Lakh <span class="prop-per"> - ₹5,862/sqft</span>
-              </div>
-              <div class="prop-title">
-                Luxurious 3 BHK Flat in Premium Society
-              </div>
-              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Sector 62, Noida</div>
-              <div class="prop-specs">
-                <div class="prop-spec"><i class="fa-solid fa-bed"></i> 3 BHK</div>
-                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,450 sq.ft</div>
-                <div class="prop-spec"><i class="fa-solid fa-building"></i> Apartment</div>
-                <div class="prop-spec"><i class="fa-solid fa-car"></i> 1 Parking</div>
-              </div>
-              <div class="prop-footer">
-                <div class="badge badge-success"><i class="fa-solid fa-check-circle"></i> Ready to Move</div>
-                <div class="prop-contact-btns">
-                  <button class="prop-btn prop-btn-call"><i class="fa-solid fa-phone"></i> Call</button>
-                  <button class="prop-btn prop-btn-msg"><i class="fa-solid fa-comment"></i> Chat</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="property-card">
-            <div class="prop-img-wrap">
-              <img src="images/city-mumbai.jpg" alt="3 BHK Sea View Mumbai" loading="lazy" />
-              <div class="prop-type-badge">
-                <span class="badge badge-primary">BUY</span>
-              </div>
-              <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
-              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-            </div>
-            <div class="prop-body">
-              <div class="prop-price">
-                ₹1.25 Cr <span class="prop-per"> - ₹6,944/sqft</span>
-              </div>
-              <div class="prop-title">
-                Premium 3 BHK Flat in Sea View Tower
-              </div>
-              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Bandra West, Mumbai</div>
-              <div class="prop-specs">
-                <div class="prop-spec"><i class="fa-solid fa-bed"></i> 3 BHK</div>
-                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,800 sq.ft</div>
-                <div class="prop-spec"><i class="fa-solid fa-building"></i> Apartment</div>
-                <div class="prop-spec"><i class="fa-solid fa-water"></i> Sea Facing</div>
-              </div>
-              <div class="prop-footer">
-                <div class="badge badge-success"><i class="fa-solid fa-check-circle"></i> Ready to Move</div>
-                <div class="prop-contact-btns">
-                  <button class="prop-btn prop-btn-call"><i class="fa-solid fa-phone"></i> Call</button>
-                  <button class="prop-btn prop-btn-msg"><i class="fa-solid fa-comment"></i> Chat</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="property-card">
-            <div class="prop-img-wrap">
-              <img src="images/hero-bg.jpg" alt="4 BHK Villa Gurgaon" loading="lazy" />
-              <div class="prop-type-badge">
-                <span class="badge badge-primary">BUY</span>
-              </div>
-              <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
-              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-            </div>
-            <div class="prop-body">
-              <div class="prop-price">
-                ₹2.2 Cr <span class="prop-per"> - ₹5,238/sqft</span>
-              </div>
-              <div class="prop-title">
-                Ultra-Luxury 4 BHK Penthouse with Terrace
-              </div>
-              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> DLF Phase 5, Gurgaon</div>
-              <div class="prop-specs">
-                <div class="prop-spec"><i class="fa-solid fa-bed"></i> 4 BHK</div>
-                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 4,200 sq.ft</div>
-                <div class="prop-spec"><i class="fa-solid fa-city"></i> Penthouse</div>
-                <div class="prop-spec"><i class="fa-solid fa-car"></i> 3 Parking</div>
-              </div>
-              <div class="prop-footer">
-                <div class="badge badge-success"><i class="fa-solid fa-check-circle"></i> Ready to Move</div>
-                <div class="prop-contact-btns">
-                  <button class="prop-btn prop-btn-call"><i class="fa-solid fa-phone"></i> Call</button>
-                  <button class="prop-btn prop-btn-msg"><i class="fa-solid fa-comment"></i> Chat</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="property-card">
-            <div class="prop-img-wrap">
-              <img src="images/property-1.jpg" alt="2 BHK Apartment Delhi" loading="lazy" />
-              <div class="prop-type-badge">
-                <span class="badge badge-warning">RENT</span>
-              </div>
-              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-            </div>
-            <div class="prop-body">
-              <div class="prop-price">
-                ₹32,000/mo <span class="prop-per"> - ₹29/sqft</span>
-              </div>
-              <div class="prop-title">
-                Modern 2 BHK Semi-Furnished Apartment
-              </div>
-              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Koramangala, Bangalore</div>
-              <div class="prop-specs">
-                <div class="prop-spec"><i class="fa-solid fa-bed"></i> 2 BHK</div>
-                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,100 sq.ft</div>
-                <div class="prop-spec"><i class="fa-solid fa-building"></i> Apartment</div>
-                <div class="prop-spec"><i class="fa-solid fa-car"></i> 1 Parking</div>
-              </div>
-              <div class="prop-footer">
-                <div class="badge badge-success"><i class="fa-solid fa-check-circle"></i> Ready to Move</div>
-                <div class="prop-contact-btns">
-                  <button class="prop-btn prop-btn-call"><i class="fa-solid fa-phone"></i> Call</button>
-                  <button class="prop-btn prop-btn-msg"><i class="fa-solid fa-comment"></i> Chat</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="property-card">
-            <div class="prop-img-wrap">
-              <img src="images/city-mumbai.jpg" alt="Villa Bangalore" loading="lazy" />
-              <div class="prop-type-badge">
-                <span class="badge badge-primary">BUY</span>
-              </div>
-              <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
-              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-            </div>
-            <div class="prop-body">
-              <div class="prop-price">
-                ₹1.85 Cr <span class="prop-per"> - ₹5,781/sqft</span>
-              </div>
-              <div class="prop-title">
-                Spacious 4 BHK Independent Villa with Garden
-              </div>
-              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Whitefield, Bangalore</div>
-              <div class="prop-specs">
-                <div class="prop-spec"><i class="fa-solid fa-bed"></i> 4 BHK</div>
-                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 3,200 sq.ft</div>
-                <div class="prop-spec"><i class="fa-solid fa-house"></i> Villa</div>
-                <div class="prop-spec"><i class="fa-solid fa-car"></i> 2 Parking</div>
-              </div>
-              <div class="prop-footer">
-                <div class="badge badge-success"><i class="fa-solid fa-check-circle"></i> Ready to Move</div>
-                <div class="prop-contact-btns">
-                  <button class="prop-btn prop-btn-call"><i class="fa-solid fa-phone"></i> Call</button>
-                  <button class="prop-btn prop-btn-msg"><i class="fa-solid fa-comment"></i> Chat</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <button class="slider-btn slider-next">›</button>
-      </div>
-      <div style="text-align: center; margin-top: 32px">
-        <a href="properties.html" class="btn btn-outline btn-lg">View All Properties →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- BROWSE BY CITY -->
-  <section class="section" style="background: var(--bg)">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">Explore Cities</span>
-        <h2>Browse Properties by City</h2>
-        <p>
-          Discover real estate opportunities in India's top metro and tier-2
-          cities.
-        </p>
-        <div class="section-title-line"></div>
-      </div>
-      <div class="city-grid">
-        <div class="city-card" onclick="window.location = 'properties.html?city=Mumbai'">
-          <img src="images/city-mumbai.jpg" alt="Mumbai Real Estate" />
-          <div class="city-card-overlay"></div>
-          <div class="city-card-info">
-            <div class="city-name">Mumbai</div>
-            <div class="city-count">82,000+ Properties</div>
-          </div>
-        </div>
-        <div class="city-card" onclick="window.location = 'properties.html?city=Delhi NCR'">
-          <img src="images/hero-bg.jpg" alt="Delhi NCR Real Estate" />
-          <div class="city-card-overlay"></div>
-          <div class="city-card-info">
-            <div class="city-name">Delhi NCR</div>
-            <div class="city-count">1,25,000+ Properties</div>
-          </div>
-        </div>
-        <div class="city-card" onclick="window.location = 'properties.html?city=Bangalore'">
-          <img src="images/property-1.jpg" alt="Bangalore Real Estate" />
-          <div class="city-card-overlay"></div>
-          <div class="city-card-info">
-            <div class="city-name">Bangalore</div>
-            <div class="city-count">95,000+ Properties</div>
-          </div>
-        </div>
-        <div class="city-card" onclick="window.location = 'properties.html?city=Hyderabad'">
-          <img src="images/city-mumbai.jpg" alt="Hyderabad Real Estate" />
-          <div class="city-card-overlay"></div>
-          <div class="city-card-info">
-            <div class="city-name">Hyderabad</div>
-            <div class="city-count">68,000+ Properties</div>
-          </div>
-        </div>
-        <div class="city-card" onclick="window.location = 'properties.html?city=Pune'">
-          <img src="images/hero-bg.jpg" alt="Pune Real Estate" />
-          <div class="city-card-overlay"></div>
-          <div class="city-card-info">
-            <div class="city-name">Pune</div>
-            <div class="city-count">54,000+ Properties</div>
-          </div>
-        </div>
-        <div class="city-card" onclick="window.location = 'properties.html?city=Chennai'">
-          <img src="images/property-1.jpg" alt="Chennai Real Estate" />
-          <div class="city-card-overlay"></div>
-          <div class="city-card-info">
-            <div class="city-name">Chennai</div>
-            <div class="city-count">47,000+ Properties</div>
-          </div>
-        </div>
-        <div class="city-card" onclick="window.location = 'properties.html?city=Kolkata'">
-          <img src="images/city-mumbai.jpg" alt="Kolkata Real Estate" />
-          <div class="city-card-overlay"></div>
-          <div class="city-card-info">
-            <div class="city-name">Kolkata</div>
-            <div class="city-count">38,000+ Properties</div>
-          </div>
-        </div>
-        <div class="city-card" onclick="window.location = 'properties.html?city=Noida'">
-          <img src="images/hero-bg.jpg" alt="Noida Real Estate" />
-          <div class="city-card-overlay"></div>
-          <div class="city-card-info">
-            <div class="city-name">Noida</div>
-            <div class="city-count">42,000+ Properties</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROPERTY TYPES -->
-  <section class="section" style="background: #fff">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">Property Types</span>
-        <h2>Browse by Property Type</h2>
-        <p>
-          Find the right property type that suits your needs and lifestyle.
-        </p>
-        <div class="section-title-line"></div>
-      </div>
-      <div class="prop-types-grid">
-        <div class="prop-type-card" onclick="window.location = 'properties.html?propType=Apartment'">
-          <div class="prop-type-icon"><i class="fa-solid fa-building"></i></div>
-          <div class="prop-type-name">Apartment / Flat</div>
-          <div class="prop-type-count">4.5 Lakh+ listings</div>
-        </div>
-        <div class="prop-type-card" onclick="window.location = 'properties.html?propType=Villa'">
-          <div class="prop-type-icon"><i class="fa-solid fa-house"></i></div>
-          <div class="prop-type-name">Independent Villa</div>
-          <div class="prop-type-count">1.2 Lakh+ listings</div>
-        </div>
-        <div class="prop-type-card" onclick="window.location = 'properties.html?propType=Plot'">
-          <div class="prop-type-icon"><i class="fa-solid fa-seedling"></i></div>
-          <div class="prop-type-name">Plot / Land</div>
-          <div class="prop-type-count">2.1 Lakh+ listings</div>
-        </div>
-        <div class="prop-type-card" onclick="window.location = 'properties.html?propType=Commercial'">
-          <div class="prop-type-icon"><i class="fa-solid fa-store"></i></div>
-          <div class="prop-type-name">Commercial Space</div>
-          <div class="prop-type-count">85,000+ listings</div>
-        </div>
-        <div class="prop-type-card" onclick="window.location = 'properties.html?propType=PG'">
-          <div class="prop-type-icon"><i class="fa-solid fa-couch"></i></div>
-          <div class="prop-type-name">PG / Co-Living</div>
-          <div class="prop-type-count">60,000+ listings</div>
-        </div>
-        <div class="prop-type-card" onclick="window.location = 'properties.html?propType=Lodge'">
-          <div class="prop-type-icon"><i class="fa-solid fa-hotel"></i></div>
-          <div class="prop-type-name">Lodge / Guest House</div>
-          <div class="prop-type-count">15,000+ listings</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NEW LAUNCH PROJECTS -->
-  <section class="section" style="background: var(--bg)">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">New Launches</span>
-        <h2>Handpicked New Launch Projects</h2>
-        <p>
-          Get the best deals with pre-launch prices in top residential
-          projects.
-        </p>
-        <div class="section-title-line"></div>
-      </div>
-      <div class="cards-slider-wrap">
-        <button class="slider-btn slider-prev">‹</button>
-        <div class="cards-slider" id="newLaunchSlider">
-          <div class="project-card" style="min-width: 300px; flex-shrink: 0">
-            <div class="project-img">
-              <img src="images/hero-bg.jpg" alt="Godrej Azure Project" />
-              <div class="project-rera">RERA Registered</div>
-              <div class="project-tag">
-                <span class="badge badge-primary">NEW LAUNCH</span>
-              </div>
-            </div>
-            <div class="project-body">
-              <div class="project-name">Godrej Azure Sky Residences</div>
-              <div class="project-location">📍 Thanisandra, Bangalore</div>
-              <div class="project-price">₹68 Lakh Onwards</div>
-              <div class="project-config">
-                2, 3 BHK Apartments · 1,150–1,850 sq.ft
-              </div>
-            </div>
-          </div>
-
-          <div class="project-card" style="min-width: 300px; flex-shrink: 0">
-            <div class="project-img">
-              <img src="images/city-mumbai.jpg" alt="Prestige Mumbai" />
-              <div class="project-rera">RERA Registered</div>
-              <div class="project-tag">
-                <span class="badge badge-success">READY SOON</span>
-              </div>
-            </div>
-            <div class="project-body">
-              <div class="project-name">Prestige Park Grove Phase 2</div>
-              <div class="project-location">📍 Whitefield, Bangalore</div>
-              <div class="project-price">₹1.2 Cr Onwards</div>
-              <div class="project-config">
-                3, 4 BHK Villas · 2,800–4,500 sq.ft
-              </div>
-            </div>
-          </div>
-
-          <div class="project-card" style="min-width: 300px; flex-shrink: 0">
-            <div class="project-img">
-              <img src="images/property-1.jpg" alt="DLF Camellias" />
-              <div class="project-rera">RERA Registered</div>
-              <div class="project-tag">
-                <span class="badge badge-primary">NEW LAUNCH</span>
-              </div>
-            </div>
-            <div class="project-body">
-              <div class="project-name">DLF The Camellias Phase 3</div>
-              <div class="project-location">📍 Golf Course Road, Gurgaon</div>
-              <div class="project-price">₹8.5 Cr Onwards</div>
-              <div class="project-config">
-                4, 5 BHK Super Luxury · 6,500–10,000 sq.ft
-              </div>
-            </div>
-          </div>
-
-          <div class="project-card" style="min-width: 300px; flex-shrink: 0">
-            <div class="project-img">
-              <img src="images/hero-bg.jpg" alt="Lodha World Towers" />
-              <div class="project-rera">RERA Registered</div>
-              <div class="project-tag">
-                <span class="badge badge-warning">UNDER CONSTRUCTION</span>
-              </div>
-            </div>
-            <div class="project-body">
-              <div class="project-name">Lodha World Towers Mumbai</div>
-              <div class="project-location">📍 Lower Parel, Mumbai</div>
-              <div class="project-price">₹3.5 Cr Onwards</div>
-              <div class="project-config">
-                3, 4 BHK Luxury Homes · 1,800–3,200 sq.ft
-              </div>
-            </div>
-          </div>
-        </div>
-        <button class="slider-btn slider-next">›</button>
-      </div>
-      <div style="text-align: center; margin-top: 32px">
-        <a href="properties.html?newLaunch=true" class="btn btn-outline btn-lg">View All Projects →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- WHY US -->
-  <section class="section" style="background: #fff">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">Why Choose Us</span>
-        <h2>The 24Dismil.com Advantage</h2>
-        <div class="section-title-line"></div>
-      </div>
-      <div class="advantage-grid">
-        <div class="advantage-card">
-          <div class="advantage-icon"><i class="fa-solid fa-check-circle"></i></div>
-          <h3 style="
-                font-size: 16px;
-                font-weight: 700;
-                color: var(--dark);
-                margin-bottom: 8px;
-              ">
-            100% Verified Listings
-          </h3>
-          <p style="
-                font-size: 13px;
-                color: var(--text-muted);
-                line-height: 1.6;
-              ">
-            Every property on our platform is physically verified by our
-            ground team for authenticity.
-          </p>
-        </div>
-        <div class="advantage-card">
-          <div class="advantage-icon"><i class="fa-solid fa-handshake"></i></div>
-          <h3 style="
-                font-size: 16px;
-                font-weight: 700;
-                color: var(--dark);
-                margin-bottom: 8px;
-              ">
-            Zero Brokerage Options
-          </h3>
-          <p style="
-                font-size: 13px;
-                color: var(--text-muted);
-                line-height: 1.6;
-              ">
-            Connect directly with owners and save lakhs in brokerage with our
-            direct connect feature.
-          </p>
-        </div>
-        <div class="advantage-card">
-          <div class="advantage-icon"><i class="fa-solid fa-lock"></i></div>
-          <h3 style="
-                font-size: 16px;
-                font-weight: 700;
-                color: var(--dark);
-                margin-bottom: 8px;
-              ">
-            Safe & Secure
-          </h3>
-          <p style="
-                font-size: 13px;
-                color: var(--text-muted);
-                line-height: 1.6;
-              ">
-            Your data is always protected. We never share personal info
-            without explicit consent.
-          </p>
-        </div>
-        <div class="advantage-card">
-          <div class="advantage-icon"><i class="fa-solid fa-chart-column"></i></div>
-          <h3 style="
-                font-size: 16px;
-                font-weight: 700;
-                color: var(--dark);
-                margin-bottom: 8px;
-              ">
-            Market Insights
-          </h3>
-          <p style="
-                font-size: 13px;
-                color: var(--text-muted);
-                line-height: 1.6;
-              ">
-            Get price trends, area insights, and market analysis to make
-            informed property decisions.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="section testimonials-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label" style="background: rgba(245, 166, 35, 0.15); color: var(--secondary);">Testimonials</span>
-        <h2>What Our Customers Say</h2>
-        <p>Thousands of happy home buyers, sellers, and renters trust 24Dismil.com.</p>
-        <div class="section-title-line"></div>
-      </div>
-    </div>
-
-    <div style="position: relative; margin-top: 40px;">
-      <button class="slider-btn test-prev" style="left: 20px; z-index: 5; background: rgba(255, 255, 255, 0.1); color: #fff; border-color: rgba(255, 255, 255, 0.2);">‹</button>
-      
-      <div class="cards-slider testimonials-slider">
-        <div class="testimonial-card">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"Found my dream 3BHK apartment in Noida within just 2 weeks! The verified listings saved me from scammers. The process was seamless and the agent was very professional."</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">R</div>
-            <div>
-              <div class="testimonial-name">Rahul Sharma</div>
-              <div class="testimonial-detail">Bought 3 BHK in Noida · Oct 2024</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="testimonial-card">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"Sold my Bangalore property at market price in under 30 days. The platform's reach is incredible. Got multiple genuine buyer inquiries within the first week of listing."</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">P</div>
-            <div>
-              <div class="testimonial-name">Priya Menon</div>
-              <div class="testimonial-detail">Sold 2 BHK in Bangalore · Aug 2024</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="testimonial-card">
-          <div class="testimonial-stars">★★★★☆</div>
-          <p class="testimonial-text">"Rented a fully furnished 2BHK in Mumbai without any hassle. The video tours feature was excellent and saved me multiple site visits. Highly recommended!"</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">A</div>
-            <div>
-              <div class="testimonial-name">Amit Verma</div>
-              <div class="testimonial-detail">Rented 2 BHK in Mumbai · Dec 2024</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="testimonial-card">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"The EMI calculator and area price trends helped me negotiate a better deal. Got my dream home ₹8 Lakhs below the asking price. This portal is a game-changer!"</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">S</div>
-            <div>
-              <div class="testimonial-name">Sneha Patel</div>
-              <div class="testimonial-detail">Bought Villa in Ahmedabad · Nov 2024</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <button class="slider-btn test-next" style="right: 20px; z-index: 5; background: rgba(255, 255, 255, 0.1); color: #fff; border-color: rgba(255, 255, 255, 0.2);">›</button>
-    </div>
-  </section>
-
-
-  <!-- APP DOWNLOAD BANNER -->
-  <section class="app-banner">
-    <div class="container">
-      <div class="app-banner-inner">
-        <div class="app-banner-text">
-          <h2>Download the 24Dismil.com App</h2>
-          <p>
-            Search, shortlist, and schedule property visits on the go. Get
-            exclusive app-only deals and instant property alerts.
-          </p>
-          <div class="app-store-btns">
-            <a href="#" class="store-btn" onclick="showToast('Coming Soon! Our mobile app is currently under development.', 'success'); return false;">
-              <div class="store-btn-icon"><i class="fa-brands fa-apple"></i></div>
-              <div class="store-btn-text">
-                <span class="store-btn-sub">Download on the</span>
-                <span class="store-btn-name">App Store</span>
-              </div>
-            </a>
-            <a href="#" class="store-btn" onclick="showToast('Coming Soon! Our mobile app is currently under development.', 'success'); return false;">
-              <div class="store-btn-icon"><i class="fa-brands fa-google-play"></i></div>
-              <div class="store-btn-text">
-                <span class="store-btn-sub">Get it on</span>
-                <span class="store-btn-name">Google Play</span>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="app-phones">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="footer-logo">
+  <body>
+    <!-- HEADER -->
+    <header class="header" id="header">
+      <div class="container">
+        <nav class="nav">
+          <a href="index.html" class="nav-logo">
             <div class="nav-logo-icon">24</div>
-            24Dismil.com
+            <span class="nav-logo-text">24Dismil.com</span>
+          </a>
+          <div class="nav-city">
+            <i class="fa-solid fa-location-dot"></i> Delhi NCR
+            <i class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
           </div>
-          <p class="footer-tagline">
-            India's most trusted real estate portal. Find your dream property
-            with verified listings, expert guidance, and market insights. Your
-            home journey starts here.
+          <div class="nav-links">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="properties.html?type=buy" class="nav-link">Buy</a>
+            <a href="properties.html?type=rent" class="nav-link">Rent</a>
+            <a href="properties.html?type=commercial" class="nav-link"
+              >Commercial</a
+            >
+            <a href="pricing.html" class="nav-link">Pricing</a>
+            <a href="post-property.html" class="nav-link">Post Property</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+          </div>
+          <div class="nav-actions">
+            <a href="login.html" class="nav-btn-login">Login</a>
+            <a href="post-property.html" class="nav-btn-post"
+              >+ Post Property</a
+            >
+          </div>
+          <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+          </div>
+        </nav>
+      </div>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="properties.html?type=buy"
+          ><i class="fa-solid fa-cart-shopping"></i> Buy Property</a
+        >
+        <a href="properties.html?type=rent"
+          ><i class="fa-solid fa-key"></i> Rent Property</a
+        >
+        <a href="properties.html?type=commercial"
+          ><i class="fa-solid fa-building"></i> Commercial</a
+        >
+        <a href="pricing.html"
+          ><i class="fa-solid fa-credit-card"></i> Pricing</a
+        >
+        <a href="post-property.html"
+          ><i class="fa-solid fa-circle-plus"></i> Post Property</a
+        >
+        <a href="about.html"
+          ><i class="fa-solid fa-circle-info"></i> About Us</a
+        >
+        <a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a>
+        <a href="login.html" style="color: var(--primary); font-weight: 700"
+          ><i class="fa-solid fa-right-to-bracket"></i> Login</a
+        >
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <i class="fa-solid fa-trophy"></i> India's Most Trusted Real Estate
+            Portal
+          </div>
+          <h1 class="hero-title">
+            Find Your Perfect <span>Dream Home</span> in India
+          </h1>
+          <p class="hero-subtitle">
+            Search from 5,000+ verified property listings. Buy, sell, or rent
+            apartments, villas, plots & commercial spaces across top Indian
+            cities.
           </p>
-          <div class="footer-socials">
-            <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+
+          <div class="search-box">
+            <form class="search-form" id="searchForm">
+              <div class="search-tabs">
+                <div class="search-tab active" data-type="buy">
+                  <i class="fa-solid fa-house"></i> Buy
+                </div>
+                <div class="search-tab" data-type="rent">
+                  <i class="fa-solid fa-key"></i> Rent
+                </div>
+                <div class="search-tab" data-type="commercial">
+                  <i class="fa-solid fa-building"></i> Commercial
+                </div>
+                <div class="search-tab" data-type="pg">
+                  <i class="fa-solid fa-couch"></i> PG / Co-living
+                </div>
+                <div class="search-tab" data-type="plot">
+                  <i class="fa-solid fa-seedling"></i> Plots
+                </div>
+              </div>
+
+              <!-- Mobile Search Type Dropdown -->
+              <div class="search-mobile-selector">
+                <select id="mobileTypeSelector">
+                  <option value="buy">Looking to Buy</option>
+                  <option value="rent">Looking for Rent</option>
+                  <option value="commercial">Commercial Space</option>
+                  <option value="pg">PG / Co-living</option>
+                  <option value="plot">Plots / Land</option>
+                </select>
+                <i class="fa-solid fa-chevron-down"></i>
+              </div>
+
+              <div class="search-body">
+                <div class="search-field" style="flex: 2">
+                  <input
+                    type="text"
+                    id="hero-location"
+                    placeholder="Search city, locality or project..."
+                    autocomplete="off"
+                  />
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                </div>
+                <div class="search-divider"></div>
+                <div class="search-field">
+                  <select>
+                    <option value="">Property Type</option>
+                    <option>Apartment / Flat</option>
+                    <option>Independent Villa</option>
+                    <option>Plot / Land</option>
+
+                    <option>Commercial Space</option>
+                    <option>PG / Hostel</option>
+                  </select>
+                </div>
+                <div class="search-divider"></div>
+                <div class="search-field">
+                  <select>
+                    <option value="">Budget</option>
+                    <option>Under ₹20 Lakh</option>
+                    <option>₹20 - ₹50 Lakh</option>
+                    <option>₹50 Lakh - ₹1 Cr</option>
+                    <option>₹1 Cr - ₹2 Cr</option>
+                    <option>₹2 Cr - ₹5 Cr</option>
+                    <option>Above ₹5 Cr</option>
+                  </select>
+                </div>
+                <button type="submit" class="search-btn">
+                  <i class="fa-solid fa-magnifying-glass"></i> Search
+                </button>
+              </div>
+            </form>
           </div>
-        </div>
-        <div class="footer-col">
-          <h4>Quick Links</h4>
-          <div class="footer-links">
-            <a href="properties.html?type=buy">Buy Properties</a>
-            <a href="properties.html?type=rent">Rent Properties</a>
-            <a href="properties.html?type=commercial">Commercial</a>
-            <a href="post-property.html">Post Free Property</a>
-            <a href="properties.html?newLaunch=true">New Projects</a>
-            <a href="about.html">About Us</a>
-            <a href="contact.html">Contact</a>
-          </div>
-        </div>
-        <div class="footer-col">
-          <h4>Top Cities</h4>
-          <div class="footer-links">
-            <a href="properties.html?city=Mumbai">Mumbai</a>
-            <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
-            <a href="properties.html?city=Bangalore">Bangalore</a>
-            <a href="properties.html?city=Hyderabad">Hyderabad</a>
-            <a href="properties.html?city=Pune">Pune</a>
-            <a href="properties.html?city=Chennai">Chennai</a>
-            <a href="properties.html?city=Kolkata">Kolkata</a>
-            <a href="properties.html?city=Noida">Noida</a>
-          </div>
-        </div>
-        <div class="footer-col">
-          <h4>Resources</h4>
-          <div class="footer-links">
-            <a href="#">EMI Calculator</a>
-            <a href="#">Property Rates</a>
-            <a href="#">RERA Guide</a>
-            <a href="#">Home Loan</a>
-            <a href="#">Legal Guide</a>
-            <a href="#">Vastu Tips</a>
-            <a href="#">Blog & News</a>
-            <a href="#">FAQ</a>
+
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="hero-stat-num">10L+</div>
+              <div class="hero-stat-label">Active Listings</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">2L+</div>
+              <div class="hero-stat-label">Verified Properties</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">500+</div>
+              <div class="hero-stat-label">Cities Covered</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">50K+</div>
+              <div class="hero-stat-label">Happy Customers</div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="footer-bottom">
-        <span>© 2025 24Dismil.com. All rights reserved. | India's #1 Real
-          Estate Portal</span>
-        <div class="footer-bottom-links">
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Use</a>
-          <a href="#">Sitemap</a>
+    </section>
+
+    <!-- STATS STRIP -->
+    <section class="stats-strip">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-num" data-target="5000" data-suffix="+">
+              5,000+
+            </div>
+            <div class="stat-label">Properties Listed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="2000" data-suffix="+">
+              2,000+
+            </div>
+            <div class="stat-label">Verified Listings</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="50" data-suffix="+">50+</div>
+            <div class="stat-label">Cities & Towns</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="1500" data-suffix="+">
+              1,500+
+            </div>
+            <div class="stat-label">Happy Home Buyers</div>
+          </div>
         </div>
       </div>
-    </div>
-  </footer>
+    </section>
 
-  <script src="js/properties.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/city-selector.js"></script>
-  <script type="module" src="js/ai-search.js"></script>
-</body>
+    <!-- FEATURED PROPERTIES -->
+    <section class="section featured-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Featured Properties</span>
+          <h2>Handpicked Premium Listings</h2>
+          <p>
+            Explore verified and premium properties handpicked by our experts
+            across top Indian cities.
+          </p>
+          <div class="section-title-line"></div>
+        </div>
+        <div class="cards-slider-wrap">
+          <button class="slider-btn slider-prev">‹</button>
+          <div class="cards-slider" id="featuredSlider">
+            <div class="property-card">
+              <div class="prop-img-wrap">
+                <img
+                  src="images/property-1.jpg"
+                  alt="3 BHK Apartment in Noida"
+                  loading="lazy"
+                />
+                <div class="prop-type-badge">
+                  <span class="badge badge-primary">BUY</span>
+                </div>
+                <div class="prop-verified">
+                  <i class="fa-solid fa-circle-check"></i> Verified
+                </div>
+                <div class="prop-wishlist">
+                  <i class="fa-regular fa-heart"></i>
+                </div>
+              </div>
+              <div class="prop-body">
+                <div class="prop-price">
+                  ₹85 Lakh <span class="prop-per"> - ₹5,862/sqft</span>
+                </div>
+                <div class="prop-title">
+                  Luxurious 3 BHK Flat in Premium Society
+                </div>
+                <div class="prop-location">
+                  <i class="fa-solid fa-location-dot"></i> Sector 62, Noida
+                </div>
+                <div class="prop-specs">
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-bed"></i> 3 BHK
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-ruler-combined"></i> 1,450 sq.ft
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-building"></i> Apartment
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-car"></i> 1 Parking
+                  </div>
+                </div>
+                <div class="prop-footer">
+                  <div class="badge badge-success">
+                    <i class="fa-solid fa-check-circle"></i> Ready to Move
+                  </div>
+                  <div class="prop-contact-btns">
+                    <button class="prop-btn prop-btn-call">
+                      <i class="fa-solid fa-phone"></i> Call
+                    </button>
+                    <button class="prop-btn prop-btn-msg">
+                      <i class="fa-solid fa-comment"></i> Chat
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
+            <div class="property-card">
+              <div class="prop-img-wrap">
+                <img
+                  src="images/city-mumbai.jpg"
+                  alt="3 BHK Sea View Mumbai"
+                  loading="lazy"
+                />
+                <div class="prop-type-badge">
+                  <span class="badge badge-primary">BUY</span>
+                </div>
+                <div class="prop-verified">
+                  <i class="fa-solid fa-circle-check"></i> Verified
+                </div>
+                <div class="prop-wishlist">
+                  <i class="fa-regular fa-heart"></i>
+                </div>
+              </div>
+              <div class="prop-body">
+                <div class="prop-price">
+                  ₹1.25 Cr <span class="prop-per"> - ₹6,944/sqft</span>
+                </div>
+                <div class="prop-title">
+                  Premium 3 BHK Flat in Sea View Tower
+                </div>
+                <div class="prop-location">
+                  <i class="fa-solid fa-location-dot"></i> Bandra West, Mumbai
+                </div>
+                <div class="prop-specs">
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-bed"></i> 3 BHK
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-ruler-combined"></i> 1,800 sq.ft
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-building"></i> Apartment
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-water"></i> Sea Facing
+                  </div>
+                </div>
+                <div class="prop-footer">
+                  <div class="badge badge-success">
+                    <i class="fa-solid fa-check-circle"></i> Ready to Move
+                  </div>
+                  <div class="prop-contact-btns">
+                    <button class="prop-btn prop-btn-call">
+                      <i class="fa-solid fa-phone"></i> Call
+                    </button>
+                    <button class="prop-btn prop-btn-msg">
+                      <i class="fa-solid fa-comment"></i> Chat
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="property-card">
+              <div class="prop-img-wrap">
+                <img
+                  src="images/hero-bg.jpg"
+                  alt="4 BHK Villa Gurgaon"
+                  loading="lazy"
+                />
+                <div class="prop-type-badge">
+                  <span class="badge badge-primary">BUY</span>
+                </div>
+                <div class="prop-verified">
+                  <i class="fa-solid fa-circle-check"></i> Verified
+                </div>
+                <div class="prop-wishlist">
+                  <i class="fa-regular fa-heart"></i>
+                </div>
+              </div>
+              <div class="prop-body">
+                <div class="prop-price">
+                  ₹2.2 Cr <span class="prop-per"> - ₹5,238/sqft</span>
+                </div>
+                <div class="prop-title">
+                  Ultra-Luxury 4 BHK Penthouse with Terrace
+                </div>
+                <div class="prop-location">
+                  <i class="fa-solid fa-location-dot"></i> DLF Phase 5, Gurgaon
+                </div>
+                <div class="prop-specs">
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-bed"></i> 4 BHK
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-ruler-combined"></i> 4,200 sq.ft
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-city"></i> Penthouse
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-car"></i> 3 Parking
+                  </div>
+                </div>
+                <div class="prop-footer">
+                  <div class="badge badge-success">
+                    <i class="fa-solid fa-check-circle"></i> Ready to Move
+                  </div>
+                  <div class="prop-contact-btns">
+                    <button class="prop-btn prop-btn-call">
+                      <i class="fa-solid fa-phone"></i> Call
+                    </button>
+                    <button class="prop-btn prop-btn-msg">
+                      <i class="fa-solid fa-comment"></i> Chat
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="property-card">
+              <div class="prop-img-wrap">
+                <img
+                  src="images/property-1.jpg"
+                  alt="2 BHK Apartment Delhi"
+                  loading="lazy"
+                />
+                <div class="prop-type-badge">
+                  <span class="badge badge-warning">RENT</span>
+                </div>
+                <div class="prop-wishlist">
+                  <i class="fa-regular fa-heart"></i>
+                </div>
+              </div>
+              <div class="prop-body">
+                <div class="prop-price">
+                  ₹32,000/mo <span class="prop-per"> - ₹29/sqft</span>
+                </div>
+                <div class="prop-title">
+                  Modern 2 BHK Semi-Furnished Apartment
+                </div>
+                <div class="prop-location">
+                  <i class="fa-solid fa-location-dot"></i> Koramangala,
+                  Bangalore
+                </div>
+                <div class="prop-specs">
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-bed"></i> 2 BHK
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-ruler-combined"></i> 1,100 sq.ft
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-building"></i> Apartment
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-car"></i> 1 Parking
+                  </div>
+                </div>
+                <div class="prop-footer">
+                  <div class="badge badge-success">
+                    <i class="fa-solid fa-check-circle"></i> Ready to Move
+                  </div>
+                  <div class="prop-contact-btns">
+                    <button class="prop-btn prop-btn-call">
+                      <i class="fa-solid fa-phone"></i> Call
+                    </button>
+                    <button class="prop-btn prop-btn-msg">
+                      <i class="fa-solid fa-comment"></i> Chat
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="property-card">
+              <div class="prop-img-wrap">
+                <img
+                  src="images/city-mumbai.jpg"
+                  alt="Villa Bangalore"
+                  loading="lazy"
+                />
+                <div class="prop-type-badge">
+                  <span class="badge badge-primary">BUY</span>
+                </div>
+                <div class="prop-verified">
+                  <i class="fa-solid fa-circle-check"></i> Verified
+                </div>
+                <div class="prop-wishlist">
+                  <i class="fa-regular fa-heart"></i>
+                </div>
+              </div>
+              <div class="prop-body">
+                <div class="prop-price">
+                  ₹1.85 Cr <span class="prop-per"> - ₹5,781/sqft</span>
+                </div>
+                <div class="prop-title">
+                  Spacious 4 BHK Independent Villa with Garden
+                </div>
+                <div class="prop-location">
+                  <i class="fa-solid fa-location-dot"></i> Whitefield, Bangalore
+                </div>
+                <div class="prop-specs">
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-bed"></i> 4 BHK
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-ruler-combined"></i> 3,200 sq.ft
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-house"></i> Villa
+                  </div>
+                  <div class="prop-spec">
+                    <i class="fa-solid fa-car"></i> 2 Parking
+                  </div>
+                </div>
+                <div class="prop-footer">
+                  <div class="badge badge-success">
+                    <i class="fa-solid fa-check-circle"></i> Ready to Move
+                  </div>
+                  <div class="prop-contact-btns">
+                    <button class="prop-btn prop-btn-call">
+                      <i class="fa-solid fa-phone"></i> Call
+                    </button>
+                    <button class="prop-btn prop-btn-msg">
+                      <i class="fa-solid fa-comment"></i> Chat
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="slider-btn slider-next">›</button>
+        </div>
+        <div style="text-align: center; margin-top: 32px">
+          <a href="properties.html" class="btn btn-outline btn-lg"
+            >View All Properties →</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- BROWSE BY CITY -->
+    <section class="section" style="background: var(--bg)">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Explore Cities</span>
+          <h2>Browse Properties by City</h2>
+          <p>
+            Discover real estate opportunities in India's top metro and tier-2
+            cities.
+          </p>
+          <div class="section-title-line"></div>
+        </div>
+        <div class="city-grid">
+          <div
+            class="city-card"
+            onclick="window.location = 'properties.html?city=Mumbai'"
+          >
+            <img src="images/city-mumbai.jpg" alt="Mumbai Real Estate" />
+            <div class="city-card-overlay"></div>
+            <div class="city-card-info">
+              <div class="city-name">Mumbai</div>
+              <div class="city-count">82,000+ Properties</div>
+            </div>
+          </div>
+          <div
+            class="city-card"
+            onclick="window.location = 'properties.html?city=Delhi NCR'"
+          >
+            <img src="images/hero-bg.jpg" alt="Delhi NCR Real Estate" />
+            <div class="city-card-overlay"></div>
+            <div class="city-card-info">
+              <div class="city-name">Delhi NCR</div>
+              <div class="city-count">1,25,000+ Properties</div>
+            </div>
+          </div>
+          <div
+            class="city-card"
+            onclick="window.location = 'properties.html?city=Bangalore'"
+          >
+            <img src="images/property-1.jpg" alt="Bangalore Real Estate" />
+            <div class="city-card-overlay"></div>
+            <div class="city-card-info">
+              <div class="city-name">Bangalore</div>
+              <div class="city-count">95,000+ Properties</div>
+            </div>
+          </div>
+          <div
+            class="city-card"
+            onclick="window.location = 'properties.html?city=Hyderabad'"
+          >
+            <img src="images/city-mumbai.jpg" alt="Hyderabad Real Estate" />
+            <div class="city-card-overlay"></div>
+            <div class="city-card-info">
+              <div class="city-name">Hyderabad</div>
+              <div class="city-count">68,000+ Properties</div>
+            </div>
+          </div>
+          <div
+            class="city-card"
+            onclick="window.location = 'properties.html?city=Pune'"
+          >
+            <img src="images/hero-bg.jpg" alt="Pune Real Estate" />
+            <div class="city-card-overlay"></div>
+            <div class="city-card-info">
+              <div class="city-name">Pune</div>
+              <div class="city-count">54,000+ Properties</div>
+            </div>
+          </div>
+          <div
+            class="city-card"
+            onclick="window.location = 'properties.html?city=Chennai'"
+          >
+            <img src="images/property-1.jpg" alt="Chennai Real Estate" />
+            <div class="city-card-overlay"></div>
+            <div class="city-card-info">
+              <div class="city-name">Chennai</div>
+              <div class="city-count">47,000+ Properties</div>
+            </div>
+          </div>
+          <div
+            class="city-card"
+            onclick="window.location = 'properties.html?city=Kolkata'"
+          >
+            <img src="images/city-mumbai.jpg" alt="Kolkata Real Estate" />
+            <div class="city-card-overlay"></div>
+            <div class="city-card-info">
+              <div class="city-name">Kolkata</div>
+              <div class="city-count">38,000+ Properties</div>
+            </div>
+          </div>
+          <div
+            class="city-card"
+            onclick="window.location = 'properties.html?city=Noida'"
+          >
+            <img src="images/hero-bg.jpg" alt="Noida Real Estate" />
+            <div class="city-card-overlay"></div>
+            <div class="city-card-info">
+              <div class="city-name">Noida</div>
+              <div class="city-count">42,000+ Properties</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROPERTY TYPES -->
+    <section class="section" style="background: #fff">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Property Types</span>
+          <h2>Browse by Property Type</h2>
+          <p>
+            Find the right property type that suits your needs and lifestyle.
+          </p>
+          <div class="section-title-line"></div>
+        </div>
+        <div class="prop-types-grid">
+          <div
+            class="prop-type-card"
+            onclick="window.location = 'properties.html?propType=Apartment'"
+          >
+            <div class="prop-type-icon">
+              <i class="fa-solid fa-building"></i>
+            </div>
+            <div class="prop-type-name">Apartment / Flat</div>
+            <div class="prop-type-count">4.5 Lakh+ listings</div>
+          </div>
+          <div
+            class="prop-type-card"
+            onclick="window.location = 'properties.html?propType=Villa'"
+          >
+            <div class="prop-type-icon"><i class="fa-solid fa-house"></i></div>
+            <div class="prop-type-name">Independent Villa</div>
+            <div class="prop-type-count">1.2 Lakh+ listings</div>
+          </div>
+          <div
+            class="prop-type-card"
+            onclick="window.location = 'properties.html?propType=Plot'"
+          >
+            <div class="prop-type-icon">
+              <i class="fa-solid fa-seedling"></i>
+            </div>
+            <div class="prop-type-name">Plot / Land</div>
+            <div class="prop-type-count">2.1 Lakh+ listings</div>
+          </div>
+          <div
+            class="prop-type-card"
+            onclick="window.location = 'properties.html?propType=Commercial'"
+          >
+            <div class="prop-type-icon"><i class="fa-solid fa-store"></i></div>
+            <div class="prop-type-name">Commercial Space</div>
+            <div class="prop-type-count">85,000+ listings</div>
+          </div>
+          <div
+            class="prop-type-card"
+            onclick="window.location = 'properties.html?propType=PG'"
+          >
+            <div class="prop-type-icon"><i class="fa-solid fa-couch"></i></div>
+            <div class="prop-type-name">PG / Co-Living</div>
+            <div class="prop-type-count">60,000+ listings</div>
+          </div>
+          <div
+            class="prop-type-card"
+            onclick="window.location = 'properties.html?propType=Lodge'"
+          >
+            <div class="prop-type-icon"><i class="fa-solid fa-hotel"></i></div>
+            <div class="prop-type-name">Lodge / Guest House</div>
+            <div class="prop-type-count">15,000+ listings</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW LAUNCH PROJECTS -->
+    <section class="section" style="background: var(--bg)">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">New Launches</span>
+          <h2>Handpicked New Launch Projects</h2>
+          <p>
+            Get the best deals with pre-launch prices in top residential
+            projects.
+          </p>
+          <div class="section-title-line"></div>
+        </div>
+        <div class="cards-slider-wrap">
+          <button class="slider-btn slider-prev">‹</button>
+          <div class="cards-slider" id="newLaunchSlider">
+            <div class="project-card" style="min-width: 300px; flex-shrink: 0">
+              <div class="project-img">
+                <img src="images/hero-bg.jpg" alt="Godrej Azure Project" />
+                <div class="project-rera">RERA Registered</div>
+                <div class="project-tag">
+                  <span class="badge badge-primary">NEW LAUNCH</span>
+                </div>
+              </div>
+              <div class="project-body">
+                <div class="project-name">Godrej Azure Sky Residences</div>
+                <div class="project-location">📍 Thanisandra, Bangalore</div>
+                <div class="project-price">₹68 Lakh Onwards</div>
+                <div class="project-config">
+                  2, 3 BHK Apartments · 1,150–1,850 sq.ft
+                </div>
+              </div>
+            </div>
+
+            <div class="project-card" style="min-width: 300px; flex-shrink: 0">
+              <div class="project-img">
+                <img src="images/city-mumbai.jpg" alt="Prestige Mumbai" />
+                <div class="project-rera">RERA Registered</div>
+                <div class="project-tag">
+                  <span class="badge badge-success">READY SOON</span>
+                </div>
+              </div>
+              <div class="project-body">
+                <div class="project-name">Prestige Park Grove Phase 2</div>
+                <div class="project-location">📍 Whitefield, Bangalore</div>
+                <div class="project-price">₹1.2 Cr Onwards</div>
+                <div class="project-config">
+                  3, 4 BHK Villas · 2,800–4,500 sq.ft
+                </div>
+              </div>
+            </div>
+
+            <div class="project-card" style="min-width: 300px; flex-shrink: 0">
+              <div class="project-img">
+                <img src="images/property-1.jpg" alt="DLF Camellias" />
+                <div class="project-rera">RERA Registered</div>
+                <div class="project-tag">
+                  <span class="badge badge-primary">NEW LAUNCH</span>
+                </div>
+              </div>
+              <div class="project-body">
+                <div class="project-name">DLF The Camellias Phase 3</div>
+                <div class="project-location">📍 Golf Course Road, Gurgaon</div>
+                <div class="project-price">₹8.5 Cr Onwards</div>
+                <div class="project-config">
+                  4, 5 BHK Super Luxury · 6,500–10,000 sq.ft
+                </div>
+              </div>
+            </div>
+
+            <div class="project-card" style="min-width: 300px; flex-shrink: 0">
+              <div class="project-img">
+                <img src="images/hero-bg.jpg" alt="Lodha World Towers" />
+                <div class="project-rera">RERA Registered</div>
+                <div class="project-tag">
+                  <span class="badge badge-warning">UNDER CONSTRUCTION</span>
+                </div>
+              </div>
+              <div class="project-body">
+                <div class="project-name">Lodha World Towers Mumbai</div>
+                <div class="project-location">📍 Lower Parel, Mumbai</div>
+                <div class="project-price">₹3.5 Cr Onwards</div>
+                <div class="project-config">
+                  3, 4 BHK Luxury Homes · 1,800–3,200 sq.ft
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="slider-btn slider-next">›</button>
+        </div>
+        <div style="text-align: center; margin-top: 32px">
+          <a
+            href="properties.html?newLaunch=true"
+            class="btn btn-outline btn-lg"
+            >View All Projects →</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY US -->
+    <section class="section" style="background: #fff">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Why Choose Us</span>
+          <h2>The 24Dismil.com Advantage</h2>
+          <div class="section-title-line"></div>
+        </div>
+        <div class="advantage-grid">
+          <div class="advantage-card">
+            <div class="advantage-icon">
+              <i class="fa-solid fa-check-circle"></i>
+            </div>
+            <h3
+              style="
+                font-size: 16px;
+                font-weight: 700;
+                color: var(--dark);
+                margin-bottom: 8px;
+              "
+            >
+              100% Verified Listings
+            </h3>
+            <p
+              style="
+                font-size: 13px;
+                color: var(--text-muted);
+                line-height: 1.6;
+              "
+            >
+              Every property on our platform is physically verified by our
+              ground team for authenticity.
+            </p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">
+              <i class="fa-solid fa-handshake"></i>
+            </div>
+            <h3
+              style="
+                font-size: 16px;
+                font-weight: 700;
+                color: var(--dark);
+                margin-bottom: 8px;
+              "
+            >
+              Zero Brokerage Options
+            </h3>
+            <p
+              style="
+                font-size: 13px;
+                color: var(--text-muted);
+                line-height: 1.6;
+              "
+            >
+              Connect directly with owners and save lakhs in brokerage with our
+              direct connect feature.
+            </p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon"><i class="fa-solid fa-lock"></i></div>
+            <h3
+              style="
+                font-size: 16px;
+                font-weight: 700;
+                color: var(--dark);
+                margin-bottom: 8px;
+              "
+            >
+              Safe & Secure
+            </h3>
+            <p
+              style="
+                font-size: 13px;
+                color: var(--text-muted);
+                line-height: 1.6;
+              "
+            >
+              Your data is always protected. We never share personal info
+              without explicit consent.
+            </p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">
+              <i class="fa-solid fa-chart-column"></i>
+            </div>
+            <h3
+              style="
+                font-size: 16px;
+                font-weight: 700;
+                color: var(--dark);
+                margin-bottom: 8px;
+              "
+            >
+              Market Insights
+            </h3>
+            <p
+              style="
+                font-size: 13px;
+                color: var(--text-muted);
+                line-height: 1.6;
+              "
+            >
+              Get price trends, area insights, and market analysis to make
+              informed property decisions.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="section testimonials-section">
+      <div class="container">
+        <div class="section-header">
+          <span
+            class="section-label"
+            style="
+              background: rgba(245, 166, 35, 0.15);
+              color: var(--secondary);
+            "
+            >Testimonials</span
+          >
+          <h2>What Our Customers Say</h2>
+          <p>
+            Thousands of happy home buyers, sellers, and renters trust
+            24Dismil.com.
+          </p>
+          <div class="section-title-line"></div>
+        </div>
+      </div>
+
+      <div style="position: relative; margin-top: 40px">
+        <button
+          class="slider-btn test-prev"
+          style="
+            left: 20px;
+            z-index: 5;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+          "
+        >
+          ‹
+        </button>
+
+        <div class="cards-slider testimonials-slider">
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "Found my dream 3BHK apartment in Noida within just 2 weeks! The
+              verified listings saved me from scammers. The process was seamless
+              and the agent was very professional."
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">R</div>
+              <div>
+                <div class="testimonial-name">Rahul Sharma</div>
+                <div class="testimonial-detail">
+                  Bought 3 BHK in Noida · Oct 2024
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "Sold my Bangalore property at market price in under 30 days. The
+              platform's reach is incredible. Got multiple genuine buyer
+              inquiries within the first week of listing."
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">P</div>
+              <div>
+                <div class="testimonial-name">Priya Menon</div>
+                <div class="testimonial-detail">
+                  Sold 2 BHK in Bangalore · Aug 2024
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★☆</div>
+            <p class="testimonial-text">
+              "Rented a fully furnished 2BHK in Mumbai without any hassle. The
+              video tours feature was excellent and saved me multiple site
+              visits. Highly recommended!"
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">A</div>
+              <div>
+                <div class="testimonial-name">Amit Verma</div>
+                <div class="testimonial-detail">
+                  Rented 2 BHK in Mumbai · Dec 2024
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "The EMI calculator and area price trends helped me negotiate a
+              better deal. Got my dream home ₹8 Lakhs below the asking price.
+              This portal is a game-changer!"
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">S</div>
+              <div>
+                <div class="testimonial-name">Sneha Patel</div>
+                <div class="testimonial-detail">
+                  Bought Villa in Ahmedabad · Nov 2024
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "Found a great commercial space for my startup in Hitech City. The
+              search filters were perfect for my specific requirements. Truly
+              professional service!"
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">V</div>
+              <div>
+                <div class="testimonial-name">Vikram Reddy</div>
+                <div class="testimonial-detail">
+                  Leased Office in Hyderabad · Oct 2024
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "Sold my OMR apartment through 24Dismil. The verified listing
+              badge definitely brought more serious buyers. Highly impressed
+              with the local market expertise."
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">K</div>
+              <div>
+                <div class="testimonial-name">Karthik Raja</div>
+                <div class="testimonial-detail">
+                  Sold 3 BHK in Chennai · Nov 2024
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★☆</div>
+            <p class="testimonial-text">
+              "Rented a cozy studio in South Delhi. The process was transparent
+              and the virtual tours were a lifesaver. Saved me so much time and
+              travel!"
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">G</div>
+              <div>
+                <div class="testimonial-name">Anjali Gupta</div>
+                <div class="testimonial-detail">
+                  Rented Studio in Delhi · Jan 2025
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              "The property valuation tool is very accurate. Helped me price my
+              independent house in Baner correctly. Got a solid deal within just
+              20 days!"
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">M</div>
+              <div>
+                <div class="testimonial-name">Sandeep Kulkarni</div>
+                <div class="testimonial-detail">
+                  Sold House in Pune · Dec 2024
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button
+          class="slider-btn test-next"
+          style="
+            right: 20px;
+            z-index: 5;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+          "
+        >
+          ›
+        </button>
+      </div>
+    </section>
+
+    <!-- APP DOWNLOAD BANNER -->
+    <section class="app-banner">
+      <div class="container">
+        <div class="app-banner-inner">
+          <div class="app-banner-text">
+            <h2>Download the 24Dismil.com App</h2>
+            <p>
+              Search, shortlist, and schedule property visits on the go. Get
+              exclusive app-only deals and instant property alerts.
+            </p>
+            <div class="app-store-btns">
+              <a
+                href="#"
+                class="store-btn"
+                onclick="
+                  showToast(
+                    'Coming Soon! Our mobile app is currently under development.',
+                    'success',
+                  );
+                  return false;
+                "
+              >
+                <div class="store-btn-icon">
+                  <i class="fa-brands fa-apple"></i>
+                </div>
+                <div class="store-btn-text">
+                  <span class="store-btn-sub">Download on the</span>
+                  <span class="store-btn-name">App Store</span>
+                </div>
+              </a>
+              <a
+                href="#"
+                class="store-btn"
+                onclick="
+                  showToast(
+                    'Coming Soon! Our mobile app is currently under development.',
+                    'success',
+                  );
+                  return false;
+                "
+              >
+                <div class="store-btn-icon">
+                  <i class="fa-brands fa-google-play"></i>
+                </div>
+                <div class="store-btn-text">
+                  <span class="store-btn-sub">Get it on</span>
+                  <span class="store-btn-name">Google Play</span>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="app-phones"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <div class="nav-logo-icon">24</div>
+              24Dismil.com
+            </div>
+            <p class="footer-tagline">
+              India's most trusted real estate portal. Find your dream property
+              with verified listings, expert guidance, and market insights. Your
+              home journey starts here.
+            </p>
+            <div class="footer-socials">
+              <a href="#" class="social-icon"
+                ><i class="fa-brands fa-facebook"></i
+              ></a>
+              <a href="#" class="social-icon"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+              <a href="#" class="social-icon"
+                ><i class="fa-brands fa-twitter"></i
+              ></a>
+              <a href="#" class="social-icon"
+                ><i class="fa-brands fa-linkedin"></i
+              ></a>
+              <a href="#" class="social-icon"
+                ><i class="fa-brands fa-youtube"></i
+              ></a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <div class="footer-links">
+              <a href="properties.html?type=buy">Buy Properties</a>
+              <a href="properties.html?type=rent">Rent Properties</a>
+              <a href="properties.html?type=commercial">Commercial</a>
+              <a href="post-property.html">Post Free Property</a>
+              <a href="properties.html?newLaunch=true">New Projects</a>
+              <a href="about.html">About Us</a>
+              <a href="contact.html">Contact</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Top Cities</h4>
+            <div class="footer-links">
+              <a href="properties.html?city=Mumbai">Mumbai</a>
+              <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
+              <a href="properties.html?city=Bangalore">Bangalore</a>
+              <a href="properties.html?city=Hyderabad">Hyderabad</a>
+              <a href="properties.html?city=Pune">Pune</a>
+              <a href="properties.html?city=Chennai">Chennai</a>
+              <a href="properties.html?city=Kolkata">Kolkata</a>
+              <a href="properties.html?city=Noida">Noida</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <div class="footer-links">
+              <a href="#">EMI Calculator</a>
+              <a href="#">Property Rates</a>
+              <a href="#">RERA Guide</a>
+              <a href="#">Home Loan</a>
+              <a href="#">Legal Guide</a>
+              <a href="#">Vastu Tips</a>
+              <a href="#">Blog & News</a>
+              <a href="#">FAQ</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span
+            >© 2025 24Dismil.com. All rights reserved. | India's #1 Real Estate
+            Portal</span
+          >
+          <div class="footer-bottom-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Use</a>
+            <a href="#">Sitemap</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/properties.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/city-selector.js"></script>
+    <script type="module" src="js/ai-search.js"></script>
+  </body>
 </html>
