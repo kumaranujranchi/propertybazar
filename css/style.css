@@ -486,6 +486,24 @@ textarea {
     margin-bottom: 40px;
     border-radius: var(--radius);
   }
+  /* Mobile navbar: logo left, actions right */
+  .nav {
+    justify-content: space-between;
+  }
+
+  /* Show only the Post Property button and hamburger on mobile */
+  .nav-city {
+    display: none;
+  }
+  .nav-links {
+    display: none;
+  }
+  .nav-btn-login {
+    display: none;
+  }
+  .hamburger {
+    display: flex;
+  }
 }
 .hero-badge {
   display: inline-flex;
