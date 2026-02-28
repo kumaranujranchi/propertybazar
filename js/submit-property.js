@@ -384,27 +384,31 @@ function updateMapPreview(location) {
   // Show the card
   previewCard.style.display = 'block';
   
-  let mapUrl = "";
+  let query = location;
+  
+  // If it's a URL, try to extract coordinate or the place name
   if (location.includes("http") || location.includes("google.com/maps")) {
-    // If it's a URL, we try to extract coords or just use Embed API with the query
-    // For simplicity, we'll use the Embed API with the URL as a query
-    mapUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(location)}`;
-  } else {
-    // If it's lat,lng or a place name
-    mapUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(location)}`;
+    // Try extracting coordinates from @23.34,85.32 format
+    const coordMatch = location.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (coordMatch) {
+      query = `${coordMatch[1]},${coordMatch[2]}`;
+    } else {
+      // Try extracting from q=lat,lng or just use the whole URL as query (might be less reliable)
+      const qMatch = location.match(/[?&]q=([^&]+)/);
+      if (qMatch) {
+        query = decodeURIComponent(qMatch[1]);
+      }
+    }
   }
 
-  // Use a generic embed if no API key is easily available or use a different method
-  // Actually, for a pure preview without a key, we can use the regular google maps embed URL format
-  if (location.includes("lat") || (location.split(',').length === 2 && !isNaN(parseFloat(location.split(',')[0])))) {
-     const [lat, lng] = location.split(',');
-     mapUrl = `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
-  } else {
-     mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(location)}&z=15&output=embed`;
-  }
+  // Use the reliable non-API embed URL
+  const mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
   iframe.src = mapUrl;
-  container.classList.add('loaded');
+  
+  iframe.onload = () => {
+    container.classList.add('loaded');
+  };
 }
 window.initGooglePlaces = initGooglePlaces;
 
