@@ -321,6 +321,15 @@ function initGooglePlaces() {
   const input = document.getElementById('googleLocationSearch');
   if (!input || !window.google) return;
 
+  // Sidebar Preview logic
+  const mapLinkInput = document.getElementById('googleMapLinkInput');
+  if (mapLinkInput) {
+    mapLinkInput.addEventListener('input', () => {
+      const url = mapLinkInput.value.trim();
+      if (url) updateMapPreview(url);
+    });
+  }
+
   const autocomplete = new google.maps.places.Autocomplete(input, {
     componentRestrictions: { country: "in" },
     fields: ["address_components", "geometry", "name"],
@@ -349,12 +358,53 @@ function initGooglePlaces() {
       stateSelect.value = state;
       stateSelect.dispatchEvent(new Event('change'));
     }
-    setTimeout(() => {
-      if (citySelect) citySelect.value = city;
-      if (pinInput) pinInput.value = pin;
-      if (localityInput) localityInput.value = locality;
-    }, 500);
+    if (citySelect) {
+      citySelect.value = city;
+      citySelect.dispatchEvent(new Event('change'));
+    }
+    if (pinInput) pinInput.value = pin;
+    if (localityInput) localityInput.value = locality;
+
+    // Update Map Preview
+    if (place.geometry.location) {
+      const lat = place.geometry.location.lat();
+      const lng = place.geometry.location.lng();
+      updateMapPreview(`${lat},${lng}`);
+    }
   });
+}
+
+function updateMapPreview(location) {
+  const previewCard = document.getElementById('sidebarLocationPreview');
+  const iframe = document.getElementById('googleMapIframe');
+  const container = document.getElementById('mapPreviewContainer');
+  
+  if (!previewCard || !iframe) return;
+
+  // Show the card
+  previewCard.style.display = 'block';
+  
+  let mapUrl = "";
+  if (location.includes("http") || location.includes("google.com/maps")) {
+    // If it's a URL, we try to extract coords or just use Embed API with the query
+    // For simplicity, we'll use the Embed API with the URL as a query
+    mapUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(location)}`;
+  } else {
+    // If it's lat,lng or a place name
+    mapUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(location)}`;
+  }
+
+  // Use a generic embed if no API key is easily available or use a different method
+  // Actually, for a pure preview without a key, we can use the regular google maps embed URL format
+  if (location.includes("lat") || (location.split(',').length === 2 && !isNaN(parseFloat(location.split(',')[0])))) {
+     const [lat, lng] = location.split(',');
+     mapUrl = `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
+  } else {
+     mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(location)}&z=15&output=embed`;
+  }
+
+  iframe.src = mapUrl;
+  container.classList.add('loaded');
 }
 window.initGooglePlaces = initGooglePlaces;
 
@@ -458,39 +508,97 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         // Pre-fill Step 2: Location
-        const locInputs = document.querySelectorAll("#formStep2 .form-input");
-        if (locInputs[0]) {
-          locInputs[0].value = prop.location.state;
-          locInputs[0].dispatchEvent(new Event('change')); // Trigger city population
+        const stateSelect = document.getElementById('stateSelect');
+        const citySelect = document.getElementById('citySelect');
+        if (stateSelect) {
+          stateSelect.value = prop.location.state;
+          stateSelect.dispatchEvent(new Event('change'));
           setTimeout(() => {
-            locInputs[1].value = prop.location.city;
-            locInputs[2].value = prop.location.locality;
-            locInputs[3].value = prop.location.society || '';
-            locInputs[4].value = prop.location.fullAddress || '';
-            locInputs[5].value = prop.location.pinCode;
-            locInputs[6].value = prop.location.landmark || '';
-            if (locInputs[7]) locInputs[7].value = prop.location.metroDistance || '';
-            if (locInputs[8]) locInputs[8].value = prop.location.schoolDistance || '';
-            if (locInputs[9]) locInputs[9].value = prop.location.mallDistance || '';
-            if (locInputs[10]) locInputs[10].value = prop.location.hospitalDistance || '';
+            if (citySelect) citySelect.value = prop.location.city;
+            const localityInput = document.getElementById('localityInput');
+            const societyInput = document.getElementById('societyInput');
+            const addressInput = document.getElementById('addressInput');
+            const pinCodeInput = document.getElementById('pinCodeInput');
+            const landmarkInput = document.getElementById('landmarkInput');
+            const mapLinkInput = document.getElementById('googleMapLinkInput');
+
+            if (localityInput) localityInput.value = prop.location.locality;
+            if (societyInput) societyInput.value = prop.location.society || '';
+            if (addressInput) addressInput.value = prop.location.fullAddress || '';
+            if (pinCodeInput) pinCodeInput.value = prop.location.pinCode;
+            if (landmarkInput) landmarkInput.value = prop.location.landmark || '';
+            if (mapLinkInput) {
+              mapLinkInput.value = prop.location.googleMapLink || '';
+              if (prop.location.googleMapLink) updateMapPreview(prop.location.googleMapLink);
+            } else if (prop.location.googleSearch) {
+              updateMapPreview(prop.location.googleSearch);
+            }
+
+            if (document.getElementById('metroDistance')) document.getElementById('metroDistance').value = prop.location.metroDistance || '';
+            if (document.getElementById('schoolDistance')) document.getElementById('schoolDistance').value = prop.location.schoolDistance || '';
+            if (document.getElementById('mallDistance')) document.getElementById('mallDistance').value = prop.location.mallDistance || '';
+            if (document.getElementById('hospitalDistance')) document.getElementById('hospitalDistance').value = prop.location.hospitalDistance || '';
           }, 500);
         }
 
         // Pre-fill Step 3: Details
-        const detInputs = document.querySelectorAll("#formStep3 .form-input");
-        if (detInputs[0]) {
-          detInputs[0].value = prop.details.bhk;
-          detInputs[1].value = prop.details.status;
-          detInputs[2].value = prop.details.builtUpArea;
-          detInputs[3].value = prop.details.carpetArea || '';
-          detInputs[4].value = prop.details.floorNumber || '';
-          detInputs[5].value = prop.details.totalFloors || '';
-          detInputs[6].value = prop.details.furnishing || '';
-          detInputs[7].value = prop.details.facing || '';
-          detInputs[8].value = prop.details.parking || '';
-          detInputs[9].value = prop.details.constructionYear || '';
-          detInputs[10].value = prop.details.description || '';
+        const bhkTypeSelect = document.getElementById('bhkTypeSelect');
+        const propertyStatusSelect = document.getElementById('propertyStatusSelect');
+        const furnishingStatusSelect = document.getElementById('furnishingStatusSelect');
+        const facingSelect = document.getElementById('facingSelect');
+
+        if (bhkTypeSelect) {
+          // Handle BHK Segmented Control
+          const bhkVal = ['1RK','1BHK','2BHK','3BHK','4BHK','4.5BHK','5BHK','6BHK'].includes(prop.details.bhk) ? prop.details.bhk : 'Others';
+          bhkTypeSelect.value = bhkVal;
+          const bhkItem = document.querySelector(`#bhkSelector .segment-item[data-value="${bhkVal}"]`);
+          if (bhkItem) {
+             document.querySelectorAll('#bhkSelector .segment-item').forEach(i => i.classList.remove('active'));
+             bhkItem.classList.add('active');
+          }
+          if (bhkVal === 'Others') {
+            document.getElementById('fgCustomBhk').style.display = 'block';
+            document.getElementById('customBhkInput').value = prop.details.bhk;
+          }
         }
+
+        if (propertyStatusSelect) {
+          propertyStatusSelect.value = prop.details.status;
+          const statusItem = document.querySelector(`#statusSelector .segment-item[data-value="${prop.details.status}"]`);
+          if (statusItem) {
+             document.querySelectorAll('#statusSelector .segment-item').forEach(i => i.classList.remove('active'));
+             statusItem.classList.add('active');
+          }
+        }
+
+        if (document.getElementById('builtUpAreaInput')) document.getElementById('builtUpAreaInput').value = prop.details.builtUpArea;
+        if (document.getElementById('carpetAreaInput')) document.getElementById('carpetAreaInput').value = prop.details.carpetArea || '';
+        if (document.getElementById('floorNumberInput')) document.getElementById('floorNumberInput').value = prop.details.floorNumber || '';
+        if (document.getElementById('totalFloorsInput')) document.getElementById('totalFloorsInput').value = prop.details.totalFloors || '';
+
+        if (furnishingStatusSelect) {
+          furnishingStatusSelect.value = prop.details.furnishing;
+          const furnCard = document.querySelector(`#furnishingSelector .selection-card[data-value="${prop.details.furnishing}"]`);
+          if (furnCard) {
+             document.querySelectorAll('#furnishingSelector .selection-card').forEach(c => c.classList.remove('active'));
+             furnCard.classList.add('active');
+          }
+        }
+
+        if (facingSelect) {
+          facingSelect.value = prop.details.facing || '';
+          if (prop.details.facing) {
+            prop.details.facing.split(', ').forEach(f => {
+              const faceItem = document.querySelector(`.face-item[data-value="${f}"]`);
+              if (faceItem) faceItem.classList.add('active');
+            });
+          }
+        }
+
+        if (document.getElementById('parkingSelect')) document.getElementById('parkingSelect').value = prop.details.parking || '';
+        if (document.getElementById('constructionYearInput')) document.getElementById('constructionYearInput').value = prop.details.constructionYear || '';
+        if (document.getElementById('reraInput')) document.getElementById('reraInput').value = prop.details.rera || '';
+        if (document.getElementById('descriptionInput')) document.getElementById('descriptionInput').value = prop.details.description || '';
 
         // Pre-fill Amenities
         const amenityCheckboxes = document.querySelectorAll('#formStep3 input[type="checkbox"]');
@@ -623,19 +731,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const googleLoc = document.getElementById('googleLocationSearch').value;
 
-      const locInputs = document.querySelectorAll("#formStep2 .form-input");
       const location = {
-        state: locInputs[1].value, 
-        city: locInputs[2].value,
-        locality: locInputs[3].value,
-        society: locInputs[4].value || undefined,
-        fullAddress: locInputs[5].value || undefined,
-        pinCode: locInputs[6].value,
-        landmark: locInputs[7].value || undefined,
-        metroDistance: locInputs[8]?.value || undefined,
-        schoolDistance: locInputs[9]?.value || undefined,
-        mallDistance: locInputs[10]?.value || undefined,
-        hospitalDistance: locInputs[11]?.value || undefined,
+        state: document.getElementById('stateSelect').value,
+        city: document.getElementById('citySelect').value,
+        locality: document.getElementById('localityInput').value,
+        society: document.getElementById('societyInput').value || undefined,
+        fullAddress: document.getElementById('addressInput').value || undefined,
+        pinCode: document.getElementById('pinCodeInput').value,
+        landmark: document.getElementById('landmarkInput').value || undefined,
+        googleMapLink: document.getElementById('googleMapLinkInput').value || undefined,
+        metroDistance: document.getElementById('metroDistance')?.value || undefined,
+        schoolDistance: document.getElementById('schoolDistance')?.value || undefined,
+        mallDistance: document.getElementById('mallDistance')?.value || undefined,
+        hospitalDistance: document.getElementById('hospitalDistance')?.value || undefined,
         googleSearch: googleLoc || undefined
       };
 

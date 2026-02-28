@@ -3472,3 +3472,23 @@ textarea {
 .amenity-pill.active i {
   color: var(--primary);
 }
+
+/* Location Preview Sidebar */
+#sidebarLocationPreview {
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+}
+
+#mapPreviewContainer iframe {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#mapPreviewContainer.loaded iframe {
+  opacity: 1;
+}
+
+#mapPreviewContainer.loaded #mapPlaceholder {
+  display: none !important;
+}
+

@@ -178,7 +178,7 @@
 
         <!-- GOOGLE LOCATION SEARCH -->
         <div class="form-group full" style="margin-bottom: 24px;">
-          <label class="form-label">Search Location on Google *</label>
+          <label class="form-label">Search Location on Google (Optional)</label>
           <div style="position: relative;">
             <i class="fa-solid fa-magnifying-glass-location" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
             <input type="text" id="googleLocationSearch" class="form-input" placeholder="Search for your society, building or area..." style="padding-left: 44px; border: 2px solid rgba(232, 65, 24, 0.2);">
@@ -201,23 +201,31 @@
           </div>
           <div class="form-group">
             <label class="form-label">Locality / Area *</label>
-            <input type="text" class="form-input" placeholder="e.g. Sector 62, Koramangala">
+            <input type="text" id="localityInput" class="form-input" placeholder="e.g. Sector 62, Koramangala">
           </div>
           <div class="form-group">
             <label class="form-label">Society / Project Name</label>
-            <input type="text" class="form-input" placeholder="e.g. Prestige Lakeside Habitat">
+            <input type="text" id="societyInput" class="form-input" placeholder="e.g. Prestige Lakeside Habitat">
           </div>
           <div class="form-group full">
             <label class="form-label">Full Address</label>
-            <textarea class="form-input" rows="3" placeholder="Flat No., Building Name, Street, Landmark..."></textarea>
+            <textarea id="addressInput" class="form-input" rows="3" placeholder="Flat No., Building Name, Street, Landmark..."></textarea>
           </div>
           <div class="form-group">
             <label class="form-label">PIN Code *</label>
-            <input type="text" class="form-input" placeholder="6-digit PIN code">
+            <input type="text" id="pinCodeInput" class="form-input" placeholder="6-digit PIN code">
           </div>
           <div class="form-group">
             <label class="form-label">Landmark (Optional)</label>
-            <input type="text" class="form-input" placeholder="Near Metro Station, Mall, etc.">
+            <input type="text" id="landmarkInput" class="form-input" placeholder="Near Metro Station, Mall, etc.">
+          </div>
+          <div class="form-group full" id="fgMapLink">
+            <label class="form-label">Google Map Link (Optional)</label>
+            <div style="position: relative;">
+               <i class="fa-solid fa-link" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
+               <input type="text" id="googleMapLinkInput" class="form-input" placeholder="Paste Google Map URL here..." style="padding-left: 44px;">
+            </div>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;"><i class="fa-solid fa-lightbulb"></i> Paste a direct link to the location on Google Maps for better accuracy.</p>
           </div>
         </div>
         <h3
@@ -656,6 +664,20 @@
         <div style="margin-top: 20px; font-size: 11px; color: var(--text-muted); line-height: 1.5; text-align: center;">
           <i class="fa-solid fa-circle-info"></i> High-score properties appear first in search results and get 10x
           more leads.
+        </div>
+      </div>
+
+      <!-- SIDEBAR: Location Preview -->
+      <div id="sidebarLocationPreview" class="form-card" style="padding: 24px; margin-top: 24px; display: none;">
+        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--dark); display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-map-location-dot" style="color: var(--primary)"></i> Location Preview
+        </h3>
+        <div id="mapPreviewContainer" style="width: 100%; height: 200px; background: #f3f4f6; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--border);">
+           <iframe id="googleMapIframe" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen src=""></iframe>
+           <div id="mapPlaceholder" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; color: var(--text-muted); text-align: center; padding: 20px;">
+              <i class="fa-solid fa-map-pin" style="font-size: 24px; margin-bottom: 10px; color: var(--primary); opacity: 0.5;"></i>
+              <p style="font-size: 12px;">Map will appear here once you select a location.</p>
+           </div>
         </div>
       </div>
     </aside>
