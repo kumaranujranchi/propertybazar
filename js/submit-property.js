@@ -121,25 +121,37 @@ function compressImage(file, maxWidth = 1200, maxHeight = 1200, quality = 0.8) {
 async function handleFiles(files, type = 'photo') {
   const isVideo = type === 'video';
   const valid = files.filter((f) => isVideo ? f.type.startsWith("video/") : f.type.startsWith("image/"));
-  const currentCount = isVideo ? selectedVideos.length : selectedFiles.length;
-  const remaining = 20 - currentCount;
-  const toProcess = valid.slice(0, remaining);
+  
+  if (isVideo) {
+    if (selectedVideos.length >= 1) {
+      window.showToast("Only 1 property video is allowed in the free plan. You can add up to 10 YouTube links.", "warning");
+      return;
+    }
+    const file = valid[0];
+    if (!file) return;
+    
+    if (file.size > 20 * 1024 * 1024) {
+      window.showToast("Video size exceeds 20MB limit. Please compress or use a YouTube link.", "error");
+      return;
+    }
+    
+    selectedVideos.push(file);
+    addPreview(file, selectedVideos.length - 1, 'video');
+  } else {
+    const currentCount = selectedFiles.length;
+    const remaining = 20 - currentCount;
+    const toProcess = valid.slice(0, remaining);
 
-  const uploadArea = isVideo ? document.getElementById("videoUploadArea") : photoUploadArea;
-  if (uploadArea) uploadArea.style.opacity = "0.5";
+    const uploadArea = photoUploadArea;
+    if (uploadArea) uploadArea.style.opacity = "0.5";
 
-  for (const file of toProcess) {
-    if (isVideo) {
-      selectedVideos.push(file);
-      addPreview(file, selectedVideos.length - 1, 'video');
-    } else {
+    for (const file of toProcess) {
       const compressedFile = await compressImage(file);
       selectedFiles.push(compressedFile);
       addPreview(compressedFile, selectedFiles.length - 1, 'photo');
     }
+    if (uploadArea) uploadArea.style.opacity = "1";
   }
-
-  if (uploadArea) uploadArea.style.opacity = "1";
 }
 
 const photoCategories = ["Project Image", "Amenities", "Sample Flat", "Location", "Room", "Kitchen", "Bathroom", "Living Room", "Master Plan", "Floor Plan"];
@@ -323,6 +335,40 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Detect Edit Mode
   const urlParams = new URLSearchParams(window.location.search);
   const editId = urlParams.get('id');
+
+  // ========== YOUTUBE LINKS LOGIC ==========
+  const addVideoLinkBtn = document.getElementById('addVideoLinkBtn');
+  const videoLinksContainer = document.getElementById('videoLinksContainer');
+  
+  if (addVideoLinkBtn && videoLinksContainer) {
+    addVideoLinkBtn.addEventListener('click', () => {
+      const currentLinks = videoLinksContainer.querySelectorAll('.video-link-row').length;
+      if (currentLinks >= 10) {
+        window.showToast("Maximum 10 external video links allowed.", "warning");
+        return;
+      }
+
+      const newRow = document.createElement('div');
+      newRow.className = 'video-link-row';
+      newRow.style.cssText = 'display:flex; gap:10px; margin-bottom:10px';
+      newRow.innerHTML = `
+        <input type="url" class="form-input video-link-input" placeholder="Paste YouTube/Vimeo link here" style="flex:1">
+        <button type="button" class="btn btn-outline btn-sm remove-link-btn" style="padding: 0 15px; color: var(--danger); border-color: var(--danger)" onclick="this.parentElement.remove(); updateRemoveButtons()"><i class="fa-solid fa-trash"></i></button>
+      `;
+      videoLinksContainer.appendChild(newRow);
+      updateRemoveButtons();
+    });
+
+    function updateRemoveButtons() {
+      const rows = videoLinksContainer.querySelectorAll('.video-link-row');
+      rows.forEach(row => {
+        const btn = row.querySelector('.remove-link-btn');
+        if (btn) btn.style.display = rows.length > 1 ? 'block' : 'none';
+      });
+    }
+    window.updateRemoveButtons = updateRemoveButtons;
+  }
+
   const submitBtn = document.getElementById("btnSubmitProperty");
   if (!submitBtn) return;
 
@@ -576,6 +622,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         contactTime: priceInputs[16].value || undefined,
       };
 
+      const externalVideos = [];
+      document.querySelectorAll('.video-link-input').forEach(input => {
+        if (input.value.trim()) externalVideos.push(input.value.trim());
+      });
+
       submitBtn.innerText = editId ? "⏳ Updating property..." : "⏳ Posting property...";
 
       if (editId) {
@@ -589,6 +640,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           amenities,
           photos: photoData,
           videos: videoData,
+          externalVideos: externalVideos,
           pricing,
           contactDesc,
         });
@@ -602,6 +654,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           amenities,
           photos: photoData,
           videos: videoData,
+          externalVideos: externalVideos,
           pricing,
           contactDesc,
           userId: user._id,
