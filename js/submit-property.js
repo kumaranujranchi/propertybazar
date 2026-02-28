@@ -336,6 +336,27 @@ function initGooglePlaces() {
     types: ["geocode", "establishment"]
   });
 
+  // Listeners for manual fields to update map
+  const manualFields = ['localityInput', 'citySelect', 'stateSelect'];
+  manualFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('change', () => {
+        const locality = document.getElementById('localityInput')?.value;
+        const city = document.getElementById('citySelect')?.value;
+        if (locality && city) updateMapPreview(`${locality}, ${city}`);
+      });
+      // Also on blur for text input
+      if (el.tagName === 'INPUT') {
+        el.addEventListener('blur', () => {
+          const locality = document.getElementById('localityInput')?.value;
+          const city = document.getElementById('citySelect')?.value;
+          if (locality && city) updateMapPreview(`${locality}, ${city}`);
+        });
+      }
+    }
+  });
+
   autocomplete.addListener("place_changed", () => {
     const place = autocomplete.getPlace();
     if (!place.geometry) return;
@@ -381,34 +402,55 @@ function updateMapPreview(location) {
   
   if (!previewCard || !iframe) return;
 
-  // Show the card
-  previewCard.style.display = 'block';
-  
   let query = location;
+  let isUrl = location.includes("http") || location.includes("google.com/maps");
   
-  // If it's a URL, try to extract coordinate or the place name
-  if (location.includes("http") || location.includes("google.com/maps")) {
-    // Try extracting coordinates from @23.34,85.32 format
+  // Try to extract useful info from URL
+  if (isUrl) {
+    // 1. Try extracting coordinates from @23.34,85.32 format
     const coordMatch = location.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
     if (coordMatch) {
       query = `${coordMatch[1]},${coordMatch[2]}`;
+      isUrl = false; // We found coords, treat as simple query now
     } else {
-      // Try extracting from q=lat,lng or just use the whole URL as query (might be less reliable)
+      // 2. Try extracting from q=lat,lng
       const qMatch = location.match(/[?&]q=([^&]+)/);
       if (qMatch) {
-        query = decodeURIComponent(qMatch[1]);
+         query = decodeURIComponent(qMatch[1]);
+         isUrl = query.includes("http"); // Re-check if it's still a URL
       }
     }
   }
 
-  // Use the reliable non-API embed URL
-  const mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  // FALLBACK: If it's still a URL (parsing failed) or empty, use manual fields
+  if (isUrl || !query) {
+     const locality = document.getElementById('localityInput')?.value;
+     const city = document.getElementById('citySelect')?.value;
+     if (locality && city) {
+        query = `${locality}, ${city}`;
+     } else if (city) {
+        query = city;
+     } else {
+        // If no info at all, don't show the map yet
+        if (!isUrl) previewCard.style.display = 'none';
+        return;
+     }
+  }
 
-  iframe.src = mapUrl;
-  
-  iframe.onload = () => {
-    container.classList.add('loaded');
-  };
+  // Show the card
+  previewCard.style.display = 'block';
+
+  // Use the reliable non-API embed URL
+  const mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=14&output=embed`;
+
+  // Only update if source changed to avoid flickering
+  if (iframe.src !== mapUrl) {
+    container.classList.remove('loaded');
+    iframe.src = mapUrl;
+    iframe.onload = () => {
+      container.classList.add('loaded');
+    };
+  }
 }
 window.initGooglePlaces = initGooglePlaces;
 
