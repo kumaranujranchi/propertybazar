@@ -1419,8 +1419,8 @@
       const isLand = /plot|land/i.test(propType);
       const isCommercial = /commercial|shop|office|warehouse/i.test(propType);
       const isWarehouse = /warehouse|industrial|godown/i.test(propType);
-      const isHospitality = /hotel|resort|guest house|lodge|service apartment/i.test(propType);
-      const isLodge = /lodge/i.test(propType) && !isHospitality; // old simple lodge (kept for legacy)
+      const isHospitality = /hotel|resort|guest house|lodge|service apartment|pg room/i.test(propType);
+      const isLodge = /lodge|pg room/i.test(propType) && !isHospitality; // old simple lodge (kept for legacy)
       const isVilla = /villa|house/i.test(propType);
       const hideResidential = isLand || isCommercial || isWarehouse || isHospitality;
       const hideStandardRes = hideResidential || isVilla;
@@ -1524,7 +1524,7 @@
         if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
         else if (isWarehouse) step3Title.textContent = 'Step 3: Warehouse / Industrial Details';
         else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
-        else if (isHospitality) step3Title.textContent = 'Step 3: Hotel / Hospitality Details';
+        else if (isHospitality) step3Title.textContent = /pg room/i.test(propType) ? 'Step 3: PG Room Details' : 'Step 3: Hotel / Hospitality Details';
         else if (isLodge) step3Title.textContent = 'Step 3: Lodge Details';
         else if (isVilla) step3Title.textContent = 'Step 3: Villa / House Details';
         else step3Title.textContent = 'Step 3: Property Details';
