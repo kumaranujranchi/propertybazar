@@ -31,12 +31,13 @@ export const getProperties = query({
     return await Promise.all(
       properties.map(async (p) => {
         const resolvedPhotos = await Promise.all(
-          (p.photos || []).map(async (storageId: string) => {
+          (p.photos || []).map(async (photo: any) => {
             try {
+              const storageId = typeof photo === 'string' ? photo : photo.storageId;
               const url = await ctx.storage.getUrl(storageId as any);
-              return url ?? storageId;
+              return typeof photo === 'string' ? (url ?? photo) : { ...photo, url: url ?? storageId };
             } catch {
-              return storageId;
+              return photo;
             }
           })
         );
@@ -52,8 +53,14 @@ export const getProperty = query({
     const p = await ctx.db.get(args.id);
     if (!p) return null;
     const resolvedPhotos = await Promise.all(
-      (p.photos || []).map(async (sid: string) => {
-        try { return (await ctx.storage.getUrl(sid as any)) ?? sid; } catch { return sid; }
+      (p.photos || []).map(async (photo: any) => {
+        try {
+          const storageId = typeof photo === 'string' ? photo : photo.storageId;
+          const url = await ctx.storage.getUrl(storageId as any);
+          return typeof photo === 'string' ? (url ?? photo) : { ...photo, url: url ?? storageId };
+        } catch {
+          return photo;
+        }
       })
     );
     return { ...p, photos: resolvedPhotos };
@@ -61,9 +68,13 @@ export const getProperty = query({
 });
 
 export const getPhotoUrl = query({
-  args: { storageId: v.string() },
+  args: { storageId: v.any() },
   handler: async (ctx, args) => {
-    try { return await ctx.storage.getUrl(args.storageId as any); } catch { return null; }
+    try {
+      const sid = typeof args.storageId === 'string' ? args.storageId : args.storageId?.storageId;
+      if (!sid) return null;
+      return await ctx.storage.getUrl(sid as any);
+    } catch { return null; }
   },
 });
 
@@ -76,7 +87,9 @@ export const createProperty = mutation({
     location: v.any(),
     details: v.any(),
     amenities: v.array(v.string()),
-    photos: v.array(v.string()),
+    photos: v.array(v.any()),
+    videos: v.optional(v.array(v.any())),
+    externalVideos: v.optional(v.array(v.string())),
     pricing: v.any(),
     contactDesc: v.any()
   },
@@ -133,6 +146,8 @@ export const createProperty = mutation({
       details: args.details,
       amenities: args.amenities,
       photos: args.photos,
+      videos: args.videos,
+      externalVideos: args.externalVideos,
       pricing: args.pricing,
       contactDesc: args.contactDesc,
       isFeatured: isFeatured,
@@ -174,7 +189,9 @@ export const updateProperty = mutation({
     location: v.any(),
     details: v.any(),
     amenities: v.array(v.string()),
-    photos: v.array(v.string()),
+    photos: v.array(v.any()),
+    videos: v.optional(v.array(v.any())),
+    externalVideos: v.optional(v.array(v.string())),
     pricing: v.any(),
     contactDesc: v.any(),
   },
@@ -196,6 +213,8 @@ export const updateProperty = mutation({
       details: args.details,
       amenities: args.amenities,
       photos: args.photos,
+      videos: args.videos,
+      externalVideos: args.externalVideos,
       pricing: args.pricing,
       contactDesc: args.contactDesc,
     });

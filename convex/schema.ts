@@ -151,7 +151,9 @@ export default defineSchema({
       tourismRegistration: v.optional(v.boolean()),
     }),
     amenities: v.array(v.string()),
-    photos: v.array(v.string()),
+    photos: v.array(v.any()), // Supports objects: { storageId, category, isCover }
+    videos: v.optional(v.array(v.any())), // Supports objects: { storageId, category }
+    externalVideos: v.optional(v.array(v.string())), // Youtube/Vimeo links
     pricing: v.object({
       expectedPrice: v.number(),
       priceType: v.optional(v.string()),
