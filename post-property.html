@@ -37,15 +37,15 @@
           <span class="nav-logo-text">24Dismil.com</span>
         </a>
         <button class="nav-city" id="citySelectorBtn">
-          <i class="fa-solid fa-location-dot"></i> <span id="currentCityText">Select City</span> <i class="fa-solid fa-chevron-down"
-            style="font-size: 0.8em;"></i>
+          <i class="fa-solid fa-location-dot"></i> <span id="currentCityText">Select City</span> <i
+            class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
         </button>
         <div class="nav-links">
           <a href="index.html" class="nav-link">Home</a>
           <a href="properties.html?type=buy" class="nav-link">Buy</a>
           <a href="properties.html?type=rent" class="nav-link">Rent</a>
           <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
-          
+
         </div>
         <div class="nav-actions">
           <a href="login.html" class="nav-btn-login">Login</a>
@@ -61,7 +61,7 @@
       <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
       <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
       <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
-      
+
       <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i>
         Login</a>
     </div>
@@ -180,10 +180,14 @@
         <div class="form-group full" style="margin-bottom: 24px;">
           <label class="form-label">Search Location on Google (Optional)</label>
           <div style="position: relative;">
-            <i class="fa-solid fa-magnifying-glass-location" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
-            <input type="text" id="googleLocationSearch" class="form-input" placeholder="Search for your society, building or area..." style="padding-left: 44px; border: 2px solid rgba(232, 65, 24, 0.2);">
+            <i class="fa-solid fa-magnifying-glass-location"
+              style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
+            <input type="text" id="googleLocationSearch" class="form-input"
+              placeholder="Search for your society, building or area..."
+              style="padding-left: 44px; border: 2px solid rgba(232, 65, 24, 0.2);">
           </div>
-          <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;"><i class="fa-solid fa-circle-info"></i> Selecting from Google automatically fills State, City and PIN code.</p>
+          <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;"><i class="fa-solid fa-circle-info"></i>
+            Selecting from Google automatically fills State, City and PIN code.</p>
         </div>
 
         <div class="form-grid">
@@ -209,7 +213,8 @@
           </div>
           <div class="form-group full">
             <label class="form-label">Full Address</label>
-            <textarea id="addressInput" class="form-input" rows="3" placeholder="Flat No., Building Name, Street, Landmark..."></textarea>
+            <textarea id="addressInput" class="form-input" rows="3"
+              placeholder="Flat No., Building Name, Street, Landmark..."></textarea>
           </div>
           <div class="form-group">
             <label class="form-label">PIN Code *</label>
@@ -222,10 +227,13 @@
           <div class="form-group full" id="fgMapLink">
             <label class="form-label">Google Map Link (Optional)</label>
             <div style="position: relative;">
-               <i class="fa-solid fa-link" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
-               <input type="text" id="googleMapLinkInput" class="form-input" placeholder="Paste Google Map URL here..." style="padding-left: 44px;">
+              <i class="fa-solid fa-link"
+                style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
+              <input type="text" id="googleMapLinkInput" class="form-input" placeholder="Paste Google Map URL here..."
+                style="padding-left: 44px;">
             </div>
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;"><i class="fa-solid fa-lightbulb"></i> Paste a direct link to the location on Google Maps for better accuracy.</p>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;"><i class="fa-solid fa-lightbulb"></i>
+              Paste a direct link to the location on Google Maps for better accuracy.</p>
           </div>
         </div>
         <h3
@@ -278,7 +286,7 @@
             </div>
             <input type="hidden" id="bhkTypeSelect" value="2BHK">
           </div>
-          
+
           <div class="form-group full" id="fgCustomBhk" style="display:none">
             <label class="form-label">Enter Custom Configuration *</label>
             <input type="text" class="form-input" id="customBhkInput" placeholder="e.g. 7 BHK, Duplex">
@@ -301,6 +309,207 @@
           <div class="form-group" id="fgCarpetArea">
             <label class="form-label">Carpet Area (sq.ft)</label>
             <input type="number" id="carpetAreaInput" class="form-input" placeholder="e.g. 1100">
+          </div>
+
+          <!-- Villa/House Specific Fields -->
+          <div id="fgVillaDetails"
+            style="display:none; grid-column: 1 / -1; gap: 20px; display: flex; flex-direction: column;">
+            <div
+              style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+              A. Basic Property Identity</div>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label class="form-label">Property Title (Auto-suggest SEO optimized)</label>
+                <input type="text" id="propertyTitleInput" class="form-input"
+                  placeholder="e.g. 4 BHK Premium Villa in Sector 62">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Ownership Type</label>
+                <select id="ownershipTypeSelect" class="form-input form-select">
+                  <option value="">Select Ownership</option>
+                  <option>Freehold</option>
+                  <option>Leasehold</option>
+                  <option>Power of Attorney</option>
+                </select>
+              </div>
+            </div>
+
+            <div
+              style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+              B. Configuration Details</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Bathrooms</label>
+                <select id="bathroomsSelect" class="form-input form-select">
+                  <option value="">Select</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5+">5+</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Balconies</label>
+                <select id="balconiesSelect" class="form-input form-select">
+                  <option value="">Select</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4+">4+</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Additional Rooms</label>
+                <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbStudyRoom"> Study Room</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbServantRoom"> Servant Room</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbPoojaRoom"> Pooja Room</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbStoreRoom"> Store Room</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbBasement"> Basement</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Floor Configuration</label>
+                <input type="text" id="floorConfigInput" class="form-input" placeholder="e.g. G+1, G+2">
+              </div>
+            </div>
+
+            <div
+              style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+              C. Area Details</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Plot Area (sq.ft / sq.yard / acre)</label>
+                <input type="number" id="plotAreaInput" class="form-input" placeholder="e.g. 2400">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Super Built-up Area (sq.ft)</label>
+                <input type="number" id="superBuiltUpAreaInput" class="form-input" placeholder="e.g. 3000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Open Area %</label>
+                <input type="number" id="openAreaInput" class="form-input" placeholder="e.g. 30">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Frontage Width (ft)</label>
+                <input type="number" id="frontageWidthInput" class="form-input" placeholder="e.g. 40">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Road Width (ft)</label>
+                <input type="number" id="roadWidthInput" class="form-input" placeholder="e.g. 30">
+              </div>
+            </div>
+
+            <div
+              style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+              D. Construction Details</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Age of Property</label>
+                <select id="ageOfPropertySelect" class="form-input form-select">
+                  <option value="">Select Age</option>
+                  <option>0-1 Years (New)</option>
+                  <option>1-5 Years</option>
+                  <option>5-10 Years</option>
+                  <option>10+ Years</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Construction Quality</label>
+                <select id="constructionQualitySelect" class="form-input form-select">
+                  <option value="">Select Quality</option>
+                  <option>Premium</option>
+                  <option>Standard</option>
+                  <option>Basic</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Flooring Type</label>
+                <input type="text" id="flooringTypeInput" class="form-input" placeholder="e.g. Marble, Vitrified">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Wall Finish</label>
+                <input type="text" id="wallFinishInput" class="form-input" placeholder="e.g. Premium Emulsion">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Ceiling Height (ft)</label>
+                <input type="number" id="ceilingHeightInput" class="form-input" placeholder="e.g. 10">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Water Source</label>
+                <select id="waterSourceSelect" class="form-input form-select">
+                  <option value="">Select Source</option>
+                  <option>Municipal</option>
+                  <option>Borewell</option>
+                  <option>Both</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Electricity Connection Load</label>
+                <input type="text" id="electricityLoadInput" class="form-input" placeholder="e.g. 5 kW">
+              </div>
+            </div>
+
+            <div
+              style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+              E. Parking Options</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Open Parking</label>
+                <select id="openParkingSelect" class="form-input form-select">
+                  <option value="">None</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3+</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <div style="display:flex; gap:20px;">
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbGarage"> Closed Garage</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbEvCharging"> EV Charging Provision</label>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+              G. Legal Details (Very Important for Trust)</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Approval Authority</label>
+                <input type="text" id="approvalAuthorityInput" class="form-input"
+                  placeholder="e.g. BDA / Municipality / Panchayat">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Property Tax Status</label>
+                <select id="propertyTaxStatusSelect" class="form-input form-select">
+                  <option value="">Select</option>
+                  <option>Paid up to date</option>
+                  <option>Pending</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Loan Approved From (Banks)</label>
+                <input type="text" id="loanApprovedInput" class="form-input" placeholder="e.g. SBI, HDFC">
+              </div>
+              <div class="form-group full">
+                <div style="display:flex; gap:20px;">
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbOccupancyCert"> Occupancy Certificate (OC) Available</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbCompletionCert"> Completion Certificate (CC) Available</label>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- New Plot/Land Specific Fields -->
@@ -349,7 +558,7 @@
             <label class="form-label">Total Floors in Building</label>
             <input type="number" id="totalFloorsInput" class="form-input" placeholder="e.g. 18">
           </div>
-          
+
           <div class="form-group full" id="fgFurnishing">
             <label class="form-label">Furnishing Status</label>
             <div class="visual-cards" id="furnishingSelector">
@@ -396,17 +605,21 @@
 
         <div style="margin-top:30px">
           <div class="filter-group-title" style="margin-bottom:20px; font-size: 16px;">Amenities Available</div>
-          
+
           <!-- Category: Basic Amenities -->
           <div class="amenity-category">
             <div class="amenity-category-title"><i class="fa-solid fa-plug-circle-bolt"></i> Basic Amenities</div>
             <div class="amenity-pill-grid">
               <div class="amenity-pill" data-value="Power Backup"><i class="fa-solid fa-bolt"></i> Power Backup</div>
               <div class="amenity-pill" data-value="Water Supply"><i class="fa-solid fa-droplet"></i> Water Supply</div>
+              <div class="amenity-pill" data-value="Rainwater Harvesting"><i class="fa-solid fa-cloud-rain"></i>
+                Rainwater Harvesting</div>
               <div class="amenity-pill" data-value="Lift"><i class="fa-solid fa-elevator"></i> Lift</div>
-              <div class="amenity-pill" data-value="Power Backup"><i class="fa-solid fa-trash-can"></i> Garbage Disposal</div>
+              <div class="amenity-pill" data-value="Garbage Disposal"><i class="fa-solid fa-trash-can"></i> Garbage
+                Disposal</div>
               <div class="amenity-pill" data-value="Solar Energy"><i class="fa-solid fa-sun"></i> Solar Energy</div>
-              <div class="amenity-pill" data-value="Central Drainage System"><i class="fa-solid fa-pipe-valve"></i> Drainage</div>
+              <div class="amenity-pill" data-value="Central Drainage System"><i class="fa-solid fa-pipe-valve"></i>
+                Drainage</div>
             </div>
           </div>
 
@@ -414,11 +627,15 @@
           <div class="amenity-category">
             <div class="amenity-category-title"><i class="fa-solid fa-shield-halved"></i> Security & Safety</div>
             <div class="amenity-pill-grid">
-              <div class="amenity-pill" data-value="24x7 Security"><i class="fa-solid fa-user-shield"></i> 24x7 Security</div>
+              <div class="amenity-pill" data-value="24x7 Security"><i class="fa-solid fa-user-shield"></i> 24x7 Security
+              </div>
+              <div class="amenity-pill" data-value="Gated Society"><i class="fa-solid fa-gate"></i> Gated Society</div>
               <div class="amenity-pill" data-value="CCTV"><i class="fa-solid fa-video"></i> CCTV</div>
               <div class="amenity-pill" data-value="Intercom"><i class="fa-solid fa-phone-volume"></i> Intercom</div>
-              <div class="amenity-pill" data-value="Fire Safety"><i class="fa-solid fa-fire-extinguisher"></i> Fire Safety</div>
-              <div class="amenity-pill" data-value="Outside Boundary"><i class="fa-solid fa-border-all"></i> boundary Wall</div>
+              <div class="amenity-pill" data-value="Fire Safety"><i class="fa-solid fa-fire-extinguisher"></i> Fire
+                Safety</div>
+              <div class="amenity-pill" data-value="Boundary Wall"><i class="fa-solid fa-border-all"></i> Boundary Wall
+              </div>
             </div>
           </div>
 
@@ -426,13 +643,20 @@
           <div class="amenity-category">
             <div class="amenity-category-title"><i class="fa-solid fa-star"></i> Lifestyle & Leisure</div>
             <div class="amenity-pill-grid">
-              <div class="amenity-pill" data-value="Swimming Pool"><i class="fa-solid fa-person-swimming"></i> Pool</div>
+              <div class="amenity-pill" data-value="Private Terrace"><i class="fa-solid fa-tree"></i> Private Terrace
+              </div>
+              <div class="amenity-pill" data-value="Swimming Pool"><i class="fa-solid fa-person-swimming"></i> Pool
+              </div>
               <div class="amenity-pill" data-value="Gymnasium"><i class="fa-solid fa-dumbbell"></i> Gym</div>
+              <div class="amenity-pill" data-value="Childrens Play Area"><i class="fa-solid fa-child-reaching"></i> Play
+                Area</div>
               <div class="amenity-pill" data-value="Clubhouse"><i class="fa-solid fa-building-user"></i> Clubhouse</div>
               <div class="amenity-pill" data-value="Garden / Park"><i class="fa-solid fa-tree"></i> Garden</div>
               <div class="amenity-pill" data-value="Free WiFi"><i class="fa-solid fa-wifi"></i> Free WiFi</div>
-              <div class="amenity-pill" data-value="Room Service"><i class="fa-solid fa-bell-concierge"></i> Room Service</div>
-              <div class="amenity-pill" data-value="Daily Housekeeping"><i class="fa-solid fa-broom-ball"></i> Housekeeping</div>
+              <div class="amenity-pill" data-value="Room Service"><i class="fa-solid fa-bell-concierge"></i> Room
+                Service</div>
+              <div class="amenity-pill" data-value="Daily Housekeeping"><i class="fa-solid fa-broom-ball"></i>
+                Housekeeping</div>
             </div>
           </div>
         </div>
@@ -447,8 +671,10 @@
       <!-- STEP 4: Photos -->
       <div class="form-card form-step" id="formStep4" style="display:none">
         <h2 class="form-card-title">Step 4: Photos & Videos</h2>
-        <p class="form-card-subtitle">Properties with photos/videos get 10X more inquiries. Select categories for each upload.</p>
-        <p style="font-size: 11px; color: var(--primary); margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-expand"></i> Recommended size: 1200 x 800 pixels (3:2 Ratio) for best look.</p>
+        <p class="form-card-subtitle">Properties with photos/videos get 10X more inquiries. Select categories for each
+          upload.</p>
+        <p style="font-size: 11px; color: var(--primary); margin-top: -10px; margin-bottom: 20px;"><i
+            class="fa-solid fa-expand"></i> Recommended size: 1200 x 800 pixels (3:2 Ratio) for best look.</p>
         <div class="photo-upload-area" id="photoUploadArea">
           <input type="file" id="photoFileInput" multiple accept="image/*" style="display:none">
           <input type="file" id="cameraFileInput" accept="image/*" capture="camera" style="display:none">
@@ -467,34 +693,47 @@
           </div>
         </div>
         <!-- Preview grid -->
-        <div id="photoPreviewGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:15px; margin-top:20px"></div>
+        <div id="photoPreviewGrid"
+          style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:15px; margin-top:20px">
+        </div>
 
         <!-- VIDEO GALLERY SECTION -->
         <hr style="border:none; border-top:1px solid var(--border); margin: 32px 0;">
-        <h3 style="font-size:16px; font-weight:700; color:var(--dark); margin-bottom:12px;">Video Gallery (Optional)</h3>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">Add project videos, 3D visualizations, or a walkthrough of the sample flat.</p>
-        
-        <div class="photo-upload-area" id="videoUploadArea" style="padding: 30px; border-style: dashed; background: rgba(232, 65, 24, 0.02);">
+        <h3 style="font-size:16px; font-weight:700; color:var(--dark); margin-bottom:12px;">Video Gallery (Optional)
+        </h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">Add project videos, 3D visualizations,
+          or a walkthrough of the sample flat.</p>
+
+        <div class="photo-upload-area" id="videoUploadArea"
+          style="padding: 30px; border-style: dashed; background: rgba(232, 65, 24, 0.02);">
           <input type="file" id="videoFileInput" accept="video/*" style="display:none">
           <div class="photo-upload-icon"><i class="fa-solid fa-video"></i></div>
           <div class="photo-upload-text">Upload property video</div>
           <div class="photo-upload-sub">Recommended: MP4 format, <b>Max 1 video, Max 20MB</b></div>
           <div style="margin-top:15px; display:flex; gap:12px; justify-content:center">
-            <span class="btn btn-outline btn-app-nav" style="cursor:pointer;" onclick="document.getElementById('videoFileInput').click()">
+            <span class="btn btn-outline btn-app-nav" style="cursor:pointer;"
+              onclick="document.getElementById('videoFileInput').click()">
               <i class="fa-solid fa-film"></i> Select Video
             </span>
           </div>
         </div>
-        <div id="videoPreviewGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:15px; margin-top:20px"></div>
+        <div id="videoPreviewGrid"
+          style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:15px; margin-top:20px">
+        </div>
 
         <div style="margin-top:30px">
-          <h4 style="font-size:14px; font-weight:700; color:var(--dark); margin-bottom:12px;">External Video Links (YouTube / Vimeo)</h4>
-          <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Add up to 10 video links from YouTube or Vimeo.</p>
+          <h4 style="font-size:14px; font-weight:700; color:var(--dark); margin-bottom:12px;">External Video Links
+            (YouTube / Vimeo)</h4>
+          <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Add up to 10 video links from YouTube
+            or Vimeo.</p>
           <div id="videoLinksContainer">
             <!-- Link inputs will be added here -->
             <div class="video-link-row" style="display:flex; gap:10px; margin-bottom:10px">
-              <input type="url" class="form-input video-link-input" placeholder="Paste YouTube/Vimeo link here" style="flex:1">
-              <button type="button" class="btn btn-outline btn-sm remove-link-btn" style="padding: 0 15px; color: var(--danger); border-color: var(--danger); display:none" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash"></i></button>
+              <input type="url" class="form-input video-link-input" placeholder="Paste YouTube/Vimeo link here"
+                style="flex:1">
+              <button type="button" class="btn btn-outline btn-sm remove-link-btn"
+                style="padding: 0 15px; color: var(--danger); border-color: var(--danger); display:none"
+                onclick="this.parentElement.remove()"><i class="fa-solid fa-trash"></i></button>
             </div>
           </div>
           <button type="button" id="addVideoLinkBtn" class="btn btn-outline btn-sm" style="margin-top:5px">
@@ -552,6 +791,17 @@
           <div class="form-group" id="fgTokenAmt">
             <label class="form-label">Token Amount (For Rent)</label>
             <input type="number" id="tokenAmountInput" class="form-input" placeholder="e.g. 100000">
+          </div>
+          <div class="form-group" id="fgNegotiableStatus">
+            <label class="form-label">Negotiable?</label>
+            <select id="negotiableSelect" class="form-input form-select">
+              <option value="false">No</option>
+              <option value="true">Yes</option>
+            </select>
+          </div>
+          <div class="form-group" id="fgAvailabilityDate">
+            <label class="form-label">Availability Date</label>
+            <input type="date" id="availabilityDateInput" class="form-input">
           </div>
 
           <!-- New Lodge Pricing Fields -->
@@ -669,15 +919,20 @@
 
       <!-- SIDEBAR: Location Preview -->
       <div id="sidebarLocationPreview" class="form-card" style="padding: 24px; margin-top: 24px;">
-        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--dark); display: flex; align-items: center; gap: 8px;">
+        <h3
+          style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--dark); display: flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-map-location-dot" style="color: var(--primary)"></i> Location Preview
         </h3>
-        <div id="mapPreviewContainer" style="width: 100%; height: 200px; background: #f3f4f6; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--border);">
-           <iframe id="googleMapIframe" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen src=""></iframe>
-           <div id="mapPlaceholder" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; color: var(--text-muted); text-align: center; padding: 20px;">
-              <i class="fa-solid fa-map-pin" style="font-size: 24px; margin-bottom: 10px; color: var(--primary); opacity: 0.5;"></i>
-              <p style="font-size: 12px;">Map will appear here once you select a location.</p>
-           </div>
+        <div id="mapPreviewContainer"
+          style="width: 100%; height: 200px; background: #f3f4f6; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--border);">
+          <iframe id="googleMapIframe" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen
+            src=""></iframe>
+          <div id="mapPlaceholder"
+            style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; color: var(--text-muted); text-align: center; padding: 20px;">
+            <i class="fa-solid fa-map-pin"
+              style="font-size: 24px; margin-bottom: 10px; color: var(--primary); opacity: 0.5;"></i>
+            <p style="font-size: 12px;">Map will appear here once you select a location.</p>
+          </div>
         </div>
       </div>
     </aside>
@@ -709,7 +964,7 @@
         <div class="footer-col">
           <h4>Quick Links</h4>
           <div class="footer-links">
-              <a href="pricing.html">Pricing</a>
+            <a href="pricing.html">Pricing</a>
             <a href="properties.html?type=buy">Buy Properties</a>
             <a href="properties.html?type=rent">Rent Properties</a>
             <a href="properties.html?type=commercial">Commercial</a>
@@ -750,10 +1005,12 @@
           <p class="footer-download-text">Search and shortlist properties on the go.</p>
           <div class="footer-badges">
             <a href="#" onclick="showToast('Coming Soon!', 'success'); return false;">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store" class="app-badge">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
+                alt="Download on the App Store" class="app-badge">
             </a>
             <a href="#" onclick="showToast('Coming Soon!', 'success'); return false;">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" class="app-badge">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                alt="Get it on Google Play" class="app-badge">
             </a>
           </div>
         </div>
@@ -789,7 +1046,9 @@
       const isLand = /plot|land/i.test(propType);
       const isCommercial = /commercial|shop|office|warehouse/i.test(propType);
       const isLodge = /lodge/i.test(propType);
+      const isVilla = /villa|house/i.test(propType);
       const hideResidential = isLand || isCommercial || isLodge;
+      const hideStandardRes = hideResidential || isVilla;
 
       const hide = (id, hidden) => {
         const el = document.getElementById(id);
@@ -798,20 +1057,23 @@
           // Clear value when hiding so it doesn't get submitted
           if (hidden) {
             const input = el.querySelector('input,select,textarea');
-            if (input) input.value = '';
+            if (input && input.type !== 'radio' && input.type !== 'checkbox') input.value = '';
           }
         }
       };
 
-      // Residential fields to hide for Land/Commercial/Lodge
-      hide('fgBhk', hideResidential);
-      hide('fgFloor', hideResidential);
-      hide('fgTotalFloors', hideResidential);
-      hide('fgFurnishing', hideResidential);
-      hide('fgParking', hideResidential);
-      hide('fgYear', hideResidential);
-      hide('fgBuiltUpArea', isLand || isLodge); // Land uses plot area, Lodge uses rooms/size
-      hide('fgCarpetArea', isLand || isLodge);
+      // Residential fields to hide for Land/Commercial/Lodge/Villa (since Villa has its own)
+      hide('fgBhk', hideStandardRes);
+      hide('fgFloor', hideStandardRes);
+      hide('fgTotalFloors', hideStandardRes);
+      hide('fgFurnishing', hideStandardRes);
+      hide('fgParking', hideStandardRes);
+      hide('fgYear', hideStandardRes);
+      hide('fgBuiltUpArea', isLand || isLodge || isVilla); // Land uses plot area, Lodge uses rooms/size, Villa has own
+      hide('fgCarpetArea', isLand || isLodge || isVilla);
+
+      // Villa specific fields
+      hide('fgVillaDetails', !isVilla);
 
       // Land specific fields to show only for Land
       hide('fgRatePerSqFt', !isLand);
@@ -848,12 +1110,13 @@
         if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
         else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
         else if (isLodge) step3Title.textContent = 'Step 3: Lodge Details';
+        else if (isVilla) step3Title.textContent = 'Step 3: Villa / House Details';
         else step3Title.textContent = 'Step 3: Property Details';
       }
     }
 
     // ---- Custom Configuration ("Others") Logic ----
-    document.getElementById('bhkTypeSelect')?.addEventListener('change', function() {
+    document.getElementById('bhkTypeSelect')?.addEventListener('change', function () {
       const fgCustomBhk = document.getElementById('fgCustomBhk');
       if (this.value === 'Others') {
         if (fgCustomBhk) fgCustomBhk.style.display = 'block';
@@ -1033,92 +1296,103 @@
     // Initial run
     window.addEventListener('load', updateOpportunityScore);
   </script>
-    <!-- CITY SELECTION MODAL -->
-    <div class="city-modal-overlay" id="cityModal">
-      <div class="city-modal">
-        <div class="city-modal-header">
-          <h3>Select your preferred City</h3>
-          <button class="city-modal-close" id="closeCityModal"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        
-        <div class="city-modal-search">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" id="citySearchInput" placeholder="Search your city...">
-        </div>
+  <!-- CITY SELECTION MODAL -->
+  <div class="city-modal-overlay" id="cityModal">
+    <div class="city-modal">
+      <div class="city-modal-header">
+        <h3>Select your preferred City</h3>
+        <button class="city-modal-close" id="closeCityModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
 
-        <div class="city-popular-section">
-          <div class="city-popular-grid">
-            <div class="city-popular-item" data-city="Ahmedabad">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/taj-mahal.png" alt="Ahmedabad"></div>
-              <span>Ahmedabad</span>
+      <div class="city-modal-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="citySearchInput" placeholder="Search your city...">
+      </div>
+
+      <div class="city-popular-section">
+        <div class="city-popular-grid">
+          <div class="city-popular-item" data-city="Ahmedabad">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/taj-mahal.png" alt="Ahmedabad">
             </div>
-            <div class="city-popular-item" data-city="Bangalore">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/parliament.png" alt="Bangalore"></div>
-              <span>Bangalore</span>
+            <span>Ahmedabad</span>
+          </div>
+          <div class="city-popular-item" data-city="Bangalore">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/parliament.png"
+                alt="Bangalore"></div>
+            <span>Bangalore</span>
+          </div>
+          <div class="city-popular-item" data-city="Bhubaneswar">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/pagoda.png" alt="Bhubaneswar">
             </div>
-            <div class="city-popular-item" data-city="Bhubaneswar">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/pagoda.png" alt="Bhubaneswar"></div>
-              <span>Bhubaneswar</span>
+            <span>Bhubaneswar</span>
+          </div>
+          <div class="city-popular-item" data-city="Chennai">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/train-station.png"
+                alt="Chennai"></div>
+            <span>Chennai</span>
+          </div>
+          <div class="city-popular-item" data-city="Gurgaon">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/skyscrapers.png" alt="Gurgaon">
             </div>
-            <div class="city-popular-item" data-city="Chennai">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/train-station.png" alt="Chennai"></div>
-              <span>Chennai</span>
+            <span>Gurgaon</span>
+          </div>
+          <div class="city-popular-item" data-city="Hyderabad">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/mosque.png" alt="Hyderabad">
             </div>
-            <div class="city-popular-item" data-city="Gurgaon">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/skyscrapers.png" alt="Gurgaon"></div>
-              <span>Gurgaon</span>
+            <span>Hyderabad</span>
+          </div>
+          <div class="city-popular-item" data-city="Jaipur">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/castle.png" alt="Jaipur"></div>
+            <span>Jaipur</span>
+          </div>
+          <div class="city-popular-item" data-city="Kolkata">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/bridge.png" alt="Kolkata">
             </div>
-            <div class="city-popular-item" data-city="Hyderabad">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/mosque.png" alt="Hyderabad"></div>
-              <span>Hyderabad</span>
+            <span>Kolkata</span>
+          </div>
+          <div class="city-popular-item" data-city="Lucknow">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/palace.png" alt="Lucknow">
             </div>
-            <div class="city-popular-item" data-city="Jaipur">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/castle.png" alt="Jaipur"></div>
-              <span>Jaipur</span>
+            <span>Lucknow</span>
+          </div>
+          <div class="city-popular-item" data-city="Mumbai">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/gateway-of-india.png"
+                alt="Mumbai"></div>
+            <span>Mumbai</span>
+          </div>
+          <div class="city-popular-item" data-city="New Delhi">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/triumphal-arch.png"
+                alt="New Delhi"></div>
+            <span>New Delhi</span>
+          </div>
+          <div class="city-popular-item" data-city="Noida">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/building.png" alt="Noida">
             </div>
-            <div class="city-popular-item" data-city="Kolkata">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/bridge.png" alt="Kolkata"></div>
-              <span>Kolkata</span>
-            </div>
-            <div class="city-popular-item" data-city="Lucknow">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/palace.png" alt="Lucknow"></div>
-              <span>Lucknow</span>
-            </div>
-            <div class="city-popular-item" data-city="Mumbai">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/gateway-of-india.png" alt="Mumbai"></div>
-              <span>Mumbai</span>
-            </div>
-            <div class="city-popular-item" data-city="New Delhi">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/triumphal-arch.png" alt="New Delhi"></div>
-              <span>New Delhi</span>
-            </div>
-            <div class="city-popular-item" data-city="Noida">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/building.png" alt="Noida"></div>
-              <span>Noida</span>
-            </div>
-            <div class="city-popular-item" data-city="Patna">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/museum.png" alt="Patna"></div>
-              <span>Patna</span>
-            </div>
-            <div class="city-popular-item" data-city="Pune">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/temple.png" alt="Pune"></div>
-              <span>Pune</span>
-            </div>
+            <span>Noida</span>
+          </div>
+          <div class="city-popular-item" data-city="Patna">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/museum.png" alt="Patna"></div>
+            <span>Patna</span>
+          </div>
+          <div class="city-popular-item" data-city="Pune">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/temple.png" alt="Pune"></div>
+            <span>Pune</span>
           </div>
         </div>
+      </div>
 
-        <div class="city-more-info">
-          <span>More Cities</span> <i class="fa-solid fa-chevron-down"></i>
-        </div>
+      <div class="city-more-info">
+        <span>More Cities</span> <i class="fa-solid fa-chevron-down"></i>
+      </div>
 
-        <div class="city-list-grid" id="allCitiesList">
-          <!-- Dynamically populated -->
-        </div>
+      <div class="city-list-grid" id="allCitiesList">
+        <!-- Dynamically populated -->
       </div>
     </div>
+  </div>
 
-    <script src="js/main.js"></script>
-    <script src="js/city-selector.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/city-selector.js"></script>
 
 </body>
 

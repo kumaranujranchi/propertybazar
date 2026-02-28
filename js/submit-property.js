@@ -666,6 +666,38 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('reraInput')) document.getElementById('reraInput').value = prop.details.rera || '';
         if (document.getElementById('descriptionInput')) document.getElementById('descriptionInput').value = prop.details.description || '';
 
+        // Pre-fill Villa
+        if (document.getElementById('propertyTitleInput')) document.getElementById('propertyTitleInput').value = prop.details.propertyTitle || '';
+        if (document.getElementById('ownershipTypeSelect')) document.getElementById('ownershipTypeSelect').value = prop.details.ownershipType || '';
+        if (document.getElementById('bathroomsSelect')) document.getElementById('bathroomsSelect').value = prop.details.bathrooms || '';
+        if (document.getElementById('balconiesSelect')) document.getElementById('balconiesSelect').value = prop.details.balconies || '';
+        if (document.getElementById('cbStudyRoom')) document.getElementById('cbStudyRoom').checked = prop.details.studyRoom || false;
+        if (document.getElementById('cbServantRoom')) document.getElementById('cbServantRoom').checked = prop.details.servantRoom || false;
+        if (document.getElementById('cbPoojaRoom')) document.getElementById('cbPoojaRoom').checked = prop.details.poojaRoom || false;
+        if (document.getElementById('cbStoreRoom')) document.getElementById('cbStoreRoom').checked = prop.details.storeRoom || false;
+        if (document.getElementById('cbBasement')) document.getElementById('cbBasement').checked = prop.details.basement || false;
+        if (document.getElementById('floorConfigInput')) document.getElementById('floorConfigInput').value = prop.details.floorConfig || '';
+        if (document.getElementById('plotAreaInput')) document.getElementById('plotAreaInput').value = prop.details.plotArea || '';
+        if (document.getElementById('superBuiltUpAreaInput')) document.getElementById('superBuiltUpAreaInput').value = prop.details.superBuiltUpArea || '';
+        if (document.getElementById('openAreaInput')) document.getElementById('openAreaInput').value = prop.details.openArea || '';
+        if (document.getElementById('frontageWidthInput')) document.getElementById('frontageWidthInput').value = prop.details.frontageWidth || '';
+        if (document.getElementById('roadWidthInput')) document.getElementById('roadWidthInput').value = prop.details.roadWidth || '';
+        if (document.getElementById('ageOfPropertySelect')) document.getElementById('ageOfPropertySelect').value = prop.details.ageOfProperty || '';
+        if (document.getElementById('constructionQualitySelect')) document.getElementById('constructionQualitySelect').value = prop.details.constructionQuality || '';
+        if (document.getElementById('flooringTypeInput')) document.getElementById('flooringTypeInput').value = prop.details.flooringType || '';
+        if (document.getElementById('wallFinishInput')) document.getElementById('wallFinishInput').value = prop.details.wallFinish || '';
+        if (document.getElementById('ceilingHeightInput')) document.getElementById('ceilingHeightInput').value = prop.details.ceilingHeight || '';
+        if (document.getElementById('waterSourceSelect')) document.getElementById('waterSourceSelect').value = prop.details.waterSource || '';
+        if (document.getElementById('electricityLoadInput')) document.getElementById('electricityLoadInput').value = prop.details.electricityLoad || '';
+        if (document.getElementById('openParkingSelect')) document.getElementById('openParkingSelect').value = prop.details.openParking || '';
+        if (document.getElementById('cbGarage')) document.getElementById('cbGarage').checked = prop.details.garage || false;
+        if (document.getElementById('cbEvCharging')) document.getElementById('cbEvCharging').checked = prop.details.evCharging || false;
+        if (document.getElementById('approvalAuthorityInput')) document.getElementById('approvalAuthorityInput').value = prop.details.approvalAuthority || '';
+        if (document.getElementById('propertyTaxStatusSelect')) document.getElementById('propertyTaxStatusSelect').value = prop.details.propertyTaxStatus || '';
+        if (document.getElementById('loanApprovedInput')) document.getElementById('loanApprovedInput').value = prop.details.loanApproved || '';
+        if (document.getElementById('cbOccupancyCert')) document.getElementById('cbOccupancyCert').checked = prop.details.occupancyCertificate || false;
+        if (document.getElementById('cbCompletionCert')) document.getElementById('cbCompletionCert').checked = prop.details.completionCertificate || false;
+
         // Pre-fill Amenities
         const amenityCheckboxes = document.querySelectorAll('#formStep3 input[type="checkbox"]');
         amenityCheckboxes.forEach(cb => {
@@ -683,15 +715,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         const priceInputs = document.querySelectorAll("#formStep5 .form-input");
         if (priceInputs[0]) {
           priceInputs[0].value = prop.pricing.expectedPrice;
-          priceInputs[1].value = prop.pricing.priceType || '';
-          priceInputs[2].value = prop.pricing.maintenance || '';
-          priceInputs[3].value = prop.pricing.tokenAmount || '';
-          priceInputs[4].value = prop.contactDesc.name;
-          priceInputs[5].value = prop.contactDesc.mobile;
-          priceInputs[6].value = prop.contactDesc.email;
-          priceInputs[7].value = prop.contactDesc.role || '';
-          priceInputs[8].value = prop.contactDesc.rera || '';
-          priceInputs[9].value = prop.contactDesc.contactTime || '';
+          priceInputs[1].value = prop.pricing.pricingType || '';
+          priceInputs[2].value = prop.pricing.priceType || '';
+          priceInputs[3].value = prop.pricing.maintenance || '';
+          priceInputs[4].value = prop.pricing.tokenAmount || '';
+          if (document.getElementById('negotiableSelect')) document.getElementById('negotiableSelect').value = prop.pricing.negotiable === true ? 'true' : 'false';
+          if (document.getElementById('availabilityDateInput')) document.getElementById('availabilityDateInput').value = prop.pricing.availabilityDate || '';
+          if (document.getElementById('contactNameInput')) document.getElementById('contactNameInput').value = prop.contactDesc.name;
+          if (document.getElementById('contactMobileInput')) document.getElementById('contactMobileInput').value = prop.contactDesc.mobile;
+          if (document.getElementById('contactEmailInput')) document.getElementById('contactEmailInput').value = prop.contactDesc.email;
+          if (document.getElementById('contactRoleSelect')) document.getElementById('contactRoleSelect').value = prop.contactDesc.role || '';
+          if (document.getElementById('contactTimeSelect')) document.getElementById('contactTimeSelect').value = prop.contactDesc.contactTime || '';
         }
       }
     } catch (err) {
@@ -829,6 +863,38 @@ document.addEventListener("DOMContentLoaded", async () => {
         constructionYear: Number(document.getElementById('constructionYearInput').value) || undefined,
         rera: document.getElementById('reraInput').value || undefined,
         description: document.getElementById('descriptionInput').value || "",
+
+        // Villa Details
+        propertyTitle: document.getElementById('propertyTitleInput')?.value || undefined,
+        ownershipType: document.getElementById('ownershipTypeSelect')?.value || undefined,
+        bathrooms: document.getElementById('bathroomsSelect')?.value ? Number(document.getElementById('bathroomsSelect').value.replace('+','')) : undefined,
+        balconies: document.getElementById('balconiesSelect')?.value ? Number(document.getElementById('balconiesSelect').value.replace('+','')) : undefined,
+        studyRoom: document.getElementById('cbStudyRoom')?.checked || false,
+        servantRoom: document.getElementById('cbServantRoom')?.checked || false,
+        poojaRoom: document.getElementById('cbPoojaRoom')?.checked || false,
+        storeRoom: document.getElementById('cbStoreRoom')?.checked || false,
+        basement: document.getElementById('cbBasement')?.checked || false,
+        floorConfig: document.getElementById('floorConfigInput')?.value || undefined,
+        plotArea: Number(document.getElementById('plotAreaInput')?.value) || undefined,
+        superBuiltUpArea: Number(document.getElementById('superBuiltUpAreaInput')?.value) || undefined,
+        openArea: Number(document.getElementById('openAreaInput')?.value) || undefined,
+        frontageWidth: Number(document.getElementById('frontageWidthInput')?.value) || undefined,
+        roadWidth: Number(document.getElementById('roadWidthInput')?.value) || undefined,
+        ageOfProperty: document.getElementById('ageOfPropertySelect')?.value || undefined,
+        constructionQuality: document.getElementById('constructionQualitySelect')?.value || undefined,
+        flooringType: document.getElementById('flooringTypeInput')?.value || undefined,
+        wallFinish: document.getElementById('wallFinishInput')?.value || undefined,
+        ceilingHeight: Number(document.getElementById('ceilingHeightInput')?.value) || undefined,
+        waterSource: document.getElementById('waterSourceSelect')?.value || undefined,
+        electricityLoad: document.getElementById('electricityLoadInput')?.value || undefined,
+        openParking: document.getElementById('openParkingSelect')?.value || undefined,
+        garage: document.getElementById('cbGarage')?.checked || false,
+        evCharging: document.getElementById('cbEvCharging')?.checked || false,
+        approvalAuthority: document.getElementById('approvalAuthorityInput')?.value || undefined,
+        occupancyCertificate: document.getElementById('cbOccupancyCert')?.checked || false,
+        completionCertificate: document.getElementById('cbCompletionCert')?.checked || false,
+        propertyTaxStatus: document.getElementById('propertyTaxStatusSelect')?.value || undefined,
+        loanApproved: document.getElementById('loanApprovedInput')?.value || undefined,
       };
 
       // Collect Amenities from Pills
@@ -843,6 +909,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         priceType: document.getElementById('priceTypeSelect').value || undefined,
         maintenance: Number(document.getElementById('maintenanceChargesInput').value) || undefined,
         tokenAmount: Number(document.getElementById('tokenAmountInput').value) || undefined,
+        negotiable: document.getElementById('negotiableSelect')?.value === 'true',
+        availabilityDate: document.getElementById('availabilityDateInput')?.value || undefined,
       };
 
       const contactDesc = {
