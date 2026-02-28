@@ -18,6 +18,12 @@ export default defineSchema({
       schoolDistance: v.optional(v.string()),
       mallDistance: v.optional(v.string()),
       hospitalDistance: v.optional(v.string()),
+
+      // Warehouse/Industrial Specific Location
+      highwayDistance: v.optional(v.string()),
+      railwayYardDistance: v.optional(v.string()),
+      airportDistance: v.optional(v.string()),
+      portDistance: v.optional(v.string()),
     }),
     details: v.object({
       bhk: v.string(),
@@ -87,6 +93,35 @@ export default defineSchema({
       tradeLicense: v.optional(v.boolean()),
       commercialApproval: v.optional(v.boolean()),
       pollutionClearance: v.optional(v.boolean()),
+
+      // Warehouse / Industrial Specific Structure
+      warehouseType: v.optional(v.string()),
+      industrialZone: v.optional(v.string()),
+      totalLandArea: v.optional(v.number()),
+      coveredArea: v.optional(v.number()),
+      openYardArea: v.optional(v.number()),
+      clearHeight: v.optional(v.number()),
+      sideHeight: v.optional(v.number()),
+      industrialFlooringType: v.optional(v.string()),
+      floorLoadCapacity: v.optional(v.string()),
+      dockDoors: v.optional(v.number()),
+      rampAvailability: v.optional(v.boolean()),
+      truckTurningRadius: v.optional(v.string()),
+      truckParking: v.optional(v.number()),
+      carParking: v.optional(v.number()),
+
+      // Warehouse Utilities & Safety
+      powerLoadKva: v.optional(v.number()),
+      transformer: v.optional(v.boolean()),
+      borewell: v.optional(v.boolean()),
+      drainage: v.optional(v.boolean()),
+      sewage: v.optional(v.boolean()),
+      internetFiber: v.optional(v.boolean()),
+      fireHydrant: v.optional(v.boolean()),
+      sprinklerSystem: v.optional(v.boolean()),
+      pollutionNoc: v.optional(v.boolean()),
+      factoryLicense: v.optional(v.boolean()),
+      industrialApproval: v.optional(v.boolean()),
     }),
     amenities: v.array(v.string()),
     photos: v.array(v.string()),
@@ -104,6 +139,10 @@ export default defineSchema({
       lockInPeriod: v.optional(v.string()),
       securityDeposit: v.optional(v.number()),
       camCharges: v.optional(v.number()),
+
+      // Additional Pricing for Warehouse
+      rentPerSqFt: v.optional(v.number()),
+      escalationPercent: v.optional(v.number()),
     }),
     contactDesc: v.object({
       name: v.string(),

@@ -1263,9 +1263,10 @@
 
       const isLand = /plot|land/i.test(propType);
       const isCommercial = /commercial|shop|office|warehouse/i.test(propType);
+      const isWarehouse = /warehouse|industrial|godown/i.test(propType);
       const isLodge = /lodge/i.test(propType);
       const isVilla = /villa|house/i.test(propType);
-      const hideResidential = isLand || isCommercial || isLodge;
+      const hideResidential = isLand || isCommercial || isWarehouse || isLodge;
       const hideStandardRes = hideResidential || isVilla;
 
       const hide = (id, hidden) => {
@@ -1287,17 +1288,40 @@
       hide('fgFurnishing', hideStandardRes);
       hide('fgParking', hideStandardRes);
       hide('fgYear', hideStandardRes);
-      hide('fgBuiltUpArea', isLand || isLodge || isCommercial || isVilla); // Land uses plot area, Lodge uses rooms/size, Villa has own, Commercial has own
-      hide('fgCarpetArea', isLand || isLodge || isCommercial || isVilla);
+      hide('fgBuiltUpArea', isLand || isLodge || isCommercial || isWarehouse || isVilla);
+      hide('fgCarpetArea', isLand || isLodge || isCommercial || isWarehouse || isVilla);
+
+      // Location extended details only for Commercial/Warehouse
+      if (document.getElementById('fgDistanceMetrics')) {
+        document.getElementById('fgDistanceMetrics').style.display = (isCommercial || isWarehouse) ? 'flex' : 'none';
+      }
 
       // Villa specific fields
       hide('fgVillaDetails', !isVilla);
 
       // Commercial specific fields
-      hide('fgCommercialDetails', !isCommercial);
-      hide('fgCommercialPricing', !isCommercial);
-      if (isCommercial) {
+      hide('fgCommercialDetails', !isCommercial || isWarehouse); // Don't show commercial for warehouse
+
+      // Warehouse specific fields
+      hide('fgWarehouseDetails', !isWarehouse);
+
+      // Shared Commercial/Warehouse Pricing
+      hide('fgCommercialPricing', !(isCommercial || isWarehouse));
+      if (isCommercial || isWarehouse) {
+        let el = document.getElementById('fgCommercialPricing');
+        if (el) el.style.display = 'flex';
+
+        let rentSqft = document.getElementById('whRentPerSqftGrp');
+        let escalGrp = document.getElementById('whEscalationGrp');
+        if (rentSqft) rentSqft.style.display = isWarehouse ? 'block' : 'none';
+        if (escalGrp) escalGrp.style.display = isWarehouse ? 'block' : 'none';
+      }
+
+      if (isCommercial && !isWarehouse) {
         let el = document.getElementById('fgCommercialDetails');
+        if (el) el.style.display = 'flex';
+      } else if (isWarehouse) {
+        let el = document.getElementById('fgWarehouseDetails');
         if (el) el.style.display = 'flex';
       }
 
@@ -1334,6 +1358,7 @@
       const step3Title = document.querySelector('#formStep3 .form-card-title');
       if (step3Title) {
         if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
+        else if (isWarehouse) step3Title.textContent = 'Step 3: Warehouse / Industrial Details';
         else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
         else if (isLodge) step3Title.textContent = 'Step 3: Lodge Details';
         else if (isVilla) step3Title.textContent = 'Step 3: Villa / House Details';

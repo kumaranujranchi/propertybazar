@@ -735,6 +735,43 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('commercialSecurityDepositInput')) document.getElementById('commercialSecurityDepositInput').value = prop.pricing.securityDeposit || '';
         if (document.getElementById('commercialCamChargesInput')) document.getElementById('commercialCamChargesInput').value = prop.pricing.camCharges || '';
 
+        // Pre-fill Warehouse Specific
+        if (document.getElementById('warehouseTypeSelect')) document.getElementById('warehouseTypeSelect').value = prop.details.warehouseType || '';
+        if (document.getElementById('industrialZoneInput')) document.getElementById('industrialZoneInput').value = prop.details.industrialZone || '';
+        if (document.getElementById('warehouseTotalLandArea')) document.getElementById('warehouseTotalLandArea').value = prop.details.totalLandArea || '';
+        if (document.getElementById('warehouseCoveredArea')) document.getElementById('warehouseCoveredArea').value = prop.details.coveredArea || '';
+        if (document.getElementById('warehouseOpenYardArea')) document.getElementById('warehouseOpenYardArea').value = prop.details.openYardArea || '';
+        if (document.getElementById('warehouseClearHeight')) document.getElementById('warehouseClearHeight').value = prop.details.clearHeight || '';
+        if (document.getElementById('warehouseSideHeight')) document.getElementById('warehouseSideHeight').value = prop.details.sideHeight || '';
+        if (document.getElementById('warehouseFlooringType')) document.getElementById('warehouseFlooringType').value = prop.details.industrialFlooringType || '';
+        if (document.getElementById('warehouseFloorLoad')) document.getElementById('warehouseFloorLoad').value = prop.details.floorLoadCapacity || '';
+        if (document.getElementById('warehouseDockDoors')) document.getElementById('warehouseDockDoors').value = prop.details.dockDoors || '';
+        if (document.getElementById('warehouseTurningRadius')) document.getElementById('warehouseTurningRadius').value = prop.details.truckTurningRadius || '';
+        if (document.getElementById('warehouseTruckParking')) document.getElementById('warehouseTruckParking').value = prop.details.truckParking || '';
+        if (document.getElementById('warehouseCarParking')) document.getElementById('warehouseCarParking').value = prop.details.carParking || '';
+        if (document.getElementById('warehousePowerLoad')) document.getElementById('warehousePowerLoad').value = prop.details.powerLoadKva || '';
+        
+        if (document.getElementById('cbRampAvailability')) document.getElementById('cbRampAvailability').checked = prop.details.rampAvailability || false;
+        if (document.getElementById('cbTransformer')) document.getElementById('cbTransformer').checked = prop.details.transformer || false;
+        if (document.getElementById('cbBorewell')) document.getElementById('cbBorewell').checked = prop.details.borewell || false;
+        if (document.getElementById('cbDrainage')) document.getElementById('cbDrainage').checked = prop.details.drainage || false;
+        if (document.getElementById('cbSewage')) document.getElementById('cbSewage').checked = prop.details.sewage || false;
+        if (document.getElementById('cbInternetFiber')) document.getElementById('cbInternetFiber').checked = prop.details.internetFiber || false;
+        if (document.getElementById('cbFireHydrant')) document.getElementById('cbFireHydrant').checked = prop.details.fireHydrant || false;
+        if (document.getElementById('cbSprinklerSystem')) document.getElementById('cbSprinklerSystem').checked = prop.details.sprinklerSystem || false;
+        if (document.getElementById('cbWarehouseFireNoc')) document.getElementById('cbWarehouseFireNoc').checked = prop.details.fireNoc || false;
+        if (document.getElementById('cbPollutionControl')) document.getElementById('cbPollutionControl').checked = prop.details.pollutionNoc || false;
+        if (document.getElementById('cbFactoryLicense')) document.getElementById('cbFactoryLicense').checked = prop.details.factoryLicense || false;
+        if (document.getElementById('cbIndustrialApproval')) document.getElementById('cbIndustrialApproval').checked = prop.details.industrialApproval || false;
+
+        if (document.getElementById('highwayDistance')) document.getElementById('highwayDistance').value = prop.location.highwayDistance || '';
+        if (document.getElementById('railwayYardDistance')) document.getElementById('railwayYardDistance').value = prop.location.railwayYardDistance || '';
+        if (document.getElementById('airportDistance')) document.getElementById('airportDistance').value = prop.location.airportDistance || '';
+        if (document.getElementById('portDistance')) document.getElementById('portDistance').value = prop.location.portDistance || '';
+
+        if (document.getElementById('commercialRentPerSqFtInput')) document.getElementById('commercialRentPerSqFtInput').value = prop.pricing.rentPerSqFt || '';
+        if (document.getElementById('commercialEscalationInput')) document.getElementById('commercialEscalationInput').value = prop.pricing.escalationPercent || '';
+
         // Pre-fill Amenities
         const amenityCheckboxes = document.querySelectorAll('#formStep3 input[type="checkbox"]');
         amenityCheckboxes.forEach(cb => {
@@ -881,6 +918,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         schoolDistance: document.getElementById('schoolDistance')?.value || undefined,
         mallDistance: document.getElementById('mallDistance')?.value || undefined,
         hospitalDistance: document.getElementById('hospitalDistance')?.value || undefined,
+        highwayDistance: document.getElementById('highwayDistance')?.value || undefined,
+        railwayYardDistance: document.getElementById('railwayYardDistance')?.value || undefined,
+        airportDistance: document.getElementById('airportDistance')?.value || undefined,
+        portDistance: document.getElementById('portDistance')?.value || undefined,
         googleSearch: googleLoc || undefined
       };
 
@@ -958,7 +999,40 @@ document.addEventListener("DOMContentLoaded", async () => {
         tradeLicense: document.getElementById('cbTradeLicense')?.checked || false,
         commercialApproval: document.getElementById('cbCommercialApproval')?.checked || false,
         pollutionClearance: document.getElementById('cbPollutionClearance')?.checked || false,
+
+        // Warehouse Property Specific
+        warehouseType: document.getElementById('warehouseTypeSelect')?.value || undefined,
+        industrialZone: document.getElementById('industrialZoneInput')?.value || undefined,
+        totalLandArea: Number(document.getElementById('warehouseTotalLandArea')?.value) || undefined,
+        coveredArea: Number(document.getElementById('warehouseCoveredArea')?.value) || undefined,
+        openYardArea: Number(document.getElementById('warehouseOpenYardArea')?.value) || undefined,
+        clearHeight: Number(document.getElementById('warehouseClearHeight')?.value) || undefined,
+        sideHeight: Number(document.getElementById('warehouseSideHeight')?.value) || undefined,
+        industrialFlooringType: document.getElementById('warehouseFlooringType')?.value || undefined,
+        floorLoadCapacity: document.getElementById('warehouseFloorLoad')?.value || undefined,
+        dockDoors: Number(document.getElementById('warehouseDockDoors')?.value) || undefined,
+        rampAvailability: document.getElementById('cbRampAvailability')?.checked || false,
+        truckTurningRadius: document.getElementById('warehouseTurningRadius')?.value || undefined,
+        truckParking: Number(document.getElementById('warehouseTruckParking')?.value) || undefined,
+        carParking: Number(document.getElementById('warehouseCarParking')?.value) || undefined,
+        powerLoadKva: Number(document.getElementById('warehousePowerLoad')?.value) || undefined,
+        transformer: document.getElementById('cbTransformer')?.checked || false,
+        borewell: document.getElementById('cbBorewell')?.checked || false,
+        drainage: document.getElementById('cbDrainage')?.checked || false,
+        sewage: document.getElementById('cbSewage')?.checked || false,
+        internetFiber: document.getElementById('cbInternetFiber')?.checked || false,
+        fireHydrant: document.getElementById('cbFireHydrant')?.checked || false,
+        sprinklerSystem: document.getElementById('cbSprinklerSystem')?.checked || false,
+        pollutionNoc: document.getElementById('cbPollutionControl')?.checked || false,
+        factoryLicense: document.getElementById('cbFactoryLicense')?.checked || false,
+        industrialApproval: document.getElementById('cbIndustrialApproval')?.checked || false,
+        // (Note: Fire NOC uses the same field as commercial so we check both checkboxes)
       };
+
+      // Warehouse logic: Since fireNoc may be ticked in commercial or warehouse UI
+      if (document.getElementById('cbWarehouseFireNoc')?.checked) {
+        details.fireNoc = true;
+      }
 
       // Collect Amenities from Pills
       const amenities = [];
@@ -981,6 +1055,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         lockInPeriod: document.getElementById('commercialLockInPeriodInput')?.value || undefined,
         securityDeposit: Number(document.getElementById('commercialSecurityDepositInput')?.value) || undefined,
         camCharges: Number(document.getElementById('commercialCamChargesInput')?.value) || undefined,
+
+        // Warehouse Pricing
+        rentPerSqFt: Number(document.getElementById('commercialRentPerSqFtInput')?.value) || undefined,
+        escalationPercent: Number(document.getElementById('commercialEscalationInput')?.value) || undefined,
       };
 
       const contactDesc = {
