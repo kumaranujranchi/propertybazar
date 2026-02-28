@@ -324,10 +324,12 @@ function initGooglePlaces() {
   // Sidebar Preview logic
   const mapLinkInput = document.getElementById('googleMapLinkInput');
   if (mapLinkInput) {
-    mapLinkInput.addEventListener('input', () => {
+    const handleMapInput = () => {
       const url = mapLinkInput.value.trim();
       if (url) updateMapPreview(url);
-    });
+    };
+    mapLinkInput.addEventListener('input', handleMapInput);
+    mapLinkInput.addEventListener('paste', () => setTimeout(handleMapInput, 10)); // Small delay for paste
   }
 
   const autocomplete = new google.maps.places.Autocomplete(input, {
@@ -428,17 +430,17 @@ function updateMapPreview(location) {
      const city = document.getElementById('citySelect')?.value;
      if (locality && city) {
         query = `${locality}, ${city}`;
+        isUrl = false;
      } else if (city) {
         query = city;
+        isUrl = false;
      } else {
-        // If no info at all, don't show the map yet
-        if (!isUrl) previewCard.style.display = 'none';
+        // No valid info, show placeholder but keep card visible
+        iframe.src = "";
+        container.classList.remove('loaded');
         return;
      }
   }
-
-  // Show the card
-  previewCard.style.display = 'block';
 
   // Use the reliable non-API embed URL
   const mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=14&output=embed`;
