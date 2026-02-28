@@ -61,6 +61,32 @@ export default defineSchema({
       completionCertificate: v.optional(v.boolean()),
       propertyTaxStatus: v.optional(v.string()),
       loanApproved: v.optional(v.string()),
+
+      // Commercial Property Specific
+      commercialType: v.optional(v.string()),
+      grade: v.optional(v.string()),
+      frontage: v.optional(v.number()),
+      workstations: v.optional(v.number()),
+      cabins: v.optional(v.number()),
+      meetingRooms: v.optional(v.number()),
+      conferenceRoom: v.optional(v.boolean()),
+      receptionArea: v.optional(v.boolean()),
+      pantry: v.optional(v.boolean()),
+      washrooms: v.optional(v.string()), // Private / Common
+      serverRoom: v.optional(v.boolean()),
+      acType: v.optional(v.string()), // Central AC / Split AC
+      powerBackupCapacity: v.optional(v.string()),
+      retailFloor: v.optional(v.string()), // Ground Floor / Upper Floor
+      glassFrontage: v.optional(v.boolean()),
+      displayArea: v.optional(v.boolean()),
+      footfallZone: v.optional(v.string()), // High/Medium/Low
+      mallHighStreet: v.optional(v.string()),
+      escalator: v.optional(v.boolean()),
+      loadingAccess: v.optional(v.boolean()),
+      fireNoc: v.optional(v.boolean()),
+      tradeLicense: v.optional(v.boolean()),
+      commercialApproval: v.optional(v.boolean()),
+      pollutionClearance: v.optional(v.boolean()),
     }),
     amenities: v.array(v.string()),
     photos: v.array(v.string()),
@@ -71,6 +97,13 @@ export default defineSchema({
       tokenAmount: v.optional(v.number()),
       negotiable: v.optional(v.boolean()),
       availabilityDate: v.optional(v.string()),
+
+      // Commercial Pricing
+      rent: v.optional(v.number()),
+      leasePeriod: v.optional(v.string()),
+      lockInPeriod: v.optional(v.string()),
+      securityDeposit: v.optional(v.number()),
+      camCharges: v.optional(v.number()),
     }),
     contactDesc: v.object({
       name: v.string(),

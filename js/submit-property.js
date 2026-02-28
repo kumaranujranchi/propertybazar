@@ -698,6 +698,43 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('cbOccupancyCert')) document.getElementById('cbOccupancyCert').checked = prop.details.occupancyCertificate || false;
         if (document.getElementById('cbCompletionCert')) document.getElementById('cbCompletionCert').checked = prop.details.completionCertificate || false;
 
+        // Pre-fill Commercial
+        if (document.getElementById('commercialTypeSelect')) document.getElementById('commercialTypeSelect').value = prop.details.commercialType || '';
+        if (document.getElementById('commercialGradeSelect')) document.getElementById('commercialGradeSelect').value = prop.details.grade || '';
+        if (document.getElementById('commercialOwnershipSelect')) document.getElementById('commercialOwnershipSelect').value = prop.details.ownershipType || '';
+        if (document.getElementById('commercialCeilingHeight')) document.getElementById('commercialCeilingHeight').value = prop.details.ceilingHeight || '';
+        if (document.getElementById('commercialFrontage')) document.getElementById('commercialFrontage').value = prop.details.frontage || '';
+        if (document.getElementById('commercialRoadWidth')) document.getElementById('commercialRoadWidth').value = prop.details.roadWidth || '';
+        if (document.getElementById('commercialSuperArea')) document.getElementById('commercialSuperArea').value = prop.details.superBuiltUpArea || '';
+        if (document.getElementById('commercialFurnishing')) document.getElementById('commercialFurnishing').value = prop.details.furnishing || '';
+        if (document.getElementById('commercialWorkstations')) document.getElementById('commercialWorkstations').value = prop.details.workstations || '';
+        if (document.getElementById('commercialCabins')) document.getElementById('commercialCabins').value = prop.details.cabins || '';
+        if (document.getElementById('commercialMeetingRooms')) document.getElementById('commercialMeetingRooms').value = prop.details.meetingRooms || '';
+        if (document.getElementById('commercialWashrooms')) document.getElementById('commercialWashrooms').value = prop.details.washrooms || '';
+        if (document.getElementById('commercialAcType')) document.getElementById('commercialAcType').value = prop.details.acType || '';
+        if (document.getElementById('commercialPowerBackup')) document.getElementById('commercialPowerBackup').value = prop.details.powerBackupCapacity || '';
+        if (document.getElementById('commercialRetailFloor')) document.getElementById('commercialRetailFloor').value = prop.details.retailFloor || '';
+        if (document.getElementById('commercialFootfallZone')) document.getElementById('commercialFootfallZone').value = prop.details.footfallZone || '';
+        if (document.getElementById('commercialMallHighStreet')) document.getElementById('commercialMallHighStreet').value = prop.details.mallHighStreet || '';
+        
+        if (document.getElementById('cbConferenceRoom')) document.getElementById('cbConferenceRoom').checked = prop.details.conferenceRoom || false;
+        if (document.getElementById('cbReceptionArea')) document.getElementById('cbReceptionArea').checked = prop.details.receptionArea || false;
+        if (document.getElementById('cbPantry')) document.getElementById('cbPantry').checked = prop.details.pantry || false;
+        if (document.getElementById('cbServerRoom')) document.getElementById('cbServerRoom').checked = prop.details.serverRoom || false;
+        if (document.getElementById('cbGlassFrontage')) document.getElementById('cbGlassFrontage').checked = prop.details.glassFrontage || false;
+        if (document.getElementById('cbDisplayArea')) document.getElementById('cbDisplayArea').checked = prop.details.displayArea || false;
+        if (document.getElementById('cbFireNoc')) document.getElementById('cbFireNoc').checked = prop.details.fireNoc || false;
+        if (document.getElementById('cbTradeLicense')) document.getElementById('cbTradeLicense').checked = prop.details.tradeLicense || false;
+        if (document.getElementById('cbCommercialApproval')) document.getElementById('cbCommercialApproval').checked = prop.details.commercialApproval || false;
+        if (document.getElementById('cbPollutionClearance')) document.getElementById('cbPollutionClearance').checked = prop.details.pollutionClearance || false;
+
+        // Commercial Pricing Pre-fill
+        if (document.getElementById('commercialRentInput')) document.getElementById('commercialRentInput').value = prop.pricing.rent || '';
+        if (document.getElementById('commercialLeasePeriodInput')) document.getElementById('commercialLeasePeriodInput').value = prop.pricing.leasePeriod || '';
+        if (document.getElementById('commercialLockInPeriodInput')) document.getElementById('commercialLockInPeriodInput').value = prop.pricing.lockInPeriod || '';
+        if (document.getElementById('commercialSecurityDepositInput')) document.getElementById('commercialSecurityDepositInput').value = prop.pricing.securityDeposit || '';
+        if (document.getElementById('commercialCamChargesInput')) document.getElementById('commercialCamChargesInput').value = prop.pricing.camCharges || '';
+
         // Pre-fill Amenities
         const amenityCheckboxes = document.querySelectorAll('#formStep3 input[type="checkbox"]');
         amenityCheckboxes.forEach(cb => {
@@ -895,6 +932,32 @@ document.addEventListener("DOMContentLoaded", async () => {
         completionCertificate: document.getElementById('cbCompletionCert')?.checked || false,
         propertyTaxStatus: document.getElementById('propertyTaxStatusSelect')?.value || undefined,
         loanApproved: document.getElementById('loanApprovedInput')?.value || undefined,
+
+        // Commercial Property Specific
+        commercialType: document.getElementById('commercialTypeSelect')?.value || undefined,
+        grade: document.getElementById('commercialGradeSelect')?.value || undefined,
+        frontage: Number(document.getElementById('commercialFrontage')?.value) || undefined,
+        workstations: Number(document.getElementById('commercialWorkstations')?.value) || undefined,
+        cabins: Number(document.getElementById('commercialCabins')?.value) || undefined,
+        meetingRooms: Number(document.getElementById('commercialMeetingRooms')?.value) || undefined,
+        conferenceRoom: document.getElementById('cbConferenceRoom')?.checked || false,
+        receptionArea: document.getElementById('cbReceptionArea')?.checked || false,
+        pantry: document.getElementById('cbPantry')?.checked || false,
+        washrooms: document.getElementById('commercialWashrooms')?.value || undefined,
+        serverRoom: document.getElementById('cbServerRoom')?.checked || false,
+        acType: document.getElementById('commercialAcType')?.value || undefined,
+        powerBackupCapacity: document.getElementById('commercialPowerBackup')?.value || undefined,
+        retailFloor: document.getElementById('commercialRetailFloor')?.value || undefined,
+        glassFrontage: document.getElementById('cbGlassFrontage')?.checked || false,
+        displayArea: document.getElementById('cbDisplayArea')?.checked || false,
+        footfallZone: document.getElementById('commercialFootfallZone')?.value || undefined,
+        mallHighStreet: document.getElementById('commercialMallHighStreet')?.value || undefined,
+        escalator: document.querySelector('.amenity-pill[data-value="Escalator"]')?.classList.contains('active') || false,
+        loadingAccess: document.querySelector('.amenity-pill[data-value="Loading Access"]')?.classList.contains('active') || false,
+        fireNoc: document.getElementById('cbFireNoc')?.checked || false,
+        tradeLicense: document.getElementById('cbTradeLicense')?.checked || false,
+        commercialApproval: document.getElementById('cbCommercialApproval')?.checked || false,
+        pollutionClearance: document.getElementById('cbPollutionClearance')?.checked || false,
       };
 
       // Collect Amenities from Pills
@@ -911,6 +974,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         tokenAmount: Number(document.getElementById('tokenAmountInput').value) || undefined,
         negotiable: document.getElementById('negotiableSelect')?.value === 'true',
         availabilityDate: document.getElementById('availabilityDateInput')?.value || undefined,
+        
+        // Commercial Pricing
+        rent: Number(document.getElementById('commercialRentInput')?.value) || undefined,
+        leasePeriod: document.getElementById('commercialLeasePeriodInput')?.value || undefined,
+        lockInPeriod: document.getElementById('commercialLockInPeriodInput')?.value || undefined,
+        securityDeposit: Number(document.getElementById('commercialSecurityDepositInput')?.value) || undefined,
+        camCharges: Number(document.getElementById('commercialCamChargesInput')?.value) || undefined,
       };
 
       const contactDesc = {
