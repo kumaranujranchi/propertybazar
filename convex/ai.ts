@@ -144,7 +144,10 @@ RULES:
       }
 
       const data = await response.json();
-      const aiResponse = data.choices[0]?.message?.content?.trim();
+      let aiResponse = data.choices[0]?.message?.content?.trim() || "";
+
+      // Post-process to remove markdown bolding and ensure plain text
+      aiResponse = aiResponse.replace(/\*\*/g, "");
 
       return { success: true, text: aiResponse || args.text };
 
