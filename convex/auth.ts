@@ -225,11 +225,13 @@ export const getMyProperties = query({
     return await Promise.all(
       properties.map(async (p) => {
         const resolvedPhotos = await Promise.all(
-          (p.photos || []).map(async (storageId: string) => {
+          (p.photos || []).map(async (photo: any) => {
             try {
-              return (await ctx.storage.getUrl(storageId as any)) ?? storageId;
+              const sid = typeof photo === 'string' ? photo : photo.storageId;
+              const url = (await ctx.storage.getUrl(sid as any)) ?? sid;
+              return typeof photo === 'string' ? url : { ...photo, url };
             } catch {
-              return storageId;
+              return photo;
             }
           }),
         );

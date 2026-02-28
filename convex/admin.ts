@@ -13,7 +13,7 @@ async function requireAdmin(ctx: any, token: string) {
     .query("sessions")
     .withIndex("by_token", (q) => q.eq("token", token))
     .first();
-    
+
   if (!session || session.expiresAt < Date.now()) {
     throw new Error("Invalid or expired session");
   }
@@ -22,7 +22,7 @@ async function requireAdmin(ctx: any, token: string) {
   if (!user) {
     throw new Error("User not found");
   }
-  
+
   return user;
 }
 
@@ -38,7 +38,7 @@ export const getDashboardStats = query({
 
     const totalProps = properties.length;
     const pendingProps = properties.filter(p => p.approvalStatus === "pending" || !p.approvalStatus).length;
-    const activeProps = properties.length - pendingProps; 
+    const activeProps = properties.length - pendingProps;
 
     return {
       totalProperties: totalProps,
@@ -55,15 +55,19 @@ export const getAllProperties = query({
   args: { token: v.string() },
   handler: async (ctx, args) => {
     await requireAdmin(ctx, args.token);
-    
+
     const properties = await ctx.db.query("properties").order("desc").collect();
-    
+
     // Resolve storage IDs to actual URLs
     return await Promise.all(
       properties.map(async (p) => {
         const resolvedPhotos = await Promise.all(
-          (p.photos || []).map(async (sid: string) => {
-            try { return (await ctx.storage.getUrl(sid as any)) ?? null; } catch { return null; }
+          (p.photos || []).map(async (photo: any) => {
+            try {
+              const sid = typeof photo === 'string' ? photo : photo.storageId;
+              const url = (await ctx.storage.getUrl(sid as any)) ?? null;
+              return typeof photo === 'string' ? url : { ...photo, url };
+            } catch { return null; }
           })
         );
         return { ...p, photos: resolvedPhotos.filter(Boolean) };
@@ -76,25 +80,25 @@ export const getAllUsers = query({
   args: { token: v.string() },
   handler: async (ctx, args) => {
     await requireAdmin(ctx, args.token);
-    
+
     const users = await ctx.db.query("users").order("desc").collect();
     return users;
   },
 });
 
 export const updatePropertyStatus = mutation({
-  args: { 
+  args: {
     token: v.string(),
-    propertyId: v.id("properties"), 
+    propertyId: v.id("properties"),
     status: v.string() // "approved", "rejected", "pending"
   },
   handler: async (ctx, args) => {
     await requireAdmin(ctx, args.token);
-    
-    await ctx.db.patch(args.propertyId, { 
-      approvalStatus: args.status 
+
+    await ctx.db.patch(args.propertyId, {
+      approvalStatus: args.status
     });
-    
+
     return { success: true };
   },
 });
