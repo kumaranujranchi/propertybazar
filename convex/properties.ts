@@ -15,16 +15,16 @@ export const getProperties = query({
       propertiesQuery = ctx.db.query("properties");
     }
     const results = await propertiesQuery.order("desc").collect();
-    
+
     // Only show properties that are NOT rejected (disabled)
     // Properties with no approvalStatus are visible by default (older listings)
     const visibleResults = results.filter(p => p.approvalStatus !== "rejected");
-    
+
     // Sort so featured comes first, while keeping descending order for the rest
     const properties = visibleResults.sort((a, b) => {
       if (a.isFeatured && !b.isFeatured) return -1;
       if (!a.isFeatured && b.isFeatured) return 1;
-      return 0; 
+      return 0;
     });
 
     // Resolve storageIds to actual URLs for each property
@@ -73,48 +73,12 @@ export const createProperty = mutation({
     userId: v.optional(v.id("users")),
     transactionType: v.string(),
     propertyType: v.string(),
-    location: v.object({
-      state: v.string(),
-      city: v.string(),
-      locality: v.string(),
-      society: v.optional(v.string()),
-      fullAddress: v.optional(v.string()),
-      pinCode: v.string(),
-      landmark: v.optional(v.string()),
-      metroDistance: v.optional(v.string()),
-      schoolDistance: v.optional(v.string()),
-      mallDistance: v.optional(v.string()),
-      hospitalDistance: v.optional(v.string()),
-    }),
-    details: v.object({
-      bhk: v.string(),
-      status: v.string(),
-      builtUpArea: v.number(),
-      carpetArea: v.optional(v.number()),
-      floorNumber: v.optional(v.number()),
-      totalFloors: v.optional(v.number()),
-      furnishing: v.optional(v.string()),
-      facing: v.optional(v.string()),
-      parking: v.optional(v.string()),
-      constructionYear: v.optional(v.number()),
-      description: v.string(),
-    }),
+    location: v.any(),
+    details: v.any(),
     amenities: v.array(v.string()),
     photos: v.array(v.string()),
-    pricing: v.object({
-      expectedPrice: v.number(),
-      priceType: v.optional(v.string()),
-      maintenance: v.optional(v.number()),
-      tokenAmount: v.optional(v.number()),
-    }),
-    contactDesc: v.object({
-      name: v.string(),
-      mobile: v.string(),
-      email: v.string(),
-      role: v.optional(v.string()),
-      rera: v.optional(v.string()),
-      contactTime: v.optional(v.string()),
-    })
+    pricing: v.any(),
+    contactDesc: v.any()
   },
   handler: async (ctx, args) => {
     let resolvedUserId = args.userId;
@@ -195,7 +159,7 @@ export const deleteProperty = mutation({
     for (const storageId of prop.photos || []) {
       try { await ctx.storage.delete(storageId as any); } catch (e) { console.error(e); }
     }
-    
+
     await ctx.db.delete(args.id);
     return { success: true };
   },
@@ -244,7 +208,7 @@ export const deleteOldProperties = internalMutation({
   handler: async (ctx) => {
     // 60 days ago in milliseconds
     const sixtyDaysAgo = Date.now() - 60 * 24 * 60 * 60 * 1000;
-    
+
     // Find properties created before 60 days ago
     const oldProperties = await ctx.db
       .query("properties")
@@ -263,7 +227,7 @@ export const deleteOldProperties = internalMutation({
       // 2. Delete the property record
       await ctx.db.delete(prop._id);
     }
-    
+
     return { deletedCount: oldProperties.length };
   }
 });
@@ -301,13 +265,13 @@ export const getMyLeads = query({
   args: { token: v.string() },
   handler: async (ctx, args) => {
     if (!args.token) return [];
-    
+
     // Auth check
     const session = await ctx.db
       .query("sessions")
       .withIndex("by_token", (q) => q.eq("token", args.token))
       .first();
-      
+
     if (!session || session.expiresAt < Date.now()) return [];
 
     // Fetch leads for this user's properties
