@@ -432,9 +432,9 @@ function updateMapPreview(location) {
     }
   }
 
-  // FALLBACK: If it's still a full URL (unparsed) or empty, use manual fields
-  // If it's a SHORT URL, we pass it directly to Google as q, it might resolve.
-  if ((isUrl && !isShortUrl) || !query) {
+  // FALLBACK: If it's still a URL (short link or unparsed long link), use manual fields for the PREVIEW
+  // We don't pass the URL itself to the iframe 'q' parameter because it causes "Custom content could not be displayed" error
+  if (isUrl || !query || isShortUrl) {
      const locality = document.getElementById('localityInput')?.value;
      const city = document.getElementById('citySelect')?.value;
      const pin = document.getElementById('pinCodeInput')?.value;
@@ -445,13 +445,16 @@ function updateMapPreview(location) {
      } else if (city) {
         query = `${city}${pin ? ", " + pin : ""}`;
         isUrl = false;
-     } else if (query && isUrl) {
-        // Keep the URL as query if we have nothing else
+     } else if (pin) {
+        query = pin;
+        isUrl = false;
      } else {
-        // No valid info, show placeholder but keep card visible
-        iframe.src = "";
-        container.classList.remove('loaded');
-        return;
+        // Only if we have NO manual info and it's a URL, we try the URL (last resort, likely shows error)
+        if (!query) {
+          iframe.src = "";
+          container.classList.remove('loaded');
+          return;
+        }
      }
   }
 
