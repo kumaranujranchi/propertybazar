@@ -854,7 +854,7 @@
         );
         // fallback
         const photos = resolvedPhotos.filter(Boolean);
-        if (photos.length === 0) photos.push('images/property-1.jpg');
+        if (photos.length === 0) photos.push('images/property-1.webp');
 
         // ---- Helpers ----
         const isLand = /plot|land/i.test(p.propertyType || '');
@@ -1317,7 +1317,7 @@ Interested in Site Visit: ${visit}
                 else spPriceStr = `₹${spPrice.toLocaleString('en-IN')}`;
               }
 
-              let spPhoto = 'images/property-1.jpg';
+              let spPhoto = 'images/property-1.webp';
               if (sp.photos && sp.photos[0]) {
                 try { spPhoto = await convex.query('properties:getPhotoUrl', { storageId: sp.photos[0] }) || spPhoto; } catch (e) { }
               }

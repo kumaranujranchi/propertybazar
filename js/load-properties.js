@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         city: p.location?.city || '',
         area,
         areaDisplay: area > 0 ? `${area} sq.ft` : '',
-        image: p.photos && p.photos.length > 0 ? p.photos[0] : 'images/property-1.jpg',
+        image: p.photos && p.photos.length > 0 ? p.photos[0] : 'images/property-1.webp',
         status: p.details?.status === 'Ready to Move' ? 'ready' : 'under-construction',
         verified: p.verified || false,
         featured: p.featured || false,

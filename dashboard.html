@@ -521,7 +521,7 @@
   } else {
     list.innerHTML = properties.map(p => `
       <div class="dash-prop-card" style="cursor: pointer; ${p.isFeatured ? 'border: 2px solid var(--primary);' : ''}" onclick="window.location.href='property-detail.html?id=${p._id}'">
-        <img class="dash-prop-img" src="${p.photos?.[0] || 'images/property-1.jpg'}" alt="${p.details?.bhk} BHK ${p.propertyType}" onerror="this.src='images/property-1.jpg'">
+        <img class="dash-prop-img" src="${p.photos?.[0] || 'images/property-1.webp'}" alt="${p.details?.bhk} BHK ${p.propertyType}" onerror="this.src='images/property-1.webp'">
         <div class="dash-prop-info">
           <div class="dash-prop-title">
             ${p.details?.bhk && p.details.bhk!=='N/A' && p.details.bhk!=='0' ? p.details.bhk + ' BHK ' : ''}${p.propertyType || ''} in ${p.location?.locality || ''}
