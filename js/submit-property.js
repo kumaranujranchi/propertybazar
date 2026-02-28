@@ -339,7 +339,7 @@ function initGooglePlaces() {
   });
 
   // Listeners for manual fields to update map
-  const manualFields = ['localityInput', 'citySelect', 'stateSelect'];
+  const manualFields = ['localityInput', 'citySelect', 'stateSelect', 'pinCodeInput'];
   manualFields.forEach(id => {
     const el = document.getElementById(id);
     if (el) {
@@ -432,29 +432,28 @@ function updateMapPreview(location) {
     }
   }
 
-  // FALLBACK: If it's still a URL (short link or unparsed long link), use manual fields for the PREVIEW
-  // We don't pass the URL itself to the iframe 'q' parameter because it causes "Custom content could not be displayed" error
+  // FALLBACK: If it's still a URL (short link or unparsed long link), strictly use manual fields for the PREVIEW
+  // Passing the URL itself to the iframe 'q' parameter MUST be avoided as it causes "Custom content could not be displayed" error
   if (isUrl || !query || isShortUrl) {
      const locality = document.getElementById('localityInput')?.value;
      const city = document.getElementById('citySelect')?.value;
+     const state = document.getElementById('stateSelect')?.value;
      const pin = document.getElementById('pinCodeInput')?.value;
      
      if (locality && city) {
         query = `${locality}, ${city}${pin ? ", " + pin : ""}`;
-        isUrl = false;
      } else if (city) {
         query = `${city}${pin ? ", " + pin : ""}`;
-        isUrl = false;
      } else if (pin) {
         query = pin;
-        isUrl = false;
+     } else if (state && state !== "Select State") {
+        query = state;
      } else {
-        // Only if we have NO manual info and it's a URL, we try the URL (last resort, likely shows error)
-        if (!query) {
-          iframe.src = "";
-          container.classList.remove('loaded');
-          return;
-        }
+        // No valid plain text address info available.
+        // Hiding the iframe to show the placeholder instead of a broken map.
+        iframe.src = "";
+        container.classList.remove('loaded');
+        return;
      }
   }
 
