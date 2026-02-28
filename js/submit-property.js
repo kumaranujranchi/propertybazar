@@ -406,34 +406,47 @@ function updateMapPreview(location) {
 
   let query = location;
   let isUrl = location.includes("http") || location.includes("google.com/maps");
+  let isShortUrl = location.includes("maps.app.goo.gl") || location.includes("goo.gl/maps");
   
   // Try to extract useful info from URL
-  if (isUrl) {
+  if (isUrl && !isShortUrl) {
     // 1. Try extracting coordinates from @23.34,85.32 format
     const coordMatch = location.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
     if (coordMatch) {
       query = `${coordMatch[1]},${coordMatch[2]}`;
-      isUrl = false; // We found coords, treat as simple query now
+      isUrl = false;
     } else {
-      // 2. Try extracting from q=lat,lng
-      const qMatch = location.match(/[?&]q=([^&]+)/);
-      if (qMatch) {
-         query = decodeURIComponent(qMatch[1]);
-         isUrl = query.includes("http"); // Re-check if it's still a URL
+      // 2. Try extracting place name from /place/Name+Here/ or /search/Name+Here/
+      const placeMatch = location.match(/\/(place|search)\/([^/@?]+)/);
+      if (placeMatch) {
+         query = decodeURIComponent(placeMatch[2].replace(/\+/g, ' '));
+         isUrl = false;
+      } else {
+        // 3. Try extracting from q=lat,lng or q=Name
+        const qMatch = location.match(/[?&]q=([^&]+)/);
+        if (qMatch) {
+           query = decodeURIComponent(qMatch[1].replace(/\+/g, ' '));
+           isUrl = query.includes("http");
+        }
       }
     }
   }
 
-  // FALLBACK: If it's still a URL (parsing failed) or empty, use manual fields
-  if (isUrl || !query) {
+  // FALLBACK: If it's still a full URL (unparsed) or empty, use manual fields
+  // If it's a SHORT URL, we pass it directly to Google as q, it might resolve.
+  if ((isUrl && !isShortUrl) || !query) {
      const locality = document.getElementById('localityInput')?.value;
      const city = document.getElementById('citySelect')?.value;
+     const pin = document.getElementById('pinCodeInput')?.value;
+     
      if (locality && city) {
-        query = `${locality}, ${city}`;
+        query = `${locality}, ${city}${pin ? ", " + pin : ""}`;
         isUrl = false;
      } else if (city) {
-        query = city;
+        query = `${city}${pin ? ", " + pin : ""}`;
         isUrl = false;
+     } else if (query && isUrl) {
+        // Keep the URL as query if we have nothing else
      } else {
         // No valid info, show placeholder but keep card visible
         iframe.src = "";
@@ -441,6 +454,9 @@ function updateMapPreview(location) {
         return;
      }
   }
+
+  // Show the card
+  previewCard.style.display = 'block';
 
   // Use the reliable non-API embed URL
   const mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=14&output=embed`;
