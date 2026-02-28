@@ -288,11 +288,11 @@
 
           <div class="form-group" id="fgBuiltUpArea">
             <label class="form-label">Built-up Area (sq.ft) *</label>
-            <input type="number" class="form-input" placeholder="e.g. 1450">
+            <input type="number" id="builtUpAreaInput" class="form-input" placeholder="e.g. 1450">
           </div>
           <div class="form-group" id="fgCarpetArea">
             <label class="form-label">Carpet Area (sq.ft)</label>
-            <input type="number" class="form-input" placeholder="e.g. 1100">
+            <input type="number" id="carpetAreaInput" class="form-input" placeholder="e.g. 1100">
           </div>
 
           <!-- New Plot/Land Specific Fields -->
@@ -335,11 +335,11 @@
           <!-- Flat/Apartment Specific Fields -->
           <div class="form-group" id="fgFloor">
             <label class="form-label">Floor Number</label>
-            <input type="number" class="form-input" placeholder="e.g. 5">
+            <input type="number" id="floorNumberInput" class="form-input" placeholder="e.g. 5">
           </div>
           <div class="form-group" id="fgTotalFloors">
             <label class="form-label">Total Floors in Building</label>
-            <input type="number" class="form-input" placeholder="e.g. 18">
+            <input type="number" id="totalFloorsInput" class="form-input" placeholder="e.g. 18">
           </div>
           
           <div class="form-group full" id="fgFurnishing">
@@ -363,7 +363,7 @@
 
           <div class="form-group" id="fgParking">
             <label class="form-label">Car Parking</label>
-            <select class="form-input form-select">
+            <select id="parkingSelect" class="form-input form-select">
               <option>None</option>
               <option>1 Covered</option>
               <option>1 Open</option>
@@ -373,11 +373,15 @@
           </div>
           <div class="form-group" id="fgYear">
             <label class="form-label">Year of Construction</label>
-            <input type="number" class="form-input" placeholder="e.g. 2020">
+            <input type="number" id="constructionYearInput" class="form-input" placeholder="e.g. 2020">
+          </div>
+          <div class="form-group" id="fgRera">
+            <label class="form-label">RERA Number (Optional)</label>
+            <input type="text" id="reraInput" class="form-input" placeholder="e.g. MH/2023/12345">
           </div>
           <div class="form-group full">
             <label class="form-label">Property Description *</label>
-            <textarea class="form-input" rows="4"
+            <textarea id="descriptionInput" class="form-input" rows="4"
               placeholder="Describe your property - location advantages, interior highlights, nearby amenities, special features..."></textarea>
           </div>
         </div>
@@ -516,18 +520,18 @@
           <!-- Standard Pricing Fields (Hidden for Lodge) -->
           <div class="form-group" id="fgExpectedPrice">
             <label class="form-label">Expected Price (₹) *</label>
-            <input type="number" class="form-input" placeholder="e.g. 8500000">
+            <input type="number" id="expectedPriceInput" class="form-input" placeholder="e.g. 8500000">
           </div>
           <div class="form-group" id="fgPricingType">
             <label class="form-label">Pricing Type *</label>
-            <select class="form-input form-select">
+            <select id="pricingTypeSelect" class="form-input form-select">
               <option value="Per Unit">Per Unit (Total Price)</option>
               <option value="Per Sqft">Per Square Foot</option>
             </select>
           </div>
           <div class="form-group" id="fgPriceType">
             <label class="form-label">Price Type</label>
-            <select class="form-input form-select">
+            <select id="priceTypeSelect" class="form-input form-select">
               <option>Fixed</option>
               <option>Negotiable</option>
               <option>Price on request</option>
@@ -535,11 +539,11 @@
           </div>
           <div class="form-group" id="fgMaintCharges">
             <label class="form-label">Maintenance Charges (₹/mo)</label>
-            <input type="number" class="form-input" placeholder="e.g. 5000">
+            <input type="number" id="maintenanceChargesInput" class="form-input" placeholder="e.g. 5000">
           </div>
           <div class="form-group" id="fgTokenAmt">
             <label class="form-label">Token Amount (For Rent)</label>
-            <input type="number" class="form-input" placeholder="e.g. 100000">
+            <input type="number" id="tokenAmountInput" class="form-input" placeholder="e.g. 100000">
           </div>
 
           <!-- New Lodge Pricing Fields -->
@@ -582,31 +586,27 @@
         <div class="form-grid">
           <div class="form-group">
             <label class="form-label">Your Name *</label>
-            <input type="text" class="form-input" placeholder="Full Name">
+            <input type="text" id="contactNameInput" class="form-input" placeholder="Full Name">
           </div>
           <div class="form-group">
             <label class="form-label">Mobile Number *</label>
-            <input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX">
+            <input type="tel" id="contactMobileInput" class="form-input" placeholder="+91 XXXXX XXXXX">
           </div>
           <div class="form-group">
             <label class="form-label">Email Address *</label>
-            <input type="email" class="form-input" placeholder="your@email.com">
+            <input type="email" id="contactEmailInput" class="form-input" placeholder="your@email.com">
           </div>
           <div class="form-group">
             <label class="form-label">You are</label>
-            <select class="form-input form-select">
+            <select id="contactRoleSelect" class="form-input form-select">
               <option>Property Owner</option>
               <option>Builder / Developer</option>
               <option>Authorised Agent</option>
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label">RERA Number (Optional)</label>
-            <input type="text" class="form-input" placeholder="e.g. MH/2023/12345">
-          </div>
-          <div class="form-group">
             <label class="form-label">Preferred Contact Time</label>
-            <select class="form-input form-select">
+            <select id="contactTimeSelect" class="form-input form-select">
               <option>Any Time</option>
               <option>Morning (9AM - 12PM)</option>
               <option>Afternoon (12PM - 4PM)</option>

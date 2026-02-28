@@ -642,19 +642,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       const bhkType = document.getElementById('bhkTypeSelect').value;
       const bhk = bhkType === 'Others' ? document.getElementById('customBhkInput').value : bhkType;
 
-      const detInputs = document.querySelectorAll("#formStep3 .form-input");
       const details = {
         bhk: bhk,
         status: document.getElementById('propertyStatusSelect').value,
-        builtUpArea: Number(detInputs[2].value) || 0,
-        carpetArea: Number(detInputs[3].value) || undefined,
-        floorNumber: Number(detInputs[14].value) || undefined,
-        totalFloors: Number(detInputs[15].value) || undefined,
+        builtUpArea: Number(document.getElementById('builtUpAreaInput').value) || 0,
+        carpetArea: Number(document.getElementById('carpetAreaInput').value) || undefined,
+        floorNumber: Number(document.getElementById('floorNumberInput').value) || undefined,
+        totalFloors: Number(document.getElementById('totalFloorsInput').value) || undefined,
         furnishing: document.getElementById('furnishingStatusSelect').value,
         facing: document.getElementById('facingSelect').value || undefined,
-        parking: detInputs[17].value || undefined, // Adjust index for select
-        constructionYear: Number(detInputs[18].value) || undefined,
-        description: detInputs[19].value || "",
+        parking: document.getElementById('parkingSelect').value || undefined, 
+        constructionYear: Number(document.getElementById('constructionYearInput').value) || undefined,
+        rera: document.getElementById('reraInput').value || undefined,
+        description: document.getElementById('descriptionInput').value || "",
       };
 
       // Collect Amenities from Pills
@@ -662,28 +662,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.querySelectorAll('.amenity-pill.active').forEach(pill => {
         amenities.push(pill.dataset.value);
       });
-      document
-        .querySelectorAll('#formStep3 input[type="checkbox"]')
-        .forEach((cb) => {
-          if (cb.checked && !cb.closest('#fgFacing')) amenities.push(cb.parentElement.innerText.trim());
-        });
 
-      const priceInputs = document.querySelectorAll("#formStep5 .form-input");
       const pricing = {
-        expectedPrice: Number(priceInputs[0].value) || 0,
-        pricingType: priceInputs[1].value, // Per Unit vs Per Sqft
-        priceType: priceInputs[2].value || undefined,
-        maintenance: Number(priceInputs[3].value) || undefined,
-        tokenAmount: Number(priceInputs[4].value) || undefined,
+        expectedPrice: Number(document.getElementById('expectedPriceInput').value) || 0,
+        pricingType: document.getElementById('pricingTypeSelect').value,
+        priceType: document.getElementById('priceTypeSelect').value || undefined,
+        maintenance: Number(document.getElementById('maintenanceChargesInput').value) || undefined,
+        tokenAmount: Number(document.getElementById('tokenAmountInput').value) || undefined,
       };
 
       const contactDesc = {
-        name: priceInputs[11].value,
-        mobile: priceInputs[12].value,
-        email: priceInputs[13].value,
-        role: priceInputs[14].value || undefined,
-        rera: priceInputs[15].value || undefined,
-        contactTime: priceInputs[16].value || undefined,
+        name: document.getElementById('contactNameInput').value,
+        mobile: document.getElementById('contactMobileInput').value,
+        email: document.getElementById('contactEmailInput').value,
+        role: document.getElementById('contactRoleSelect').value || undefined,
+        contactTime: document.getElementById('contactTimeSelect').value || undefined,
       };
 
       const externalVideos = [];
