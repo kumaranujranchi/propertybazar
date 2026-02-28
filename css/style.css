@@ -468,7 +468,7 @@ textarea {
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 1150px;
+  max-width: 1250px;
   width: calc(100% - 40px);
   margin: 0 auto 30px auto;
   padding: 32px 32px 32px;
@@ -520,11 +520,12 @@ textarea {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 .hero-title {
-  font-size: clamp(28px, 4vw, 42px);
+  font-size: clamp(24px, 3.5vw, 38px);
   font-weight: 800;
   color: #fff;
   margin-bottom: 12px;
   line-height: 1.15;
+  white-space: nowrap;
 }
 #typing-text {
   border-right: none;
