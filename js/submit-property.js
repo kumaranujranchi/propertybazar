@@ -772,6 +772,33 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('commercialRentPerSqFtInput')) document.getElementById('commercialRentPerSqFtInput').value = prop.pricing.rentPerSqFt || '';
         if (document.getElementById('commercialEscalationInput')) document.getElementById('commercialEscalationInput').value = prop.pricing.escalationPercent || '';
 
+        // Pre-fill Hospitality Specific
+        if (document.getElementById('hospitalityTypeSelect')) document.getElementById('hospitalityTypeSelect').value = prop.details.hospitalityType || '';
+        if (document.getElementById('hospitalityStarRating')) document.getElementById('hospitalityStarRating').value = prop.details.starRating || '';
+        if (document.getElementById('hospitalityOperational')) document.getElementById('hospitalityOperational').value = prop.details.operationalStatus !== undefined ? String(prop.details.operationalStatus) : '';
+        if (document.getElementById('hospitalityTotalRooms')) document.getElementById('hospitalityTotalRooms').value = prop.details.totalRooms || '';
+        if (document.getElementById('hospitalityRoomTypes')) document.getElementById('hospitalityRoomTypes').value = prop.details.roomTypes || '';
+        if (document.getElementById('hospitalityOccupancyRate')) document.getElementById('hospitalityOccupancyRate').value = prop.details.occupancyRate || '';
+        if (document.getElementById('hospitalityADR')) document.getElementById('hospitalityADR').value = prop.details.averageDailyRate || '';
+        if (document.getElementById('cbHospitalityBanquet')) document.getElementById('cbHospitalityBanquet').checked = prop.details.banquetHall || false;
+        if (document.getElementById('cbHospitalityRestaurant')) document.getElementById('cbHospitalityRestaurant').checked = prop.details.restaurant || false;
+        if (document.getElementById('cbHospitalityBarLicense')) document.getElementById('cbHospitalityBarLicense').checked = prop.details.barLicenseDetails || false;
+        if (document.getElementById('cbHospitalityPool')) document.getElementById('cbHospitalityPool').checked = prop.details.hospitalityPool || false;
+        if (document.getElementById('cbHospitalitySpa')) document.getElementById('cbHospitalitySpa').checked = prop.details.spa || false;
+        if (document.getElementById('cbHospitalityGym')) document.getElementById('cbHospitalityGym').checked = prop.details.gym || false;
+        if (document.getElementById('hospitalityLandArea')) document.getElementById('hospitalityLandArea').value = prop.details.hospitalityLandArea || '';
+        if (document.getElementById('hospitalityBuiltUpArea')) document.getElementById('hospitalityBuiltUpArea').value = prop.details.hospitalityBuiltUpArea || '';
+        if (document.getElementById('hospitalityParking')) document.getElementById('hospitalityParking').value = prop.details.hospitalityParkingCapacity || '';
+        if (document.getElementById('cbHospitalityKitchen')) document.getElementById('cbHospitalityKitchen').checked = prop.details.kitchenSetup || false;
+        if (document.getElementById('cbHospitalityLaundry')) document.getElementById('cbHospitalityLaundry').checked = prop.details.laundrySetup || false;
+        if (document.getElementById('hospitalityAnnualRev')) document.getElementById('hospitalityAnnualRev').value = prop.details.annualRevenue || '';
+        if (document.getElementById('hospitalityMonthlyRev')) document.getElementById('hospitalityMonthlyRev').value = prop.details.monthlyRevenue || '';
+        if (document.getElementById('hospitalityEBITDA')) document.getElementById('hospitalityEBITDA').value = prop.details.ebitda || '';
+        if (document.getElementById('hospitalityStaff')) document.getElementById('hospitalityStaff').value = prop.details.staffStrength || '';
+        if (document.getElementById('cbHospitalityHotelLicense')) document.getElementById('cbHospitalityHotelLicense').checked = prop.details.hotelLicense || false;
+        if (document.getElementById('cbHospitalityFSSAI')) document.getElementById('cbHospitalityFSSAI').checked = prop.details.fssaiLicense || false;
+        if (document.getElementById('cbHospitalityTourismReg')) document.getElementById('cbHospitalityTourismReg').checked = prop.details.tourismRegistration || false;
+
         // Pre-fill Amenities
         const amenityCheckboxes = document.querySelectorAll('#formStep3 input[type="checkbox"]');
         amenityCheckboxes.forEach(cb => {
@@ -1027,12 +1054,44 @@ document.addEventListener("DOMContentLoaded", async () => {
         factoryLicense: document.getElementById('cbFactoryLicense')?.checked || false,
         industrialApproval: document.getElementById('cbIndustrialApproval')?.checked || false,
         // (Note: Fire NOC uses the same field as commercial so we check both checkboxes)
+
+        // Hospitality Specific
+        hospitalityType: document.getElementById('hospitalityTypeSelect')?.value || undefined,
+        starRating: Number(document.getElementById('hospitalityStarRating')?.value) || undefined,
+        operationalStatus: document.getElementById('hospitalityOperational')?.value === 'true',
+        totalRooms: Number(document.getElementById('hospitalityTotalRooms')?.value) || undefined,
+        roomTypes: document.getElementById('hospitalityRoomTypes')?.value || undefined,
+        occupancyRate: Number(document.getElementById('hospitalityOccupancyRate')?.value) || undefined,
+        averageDailyRate: Number(document.getElementById('hospitalityADR')?.value) || undefined,
+        banquetHall: document.getElementById('cbHospitalityBanquet')?.checked || false,
+        restaurant: document.getElementById('cbHospitalityRestaurant')?.checked || false,
+        barLicenseDetails: document.getElementById('cbHospitalityBarLicense')?.checked || false,
+        hospitalityPool: document.getElementById('cbHospitalityPool')?.checked || false,
+        spa: document.getElementById('cbHospitalitySpa')?.checked || false,
+        gym: document.getElementById('cbHospitalityGym')?.checked || false,
+        hospitalityLandArea: Number(document.getElementById('hospitalityLandArea')?.value) || undefined,
+        hospitalityBuiltUpArea: Number(document.getElementById('hospitalityBuiltUpArea')?.value) || undefined,
+        hospitalityParkingCapacity: Number(document.getElementById('hospitalityParking')?.value) || undefined,
+        kitchenSetup: document.getElementById('cbHospitalityKitchen')?.checked || false,
+        laundrySetup: document.getElementById('cbHospitalityLaundry')?.checked || false,
+        annualRevenue: Number(document.getElementById('hospitalityAnnualRev')?.value) || undefined,
+        monthlyRevenue: Number(document.getElementById('hospitalityMonthlyRev')?.value) || undefined,
+        ebitda: Number(document.getElementById('hospitalityEBITDA')?.value) || undefined,
+        staffStrength: Number(document.getElementById('hospitalityStaff')?.value) || undefined,
+        hotelLicense: document.getElementById('cbHospitalityHotelLicense')?.checked || false,
+        fssaiLicense: document.getElementById('cbHospitalityFSSAI')?.checked || false,
+        tourismRegistration: document.getElementById('cbHospitalityTourismReg')?.checked || false,
       };
 
       // Warehouse logic: Since fireNoc may be ticked in commercial or warehouse UI
       if (document.getElementById('cbWarehouseFireNoc')?.checked) {
         details.fireNoc = true;
       }
+      
+      // Hospitality logic: Since fireNoc / pollution clear may be ticked
+      if (document.getElementById('cbHospitalityHotelLicense')?.checked) details.hotelLicense = true;
+      if (document.getElementById('cbHospitalityFSSAI')?.checked) details.fssaiLicense = true;
+      if (document.getElementById('cbHospitalityTourismReg')?.checked) details.tourismRegistration = true;
 
       // Collect Amenities from Pills
       const amenities = [];

@@ -716,6 +716,161 @@
             </div>
             <input type="hidden" id="roomTypeSelect" value="Single Bed">
           </div>
+
+          <!-- New Hospitality Details (Hotel / Resort / Guest House) -->
+          <div id="fgHospitalityDetails"
+            style="display:none; grid-column: 1 / -1; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
+            <div class="form-group" style="width: 100%;">
+              <div
+                style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+                A. Hospitality / Hotel Basic Info
+              </div>
+            </div>
+            <div class="form-grid" style="width: 100%;">
+              <div class="form-group">
+                <label class="form-label">Hospitality Type</label>
+                <select id="hospitalityTypeSelect" class="form-input form-select">
+                  <option value="">Select</option>
+                  <option>Hotel</option>
+                  <option>Resort</option>
+                  <option>Guest House</option>
+                  <option>Lodge</option>
+                  <option>Service Apartment</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Star Rating (1-5)</label>
+                <input type="number" id="hospitalityStarRating" class="form-input" placeholder="e.g. 3" min="1" max="5">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Operational Status</label>
+                <select id="hospitalityOperational" class="form-input form-select">
+                  <option value="true">Operational</option>
+                  <option value="false">Non-operational</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group" style="width: 100%;">
+              <div
+                style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+                B. Room & Facility Details
+              </div>
+            </div>
+            <div class="form-grid" style="width: 100%;">
+              <div class="form-group">
+                <label class="form-label">Total Rooms</label>
+                <input type="number" id="hospitalityTotalRooms" class="form-input" placeholder="e.g. 50">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Room Types (Comma separated)</label>
+                <input type="text" id="hospitalityRoomTypes" class="form-input"
+                  placeholder="e.g. Deluxe, Suite, Standard">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Occupancy Rate (%)</label>
+                <input type="number" id="hospitalityOccupancyRate" class="form-input" placeholder="e.g. 75">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Average Daily Rate (ADR ₹)</label>
+                <input type="number" id="hospitalityADR" class="form-input" placeholder="e.g. 3500">
+              </div>
+
+              <div class="form-group full">
+                <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbHospitalityBanquet"> Banquet Hall</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbHospitalityRestaurant"> Restaurant</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbHospitalityBarLicense"> Bar / License</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbHospitalityPool"> Swimming Pool</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbHospitalitySpa"> Spa</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbHospitalityGym"> Gym</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" style="width: 100%;">
+              <div
+                style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+                C. Infrastructure Details
+              </div>
+            </div>
+            <div class="form-grid" style="width: 100%;">
+              <div class="form-group">
+                <label class="form-label">Total Land Area (Sq.Ft / Acres)</label>
+                <input type="number" id="hospitalityLandArea" class="form-input" placeholder="e.g. 10000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Total Built-up Area (Sq.Ft)</label>
+                <input type="number" id="hospitalityBuiltUpArea" class="form-input" placeholder="e.g. 25000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Parking Capacity (Vehicles)</label>
+                <input type="number" id="hospitalityParking" class="form-input" placeholder="e.g. 40">
+              </div>
+
+              <div class="form-group full">
+                <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbHospitalityKitchen"> Commercial Kitchen Setup</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbHospitalityLaundry"> In-house Laundry Setup</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" style="width: 100%;">
+              <div
+                style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+                D. Financial Performance & Staffing
+              </div>
+            </div>
+            <div class="form-grid" style="width: 100%;">
+              <div class="form-group">
+                <label class="form-label">Annual Revenue (₹)</label>
+                <input type="number" id="hospitalityAnnualRev" class="form-input" placeholder="e.g. 12000000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Monthly Revenue (₹)</label>
+                <input type="number" id="hospitalityMonthlyRev" class="form-input" placeholder="e.g. 1000000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">EBITDA (₹)</label>
+                <input type="number" id="hospitalityEBITDA" class="form-input" placeholder="Optional">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Staff Strength</label>
+                <input type="number" id="hospitalityStaff" class="form-input" placeholder="e.g. 25">
+              </div>
+            </div>
+
+            <div class="form-group" style="width: 100%;">
+              <div
+                style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
+                E. Legal & Compliance
+              </div>
+            </div>
+            <div class="form-grid" style="width: 100%;">
+              <div class="form-group full">
+                <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbHospitalityHotelLicense"> Hotel License</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbHospitalityFSSAI"> FSSAI License</label>
+                  <label style="font-size:13px; display:flex; align-items:center; gap:5px;"><input type="checkbox"
+                      id="cbHospitalityTourismReg"> Tourism Registration</label>
+                </div>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:5px;">
+                  (Fire NOC and Pollution Clearance are in the Shared section below)
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Shared Field: Facing Direction -->
           <div class="form-group full" id="fgFacing">
             <label class="form-label">Facing Direction</label>
@@ -1264,9 +1419,10 @@
       const isLand = /plot|land/i.test(propType);
       const isCommercial = /commercial|shop|office|warehouse/i.test(propType);
       const isWarehouse = /warehouse|industrial|godown/i.test(propType);
-      const isLodge = /lodge/i.test(propType);
+      const isHospitality = /hotel|resort|guest house|lodge|service apartment/i.test(propType);
+      const isLodge = /lodge/i.test(propType) && !isHospitality; // old simple lodge (kept for legacy)
       const isVilla = /villa|house/i.test(propType);
-      const hideResidential = isLand || isCommercial || isWarehouse || isLodge;
+      const hideResidential = isLand || isCommercial || isWarehouse || isHospitality;
       const hideStandardRes = hideResidential || isVilla;
 
       const hide = (id, hidden) => {
@@ -1288,8 +1444,8 @@
       hide('fgFurnishing', hideStandardRes);
       hide('fgParking', hideStandardRes);
       hide('fgYear', hideStandardRes);
-      hide('fgBuiltUpArea', isLand || isLodge || isCommercial || isWarehouse || isVilla);
-      hide('fgCarpetArea', isLand || isLodge || isCommercial || isWarehouse || isVilla);
+      hide('fgBuiltUpArea', isLand || isHospitality || isCommercial || isWarehouse || isVilla);
+      hide('fgCarpetArea', isLand || isHospitality || isCommercial || isWarehouse || isVilla);
 
       // Location extended details only for Commercial/Warehouse
       if (document.getElementById('fgDistanceMetrics')) {
@@ -1304,6 +1460,13 @@
 
       // Warehouse specific fields
       hide('fgWarehouseDetails', !isWarehouse);
+
+      // Hospitality specific fields
+      hide('fgHospitalityDetails', !isHospitality);
+      if (isHospitality) {
+        const el = document.getElementById('fgHospitalityDetails');
+        if (el) el.style.display = 'flex';
+      }
 
       // Shared Commercial/Warehouse Pricing
       hide('fgCommercialPricing', !(isCommercial || isWarehouse));
@@ -1332,27 +1495,28 @@
       hide('fgLoan', !isLand);
       hide('fgEmi', !isLand);
 
-      // Lodge specific room fields to show only for Lodge
-      hide('fgRoomType', !isLodge);
+      // Hospitality/Lodge pricing fields
+      const isHospOrLodge = isHospitality || isLodge;
+      hide('fgRoomType', !isLodge); // Old simple lodge room type field
       hide('fgAcNonAc', !isLodge);
       hide('fgAttachedBathroom', !isLodge);
       hide('fgBedType', !isLodge);
       hide('fgRoomSize', !isLodge);
 
-      // Lodge specific pricing fields (Step 5)
-      hide('fgPricePerDay', !isLodge);
-      hide('fgPricePerWeek', !isLodge);
-      hide('fgPricePerMonth', !isLodge);
-      hide('fgSecurityDeposit', !isLodge);
-      hide('fgElectricityExtra', !isLodge);
-      hide('fgGstExtra', !isLodge);
+      // Pricing fields for Hospitality
+      hide('fgPricePerDay', !isHospOrLodge);
+      hide('fgPricePerWeek', !isHospOrLodge);
+      hide('fgPricePerMonth', !isHospOrLodge);
+      hide('fgSecurityDeposit', !isHospOrLodge);
+      hide('fgElectricityExtra', !isHospOrLodge);
+      hide('fgGstExtra', !isHospOrLodge);
 
-      // Standard pricing fields to hide for Lodge
-      hide('fgExpectedPrice', isLodge);
-      hide('fgPricingType', isLodge);
-      hide('fgPriceType', isLodge);
-      hide('fgMaintCharges', isLodge);
-      hide('fgTokenAmt', isLodge);
+      // Standard pricing fields to hide for Hospitality / Lodge
+      hide('fgExpectedPrice', isHospOrLodge || isCommercial || isWarehouse);
+      hide('fgPricingType', isHospOrLodge || isCommercial || isWarehouse);
+      hide('fgPriceType', isHospOrLodge);
+      hide('fgMaintCharges', isHospOrLodge);
+      hide('fgTokenAmt', isHospOrLodge);
 
       // Also update Step 3 title to match context
       const step3Title = document.querySelector('#formStep3 .form-card-title');
@@ -1360,6 +1524,7 @@
         if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
         else if (isWarehouse) step3Title.textContent = 'Step 3: Warehouse / Industrial Details';
         else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
+        else if (isHospitality) step3Title.textContent = 'Step 3: Hotel / Hospitality Details';
         else if (isLodge) step3Title.textContent = 'Step 3: Lodge Details';
         else if (isVilla) step3Title.textContent = 'Step 3: Villa / House Details';
         else step3Title.textContent = 'Step 3: Property Details';
