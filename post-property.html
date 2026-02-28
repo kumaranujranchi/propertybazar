@@ -176,6 +176,16 @@
         <h2 class="form-card-title">Step 2: Where is your property?</h2>
         <p class="form-card-subtitle">Add the exact location for better visibility</p>
 
+        <!-- GOOGLE LOCATION SEARCH -->
+        <div class="form-group full" style="margin-bottom: 24px;">
+          <label class="form-label">Search Location on Google *</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-magnifying-glass-location" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
+            <input type="text" id="googleLocationSearch" class="form-input" placeholder="Search for your society, building or area..." style="padding-left: 44px; border: 2px solid rgba(232, 65, 24, 0.2);">
+          </div>
+          <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;"><i class="fa-solid fa-circle-info"></i> Selecting from Google automatically fills State, City and PIN code.</p>
+        </div>
+
         <div class="form-grid">
           <div class="form-group">
             <label class="form-label">State *</label>
@@ -246,14 +256,21 @@
 
         <div class="form-grid">
           <div class="form-group" id="fgBhk">
-            <label class="form-label">BHK Type *</label>
-            <select class="form-input form-select">
-              <option>1 BHK</option>
-              <option selected>2 BHK</option>
-              <option>3 BHK</option>
-              <option>4 BHK</option>
-              <option>4+ BHK</option>
+            <select class="form-input form-select" id="bhkTypeSelect">
+              <option value="1RK">1 RK</option>
+              <option value="1BHK">1 BHK</option>
+              <option value="2BHK" selected>2 BHK</option>
+              <option value="3BHK">3 BHK</option>
+              <option value="4BHK">4 BHK</option>
+              <option value="4.5BHK">4.5 BHK</option>
+              <option value="5BHK">5 BHK</option>
+              <option value="6BHK">6 BHK</option>
+              <option value="Others">Others (Custom)</option>
             </select>
+          </div>
+          <div class="form-group" id="fgCustomBhk" style="display:none">
+            <label class="form-label">Enter Custom Configuration *</label>
+            <input type="text" class="form-input" id="customBhkInput" placeholder="e.g. 7 BHK, Duplex">
           </div>
           <div class="form-group">
             <label class="form-label">Property Status *</label>
@@ -374,9 +391,9 @@
           <div class="form-group" id="fgFurnishing">
             <label class="form-label">Furnishing Status</label>
             <select class="form-input form-select">
-              <option>Unfurnished</option>
-              <option>Semi-Furnished</option>
-              <option>Fully Furnished</option>
+              <option value="Unfurnished">Unfurnished</option>
+              <option value="Semi-Furnished">Semi-Furnished</option>
+              <option value="Furnished">Furnished</option>
             </select>
           </div>
           <div class="form-group" id="fgParking">
@@ -457,8 +474,9 @@
 
       <!-- STEP 4: Photos -->
       <div class="form-card form-step" id="formStep4" style="display:none">
-        <h2 class="form-card-title">Step 4: Upload Property Photos</h2>
-        <p class="form-card-subtitle">Properties with photos get 5X more inquiries. Upload at least 5 clear photos.</p>
+        <h2 class="form-card-title">Step 4: Photos & Videos</h2>
+        <p class="form-card-subtitle">Properties with photos/videos get 10X more inquiries. Select categories for each upload.</p>
+        <p style="font-size: 11px; color: var(--primary); margin-top: -10px; margin-bottom: 20px;"><i class="fa-solid fa-expand"></i> Recommended size: 1200 x 800 pixels (3:2 Ratio) for best look.</p>
         <div class="photo-upload-area" id="photoUploadArea">
           <input type="file" id="photoFileInput" multiple accept="image/*" style="display:none">
           <input type="file" id="cameraFileInput" accept="image/*" capture="camera" style="display:none">
@@ -477,7 +495,25 @@
           </div>
         </div>
         <!-- Preview grid -->
-        <div id="photoPreviewGrid" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"></div>
+        <div id="photoPreviewGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:15px; margin-top:20px"></div>
+
+        <!-- VIDEO GALLERY SECTION -->
+        <hr style="border:none; border-top:1px solid var(--border); margin: 32px 0;">
+        <h3 style="font-size:16px; font-weight:700; color:var(--dark); margin-bottom:12px;">Video Gallery (Optional)</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">Add project videos, 3D visualizations, or a walkthrough of the sample flat.</p>
+        
+        <div class="photo-upload-area" id="videoUploadArea" style="padding: 30px; border-style: dashed; background: rgba(232, 65, 24, 0.02);">
+          <input type="file" id="videoFileInput" multiple accept="video/*" style="display:none">
+          <div class="photo-upload-icon"><i class="fa-solid fa-video"></i></div>
+          <div class="photo-upload-text">Upload property videos</div>
+          <div class="photo-upload-sub">Recommended: MP4 format, Max 50MB per video</div>
+          <div style="margin-top:15px; display:flex; gap:12px; justify-content:center">
+            <span class="btn btn-outline btn-app-nav" style="cursor:pointer;" onclick="document.getElementById('videoFileInput').click()">
+              <i class="fa-solid fa-film"></i> Select Videos
+            </span>
+          </div>
+        </div>
+        <div id="videoPreviewGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:15px; margin-top:20px"></div>
         <div
           style="margin-top:20px;background:rgba(232,65,24,0.05);border:1px solid rgba(232,65,24,0.15);border-radius:var(--radius-sm);padding:14px">
           <h4 style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px"><i
@@ -506,6 +542,13 @@
           <div class="form-group" id="fgExpectedPrice">
             <label class="form-label">Expected Price (₹) *</label>
             <input type="number" class="form-input" placeholder="e.g. 8500000">
+          </div>
+          <div class="form-group" id="fgPricingType">
+            <label class="form-label">Pricing Type *</label>
+            <select class="form-input form-select">
+              <option value="Per Unit">Per Unit (Total Price)</option>
+              <option value="Per Sqft">Per Square Foot</option>
+            </select>
           </div>
           <div class="form-group" id="fgPriceType">
             <label class="form-label">Price Type</label>
@@ -731,6 +774,8 @@
 
   <script src="js/properties.js"></script>
   <script src="js/main.js"></script>
+  <!-- Google Maps API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&libraries=places"></script>
   <script type="module" src="js/submit-property.js"></script>
   <script type="module">
     import { initNavAuth } from './js/auth.js';
@@ -796,6 +841,7 @@
 
       // Standard pricing fields to hide for Lodge
       hide('fgExpectedPrice', isLodge);
+      hide('fgPricingType', isLodge);
       hide('fgPriceType', isLodge);
       hide('fgMaintCharges', isLodge);
       hide('fgTokenAmt', isLodge);
@@ -809,6 +855,18 @@
         else step3Title.textContent = 'Step 3: Property Details';
       }
     }
+
+    // ---- Custom Configuration ("Others") Logic ----
+    document.getElementById('bhkTypeSelect')?.addEventListener('change', function() {
+      const fgCustomBhk = document.getElementById('fgCustomBhk');
+      if (this.value === 'Others') {
+        if (fgCustomBhk) fgCustomBhk.style.display = 'block';
+      } else {
+        if (fgCustomBhk) fgCustomBhk.style.display = 'none';
+        const input = document.getElementById('customBhkInput');
+        if (input) input.value = '';
+      }
+    });
 
     // ---- State / City Dropdown Logic ----
     const LOCATIONS = {
