@@ -255,31 +255,37 @@
         <p class="form-card-subtitle">More details = more inquiries. Fill as much as possible.</p>
 
         <div class="form-grid">
-          <div class="form-group" id="fgBhk">
-            <select class="form-input form-select" id="bhkTypeSelect">
-              <option value="1RK">1 RK</option>
-              <option value="1BHK">1 BHK</option>
-              <option value="2BHK" selected>2 BHK</option>
-              <option value="3BHK">3 BHK</option>
-              <option value="4BHK">4 BHK</option>
-              <option value="4.5BHK">4.5 BHK</option>
-              <option value="5BHK">5 BHK</option>
-              <option value="6BHK">6 BHK</option>
-              <option value="Others">Others (Custom)</option>
-            </select>
+          <div class="form-group full" id="fgBhk">
+            <label class="form-label">How many BHK? *</label>
+            <div class="segmented-control" id="bhkSelector">
+              <div class="segment-item" data-value="1RK">1 RK</div>
+              <div class="segment-item" data-value="1BHK">1 BHK</div>
+              <div class="segment-item active" data-value="2BHK">2 BHK</div>
+              <div class="segment-item" data-value="3BHK">3 BHK</div>
+              <div class="segment-item" data-value="4BHK">4 BHK</div>
+              <div class="segment-item" data-value="4.5BHK">4.5 BHK</div>
+              <div class="segment-item" data-value="5BHK">5 BHK</div>
+              <div class="segment-item" data-value="6BHK">6 BHK</div>
+              <div class="segment-item" data-value="Others">Others</div>
+            </div>
+            <input type="hidden" id="bhkTypeSelect" value="2BHK">
           </div>
-          <div class="form-group" id="fgCustomBhk" style="display:none">
+          
+          <div class="form-group full" id="fgCustomBhk" style="display:none">
             <label class="form-label">Enter Custom Configuration *</label>
             <input type="text" class="form-input" id="customBhkInput" placeholder="e.g. 7 BHK, Duplex">
           </div>
-          <div class="form-group">
+
+          <div class="form-group full">
             <label class="form-label">Property Status *</label>
-            <select class="form-input form-select">
-              <option>Ready to Move</option>
-              <option>Under Construction</option>
-              <option>New Launch</option>
-            </select>
+            <div class="segmented-control" id="statusSelector">
+              <div class="segment-item active" data-value="Ready to Move">Ready to Move</div>
+              <div class="segment-item" data-value="Under Construction">Under Construction</div>
+              <div class="segment-item" data-value="New Launch">New Launch</div>
+            </div>
+            <input type="hidden" id="propertyStatusSelect" value="Ready to Move">
           </div>
+
           <div class="form-group" id="fgBuiltUpArea">
             <label class="form-label">Built-up Area (sq.ft) *</label>
             <input type="number" class="form-input" placeholder="e.g. 1450">
@@ -302,81 +308,28 @@
           <!-- New Lodge Specific Fields -->
           <div class="form-group" id="fgRoomType" style="display:none">
             <label class="form-label">Room Type *</label>
-            <select class="form-input form-select">
-              <option>Single Bed</option>
-              <option>2 Seater</option>
-              <option>3 Seater</option>
-              <option>4 Seater</option>
-            </select>
+            <div class="segmented-control" id="roomTypeSelector">
+              <div class="segment-item active" data-value="Single Bed">Single</div>
+              <div class="segment-item" data-value="2 Seater">2 Seater</div>
+              <div class="segment-item" data-value="3 Seater">3 Seater</div>
+              <div class="segment-item" data-value="4 Seater">4 Seater</div>
+            </div>
+            <input type="hidden" id="roomTypeSelect" value="Single Bed">
           </div>
-          <div class="form-group" id="fgAcNonAc" style="display:none">
-            <label class="form-label">AC / Non-AC *</label>
-            <select class="form-input form-select">
-              <option>AC</option>
-              <option>Non-AC</option>
-            </select>
-          </div>
-          <div class="form-group" id="fgAttachedBathroom" style="display:none">
-            <label class="form-label">Bathroom Type *</label>
-            <select class="form-input form-select">
-              <option>Attached</option>
-              <option>Common</option>
-            </select>
-          </div>
-          <div class="form-group" id="fgBedType" style="display:none">
-            <label class="form-label">Bed Type *</label>
-            <select class="form-input form-select">
-              <option>Single</option>
-              <option>Double</option>
-              <option>Bunk Bed</option>
-            </select>
-          </div>
-          <div class="form-group" id="fgRoomSize" style="display:none">
-            <label class="form-label">Room Size (sq.ft) (Optional)</label>
-            <input type="number" class="form-input" placeholder="e.g. 120">
-          </div>
-          <!-- End Lodge Specific Fields -->
           <!-- Shared Field: Facing Direction -->
           <div class="form-group full" id="fgFacing">
             <label class="form-label">Facing Direction</label>
-            <div
-              style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:6px;">
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
-                  type="checkbox" value="East" style="accent-color:var(--primary)"> East</label>
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
-                  type="checkbox" value="West" style="accent-color:var(--primary)"> West</label>
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
-                  type="checkbox" value="North" style="accent-color:var(--primary)"> North</label>
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
-                  type="checkbox" value="South" style="accent-color:var(--primary)"> South</label>
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
-                  type="checkbox" value="North-East" style="accent-color:var(--primary)"> North-East</label>
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
-                  type="checkbox" value="North-West" style="accent-color:var(--primary)"> North-West</label>
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
-                  type="checkbox" value="South-East" style="accent-color:var(--primary)"> South-East</label>
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input
-                  type="checkbox" value="South-West" style="accent-color:var(--primary)"> South-West</label>
+            <div class="facing-grid">
+              <div class="face-item" data-value="East">East</div>
+              <div class="face-item" data-value="West">West</div>
+              <div class="face-item" data-value="North">North</div>
+              <div class="face-item" data-value="South">South</div>
+              <div class="face-item" data-value="North-East">N-East</div>
+              <div class="face-item" data-value="North-West">N-West</div>
+              <div class="face-item" data-value="South-East">S-East</div>
+              <div class="face-item" data-value="South-West">S-West</div>
             </div>
-          </div>
-          <!-- PLC, Loan, EMI -->
-          <div class="form-group" id="fgPlc" style="display:none">
-            <label class="form-label">Preferred Location Charges (PLC) / Describe</label>
-            <input type="text" class="form-input" placeholder="e.g. 10% for Corner Plot, ₹50/sqft for Park Facing">
-          </div>
-          <div class="form-group" id="fgLoan" style="display:none">
-            <label class="form-label">Loan Facility Available?</label>
-            <select class="form-input form-select">
-              <option>Yes</option>
-              <option>No</option>
-            </select>
-          </div>
-          <div class="form-group" id="fgEmi" style="display:none">
-            <label class="form-label">EMI Facility Available?</label>
-            <select class="form-input form-select">
-              <option>Yes</option>
-              <option>No</option>
-            </select>
+            <input type="hidden" id="facingSelect" value="">
           </div>
 
           <!-- Flat/Apartment Specific Fields -->
@@ -388,14 +341,26 @@
             <label class="form-label">Total Floors in Building</label>
             <input type="number" class="form-input" placeholder="e.g. 18">
           </div>
-          <div class="form-group" id="fgFurnishing">
+          
+          <div class="form-group full" id="fgFurnishing">
             <label class="form-label">Furnishing Status</label>
-            <select class="form-input form-select">
-              <option value="Unfurnished">Unfurnished</option>
-              <option value="Semi-Furnished">Semi-Furnished</option>
-              <option value="Furnished">Furnished</option>
-            </select>
+            <div class="visual-cards" id="furnishingSelector">
+              <div class="selection-card active" data-value="Unfurnished">
+                <i class="fa-solid fa-house-chimney-crack"></i>
+                <span>Unfurnished</span>
+              </div>
+              <div class="selection-card" data-value="Semi-Furnished">
+                <i class="fa-solid fa-house-laptop"></i>
+                <span>Semi-Furnished</span>
+              </div>
+              <div class="selection-card" data-value="Furnished">
+                <i class="fa-solid fa-couch"></i>
+                <span>Furnished</span>
+              </div>
+            </div>
+            <input type="hidden" id="furnishingStatusSelect" value="Unfurnished">
           </div>
+
           <div class="form-group" id="fgParking">
             <label class="form-label">Car Parking</label>
             <select class="form-input form-select">
@@ -417,51 +382,46 @@
           </div>
         </div>
 
-        <div style="margin-top:20px">
-          <div class="filter-group-title" style="margin-bottom:12px">Amenities Available</div>
-          <div style="display:flex;flex-wrap:wrap;gap:10px">
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Swimming Pool</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Gymnasium</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Clubhouse</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> 24x7 Security</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Power Backup</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Lift</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Garden / Park</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Water Supply</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> CCTV</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Intercom</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Fire Safety</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Solar Energy</label>
+        <div style="margin-top:30px">
+          <div class="filter-group-title" style="margin-bottom:20px; font-size: 16px;">Amenities Available</div>
+          
+          <!-- Category: Basic Amenities -->
+          <div class="amenity-category">
+            <div class="amenity-category-title"><i class="fa-solid fa-plug-circle-bolt"></i> Basic Amenities</div>
+            <div class="amenity-pill-grid">
+              <div class="amenity-pill" data-value="Power Backup"><i class="fa-solid fa-bolt"></i> Power Backup</div>
+              <div class="amenity-pill" data-value="Water Supply"><i class="fa-solid fa-droplet"></i> Water Supply</div>
+              <div class="amenity-pill" data-value="Lift"><i class="fa-solid fa-elevator"></i> Lift</div>
+              <div class="amenity-pill" data-value="Power Backup"><i class="fa-solid fa-trash-can"></i> Garbage Disposal</div>
+              <div class="amenity-pill" data-value="Solar Energy"><i class="fa-solid fa-sun"></i> Solar Energy</div>
+              <div class="amenity-pill" data-value="Central Drainage System"><i class="fa-solid fa-pipe-valve"></i> Drainage</div>
+            </div>
+          </div>
 
-            <!-- New Amenities -->
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Outside Boundary</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Central Drainage System</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Street Light</label>
+          <!-- Category: Security -->
+          <div class="amenity-category">
+            <div class="amenity-category-title"><i class="fa-solid fa-shield-halved"></i> Security & Safety</div>
+            <div class="amenity-pill-grid">
+              <div class="amenity-pill" data-value="24x7 Security"><i class="fa-solid fa-user-shield"></i> 24x7 Security</div>
+              <div class="amenity-pill" data-value="CCTV"><i class="fa-solid fa-video"></i> CCTV</div>
+              <div class="amenity-pill" data-value="Intercom"><i class="fa-solid fa-phone-volume"></i> Intercom</div>
+              <div class="amenity-pill" data-value="Fire Safety"><i class="fa-solid fa-fire-extinguisher"></i> Fire Safety</div>
+              <div class="amenity-pill" data-value="Outside Boundary"><i class="fa-solid fa-border-all"></i> boundary Wall</div>
+            </div>
+          </div>
 
-            <!-- Lodge Specific Amenities -->
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Free WiFi</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Room Service</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> Daily Housekeeping</label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="checkbox"
-                style="accent-color:var(--primary)"> RO / Drinking Water</label>
+          <!-- Category: Lifestyle -->
+          <div class="amenity-category">
+            <div class="amenity-category-title"><i class="fa-solid fa-star"></i> Lifestyle & Leisure</div>
+            <div class="amenity-pill-grid">
+              <div class="amenity-pill" data-value="Swimming Pool"><i class="fa-solid fa-person-swimming"></i> Pool</div>
+              <div class="amenity-pill" data-value="Gymnasium"><i class="fa-solid fa-dumbbell"></i> Gym</div>
+              <div class="amenity-pill" data-value="Clubhouse"><i class="fa-solid fa-building-user"></i> Clubhouse</div>
+              <div class="amenity-pill" data-value="Garden / Park"><i class="fa-solid fa-tree"></i> Garden</div>
+              <div class="amenity-pill" data-value="Free WiFi"><i class="fa-solid fa-wifi"></i> Free WiFi</div>
+              <div class="amenity-pill" data-value="Room Service"><i class="fa-solid fa-bell-concierge"></i> Room Service</div>
+              <div class="amenity-pill" data-value="Daily Housekeeping"><i class="fa-solid fa-broom-ball"></i> Housekeeping</div>
+            </div>
           </div>
         </div>
 

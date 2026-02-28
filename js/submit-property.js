@@ -252,7 +252,71 @@ async function addExistingPhoto(storageId) {
   }
 }
 
-// ========== GOOGLE PLACES AUTOCOMPLETE ==========
+// ========== INTERACTIVE FORM LOGIC ==========
+function initInteractiveForm() {
+  // Segmented Controls (BHK, Status, Room Type)
+  document.querySelectorAll('.segmented-control').forEach(control => {
+    const hiddenInput = control.nextElementSibling;
+    control.querySelectorAll('.segment-item').forEach(item => {
+      item.addEventListener('click', () => {
+        control.querySelectorAll('.segment-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        if (hiddenInput && hiddenInput.type === 'hidden') {
+          hiddenInput.value = item.dataset.value;
+          hiddenInput.dispatchEvent(new Event('change'));
+        }
+        
+        // Custom BHK Logic
+        if (item.dataset.value === 'Others' && control.id === 'bhkSelector') {
+          const customBhk = document.getElementById('fgCustomBhk');
+          if (customBhk) customBhk.style.display = 'block';
+        } else if (control.id === 'bhkSelector') {
+          const customBhk = document.getElementById('fgCustomBhk');
+          if (customBhk) customBhk.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Furnishing Cards
+  const furnishingSelector = document.getElementById('furnishingSelector');
+  if (furnishingSelector) {
+    const hiddenInput = document.getElementById('furnishingStatusSelect');
+    furnishingSelector.querySelectorAll('.selection-card').forEach(card => {
+      card.addEventListener('click', () => {
+        furnishingSelector.querySelectorAll('.selection-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        if (hiddenInput) {
+          hiddenInput.value = card.dataset.value;
+          hiddenInput.dispatchEvent(new Event('change'));
+        }
+      });
+    });
+  }
+
+  // Facing Grid (Multiple selection possible if we want, but usually one)
+  document.querySelectorAll('.facing-grid').forEach(grid => {
+    const hiddenInput = grid.nextElementSibling;
+    grid.querySelectorAll('.face-item').forEach(item => {
+      item.addEventListener('click', () => {
+        // Toggle active
+        item.classList.toggle('active');
+        
+        // Update hidden input with comma separated values
+        const activeVals = [...grid.querySelectorAll('.face-item.active')].map(i => i.dataset.value);
+        if (hiddenInput) hiddenInput.value = activeVals.join(', ');
+      });
+    });
+  });
+
+  // Amenity Pills
+  document.querySelectorAll('.amenity-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      pill.classList.toggle('active');
+    });
+  });
+}
+
 function initGooglePlaces() {
   const input = document.getElementById('googleLocationSearch');
   if (!input || !window.google) return;
@@ -297,6 +361,7 @@ window.initGooglePlaces = initGooglePlaces;
 // ========== FORM SUBMISSION ==========
 document.addEventListener("DOMContentLoaded", async () => {
   initGooglePlaces();
+  initInteractiveForm();
 
   // Auth guard - redirect to login if not logged in
   const user = await requireAuth("login.html?redirect=post-property.html");
@@ -560,7 +625,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const locInputs = document.querySelectorAll("#formStep2 .form-input");
       const location = {
-        state: locInputs[1].value, // Adjusted index due to Google search input
+        state: locInputs[1].value, 
         city: locInputs[2].value,
         locality: locInputs[3].value,
         society: locInputs[4].value || undefined,
@@ -580,24 +645,23 @@ document.addEventListener("DOMContentLoaded", async () => {
       const detInputs = document.querySelectorAll("#formStep3 .form-input");
       const details = {
         bhk: bhk,
-        status: detInputs[2].value,
-        builtUpArea: Number(detInputs[3].value) || 0,
-        carpetArea: Number(detInputs[4].value) || undefined,
-        floorNumber: Number(detInputs[15].value) || undefined,
-        totalFloors: Number(detInputs[16].value) || undefined,
-        furnishing: detInputs[17].value || undefined,
-        facing: detInputs[13].value || undefined, // This was checkboxes but I'll leave if it was used elsewhere, wait...
-        parking: detInputs[18].value || undefined,
-        constructionYear: Number(detInputs[19].value) || undefined,
-        description: detInputs[20].value || "",
+        status: document.getElementById('propertyStatusSelect').value,
+        builtUpArea: Number(detInputs[2].value) || 0,
+        carpetArea: Number(detInputs[3].value) || undefined,
+        floorNumber: Number(detInputs[14].value) || undefined,
+        totalFloors: Number(detInputs[15].value) || undefined,
+        furnishing: document.getElementById('furnishingStatusSelect').value,
+        facing: document.getElementById('facingSelect').value || undefined,
+        parking: detInputs[17].value || undefined, // Adjust index for select
+        constructionYear: Number(detInputs[18].value) || undefined,
+        description: detInputs[19].value || "",
       };
 
-      // Correct Facing lookup (checkboxes)
-      const facing = [];
-      document.querySelectorAll('#fgFacing input[type="checkbox"]:checked').forEach(cb => facing.push(cb.value));
-      details.facing = facing.join(', ') || undefined;
-
+      // Collect Amenities from Pills
       const amenities = [];
+      document.querySelectorAll('.amenity-pill.active').forEach(pill => {
+        amenities.push(pill.dataset.value);
+      });
       document
         .querySelectorAll('#formStep3 input[type="checkbox"]')
         .forEach((cb) => {
