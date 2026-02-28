@@ -120,13 +120,11 @@ RULES:
 1. Mirror the Original Language: If the input is in Hindi, respond in Hindi. If English, respond in English. If Hinglish, respond in Hinglish.
 2. Structure: Use bullet points for key features and a clean, easy-to-read format. Highlight the main selling points.
 3. Tone: Professional, persuasive, and trustworthy.
-4. Output: ONLY output the rewritten description. Do not include introductory text like "Here is the rewritten description:" or "Sure, I can help with that". Do not use markdown code blocks \`\`\` around the entire response unless formatting a specific part. Just provide the raw text.
-
-Input Description:
-"${args.text}"`;
+4. Output: ONLY output the rewritten description. Do not include introductory text like "Here is the rewritten description:" or "Sure, I can help with that". Do not use markdown code blocks \`\`\` around the entire response unless formatting a specific part. JUST PROVIDE THE RAW TEXT. Do NOT use markdown bolding (e.g., do not use **word**). Use plain text for headers or bullet points.`;
 
       const messages = [
-        { role: "system", content: systemPrompt }
+        { role: "system", content: systemPrompt },
+        { role: "user", content: `Please rewrite this property description: "${args.text}"` }
       ];
 
       const response = await fetch("https://api.sarvam.ai/v1/chat/completions", {

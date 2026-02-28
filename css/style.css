@@ -2503,6 +2503,7 @@ textarea {
   outline: none;
   transition: var(--transition);
   width: 100%;
+  resize: vertical;
 }
 .form-input:focus {
   border-color: var(--primary);
