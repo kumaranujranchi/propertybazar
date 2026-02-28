@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         city: p.location?.city || '',
         area,
         areaDisplay: area > 0 ? `${area} sq.ft` : '',
-        image: p.photos && p.photos.length > 0 ? p.photos[0] : 'images/property-1.webp',
+        image: p.photos && p.photos.length > 0 ? (typeof p.photos[0] === 'object' ? p.photos[0].url : p.photos[0]) : 'images/property-1.webp',
         status: p.details?.status === 'Ready to Move' ? 'ready' : 'under-construction',
         verified: p.verified || false,
         featured: p.featured || false,
@@ -193,9 +193,10 @@ function calculateQualityScore(p) {
     
     // 4. Visual Completeness & Placeholder Penalty (Updated)
     if (p.photos && p.photos.length > 0) {
-        const hasPlaceholder = p.photos.some(url => 
-            /property-1\.jpg|city-mumbai\.jpg|hero-bg\.jpg|placeholder/i.test(url)
-        );
+        const hasPlaceholder = p.photos.some(item => {
+            const url = typeof item === 'object' ? item.url : item;
+            return /property-1\.jpg|city-mumbai\.jpg|hero-bg\.jpg|placeholder/i.test(url || '');
+        });
         
         if (hasPlaceholder) {
             score -= 50; // Heavy penalty for generic placeholders

@@ -337,7 +337,8 @@
     <div class="mobile-menu" id="mobileMenu">
       <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
       <a href="properties.html"><i class="fa-solid fa-magnifying-glass"></i> Properties</a>
-      <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+      <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i>
+        Login</a>
     </div>
   </header>
 
@@ -658,9 +659,10 @@
         <div class="footer-col">
           <h4>Quick Links</h4>
           <div class="footer-links">
-              <a href="pricing.html">Pricing</a><a href="properties.html?type=buy">Buy</a><a
+            <a href="pricing.html">Pricing</a><a href="properties.html?type=buy">Buy</a><a
               href="properties.html?type=rent">Rent</a><a href="post-property.html">Post Property</a><a
-              href="about.html">About</a><a href="contact.html">Contact</a></div>
+              href="about.html">About</a><a href="contact.html">Contact</a>
+          </div>
         </div>
         <div class="footer-col">
           <h4>Top Cities</h4>
@@ -843,17 +845,12 @@
         const p = await convex.query('properties:getProperty', { id });
         if (!p) return;
 
-        // ---- Resolve photo URLs ----
-        const resolvedPhotos = await Promise.all(
-          (p.photos || []).map(async (sid) => {
-            try {
-              const url = await convex.query('properties:getPhotoUrl', { storageId: sid });
-              return url || sid;
-            } catch { return sid; }
-          })
-        );
-        // fallback
-        const photos = resolvedPhotos.filter(Boolean);
+        // ---- Resolve photo URLs (Cleaned version) ----
+        const photos = (p.photos || []).map(item => {
+          if (typeof item === 'object') return item.url;
+          return item; // already a URL string
+        }).filter(Boolean);
+
         if (photos.length === 0) photos.push('images/property-1.webp');
 
         // ---- Helpers ----
@@ -1360,7 +1357,7 @@ Interested in Site Visit: ${visit}
       }
     })();
   </script>
-<script src="js/city-selector.js"></script>
+  <script src="js/city-selector.js"></script>
 
 </body>
 

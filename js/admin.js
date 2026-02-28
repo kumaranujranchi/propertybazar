@@ -107,7 +107,7 @@ function renderRecentProperties(recentProps) {
   tbody.innerHTML = recentProps.map(p => `
     <tr>
       <td class="td-prop">
-        <img src="${p.photos && p.photos.length ? p.photos[0] : 'images/placeholder.jpg'}" alt="Property" onerror="this.src='images/placeholder.jpg'">
+        <img src="${p.photos && p.photos.length ? (typeof p.photos[0] === 'object' ? p.photos[0].url : p.photos[0]) : 'images/placeholder.jpg'}" alt="Property" onerror="this.src='images/placeholder.jpg'">
         <div>
           <div class="td-prop-title">${p.details?.bhk || ''} ${p.propertyType}</div>
           <div class="td-prop-loc">${p.location?.locality}, ${p.location?.city}</div>
