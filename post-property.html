@@ -935,9 +935,20 @@
             <input type="text" id="reraInput" class="form-input" placeholder="e.g. MH/2023/12345">
           </div>
           <div class="form-group full">
-            <label class="form-label">Property Description *</label>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="form-label" style="margin-bottom: 0;">Property Description *</label>
+              <button type="button" id="btnRewriteAi" class="btn btn-outline btn-sm"
+                style="display: inline-flex; align-items: center; gap: 5px; color: var(--primary); border-color: var(--primary); padding: 4px 10px; font-size: 12px; height: auto; min-height: unset; line-height: 1.2;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Rewrite with AI
+              </button>
+            </div>
             <textarea id="descriptionInput" class="form-input" rows="4"
               placeholder="Describe your property - location advantages, interior highlights, nearby amenities, special features..."></textarea>
+            <div id="aiSuggestionBox"
+              style="display: none; color: var(--primary); font-size: 12px; margin-top: 5px; cursor: pointer;">
+              <i class="fa-solid fa-lightbulb"></i> Your description looks a bit short. Click here to let AI make it
+              professional!
+            </div>
           </div>
         </div>
 

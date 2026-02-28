@@ -830,9 +830,64 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
     } catch (err) {
-      console.error("Error loading property:", err);
-      window.showToast("Failed to load property data for editing", "error");
+      console.error("Error loading property for edit:", err);
+      window.showToast("Could not load property data.", "error");
     }
+  }
+
+  // ========== AI REWRITE LOGIC ==========
+  const descriptionInput = document.getElementById('descriptionInput');
+  const btnRewriteAi = document.getElementById('btnRewriteAi');
+  const aiSuggestionBox = document.getElementById('aiSuggestionBox');
+
+  if (descriptionInput && btnRewriteAi && aiSuggestionBox) {
+    let typingTimer;
+
+    // Detect short descriptions
+    descriptionInput.addEventListener('input', () => {
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(() => {
+        const text = descriptionInput.value.trim();
+        // Show suggestion if text is between 10 and 50 characters, or lacks basic punctuation
+        if (text.length > 10 && text.length < 50) {
+          aiSuggestionBox.style.display = 'block';
+        } else {
+          aiSuggestionBox.style.display = 'none';
+        }
+      }, 1000); // Wait 1s after typing stops
+    });
+
+    const handleRewrite = async () => {
+      const text = descriptionInput.value.trim();
+      if (!text || text.length < 10) {
+        window.showToast("Please enter at least 10 characters for AI to rewrite.", "warning");
+        return;
+      }
+
+      const originalHtml = btnRewriteAi.innerHTML;
+      btnRewriteAi.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Rewriting...';
+      btnRewriteAi.disabled = true;
+
+      try {
+        const result = await convex.action("ai:rewriteDescription", { text });
+        if (result && result.success) {
+          descriptionInput.value = result.text;
+          window.showToast("Description professionally rewritten!", "success");
+          aiSuggestionBox.style.display = 'none';
+        } else {
+          window.showToast(result?.error || "Failed to rewrite description.", "error");
+        }
+      } catch (err) {
+        console.error("AI Rewrite Error:", err);
+        window.showToast("An error occurred while calling the AI service.", "error");
+      } finally {
+        btnRewriteAi.innerHTML = originalHtml;
+        btnRewriteAi.disabled = false;
+      }
+    };
+
+    btnRewriteAi.addEventListener('click', handleRewrite);
+    aiSuggestionBox.addEventListener('click', handleRewrite);
   }
 
   submitBtn.addEventListener("click", async (e) => {

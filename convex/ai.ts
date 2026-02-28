@@ -1,6 +1,8 @@
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 
+declare const process: any;
+
 /**
  * Parses natural language property search queries into structured JSON.
  * Uses Sarvam AI's sarvam-m model.
@@ -94,4 +96,63 @@ RULES:
       return { success: false, error: error.message || "Internal AI error" };
     }
   },
+});
+
+/**
+ * Rewrites a property description using Sarvam AI.
+ */
+export const rewriteDescription = action({
+  args: {
+    text: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const apiKey = process.env.SARVAM_API_KEY;
+    if (!apiKey) {
+      console.error("SARVAM_API_KEY is not set in environment variables");
+      return { success: false, error: "AI is currently unavailable. Please check backend config." };
+    }
+
+    try {
+      const systemPrompt = `You are an expert real estate copywriter in India.
+Your task is to take a raw, potentially broken or short property description and rewrite it into a highly professional, engaging, and grammatically correct description.
+
+RULES:
+1. Mirror the Original Language: If the input is in Hindi, respond in Hindi. If English, respond in English. If Hinglish, respond in Hinglish.
+2. Structure: Use bullet points for key features and a clean, easy-to-read format. Highlight the main selling points.
+3. Tone: Professional, persuasive, and trustworthy.
+4. Output: ONLY output the rewritten description. Do not include introductory text like "Here is the rewritten description:" or "Sure, I can help with that". Do not use markdown code blocks \`\`\` around the entire response unless formatting a specific part. Just provide the raw text.
+
+Input Description:
+"${args.text}"`;
+
+      const messages = [
+        { role: "system", content: systemPrompt }
+      ];
+
+      const response = await fetch("https://api.sarvam.ai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-subscription-key": apiKey,
+        },
+        body: JSON.stringify({
+          model: "sarvam-m",
+          messages: messages,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Sarvam AI API Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const aiResponse = data.choices[0]?.message?.content?.trim();
+
+      return { success: true, text: aiResponse || args.text };
+
+    } catch (error: any) {
+      console.error("AI Rewrite Error:", error);
+      return { success: false, error: error.message || "Internal AI error during rewrite" };
+    }
+  }
 });
