@@ -121,6 +121,25 @@
         <p class="form-card-subtitle">Select the transaction type and property type</p>
 
         <div style="margin-bottom:24px">
+          <div class="filter-group-title" style="margin-bottom:12px">Are you the...</div>
+          <div class="form-type-grid" id="posterTypeGrid">
+            <div class="form-type-option active">
+              <div class="icon"><i class="fa-solid fa-user-tie"></i></div>
+              <div class="name">Owner</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
+              <div class="name">Agent / Broker</div>
+            </div>
+            <div class="form-type-option">
+              <div class="icon"><i class="fa-solid fa-trowel-bricks"></i></div>
+              <div class="name">Builder</div>
+            </div>
+          </div>
+          <input type="hidden" id="posterTypeInput" value="Owner">
+        </div>
+
+        <div style="margin-bottom:24px">
           <div class="filter-group-title" style="margin-bottom:12px">Transaction Type</div>
           <div class="form-type-grid">
             <div class="form-type-option active">

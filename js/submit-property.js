@@ -341,6 +341,21 @@ async function addExistingPhoto(photoObj) {
 
 // ========== INTERACTIVE FORM LOGIC ==========
 function initInteractiveForm() {
+  // Poster Type Grid
+  const posterTypeGrid = document.getElementById('posterTypeGrid');
+  if (posterTypeGrid) {
+    const hiddenInput = document.getElementById('posterTypeInput');
+    posterTypeGrid.querySelectorAll('.form-type-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        posterTypeGrid.querySelectorAll('.form-type-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        if (hiddenInput) {
+          hiddenInput.value = opt.querySelector('.name').innerText.trim();
+        }
+      });
+    });
+  }
+
   // Segmented Controls (BHK, Status, Room Type)
   document.querySelectorAll('.segmented-control').forEach(control => {
     const hiddenInput = control.nextElementSibling;
@@ -566,12 +581,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   initGooglePlaces();
   initInteractiveForm();
 
+  // Detect Edit Mode
+  const urlParams = new URLSearchParams(window.location.search);
+  const editId = urlParams.get('id');
+
   // Auth guard - redirect to login if not logged in
   const user = await requireAuth("login.html?redirect=post-property.html");
   if (!user) return;
 
-  // Check free limit
-  if (!user.canPostMore) {
+  // Check free limit - ONLY for new properties
+  if (!user.canPostMore && !editId) {
     const submitBtn = document.getElementById("btnSubmitProperty");
     if (submitBtn) {
       // Replace button with Upgrade link
@@ -600,9 +619,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // Detect Edit Mode
-  const urlParams = new URLSearchParams(window.location.search);
-  const editId = urlParams.get('id');
+  // Detect Edit Mode (already done above)
 
   // ========== YOUTUBE LINKS LOGIC ==========
   const addVideoLinkBtn = document.getElementById('addVideoLinkBtn');
@@ -650,49 +667,72 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (prop) {
         // Pre-fill Step 1: Property Types (this is harder due to grid UI)
         // For simplicity, we'll try to find the matching elements
+        // Step 1: Types (Transaction & Property)
         document.querySelectorAll('#formStep1 .form-type-grid').forEach((grid, gIdx) => {
-          const target = gIdx === 0 ? prop.transactionType : prop.propertyType;
+          let target;
+          if (gIdx === 0) target = prop.posterType;
+          else if (gIdx === 1) target = prop.transactionType;
+          else target = prop.propertyType;
+          
+          target = target?.trim()?.toLowerCase();
+          if (!target) return;
+          
           grid.querySelectorAll('.form-type-option').forEach(opt => {
-            if (opt.querySelector('.name').innerText.trim() === target) {
+            const optName = opt.querySelector('.name')?.innerText?.trim()?.toLowerCase();
+            if (optName === target) {
               opt.parentElement.querySelectorAll('.form-type-option').forEach(el => el.classList.remove('active'));
               opt.classList.add('active');
             }
           });
         });
 
-        // Pre-fill Step 2: Location
+        // Step 2: Location
         const stateSelect = document.getElementById('stateSelect');
         const citySelect = document.getElementById('citySelect');
-        if (stateSelect) {
+        const manualCityGroup = document.getElementById('manualCityGroup');
+        const manualCityInput = document.getElementById('manualCityInput');
+
+        if (stateSelect && prop.location.state) {
           stateSelect.value = prop.location.state;
           stateSelect.dispatchEvent(new Event('change'));
+
+          // Wait for city list to populate (hardcoded in post-property.html script)
           setTimeout(() => {
-            if (citySelect) citySelect.value = prop.location.city;
-            const localityInput = document.getElementById('localityInput');
-            const societyInput = document.getElementById('societyInput');
-            const addressInput = document.getElementById('addressInput');
-            const pinCodeInput = document.getElementById('pinCodeInput');
-            const landmarkInput = document.getElementById('landmarkInput');
-            const mapLinkInput = document.getElementById('googleMapLinkInput');
+            if (citySelect) {
+              // Try to find the city in the newly populated list
+              let cityFound = false;
+              for (let i = 0; i < citySelect.options.length; i++) {
+                if (citySelect.options[i].value === prop.location.city) {
+                  citySelect.selectedIndex = i;
+                  cityFound = true;
+                  break;
+                }
+              }
 
-            if (localityInput) localityInput.value = prop.location.locality;
-            if (societyInput) societyInput.value = prop.location.society || '';
-            if (addressInput) addressInput.value = prop.location.fullAddress || '';
-            if (pinCodeInput) pinCodeInput.value = prop.location.pinCode;
-            if (landmarkInput) landmarkInput.value = prop.location.landmark || '';
-            if (mapLinkInput) {
-              mapLinkInput.value = prop.location.googleMapLink || '';
-              if (prop.location.googleMapLink) updateMapPreview(prop.location.googleMapLink);
-            } else if (prop.location.googleSearch) {
-              updateMapPreview(prop.location.googleSearch);
+              if (!cityFound && prop.location.city) {
+                // If not found, it must be a manual entry
+                citySelect.value = 'Other';
+                citySelect.dispatchEvent(new Event('change'));
+                if (manualCityInput) manualCityInput.value = prop.location.city;
+              }
             }
-
-            if (document.getElementById('metroDistance')) document.getElementById('metroDistance').value = prop.location.metroDistance || '';
-            if (document.getElementById('schoolDistance')) document.getElementById('schoolDistance').value = prop.location.schoolDistance || '';
-            if (document.getElementById('mallDistance')) document.getElementById('mallDistance').value = prop.location.mallDistance || '';
-            if (document.getElementById('hospitalDistance')) document.getElementById('hospitalDistance').value = prop.location.hospitalDistance || '';
-          }, 500);
+          }, 300);
         }
+        
+        if (document.getElementById('localityInput')) document.getElementById('localityInput').value = prop.location.locality || '';
+        if (document.getElementById('societyInput')) document.getElementById('societyInput').value = prop.location.society || '';
+        if (document.getElementById('addressInput')) document.getElementById('addressInput').value = prop.location.fullAddress || '';
+        if (document.getElementById('pinCodeInput')) document.getElementById('pinCodeInput').value = prop.location.pinCode || '';
+        if (document.getElementById('landmarkInput')) document.getElementById('landmarkInput').value = prop.location.landmark || '';
+        if (document.getElementById('googleMapLinkInput')) document.getElementById('googleMapLinkInput').value = prop.location.googleMapLink || '';
+        if (document.getElementById('googleLocationSearch')) document.getElementById('googleLocationSearch').value = prop.location.googleSearch || '';
+        
+        // Distances
+        if (document.getElementById('metroDistance')) document.getElementById('metroDistance').value = prop.location.metroDistance || '';
+        if (document.getElementById('schoolDistance')) document.getElementById('schoolDistance').value = prop.location.schoolDistance || '';
+        if (document.getElementById('mallDistance')) document.getElementById('mallDistance').value = prop.location.mallDistance || '';
+        if (document.getElementById('hospitalDistance')) document.getElementById('hospitalDistance').value = prop.location.hospitalDistance || '';
+        
 
         // Pre-fill Step 3: Details
         const bhkTypeSelect = document.getElementById('bhkTypeSelect');
@@ -700,8 +740,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const furnishingStatusSelect = document.getElementById('furnishingStatusSelect');
         const facingSelect = document.getElementById('facingSelect');
 
-        if (bhkTypeSelect) {
-          // Handle BHK Segmented Control
+        if (bhkTypeSelect && prop.details.bhk) {
           const bhkVal = ['1RK','1BHK','2BHK','3BHK','4BHK','4.5BHK','5BHK','6BHK'].includes(prop.details.bhk) ? prop.details.bhk : 'Others';
           bhkTypeSelect.value = bhkVal;
           const bhkItem = document.querySelector(`#bhkSelector .segment-item[data-value="${bhkVal}"]`);
@@ -710,12 +749,12 @@ document.addEventListener("DOMContentLoaded", async () => {
              bhkItem.classList.add('active');
           }
           if (bhkVal === 'Others') {
-            document.getElementById('fgCustomBhk').style.display = 'block';
-            document.getElementById('customBhkInput').value = prop.details.bhk;
+            if (document.getElementById('fgCustomBhk')) document.getElementById('fgCustomBhk').style.display = 'block';
+            if (document.getElementById('customBhkInput')) document.getElementById('customBhkInput').value = prop.details.bhk;
           }
         }
 
-        if (propertyStatusSelect) {
+        if (propertyStatusSelect && prop.details.status) {
           propertyStatusSelect.value = prop.details.status;
           const statusItem = document.querySelector(`#statusSelector .segment-item[data-value="${prop.details.status}"]`);
           if (statusItem) {
@@ -724,12 +763,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         }
 
-        if (document.getElementById('builtUpAreaInput')) document.getElementById('builtUpAreaInput').value = prop.details.builtUpArea;
+        if (document.getElementById('builtUpAreaInput')) document.getElementById('builtUpAreaInput').value = prop.details.builtUpArea || '';
         if (document.getElementById('carpetAreaInput')) document.getElementById('carpetAreaInput').value = prop.details.carpetArea || '';
-        if (document.getElementById('floorNumberInput')) document.getElementById('floorNumberInput').value = prop.details.floorNumber || '';
-        if (document.getElementById('totalFloorsInput')) document.getElementById('totalFloorsInput').value = prop.details.totalFloors || '';
+        if (document.getElementById('floorNumberInput')) document.getElementById('floorNumberInput').value = prop.details.floorNumber !== undefined ? prop.details.floorNumber : '';
+        if (document.getElementById('totalFloorsInput')) document.getElementById('totalFloorsInput').value = prop.details.totalFloors !== undefined ? prop.details.totalFloors : '';
 
-        if (furnishingStatusSelect) {
+        if (furnishingStatusSelect && prop.details.furnishing) {
           furnishingStatusSelect.value = prop.details.furnishing;
           const furnCard = document.querySelector(`#furnishingSelector .selection-card[data-value="${prop.details.furnishing}"]`);
           if (furnCard) {
@@ -740,6 +779,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (facingSelect) {
           facingSelect.value = prop.details.facing || '';
+          document.querySelectorAll('.face-item').forEach(fi => fi.classList.remove('active'));
           if (prop.details.facing) {
             prop.details.facing.split(', ').forEach(f => {
               const faceItem = document.querySelector(`.face-item[data-value="${f}"]`);
@@ -753,16 +793,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('reraInput')) document.getElementById('reraInput').value = prop.details.rera || '';
         if (document.getElementById('descriptionInput')) document.getElementById('descriptionInput').value = prop.details.description || '';
 
-        // Pre-fill Villa
+        // Pre-fill Villa / House Specific
         if (document.getElementById('propertyTitleInput')) document.getElementById('propertyTitleInput').value = prop.details.propertyTitle || '';
         if (document.getElementById('ownershipTypeSelect')) document.getElementById('ownershipTypeSelect').value = prop.details.ownershipType || '';
         if (document.getElementById('bathroomsSelect')) document.getElementById('bathroomsSelect').value = prop.details.bathrooms || '';
-        if (document.getElementById('balconiesSelect')) document.getElementById('balconiesSelect').value = prop.details.balconies || '';
-        if (document.getElementById('cbStudyRoom')) document.getElementById('cbStudyRoom').checked = prop.details.studyRoom || false;
-        if (document.getElementById('cbServantRoom')) document.getElementById('cbServantRoom').checked = prop.details.servantRoom || false;
-        if (document.getElementById('cbPoojaRoom')) document.getElementById('cbPoojaRoom').checked = prop.details.poojaRoom || false;
-        if (document.getElementById('cbStoreRoom')) document.getElementById('cbStoreRoom').checked = prop.details.storeRoom || false;
-        if (document.getElementById('cbBasement')) document.getElementById('cbBasement').checked = prop.details.basement || false;
+        if (document.getElementById('balconiesSelect')) document.getElementById('balconiesSelect').value = prop.details.balconies !== undefined ? prop.details.balconies : '';
+        
+        if (document.getElementById('cbStudyRoom')) document.getElementById('cbStudyRoom').checked = !!prop.details.studyRoom;
+        if (document.getElementById('cbServantRoom')) document.getElementById('cbServantRoom').checked = !!prop.details.servantRoom;
+        if (document.getElementById('cbPoojaRoom')) document.getElementById('cbPoojaRoom').checked = !!prop.details.poojaRoom;
+        if (document.getElementById('cbStoreRoom')) document.getElementById('cbStoreRoom').checked = !!prop.details.storeRoom;
+        if (document.getElementById('cbBasement')) document.getElementById('cbBasement').checked = !!prop.details.basement;
+        
         if (document.getElementById('floorConfigInput')) document.getElementById('floorConfigInput').value = prop.details.floorConfig || '';
         if (document.getElementById('plotAreaInput')) document.getElementById('plotAreaInput').value = prop.details.plotArea || '';
         if (document.getElementById('superBuiltUpAreaInput')) document.getElementById('superBuiltUpAreaInput').value = prop.details.superBuiltUpArea || '';
@@ -777,13 +819,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('waterSourceSelect')) document.getElementById('waterSourceSelect').value = prop.details.waterSource || '';
         if (document.getElementById('electricityLoadInput')) document.getElementById('electricityLoadInput').value = prop.details.electricityLoad || '';
         if (document.getElementById('openParkingSelect')) document.getElementById('openParkingSelect').value = prop.details.openParking || '';
-        if (document.getElementById('cbGarage')) document.getElementById('cbGarage').checked = prop.details.garage || false;
-        if (document.getElementById('cbEvCharging')) document.getElementById('cbEvCharging').checked = prop.details.evCharging || false;
+        if (document.getElementById('cbGarage')) document.getElementById('cbGarage').checked = !!prop.details.garage;
+        if (document.getElementById('cbEvCharging')) document.getElementById('cbEvCharging').checked = !!prop.details.evCharging;
         if (document.getElementById('approvalAuthorityInput')) document.getElementById('approvalAuthorityInput').value = prop.details.approvalAuthority || '';
         if (document.getElementById('propertyTaxStatusSelect')) document.getElementById('propertyTaxStatusSelect').value = prop.details.propertyTaxStatus || '';
         if (document.getElementById('loanApprovedInput')) document.getElementById('loanApprovedInput').value = prop.details.loanApproved || '';
-        if (document.getElementById('cbOccupancyCert')) document.getElementById('cbOccupancyCert').checked = prop.details.occupancyCertificate || false;
-        if (document.getElementById('cbCompletionCert')) document.getElementById('cbCompletionCert').checked = prop.details.completionCertificate || false;
+        if (document.getElementById('cbOccupancyCert')) document.getElementById('cbOccupancyCert').checked = !!prop.details.occupancyCertificate;
+        if (document.getElementById('cbCompletionCert')) document.getElementById('cbCompletionCert').checked = !!prop.details.completionCertificate;
 
         // Pre-fill Commercial
         if (document.getElementById('commercialTypeSelect')) document.getElementById('commercialTypeSelect').value = prop.details.commercialType || '';
@@ -886,17 +928,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('cbHospitalityFSSAI')) document.getElementById('cbHospitalityFSSAI').checked = prop.details.fssaiLicense || false;
         if (document.getElementById('cbHospitalityTourismReg')) document.getElementById('cbHospitalityTourismReg').checked = prop.details.tourismRegistration || false;
 
-        // Pre-fill Amenities
-        const amenityCheckboxes = document.querySelectorAll('#formStep3 input[type="checkbox"]');
-        amenityCheckboxes.forEach(cb => {
-          if (prop.amenities.includes(cb.parentElement.innerText.trim())) {
-            cb.checked = true;
-          }
-        });
+        // Pre-fill Amenities (Pills)
+        if (prop.amenities) {
+          document.querySelectorAll('.amenity-pill').forEach(pill => {
+            if (prop.amenities.includes(pill.dataset.value)) {
+              pill.classList.add('active');
+            }
+          });
+        }
 
         // Pre-fill Step 4: Photos (Existing)
-        for (const photoObj of p.photos || []) {
-          addExistingPhoto(photoObj);
+        if (prop.photos) {
+          prop.photos.forEach(photoObj => {
+            addExistingPhoto(photoObj);
+          });
         }
 
         // Pre-fill Step 5: Pricing & Contact
@@ -980,8 +1025,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ========== DRAFT SYSTEM ==========
   function getFormState() {
     const step1Grids = document.querySelectorAll("#formStep1 .form-type-grid");
-    const transactionType = step1Grids[0]?.querySelector(".active .name")?.innerText.trim() || "";
-    const propertyType = step1Grids[1]?.querySelector(".active .name")?.innerText.trim() || "";
+    const posterType = step1Grids[0]?.querySelector(".active .name")?.innerText.trim() || "Owner";
+    const transactionType = step1Grids[1]?.querySelector(".active .name")?.innerText.trim() || "";
+    const propertyType = step1Grids[2]?.querySelector(".active .name")?.innerText.trim() || "";
 
     const location = {
       state: document.getElementById('stateSelect')?.value,
@@ -1157,11 +1203,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (input.value.trim()) externalVideos.push(input.value.trim());
     });
 
-    return { transactionType, propertyType, location, details, amenities, pricing, contactDesc, externalVideos };
+    return { posterType, transactionType, propertyType, location, details, amenities, pricing, contactDesc, externalVideos };
   }
 
   async function saveDraftToCloud(isManual = false) {
     try {
+      if (editId) return; // Reinforced: If in edit mode, NEVER save as draft
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('id')) return; 
       

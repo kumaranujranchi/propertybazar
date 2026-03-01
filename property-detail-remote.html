@@ -1099,10 +1099,21 @@
           const ownerName = document.getElementById('ownerName');
           const ownerJoinDate = document.getElementById('ownerJoinDate');
           const posterBadge = document.getElementById('posterBadge');
-          const isCompany = !!(p.ownerInfo.companyName && p.ownerInfo.companyName.trim());
+          const isCompany = !!(p.ownerInfo?.companyName && p.ownerInfo.companyName.trim());
           
-          if (ownerName) ownerName.textContent = isCompany ? p.ownerInfo.companyName : p.ownerInfo.name;
-          if (posterBadge) posterBadge.textContent = isCompany ? 'COMPANY' : 'INDIVIDUAL';
+          if (ownerName) {
+            ownerName.textContent = isCompany ? p.ownerInfo.companyName : (p.ownerInfo?.name || "Advertiser");
+          }
+
+          if (posterBadge) {
+            // Priority 1: Stored posterType
+            // Priority 2: COMPANY/INDIVIDUAL fallback
+            if (p.posterType) {
+              posterBadge.textContent = p.posterType.toUpperCase();
+            } else {
+              posterBadge.textContent = isCompany ? 'COMPANY' : 'INDIVIDUAL';
+            }
+          }
 
           if (ownerAvatar) {
             if (p.ownerInfo.profilePictureUrl) {

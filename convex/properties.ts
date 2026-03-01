@@ -109,7 +109,8 @@ export const createProperty = mutation({
     videos: v.optional(v.array(v.any())),
     externalVideos: v.optional(v.array(v.string())),
     pricing: v.any(),
-    contactDesc: v.any()
+    contactDesc: v.any(),
+    posterType: v.optional(v.string())
   },
   handler: async (ctx: any, args: any) => {
     let resolvedUserId = args.userId;
@@ -168,6 +169,7 @@ export const createProperty = mutation({
       externalVideos: args.externalVideos,
       pricing: args.pricing,
       contactDesc: args.contactDesc,
+      posterType: args.posterType || "Owner",
       isFeatured: isFeatured,
       approvalStatus: "pending",
       lastActivatedAt: Date.now(),
@@ -213,6 +215,7 @@ export const updateProperty = mutation({
     externalVideos: v.optional(v.array(v.string())),
     pricing: v.any(),
     contactDesc: v.any(),
+    posterType: v.optional(v.string()),
   },
   handler: async (ctx: any, args: any) => {
     const session = await ctx.db
@@ -236,6 +239,7 @@ export const updateProperty = mutation({
       externalVideos: args.externalVideos,
       pricing: args.pricing,
       contactDesc: args.contactDesc,
+      posterType: args.posterType,
     });
     return { success: true };
   },
