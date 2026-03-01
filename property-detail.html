@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/city-dropdown.css">
   <link rel="stylesheet" href="css/property-detail-new.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
   <style>
     /* ---- Gallery skeleton shimmer ---- */
@@ -355,33 +357,46 @@
     </div>
   </header>
 
-  <!-- PAGE BREADCRUMB BAR -->
-  <!-- HERO COVER SECTION -->
-  <section class="property-hero" id="propertyHero">
-    <img src="images/property-1.webp" alt="Property Cover" class="hero-cover" id="heroCoverImg">
-    <div class="hero-overlay">
-      <div class="hero-content">
-        <div class="hero-badges" id="heroBadges">
-          <!-- Badges injected here -->
+  <!-- TOP SECTION: Gallery & Summary Card -->
+  <div class="container">
+    <div class="property-top-wrapper">
+      <!-- MAIN PHOTO BOX -->
+      <div class="gallery-primary-box gallery-skeleton" id="galleryItem0">
+        <img src="" alt="Main Property View" id="img0">
+      </div>
+
+      <!-- PRICE & SUMMARY CARD -->
+      <div class="summary-card-top">
+        <div>
+          <div id="heroBadges" style="margin-bottom: 12px; display: flex; gap: 8px;"></div>
+          <div class="summary-price" id="heroPrice">₹--</div>
+          <h1 class="summary-title" id="heroTitle">Loading Property Details...</h1>
+          <div class="summary-location" id="heroLocation">
+            <i class="fa-solid fa-location-dot"></i> <span>Locality, City</span>
+          </div>
         </div>
-        <div class="hero-price" id="heroPrice">₹--</div>
-        <h1 class="hero-title" id="heroTitle">Property Title</h1>
-        <div class="hero-location" id="heroLocation">
-          <i class="fa-solid fa-location-dot"></i> <span>Location details</span>
+
+        <div style="border-top: 1px solid var(--border); padding-top: 20px;">
+          <button class="btn-primary-large" id="btnOpenAdvModal">
+             <i class="fa-solid fa-phone"></i> View Contact Details
+          </button>
+          <div style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 12px;">
+            <i class="fa-solid fa-shield-halved"></i> 100% Verified Listings
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- BREADCRUMB -->
-  <div style="background:#fff;border-bottom:1px solid var(--border);padding:14px 0;">
+  <!-- STICKY SUB-NAV -->
+  <div class="sticky-subnav">
     <div class="container">
-      <div class="page-breadcrumb" style="color:var(--text-muted)">
-        <a href="index.html" style="color:var(--text-muted)">Home</a> <i class="fa-solid fa-chevron-right"
-          style="font-size:10px"></i>
-        <a href="properties.html" style="color:var(--text-muted)">Properties</a> <i class="fa-solid fa-chevron-right"
-          style="font-size:10px"></i>
-        <span style="color:var(--text)">Property Details</span>
+      <div class="subnav-links">
+        <a href="#overview" class="subnav-link active">Overview</a>
+        <a href="#amenities" class="subnav-link">Amenities</a>
+        <a href="#floorPlan" class="subnav-link">Floor Plan</a>
+        <a href="#location" class="subnav-link">Location</a>
+        <a href="#faq" class="subnav-link">FAQ</a>
       </div>
     </div>
   </div>
@@ -391,114 +406,144 @@
     <div class="detail-layout">
 
       <!-- LEFT COLUMN -->
-      <div>
-        <!-- NEW GALLERY GRID -->
-        <div class="detail-gallery-grid" id="galleryGrid">
-          <div class="gallery-item gallery-main-item gallery-skeleton" id="galleryItem0">
-            <img src="" alt="Main View" id="img0">
+      <div class="detail-content-main">
+        
+        <!-- OVERVIEW / HIGHLIGHTS -->
+        <div id="overview" class="detail-section-card">
+          <h2 class="section-h2"><i class="fa-solid fa-compass"></i> Property Overview</h2>
+          <div class="houssed-specs" id="mainSpecsGrid">
+             <!-- Dynamic Specs: Area, BHK, Facing, Floor, etc. -->
           </div>
-          <div class="gallery-item gallery-skeleton" id="galleryItem1">
-            <img src="" alt="View 2" id="img1">
+          
+          <div style="margin-top: 32px; border-top: 1px solid var(--border); padding-top: 24px;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Property Description</h3>
+            <p id="dynamicDescription" style="font-size: 15px; color: var(--text-muted); line-height: 1.8; white-space: pre-wrap;">
+              Loading description...
+            </p>
           </div>
-          <div class="gallery-item gallery-skeleton" id="galleryItem2" style="position:relative">
-            <img src="" alt="View 3" id="img2">
-            <div class="gallery-more-overlay" id="galleryMoreOverlay" style="display:none">+N Photos</div>
-          </div>
-        </div>
-
-        <!-- KEY SPECS SECTION -->
-        <div class="detail-section">
-          <h2 class="section-title"><i class="fa-solid fa-list-check"></i> Property Highlights</h2>
-          <div class="specs-grid" id="mainSpecsGrid">
-            <!-- Dynamic Spec Cards (BHK, Area, Facing, Floor, etc.) -->
-          </div>
-        </div>
-
-        <!-- DESCRIPTION SECTION -->
-        <div class="detail-section">
-          <h2 class="section-title"><i class="fa-solid fa-align-left"></i> Description</h2>
-          <p id="dynamicDescription" style="font-size:15px;color:var(--text);line-height:1.8;white-space:pre-wrap;">
-            No description provided.
-          </p>
         </div>
 
         <!-- AMENITIES SECTION -->
-        <div class="detail-section" id="amenitiesSection">
-          <h2 class="section-title"><i class="fa-solid fa-star"></i> Amenities & Features</h2>
+        <div id="amenities" class="detail-section-card">
+          <h2 class="section-h2"><i class="fa-solid fa-star"></i> Amenities & Facilities</h2>
           <div class="amenities-grid">
             <!-- Dynamic Amenities -->
           </div>
         </div>
 
-        <!-- FLOOR PLAN SECTION -->
-        <div class="detail-section" id="floorPlanSection" style="display:none">
-          <h2 class="section-title"><i class="fa-solid fa-draw-polygon"></i> Floor Plan</h2>
+        <!-- FLOOR PLAN -->
+        <div id="floorPlan" class="detail-section-card" id="floorPlanSection" style="display:none">
+          <h2 class="section-h2"><i class="fa-solid fa-draw-polygon"></i> Site & Floor Plan</h2>
           <div class="floor-plan-container">
-            <img src="" alt="Floor Plan" id="floorPlanImg" class="floor-plan-img">
+            <img src="" alt="Floor Plan" id="floorPlanImg" style="width: 100%; border-radius: 8px;">
           </div>
         </div>
 
-        <!-- ADVANCED DETAILS TABLES -->
-        <div id="advancedDetailsContainer">
-            <!-- Dynamic Detailed Tables -->
+        <!-- PROJECT INFO / ADVANCED DETAILS -->
+        <div class="detail-section-card">
+          <h2 class="section-h2"><i class="fa-solid fa-circle-info"></i> Project Details</h2>
+          <div id="advancedDetailsContainer" class="info-grid-3col">
+              <!-- Categorized tables -->
+          </div>
+        </div>
+
+        <!-- CONNECTIVITY (Houssed Style) -->
+        <div class="detail-section-card">
+          <h2 class="section-h2"><i class="fa-solid fa-route"></i> Connectivity & Landmarks</h2>
+          <div class="connectivity-grid">
+            <div class="conn-card">
+              <div class="conn-icon"><i class="fa-solid fa-school"></i></div>
+              <span class="conn-title">School</span>
+              <span class="conn-dist">~1.2 km</span>
+            </div>
+            <div class="conn-card">
+              <div class="conn-icon"><i class="fa-solid fa-hospital"></i></div>
+              <span class="conn-title">Hospital</span>
+              <span class="conn-dist">~0.8 km</span>
+            </div>
+            <div class="conn-card">
+              <div class="conn-icon"><i class="fa-solid fa-train"></i></div>
+              <span class="conn-title">Metro</span>
+              <span class="conn-dist">~3.5 km</span>
+            </div>
+            <div class="conn-card">
+              <div class="conn-icon"><i class="fa-solid fa-shopping-cart"></i></div>
+              <span class="conn-title">Mall</span>
+              <span class="conn-dist">~2.1 km</span>
+            </div>
+          </div>
         </div>
 
         <!-- LOCATION MAP -->
-        <div class="detail-section">
-          <h2 class="section-title"><i class="fa-solid fa-map-location-dot"></i> Location</h2>
-          <div style="background:var(--bg);border-radius:12px;height:300px;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);flex-direction:column;gap:15px">
+        <div id="location" class="detail-section-card">
+          <h2 class="section-h2"><i class="fa-solid fa-map-location-dot"></i> Geographic Location</h2>
+          <div style="background:var(--bg); border-radius:12px; height:320px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); flex-direction:column; gap:16px">
             <div style="font-size:48px; color:var(--primary)"><i class="fa-solid fa-location-arrow"></i></div>
-            <p id="fullAddressText" style="font-size:15px;color:var(--text-muted); text-align:center; padding:0 20px"></p>
-            <a href="#" target="_blank" id="googleMapsBtn" class="btn btn-primary btn-sm">Open in Google Maps ↗</a>
+            <p id="fullAddressText" style="font-size:15px; color:var(--text-muted); text-align:center; padding:0 32px">Loading address...</p>
+            <a href="#" target="_blank" id="googleMapsBtn" class="btn btn-primary" style="padding: 10px 24px;">View on Google Maps</a>
           </div>
         </div>
-      </div>
 
-      <!-- RIGHT COLUMN — STICKY SIDEBAR -->
-      <div class="sticky-sidebar">
-        <!-- CONTACT WIDGET -->
-        <div class="contact-widget">
-          <h3>Interested?</h3>
-          <p>Get instant contact details and schedule a direct site visit.</p>
-          <button class="btn-white" id="btnOpenAdvModal">View Advertiser Details</button>
-        </div>
-
-        <!-- POSTED BY SECTION -->
-        <div class="detail-section" style="margin-top:24px">
-          <h3 style="font-size:16px;font-weight:700;margin-bottom:20px;color:var(--dark)">Listed By</h3>
-          <div class="posted-by-card">
-            <div id="ownerAvatar" class="poster-avatar" style="display:flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-size:32px;font-weight:700">24</div>
-            <div class="poster-details">
-              <div class="poster-badge" id="posterBadge"><i class="fa-solid fa-user-check"></i> Individual</div>
-              <h4 id="ownerName">Advertiser</h4>
-              <p id="ownerJoinDate" style="font-size:13px;color:var(--text-muted)">Member since 2024</p>
-              <div style="font-size:13px;color:var(--success);margin-top:4px"><i class="fa-solid fa-circle-check"></i> ID Verified</div>
+        <!-- FAQ SECTION -->
+        <div id="faq" class="detail-section-card">
+          <h2 class="section-h2"><i class="fa-solid fa-circle-question"></i> FAQs about this Property</h2>
+          <div class="faq-wrap">
+            <div class="faq-item">
+              <button class="faq-trigger">Is this property ready for immediate possession? <i class="fa-solid fa-chevron-down"></i></button>
+              <div class="faq-content">Yes, this property is currently in "Ready to Move" status according to the listings updated by the owner.</div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-trigger">What is the total built-up area? <i class="fa-solid fa-chevron-down"></i></button>
+              <div class="faq-content">The total built-up area for this configuration is mentioned in the overview section. Please check the "Area" spec for exact figures.</div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-trigger">Are there any hidden brokerage charges? <i class="fa-solid fa-chevron-down"></i></button>
+              <div class="faq-content">No, if the property is listed by the "Owner", you can contact them directly without paying any brokerage.</div>
             </div>
           </div>
-          <div style="background:#f8fafc;border-radius:12px;padding:16px;font-size:13px;color:var(--text-muted);line-height:1.6;margin-top:20px;border:1px solid rgba(0,0,0,0.05)">
-            <i class="fa-solid fa-lock"></i> Contact details are hidden for privacy. Click the button above to unlock.
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN — SIDEBAR -->
+      <div class="sticky-sidebar">
+        <!-- LISTED BY CARD -->
+        <div class="detail-section-card" style="margin-top:0">
+          <h3 style="font-size:15px; font-weight:700; margin-bottom:20px; color:var(--text-muted)">LISTED BY</h3>
+          <div class="posted-by-card" style="display: flex; gap: 16px; align-items: center;">
+            <div id="ownerAvatar" style="width: 56px; height: 56px; border-radius: 12px; background: var(--primary); color: #fff; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center;">24</div>
+            <div>
+               <div id="posterBadge" style="font-size: 11px; font-weight: 700; color: var(--primary);">INDIVIDUAL</div>
+               <h4 id="ownerName" style="font-size: 16px; font-weight: 700; margin: 2px 0;">Advertiser</h4>
+               <p id="ownerJoinDate" style="font-size: 12px; color: var(--text-muted);">Member since 2024</p>
+            </div>
+          </div>
+          <div style="margin-top: 16px; padding: 12px; background: #f8faff; border-radius: 8px; font-size: 12px; color: var(--text-muted); border-left: 3px solid var(--primary);">
+            Listed by verified owner. 0% Brokerage apply.
           </div>
         </div>
 
-        <!-- EMI CALCULATOR SMALL -->
-        <div class="detail-section" style="margin-top:16px">
-           <h3 style="font-size:16px;font-weight:700;margin-bottom:16px"><i class="fa-solid fa-calculator"></i> EMI Estimator</h3>
-           <div id="emi-result-sidebar" style="font-size:24px;font-weight:800;color:var(--primary);margin-bottom:4px">₹0</div>
-           <div style="font-size:12px;color:var(--text-muted)">Est. monthly EMI @ 8.5%</div>
+        <!-- EMI CALCULATOR CARD -->
+        <div class="detail-section-card" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: #fff;">
+          <h3 style="font-size:14px; font-weight:600; margin-bottom:12px; color: rgba(255,255,255,0.6)">EMI ESTIMATOR</h3>
+          <div id="emi-result-sidebar" style="font-size:28px; font-weight:800; color:#fff; margin-bottom:4px">₹0</div>
+          <div style="font-size:12px; color:rgba(255,255,255,0.5)">Est. monthly EMI @ 8.5% interest</div>
+          <button style="width:100%; margin-top:16px; padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.05); color:#fff; font-size:13px; font-weight:600; cursor:pointer;" onclick="location.href='#faq'">Get Assistance</button>
         </div>
       </div>
+
     </div>
   </div>
 
   <!-- SIMILAR PROPERTIES -->
-  <section class="section" style="background:var(--bg)">
+  <section class="section">
     <div class="container">
-      <div class="section-header" style="text-align:left;margin-bottom:24px">
-        <h2 style="font-size:22px">Similar Properties You May Like</h2>
+      <div class="section-header" style="text-align:left; margin-bottom:24px">
+        <h2 style="font-size:22px; font-weight:700;">Similar Properties You May Like</h2>
       </div>
       <div class="cards-slider-wrap">
-        <div class="cards-slider" id="similarPropertiesSlider">
-          <!-- Dynamic Similar Properties will be injected here -->
+        <div class="cards-slider" id="similarPropertiesSlider" style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px;">
+          <!-- Dynamic Similar Properties -->
         </div>
       </div>
     </div>
@@ -893,49 +938,74 @@
           galleryMoreOverlay.addEventListener('click', () => lbOpen(3));
         }
 
-        // ---- Main Specs Grid (Highlights) ----
+        // ---- Main Specs Grid (Houssed Style) ----
         const mainSpecsGrid = document.getElementById('mainSpecsGrid');
         if (mainSpecsGrid) {
           const highlights = [];
-          if (!isLand && !isCommercial && bhk && bhk !== '0') highlights.push({ icon: 'fa-bed', val: `${bhk} BHK`, label: 'Bedrooms' });
-          if (area > 0) highlights.push({ icon: 'fa-ruler-combined', val: `${area.toLocaleString('en-IN')} sq.ft`, label: 'Built-up Area' });
+          if (!isLand && !isCommercial && bhk && bhk !== '0') highlights.push({ icon: 'fa-bed', val: `${bhk} BHK`, label: 'Room' });
+          if (area > 0) highlights.push({ icon: 'fa-ruler-combined', val: `${area} sq.ft`, label: 'Built Area' });
           if (p.details?.facing) highlights.push({ icon: 'fa-compass', val: p.details.facing, label: 'Facing' });
-          if (!isLand && p.details?.floorNumber) highlights.push({ icon: 'fa-building', val: `${p.details.floorNumber}${p.details.totalFloors ? ' / ' + p.details.totalFloors : ''}`, label: 'Floor' });
+          if (!isLand && p.details?.floorNumber) highlights.push({ icon: 'fa-building', val: `${p.details.floorNumber}${p.details.totalFloors ? '/' + p.details.totalFloors : ''}`, label: 'Floor' });
           if (!isLand && p.details?.furnishing) highlights.push({ icon: 'fa-couch', val: p.details.furnishing, label: 'Furnishing' });
-          if (p.details?.parking && p.details.parking !== 'None') highlights.push({ icon: 'fa-car', val: p.details.parking, label: 'Parking' });
+          if (p.details?.parking && p.details.parking !== 'None') highlights.push({ icon: 'fa-car', val: 'Available', label: 'Parking' });
+          if (p.details?.status) highlights.push({ icon: 'fa-clock', val: p.details.status, label: 'Status' });
 
           mainSpecsGrid.innerHTML = highlights.map(h => `
-            <div class="spec-card">
-              <div class="spec-icon"><i class="fa-solid ${h.icon}"></i></div>
-              <div class="spec-info">
-                <span class="spec-label">${h.label}</span>
-                <span class="spec-value">${h.val}</span>
+            <div class="spec-item-box">
+              <div class="spec-item-icon"><i class="fa-solid ${h.icon}"></i></div>
+              <div class="spec-item-info">
+                <span>${h.label}</span>
+                <span>${h.val}</span>
               </div>
             </div>
           `).join('');
         }
 
-        // ---- Advanced Details (Categorized) ----
+        // ---- Modal Header Details & Revelation Logic ----
+        const advPhoneDisplay = document.getElementById('advPhoneDisplay');
+        const advNameDisplay = document.getElementById('advNameDisplay');
+        const advBtnSubmit = document.getElementById('advBtnSubmit');
+        const REAL_OWNER_PHONE = p.contactDesc?.mobile || '';
+        const REAL_OWNER_NAME = p.contactDesc?.name || 'Owner';
+
+        if (advBtnSubmit) {
+          const newBtn = advBtnSubmit.cloneNode(true);
+          advBtnSubmit.parentNode.replaceChild(newBtn, advBtnSubmit);
+          newBtn.addEventListener('click', async function () {
+            const name = document.getElementById('advInputName').value.trim();
+            const phone = document.getElementById('advInputPhone').value.trim();
+            if (!name || !phone) { alert('Please enter Name and Mobile'); return; }
+            if (!document.getElementById('advCheckTerms').checked) { alert('Please agree to terms'); return; }
+
+            this.disabled = true;
+            this.textContent = 'Submitting...';
+            try {
+              await convex.mutation('properties:contactOwner', {
+                propertyId: id, name, phone, email: '', message: 'Advertiser Modal Enquiry'
+              });
+              this.style.display = 'none';
+              document.getElementById('advSuccessMsg').style.display = 'block';
+              if (advPhoneDisplay) advPhoneDisplay.textContent = '+91 ' + REAL_OWNER_PHONE;
+              if (advNameDisplay) advNameDisplay.textContent = REAL_OWNER_NAME;
+            } catch (err) {
+              alert('Failed: ' + err.message);
+              this.disabled = false;
+              this.textContent = 'Get Contact Details';
+            }
+          });
+        }
+        // ---- Advanced Details (Categorized - Houssed Style) ----
         const advancedContainer = document.getElementById('advancedDetailsContainer');
         if (advancedContainer) {
           let tablesHtml = '';
-          
-          // Helper for rows
-          const renderRow = (label, val) => val ? `<div class="info-row"><span class="info-label">${label}</span><span class="info-value">${val}</span></div>` : '';
+          const renderRow = (label, val) => val ? `<div class="info-row-flex"><label>${label}</label><b>${val}</b></div>` : '';
 
           // 1. Area & Orientation
           let areaRows = renderRow('Built-up Area', area > 0 ? `${area} sq.ft` : '');
           areaRows += renderRow('Carpet Area', p.details?.carpetArea ? `${p.details.carpetArea} sq.ft` : '');
           areaRows += renderRow('Facing', p.details?.facing);
           areaRows += renderRow('Road Width', p.details?.roadWidth ? `${p.details.roadWidth} ft` : '');
-          
-          if (areaRows) {
-            tablesHtml += `
-              <div class="detail-section">
-                <h2 class="section-title"><i class="fa-solid fa-ruler-max"></i> Area & Orientation</h2>
-                <div class="detail-info-grid">${areaRows}</div>
-              </div>`;
-          }
+          if (areaRows) tablesHtml += `<div class="info-col"><h3>AREA & ORIENTATION</h3>${areaRows}</div>`;
 
           // 2. Configuration & Features
           let configRows = renderRow('Bedrooms', bhk !== '0' ? bhk : '');
@@ -943,37 +1013,21 @@
           configRows += renderRow('Balconies', p.details?.balconies);
           configRows += renderRow('Furnishing', p.details?.furnishing);
           configRows += renderRow('Floor', p.details?.floorNumber ? `${p.details.floorNumber} of ${p.details.totalFloors || 'N/A'}` : '');
-          
-          if (configRows) {
-            tablesHtml += `
-              <div class="detail-section">
-                <h2 class="section-title"><i class="fa-solid fa-house-chimney-window"></i> Configuration</h2>
-                <div class="detail-info-grid">${configRows}</div>
-              </div>`;
-          }
+          if (configRows) tablesHtml += `<div class="info-col"><h3>CONFIGURATION</h3>${configRows}</div>`;
 
           // 3. Construction & Legal
-          let constructRows = renderRow('Property Status', p.details?.status);
+          let constructRows = renderRow('Status', p.details?.status);
           constructRows += renderRow('Built Year', p.details?.constructionYear);
           constructRows += renderRow('Ownership', p.details?.ownershipType);
           constructRows += renderRow('RERA ID', p.details?.rera);
-          
-          if (constructRows) {
-            tablesHtml += `
-              <div class="detail-section">
-                <h2 class="section-title"><i class="fa-solid fa-gavel"></i> Construction & Records</h2>
-                <div class="detail-info-grid">${constructRows}</div>
-              </div>`;
-          }
+          if (constructRows) tablesHtml += `<div class="info-col"><h3>LEGAL & STATUS</h3>${constructRows}</div>`;
 
           advancedContainer.innerHTML = tablesHtml;
         }
 
         // ---- Description ----
         const descEl = document.getElementById('dynamicDescription');
-        if (descEl && p.details?.description) {
-          descEl.textContent = p.details.description;
-        }
+        if (descEl && p.details?.description) descEl.textContent = p.details.description;
 
         // ---- Floor Plan ----
         const floorPlanSection = document.getElementById('floorPlanSection');
@@ -995,6 +1049,33 @@
           mapsBtn.href = `https://maps.google.com?q=${addr}`;
         }
 
+        // ---- FAQ Accordion Logic ----
+        document.querySelectorAll('.faq-trigger').forEach(btn => {
+          btn.addEventListener('click', () => {
+             const item = btn.parentElement;
+             const isOpen = item.classList.contains('open');
+             // Close all others
+             document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+             if (!isOpen) item.classList.add('open');
+          });
+        });
+
+        // ---- Sub-nav Scroll Logic ----
+        const subnavLinks = document.querySelectorAll('.subnav-link');
+        window.addEventListener('scroll', () => {
+          let current = '';
+          const sections = ['overview', 'amenities', 'floorPlan', 'location', 'faq'];
+          sections.forEach(id => {
+            const section = document.getElementById(id);
+            if (section && window.scrollY >= (section.offsetTop - 150)) {
+              current = id;
+            }
+          });
+          subnavLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+          });
+        });
         // ---- Sidebar EMI ----
         const emiResultSidebar = document.getElementById('emi-result-sidebar');
         if (emiResultSidebar && price > 500000) {
@@ -1008,31 +1089,22 @@
           const ownerName = document.getElementById('ownerName');
           const ownerJoinDate = document.getElementById('ownerJoinDate');
           const posterBadge = document.getElementById('posterBadge');
-          
-          const isCompany = p.ownerInfo.companyName && p.ownerInfo.companyName.trim() !== '';
+          const isCompany = !!(p.ownerInfo.companyName && p.ownerInfo.companyName.trim());
           
           if (ownerName) ownerName.textContent = isCompany ? p.ownerInfo.companyName : p.ownerInfo.name;
-          
-          if (posterBadge) {
-            posterBadge.innerHTML = isCompany ? 
-              `<i class="fa-solid fa-building"></i> Company` : 
-              `<i class="fa-solid fa-user-check"></i> Individual`;
-          }
+          if (posterBadge) posterBadge.textContent = isCompany ? 'COMPANY' : 'INDIVIDUAL';
 
           if (ownerAvatar) {
             if (p.ownerInfo.profilePictureUrl) {
-              ownerAvatar.innerHTML = `<img src="${p.ownerInfo.profilePictureUrl}" style="width:100%;height:100%;border-radius:20px;object-fit:cover;">`;
+              ownerAvatar.innerHTML = `<img src="${p.ownerInfo.profilePictureUrl}" style="width:100%;height:100%;border-radius:12px;object-fit:cover;">`;
               ownerAvatar.style.background = 'transparent';
             } else {
-              const initial = (isCompany ? p.ownerInfo.companyName : p.ownerInfo.name || 'U')[0].toUpperCase();
-              ownerAvatar.innerHTML = initial;
+              ownerAvatar.textContent = (isCompany ? p.ownerInfo.companyName : p.ownerInfo.name || 'U')[0].toUpperCase();
             }
           }
-
           if (ownerJoinDate) {
             const memberSince = p.ownerInfo.joinedYear || 2024;
-            const role = p.contactDesc?.role || (isCompany ? 'Agent' : 'Owner');
-            ownerJoinDate.innerHTML = `<i class="fa-solid fa-user-tag"></i> ${role} · Member since ${memberSince}`;
+            ownerJoinDate.textContent = `Member since ${memberSince}`;
           }
         }
 
@@ -1049,270 +1121,38 @@
             const icon = Object.entries(icons).find(([k]) => a.toLowerCase().includes(k.toLowerCase()))?.[1] || '✅';
             return `<div class="amenity-item"><div class="amenity-icon">${icon}</div> ${a}</div>`;
           }).join('');
-        } else if (amenGrid && (!p.amenities || p.amenities.length === 0)) {
-          amenGrid.closest('.detail-card')?.remove(); // hide empty amenities section
-        }
-
-        // ---- Contact card ----
-        if (p.contactDesc) {
-          const ct = p.contactDesc;
-          const sellerDiv = document.querySelector('.detail-card h3')?.closest('.detail-card');
-          // Update seller info
-          const sellerCard = document.querySelectorAll('.detail-card');
-          sellerCard.forEach(card => {
-            if (card.querySelector('h3')?.textContent.includes('Listed By')) {
-              const nameEl = card.querySelector('div[style*="font-weight:700"]') || card.querySelector('.font-bold');
-              const initial = document.querySelector('.detail-card div[style*="border-radius:50%"]');
-              if (initial) initial.textContent = (ct.name || 'U')[0].toUpperCase();
-              const rows = card.querySelectorAll('div[style*="font-weight:700"]');
-              if (rows[0]) rows[0].textContent = ct.name || 'Owner';
-              const roleEl = card.querySelector('div[style*="font-size:12px"]');
-              if (roleEl) roleEl.textContent = `🏠 ${ct.role || 'Owner'} · Listed on 24Dismil.com`;
-            }
-          });
-
-          // Update Call/WhatsApp buttons with real owner number from DB
-          const callBtn = document.getElementById('btnCallNow');
-          const waBtn = document.getElementById('btnWhatsApp');
-          if (callBtn && ct.mobile) {
-            callBtn.dataset.phone = ct.mobile;
-            callBtn.onclick = () => window.location.href = `tel:${ct.mobile}`;
-          }
-          if (waBtn && ct.mobile) {
-            waBtn.dataset.phone = ct.mobile;
-            waBtn.onclick = () => {
-              const msg = document.getElementById('contactMessage')?.value.trim() ||
-                'Hi, I am interested in this property. Please contact me.';
-              const name = document.getElementById('contactName')?.value.trim() || '';
-              const text = encodeURIComponent((name ? 'Name: ' + name + '\n' : '') + msg);
-              window.open(`https://wa.me/91${ct.mobile}?text=${text}`, '_blank');
-            };
-          }
-        }
-
-        // ---- Google Maps link ----
-        const mapsLink = document.querySelector('a[href*="maps.google.com"]');
-        if (mapsLink) {
-          const addr = encodeURIComponent(`${p.location?.locality || ''} ${p.location?.city || ''} ${p.location?.state || ''} ${p.location?.pinCode || ''}`);
-          mapsLink.href = `https://maps.google.com?q=${addr}`;
-        }
-        const mapText = document.querySelector('[href*="maps.google.com"]')?.previousElementSibling;
-        if (mapText) mapText.textContent = `${p.location?.locality || ''}, ${p.location?.city || ''} ${p.location?.pinCode || ''}`;
-
-        // ---- Populate Modal Header Details ----
-        const advPhoneDisplay = document.getElementById('advPhoneDisplay');
-        const advNameDisplay = document.getElementById('advNameDisplay');
-        const advHeaderPhone = document.getElementById('advPhoneDisplay'); // Legacy name alias
-        const advHeaderName = document.getElementById('advNameDisplay');   // Legacy name alias
-        const advDateDisplay = document.getElementById('advDateDisplay');
-        const advPriceAddress = document.getElementById('advPriceAddress');
-        const advAreaType = document.getElementById('advAreaType');
-        const advBtnSubmit = document.getElementById('advBtnSubmit');
-
-        let REAL_OWNER_PHONE = p.contactDesc?.mobile || '';
-        let REAL_OWNER_NAME = p.contactDesc?.name || 'Owner';
-
-        if (advDateDisplay) {
-          const creationDate = p._creationTime ? new Date(p._creationTime).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Recently';
-          advDateDisplay.textContent = `Posted On: ${creationDate}`;
-        }
-
-        // Format Price & Address
-        const shortAddress = `${p.location?.locality || ''}, ${p.location?.city || ''}`;
-        let formattedPrice = 'Price on Request';
-        if (price > 0) {
-          if (price >= 10000000) formattedPrice = `₹${(price / 10000000).toFixed(2)} Cr`;
-          else if (price >= 100000) formattedPrice = `₹${(price / 100000).toFixed(2)} Lac`;
-          else formattedPrice = priceStr;
-        }
-        if (advPriceAddress) advPriceAddress.textContent = `${formattedPrice} | ${shortAddress}`;
-
-        // Format Area & Type
-        const areaStr = area > 0 ? `${area.toLocaleString('en-IN')} SQ.FT.` : '';
-        const propTypeStr = p.propertyType ? p.propertyType.toUpperCase() : '';
-        if (advAreaType) advAreaType.textContent = `${areaStr} | ${propTypeStr}`;
-
-        // ---- Override Modal Submit for Real DB Submit ----
-        const newAdvSubmit = advBtnSubmit.cloneNode(true);
-        advBtnSubmit.parentNode.replaceChild(newAdvSubmit, advBtnSubmit);
-
-        newAdvSubmit.addEventListener('click', async function () {
-          const name = document.getElementById('advInputName').value.trim();
-          const phone = document.getElementById('advInputPhone').value.trim();
-          const termsChecked = document.getElementById('advCheckTerms').checked;
-
-          // Extract Chip values
-          const reason = document.getElementById('valReason')?.value || '';
-          const dealer = document.getElementById('valDealer')?.value || '';
-          const timeframe = document.getElementById('valTimeframe')?.value || '';
-          const loan = document.getElementById('advCheckLoan').checked ? 'Yes' : 'No';
-          const visit = document.getElementById('advCheckVisit').checked ? 'Yes' : 'No';
-
-          if (!name || !phone) {
-            alert('Please enter your Name and Mobile Number.');
-            return;
-          }
-          if (!termsChecked) {
-            alert('Please agree to the Terms & Conditions.');
-            return;
-          }
-
-          this.disabled = true;
-          this.textContent = 'Submitting...';
-
-          // Format payload into single message string
-          const fullMessage = `
---- Advertiser Modal Enquiry ---
-Reason to Buy: ${reason}
-Property Dealer: ${dealer}
-Planning to Buy In: ${timeframe}
-Interested in Home Loan: ${loan}
-Interested in Site Visit: ${visit}
-      `.trim();
-
-          try {
-            await convex.mutation('properties:contactOwner', {
-              propertyId: id,
-              name,
-              phone,
-              email: '', // Not collected in this modal
-              message: fullMessage
-            });
-
-            // UI Success state
-            this.style.display = 'none';
-            document.getElementById('advSuccessMsg').style.display = 'block';
-
-            // Reveal Owner Details!
-            advHeaderPhone.textContent = '+91 ' + REAL_OWNER_PHONE;
-            advHeaderName.textContent = REAL_OWNER_NAME;
-
-            // Clear only core inputs, keep preferences
-            document.getElementById('advInputName').value = '';
-            document.getElementById('advInputPhone').value = '';
-            document.getElementById('advCheckTerms').checked = false;
-
-          } catch (err) {
-            alert('Failed to send enquiry: ' + err.message);
-            this.disabled = false;
-            this.textContent = 'Get Contact Details';
-          }
-        });
-
-        // Keep OLD Handle Contact Owner Form valid for DOM safety
-        const btnSendEnquiry = document.getElementById('btnSendEnquiry');
-        if (btnSendEnquiry) {
-          // Remove fallback listener and replace with DB-backed version
-          const newBtn = btnSendEnquiry.cloneNode(true);
-          btnSendEnquiry.parentNode.replaceChild(newBtn, btnSendEnquiry);
-
-          newBtn.addEventListener('click', async () => {
-            const name = document.getElementById('contactName')?.value.trim();
-            const phone = document.getElementById('contactPhone')?.value.trim();
-            const email = document.getElementById('contactEmail')?.value.trim();
-            const message = document.getElementById('contactMessage')?.value.trim();
-            const successMsg = document.getElementById('contactSuccess');
-            const loader = document.getElementById('contactLoader');
-
-            if (!name || !phone) {
-              alert('Name aur Mobile Number zaroori hai.');
-              return;
-            }
-
-            newBtn.style.display = 'none';
-            if (loader) loader.style.display = 'block';
-
-            try {
-              await convex.mutation('properties:contactOwner', {
-                propertyId: id,
-                name, phone, email: email || '', message: message || ''
-              });
-              if (loader) loader.style.display = 'none';
-              if (successMsg) successMsg.style.display = 'block';
-
-              // Clear inputs
-              document.getElementById('contactName').value = '';
-              document.getElementById('contactPhone').value = '';
-              document.getElementById('contactEmail').value = '';
-              document.getElementById('contactMessage').value = 'Hi, I am interested in this property. Please contact me.';
-
-              setTimeout(() => {
-                if (successMsg) successMsg.style.display = 'none';
-                newBtn.style.display = 'inline-block';
-              }, 5000);
-
-            } catch (err) {
-              alert('Enquiry bhejne mein error: ' + err.message);
-              newBtn.style.display = 'inline-block';
-              if (loader) loader.style.display = 'none';
-            }
-          });
-        }
-
-        // ---- EMI seed value ----
-        const emiLoan = document.getElementById('emi-loan');
-        if (emiLoan && price > 0) {
-          emiLoan.value = Math.round(price * 0.8); // 80% as loan
-          emiLoan.dispatchEvent(new Event('input'));
+        } else if (amenGrid) {
+          document.getElementById('amenities')?.remove();
         }
 
         // ---- Similar Properties ----
         try {
           const allProps = await convex.query('properties:getProperties', {}) || [];
           const similar = allProps
-            .filter(item => item._id !== id && item.id !== id) // Exclude current
+            .filter(item => item._id !== id && item.id !== id)
             .filter(item => (item.location?.city === p.location?.city) || (item.propertyType === p.propertyType))
-            .slice(0, 4); // Take up to 4
+            .slice(0, 4);
 
           const slider = document.getElementById('similarPropertiesSlider');
           if (slider && similar.length > 0) {
-            let htmlStr = '';
-            for (const sp of similar) {
+            slider.innerHTML = similar.map(sp => {
               const spPrice = sp.pricing?.expectedPrice || 0;
-              let spPriceStr = 'Price on Request';
-              if (spPrice > 0) {
-                if (spPrice >= 10000000) spPriceStr = `₹${(spPrice / 10000000).toFixed(2)} Cr`;
-                else if (spPrice >= 100000) spPriceStr = `₹${(spPrice / 100000).toFixed(2)} Lac`;
-                else spPriceStr = `₹${spPrice.toLocaleString('en-IN')}`;
-              }
-
-              let spPhoto = 'images/property-1.webp';
-              if (sp.photos && sp.photos[0]) {
-                spPhoto = (typeof sp.photos[0] === 'object' ? sp.photos[0].url : sp.photos[0]) || spPhoto;
-              }
-
-              let spTitle = sp.propertyType || 'Property';
-              if (!/plot|land|commercial|shop/i.test(spTitle) && sp.details?.bhk && sp.details.bhk !== '0') {
-                spTitle = `${sp.details.bhk} BHK ${spTitle}`;
-              }
-
-              htmlStr += `
-                  <div class="property-card" style="min-width:280px;flex-shrink:0;cursor:pointer;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff;transition:transform 0.2s" onclick="window.location.href='property-detail.html?id=${sp._id || sp.id}'" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-                    <div class="prop-img-wrap" style="position:relative"><img src="${spPhoto}" alt="${spTitle}" loading="lazy" style="height:200px;object-fit:cover;width:100%">
-                      <div class="prop-type-badge" style="position:absolute;top:10px;left:10px"><span class="badge ${sp.type === 'rent' ? 'badge-warning' : 'badge-primary'}" style="background:var(--primary);color:#fff;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:700">${sp.type === 'rent' ? 'RENT' : 'BUY'}</span></div>
-                      ${sp.verified ? '<div class="prop-verified" style="position:absolute;bottom:10px;left:10px;background:rgba(16,185,129,0.9);color:#fff;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600"><i class="fa-solid fa-circle-check"></i> Verified</div>' : ''}
-                    </div>
-                    <div class="prop-body" style="padding:16px">
-                      <div class="prop-price" style="font-size:20px;font-weight:800;color:var(--primary);margin-bottom:4px">${spPriceStr}</div>
-                      <div class="prop-title" style="font-size:15px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${spTitle}</div>
-                      <div class="prop-location" style="color:var(--text-muted);font-size:13px;margin:8px 0"><i class="fa-solid fa-location-dot"></i> ${sp.location?.locality || ''}, ${sp.location?.city || ''}</div>
-                      <div class="prop-specs" style="display:flex;gap:12px;font-size:13px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
-                        ${sp.details?.bhk ? `<div><i class="fa-solid fa-bed"></i> ${sp.details.bhk} BHK</div>` : ''}
-                        ${sp.details?.builtUpArea ? `<div><i class="fa-solid fa-ruler-combined"></i> ${sp.details.builtUpArea} sq.ft</div>` : ''}
-                      </div>
-                    </div>
+              let spPriceStr = spPrice >= 10000000 ? `₹${(spPrice/10000000).toFixed(2)} Cr` : (spPrice >= 100000 ? `₹${(spPrice/100000).toFixed(2)} Lac` : `₹${spPrice.toLocaleString('en-IN')}`);
+              const spPhoto = (sp.photos?.[0]?.url || sp.photos?.[0] || 'images/property-1.webp');
+              return `
+                <div class="property-card" style="min-width:280px; flex-shrink:0; cursor:pointer; border:1px solid var(--border); border-radius:12px; overflow:hidden; background:#fff;" onclick="window.location.href='property-detail.html?id=${sp._id || sp.id}'">
+                  <img src="${spPhoto}" style="height:180px; object-fit:cover; width:100%">
+                  <div style="padding:16px">
+                    <div style="font-size:18px; font-weight:800; color:var(--primary); margin-bottom:4px">${spPriceStr}</div>
+                    <div style="font-size:14px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${sp.propertyType}</div>
+                    <div style="color:var(--text-muted); font-size:12px; margin-top:4px"><i class="fa-solid fa-location-dot"></i> ${sp.location?.locality || ''}, ${sp.location?.city || ''}</div>
                   </div>
-                `;
-            }
-            slider.innerHTML = htmlStr;
+                </div>`;
+            }).join('');
           } else if (slider) {
-            slider.parentElement.parentElement.style.display = 'none';
+            slider.closest('section')?.remove();
           }
-        } catch (e) {
-          console.error('Failed to load similar properties', e);
-          const slider = document.getElementById('similarPropertiesSlider');
-          if (slider) slider.parentElement.parentElement.style.display = 'none';
-        }
+        } catch (e) { console.error(e); }
 
       } catch (err) {
         console.error('Failed to load property details:', err);
