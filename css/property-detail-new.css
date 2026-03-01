@@ -19,6 +19,7 @@ body {
   color: var(--text);
   font-family: var(--font-main);
   line-height: 1.6;
+  padding-top: 80px; /* Account for fixed header */
 }
 
 .container {
@@ -92,11 +93,11 @@ body {
 /* ---- Sticky Sub-Nav ---- */
 .sticky-subnav {
   position: sticky;
-  top: 64px;
+  top: 80px; /* Below fixed header */
   z-index: 900;
   background: #fff;
   border-bottom: 1px solid var(--border);
-  margin-top: 24px;
+  margin-top: 32px;
   padding: 0;
   box-shadow: 0 4px 12px rgba(0,0,0,0.02);
 }
