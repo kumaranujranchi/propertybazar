@@ -163,8 +163,14 @@
   .footer-bottom-links { flex-wrap: wrap; justify-content: center; }
 
   /* Nav */
+  .header .container { padding: 0 16px; }
+  .nav { gap: 10px; }
+  .nav-group-left { gap: 8px; }
+  .nav-logo-text { display: none; }
+  .nav-city { padding: 4px 8px; font-size: 11px; }
+  .nav-group-right { gap: 12px; }
+  .nav-btn-post { padding: 6px 12px; font-size: 12px; }
   .nav-btn-login { display: none; }
-  .nav-city-btn { font-size: 12px; padding: 5px 10px; }
 
   /* About */
   .about-stats { grid-template-columns: repeat(2, 1fr); }

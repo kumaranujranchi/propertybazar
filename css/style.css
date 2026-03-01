@@ -300,7 +300,16 @@ textarea {
 .nav {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 64px;
+  gap: 20px;
+}
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-group-right {
   gap: 20px;
 }
 .nav-logo {

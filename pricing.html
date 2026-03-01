@@ -318,33 +318,32 @@
     <header class="header" id="header">
       <div class="container">
         <nav class="nav">
-          <a href="index.html" class="nav-logo">
-            <div class="nav-logo-icon">24</div>
-            <span class="nav-logo-text">24Dismil.com</span>
-          </a>
-          <button class="nav-city" id="citySelectorBtn">
-            <i class="fa-solid fa-location-dot"></i> Delhi NCR
-            <i class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
-          </button>
+          <div class="nav-group nav-group-left">
+            <a href="index.html" class="nav-logo">
+              <div class="nav-logo-icon">24</div>
+              <span class="nav-logo-text">24Dismil.com</span>
+            </a>
+            <button class="nav-city" id="citySelectorBtn">
+              <i class="fa-solid fa-location-dot"></i> <span id="currentCityText">Select City</span>
+              <i class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
+            </button>
+          </div>
+
           <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
             <a href="properties.html?type=buy" class="nav-link">Buy</a>
             <a href="properties.html?type=rent" class="nav-link">Rent</a>
-            <a href="properties.html?type=commercial" class="nav-link"
-              >Commercial</a
-            >
-            
+            <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
           </div>
-          <div class="nav-actions">
-            <a href="login.html" class="nav-btn-login"
-              >Login</a
-            >
-            <a href="post-property.html" class="nav-btn-post"
-              >+ Post FREE Property</a
-            >
-          </div>
-          <div class="hamburger" id="hamburger">
-            <span></span><span></span><span></span>
+
+          <div class="nav-group nav-group-right">
+            <div class="nav-actions">
+              <a href="login.html" class="nav-btn-login">Login</a>
+              <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+              <span></span><span></span><span></span>
+            </div>
           </div>
         </nav>
       </div>
