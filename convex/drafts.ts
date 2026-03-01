@@ -40,17 +40,25 @@ export const saveDraft = mutation({
 export const getDraft = query({
   args: { token: v.string() },
   handler: async (ctx, args) => {
-    const session = await ctx.db
-      .query("sessions")
-      .withIndex("by_token", (q) => q.eq("token", args.token))
-      .first();
+    if (!args.token) return null;
+    try {
+      const session = await ctx.db
+        .query("sessions")
+        .withIndex("by_token", (q) => q.eq("token", args.token))
+        .first();
 
-    if (!session || session.expiresAt < Date.now()) return null;
+      if (!session || session.expiresAt < Date.now()) return null;
 
-    return await ctx.db
-      .query("drafts")
-      .withIndex("by_userId", (q) => q.eq("userId", session.userId))
-      .first();
+      const draft = await ctx.db
+        .query("drafts")
+        .withIndex("by_userId", (q) => q.eq("userId", session.userId))
+        .first();
+        
+      return draft;
+    } catch (err) {
+      console.error("Draft query error:", err);
+      return null;
+    }
   },
 });
 
@@ -79,7 +87,6 @@ export const deleteDraft = mutation({
 export const deleteOldDrafts = internalMutation({
   args: {},
   handler: async (ctx) => {
-    // 10 days in milliseconds
     const tenDaysAgo = Date.now() - 10 * 24 * 60 * 60 * 1000;
 
     const oldDrafts = await ctx.db
