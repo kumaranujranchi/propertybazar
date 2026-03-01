@@ -142,8 +142,15 @@
   .prop-types-grid { grid-template-columns: repeat(2, 1fr); }
 
   /* Footer */
-  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
-  .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+  .footer { padding-bottom: 20px; }
+  .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 40px 20px; }
+  .footer-brand { grid-column: 1 / -1; text-align: center; margin-bottom: 10px; }
+  .footer-logo { justify-content: center; margin-bottom: 15px; }
+  .footer-socials { justify-content: center; margin-bottom: 20px; }
+  .footer-col h4 { font-size: 14px; margin-bottom: 15px; }
+  .footer-links a { font-size: 12px; }
+  .footer-download { grid-column: 1 / -1; margin-top: 10px; }
+  .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.05); margin-top: 40px; padding-top: 30px; flex-direction: column; gap: 15px; text-align: center; }
   .footer-bottom-links { flex-wrap: wrap; justify-content: center; }
 
   /* Nav */
