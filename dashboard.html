@@ -648,7 +648,7 @@
     }
   } catch (err) {
     console.error("Failed to fetch draft:", err);
-    draftsList.innerHTML = `<div class="dash-empty">Error loading drafts.</div>`;
+    draftsList.innerHTML = `<div class="dash-empty">Error loading drafts: ${err.message || 'Unknown error'}</div>`;
   }
 
   // Load Leads
