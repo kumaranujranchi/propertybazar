@@ -130,6 +130,13 @@
   .filter-sidebar { border-radius: var(--radius-sm); }
   .listing-controls { flex-wrap: wrap; gap: 8px; }
 
+  /* Ensure slider cards don't overflow on small tablet/large mobile */
+  .cards-slider .property-card,
+  .cards-slider .project-card {
+    min-width: 280px;
+    max-width: 85vw;
+  }
+
   /* City & Property Types */
   .city-grid { grid-template-columns: repeat(2, 1fr); }
   .prop-types-grid { grid-template-columns: repeat(2, 1fr); }
@@ -235,6 +242,12 @@
   .prop-spec { font-size: 11px; }
   .prop-price { font-size: 17px; }
   .prop-title { font-size: 14px; }
+
+  .cards-slider .property-card,
+  .cards-slider .project-card {
+    min-width: 260px;
+    max-width: calc(100vw - 32px);
+  }
 
   /* Post form */
   .form-actions { display: flex; gap: 12px; margin-top: 24px; }
