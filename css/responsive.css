@@ -172,7 +172,59 @@
   .nav-btn-post { padding: 6px 12px; font-size: 12px; }
   .nav-btn-login { display: none; }
 
-  /* About */
+  /* Property Posting Flow Optimization */
+  .post-hero { padding: 40px 0; text-align: center; }
+  .post-hero h1 { font-size: 24px; }
+  .post-hero p { font-size: 14px; }
+  
+  .post-body { 
+    grid-template-columns: 1fr !important; 
+    gap: 20px !important; 
+    padding: 0 16px !important; 
+    margin-top: 20px !important;
+  }
+  
+  .form-card { padding: 20px !important; }
+  .form-card-title { font-size: 18px; }
+  
+  .form-grid { grid-template-columns: 1fr !important; gap: 15px !important; }
+  .form-group.full { grid-column: auto !important; }
+  
+  .segmented-control { flex-wrap: wrap; }
+  .segment-item { font-size: 12px; padding: 6px 10px; }
+  
+  .visual-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .selection-card { padding: 12px; }
+  .selection-card i { font-size: 20px; }
+  
+  .facing-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
+  .face-item { padding: 8px 4px; font-size: 11px; }
+  
+  .amenity-pill-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  .amenity-pill { font-size: 12px; padding: 8px 10px; }
+  
+  .post-sidebar { position: static !important; order: 2; }
+  
+  .form-type-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  
+  /* Category Specific Headers */
+  [id^="fg"] [style*="font-weight:700"] { font-size: 14px; margin-top: 20px !important; }
+  
+  .photo-upload-area { padding: 20px !important; }
+  .photo-preview-grid, #photoPreviewGrid, #videoPreviewGrid { 
+    grid-template-columns: repeat(2, 1fr) !important; 
+    gap: 10px !important; 
+  }
+  
+  .form-actions { flex-direction: column-reverse; gap: 10px; }
+  .form-actions .btn { width: 100%; justify-content: center; }
+  .btn-next-step { width: 100% !important; }
+
+  .benefits-strip { gap: 12px !important; margin-top: 20px !important; }
+  .benefits-strip > div { font-size: 11px !important; gap: 4px !important; }
+
+  .post-progress-container { margin-bottom: 25px; }
+  .step-counter-text { font-size: 12px; }
   .about-stats { grid-template-columns: repeat(2, 1fr); }
   .about-hero { padding: 40px 0; }
   .about-hero h1 { font-size: 28px; }

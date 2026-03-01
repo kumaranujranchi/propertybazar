@@ -2459,6 +2459,14 @@ textarea {
   display: none !important;
 }
 
+.benefits-strip {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
 .post-body {
   max-width: 1200px;
   margin: 40px auto 60px;
