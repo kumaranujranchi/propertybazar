@@ -30,11 +30,24 @@ export const handleUpdate = action({
   args: { update: v.any() },
   handler: async (ctx, args) => {
     const update = args.update;
-    if (!update.message) return;
+    let chatId: string;
+    let text: string | undefined;
+    let isCallback = false;
 
-    const chatId = String(update.message.chat.id);
-    const text = update.message.text?.trim();
-    console.log(`Telegram update from ${chatId}: "${text}"`);
+    if (update.callback_query) {
+      chatId = String(update.callback_query.message.chat.id);
+      text = update.callback_query.data;
+      isCallback = true;
+      // Alert Telegram we got the callback
+      await answerCallbackQuery(update.callback_query.id);
+    } else if (update.message) {
+      chatId = String(update.message.chat.id);
+      text = update.message.text?.trim();
+    } else {
+      return;
+    }
+
+    console.log(`Telegram update from ${chatId}: "${text}" (isCallback: ${isCallback})`);
 
     // 1. Get user linked to this chatId
     const user = await ctx.runQuery(internal.telegram.getUserByChatId, { chatId });
@@ -53,14 +66,12 @@ export const handleUpdate = action({
 
       if (codeOrToken) {
         console.log(`Attempting to link chatId ${chatId} with code/token ${codeOrToken.substring(0, 6)}...`);
-        // Try linking by code first, then by token
         const linked = await ctx.runMutation(internal.telegram.linkUserByCodeOrToken, { chatId, codeOrToken });
         
         if (linked) {
           await sendMessage(chatId, "✅ Account linked! You can now post properties by typing /post");
           return;
         } else {
-          console.error("Linking failed - invalid or expired code/token");
           await sendMessage(chatId, "❌ Link failed. Please check your code or click 'Connect Bot' again from the Dashboard.");
           return;
         }
@@ -71,14 +82,14 @@ export const handleUpdate = action({
     }
 
     // 2. Core Bot Logic (Command Handling)
-    // ... rest of the logic remains same
-    if (text === "/post") {
+    if (text === "/post" || text === "/start") {
       await ctx.runMutation(internal.telegram.resetState, { chatId });
       await sendMessage(chatId, "Let's post a property! 🏠\nWhat is the transaction type?", {
         reply_markup: {
-          keyboard: [[{ text: "Buy" }, { text: "Rent" }]],
-          one_time_keyboard: true,
-          resize_keyboard: true
+          inline_keyboard: [[
+            { text: "Buy (Sell)", callback_data: "Buy" }, 
+            { text: "Rent", callback_data: "Rent" }
+          ]]
         }
       });
       return;
@@ -87,7 +98,7 @@ export const handleUpdate = action({
     // 3. State-based Flow (if user is in middle of posting)
     const state = await ctx.runQuery(internal.telegram.getState, { chatId });
     if (state) {
-      await handleFlowStep(ctx, chatId, state, update);
+      await handleFlowStep(ctx, chatId, state, update, text);
       return;
     }
 
@@ -249,9 +260,9 @@ export const updateState = internalMutation({
 
 // --- Flow Engine ---
 
-async function handleFlowStep(ctx: any, chatId: string, state: any, update: any) {
-  const text = update.message.text;
+async function handleFlowStep(ctx: any, chatId: string, state: any, update: any, text: string | undefined) {
   const { step, data } = state;
+  if (!text) return;
 
   switch (step) {
     case "transactionType":
@@ -261,18 +272,19 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any)
         });
         await sendMessage(chatId, "Great! Now, what is the property type?", {
           reply_markup: {
-            keyboard: [
-              [{ text: "Apartment" }, { text: "House" }], 
-              [{ text: "Plot" }, { text: "Commercial" }]
-            ],
-            one_time_keyboard: true, resize_keyboard: true
+            inline_keyboard: [
+              [{ text: "Apartment", callback_data: "Apartment" }, { text: "House", callback_data: "House" }], 
+              [{ text: "Plot", callback_data: "Plot" }, { text: "Commercial", callback_data: "Commercial" }]
+            ]
           }
         });
       } else {
         await sendMessage(chatId, "Please select one of the options below ⬇️", {
           reply_markup: {
-            keyboard: [[{ text: "Buy" }, { text: "Rent" }]],
-            one_time_keyboard: true, resize_keyboard: true
+            inline_keyboard: [[
+              { text: "Buy (Sell)", callback_data: "Buy" }, 
+              { text: "Rent", callback_data: "Rent" }
+            ]]
           }
         });
       }
@@ -284,15 +296,25 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any)
         let nextStep = "location";
         let msg = "Where is the property located? You can type the address or share your location 📍";
         let markup: any = {
-          keyboard: [[{ text: "Share Location", request_location: true }]],
-          resize_keyboard: true
+          inline_keyboard: [[{ text: "Share Location", request_location: true }]] // Note: Inline buttons can't request location in the same way as keyboard buttons usually
         };
+        // For location, we might actually need a regular keyboard or just ask them to type
+        // Let's stick to regular keyboard for Location as it has "request_location"
+        let useRegularKeyboard = false;
 
         if (["Apartment", "House", "Flat"].includes(text)) {
           nextStep = "bhk";
           msg = "How many BHK? 🏠";
           markup = {
-            keyboard: [[{ text: "1 BHK" }, { text: "2 BHK" }], [{ text: "3 BHK" }, { text: "4+ BHK" }]],
+            inline_keyboard: [
+              [{ text: "1 BHK", callback_data: "1 BHK" }, { text: "2 BHK", callback_data: "2 BHK" }], 
+              [{ text: "3 BHK", callback_data: "3 BHK" }, { text: "4+ BHK", callback_data: "4+ BHK" }]
+            ]
+          };
+        } else {
+          useRegularKeyboard = true;
+          markup = {
+            keyboard: [[{ text: "Share Location", request_location: true }]],
             one_time_keyboard: true, resize_keyboard: true
           };
         }
@@ -300,15 +322,14 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any)
         await ctx.runMutation(internal.telegram.updateState, { 
           chatId, step: nextStep, data: { propertyType: text === "Apartment" ? "Flat" : text } 
         });
-        await sendMessage(chatId, msg, markup);
+        await sendMessage(chatId, msg, { reply_markup: markup });
       } else {
         await sendMessage(chatId, "Please select the property type from the buttons below ⬇️", {
           reply_markup: {
-            keyboard: [
-              [{ text: "Apartment" }, { text: "House" }], 
-              [{ text: "Plot" }, { text: "Commercial" }]
-            ],
-            one_time_keyboard: true, resize_keyboard: true
+            inline_keyboard: [
+              [{ text: "Apartment", callback_data: "Apartment" }, { text: "House", callback_data: "House" }], 
+              [{ text: "Plot", callback_data: "Plot" }, { text: "Commercial", callback_data: "Commercial" }]
+            ]
           }
         });
       }
@@ -321,13 +342,13 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any)
       await sendMessage(chatId, "Where is the property located? You can type the address or share your location 📍", {
         reply_markup: {
           keyboard: [[{ text: "Share Location", request_location: true }]],
-          resize_keyboard: true
+          one_time_keyboard: true, resize_keyboard: true
         }
       });
       break;
 
     case "location":
-      const isLocation = !!update.message.location;
+      const isLocation = !!update.message?.location;
       const locData = isLocation
         ? { lat: update.message.location.latitude, lng: update.message.location.longitude, address: "Location shared via GPS" }
         : { address: text };
@@ -350,22 +371,22 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any)
       const summary = `Summary of your listing:\n- ${data.transactionType} ${data.propertyType}\n- BHK: ${data.bhk || "N/A"}\n- Price: ₹${priceNum.toLocaleString("en-IN")}\n\nConfirm to post?`;
       await sendMessage(chatId, summary, {
         reply_markup: {
-          keyboard: [[{ text: "Confirm ✅" }, { text: "Cancel ❌" }]],
-          one_time_keyboard: true, resize_keyboard: true
+          inline_keyboard: [[
+            { text: "Confirm ✅", callback_data: "Confirm ✅" }, 
+            { text: "Cancel ❌", callback_data: "Cancel ❌" }
+          ]]
         }
       });
       break;
 
     case "finish":
       if (text === "Confirm ✅") {
-        // Find user to get ID
         const user = await ctx.runQuery(internal.telegram.getUserByChatId, { chatId });
         if (!user) {
           await sendMessage(chatId, "Account error. Please try linking again.");
           return;
         }
 
-        // Call the mutation to create property
         await ctx.runMutation(internal.telegram.createTelegramProperty, {
           userId: user._id,
           transactionType: data.transactionType.toLowerCase() === "buy" ? "sell" : "rent",
@@ -385,7 +406,7 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any)
   }
 }
 
-// External API Call Helper
+// External API Call Helpers
 async function sendMessage(chatId: string, text: string, extra = {}) {
   if (!BOT_TOKEN) return;
   const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
@@ -397,5 +418,19 @@ async function sendMessage(chatId: string, text: string, extra = {}) {
     });
   } catch (err) {
     console.error("Telegram sendMessage error:", err);
+  }
+}
+
+async function answerCallbackQuery(callbackQueryId: string) {
+  if (!BOT_TOKEN) return;
+  const url = `https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`;
+  try {
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ callback_query_id: callbackQueryId }),
+    });
+  } catch (err) {
+    console.error("Telegram answerCallbackQuery error:", err);
   }
 }
