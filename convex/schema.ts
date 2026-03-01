@@ -75,4 +75,10 @@ export default defineSchema({
     data: v.any(),
     lastUpdated: v.number(),
   }).index("by_chatId", ["chatId"]),
+
+  telegramLinkCodes: defineTable({
+    userId: v.id("users"),
+    code: v.string(),
+    expiresAt: v.number(),
+  }).index("by_code", ["code"]),
 });

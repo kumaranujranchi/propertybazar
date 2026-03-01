@@ -33,7 +33,7 @@ export const handleUpdate = action({
     if (!update.message) return;
 
     const chatId = String(update.message.chat.id);
-    const text = update.message.text;
+    const text = update.message.text?.trim();
     console.log(`Telegram update from ${chatId}: "${text}"`);
 
     // 1. Get user linked to this chatId
@@ -41,30 +41,37 @@ export const handleUpdate = action({
     
     if (!user) {
       console.log(`User not found for chatId ${chatId}`);
+      
+      // Check for deep link token or manual 6-digit code
+      let codeOrToken = "";
       if (text?.startsWith("/start")) {
         const parts = text.split(" ");
-        if (parts.length > 1) {
-          const linkToken = parts[1];
-          console.log(`Attempting to link chatId ${chatId} with token ${linkToken.substring(0, 5)}...`);
-          await ctx.runMutation(internal.telegram.linkUserByToken, { chatId, linkToken });
-          
-          // Verify if it worked
-          const linkedUser = await ctx.runQuery(internal.telegram.getUserByChatId, { chatId });
-          if (linkedUser) {
-            await sendMessage(chatId, "✅ Account linked! You can now post properties by typing /post");
-            return;
-          } else {
-            console.error("Linking failed - session not found or expired");
-            await sendMessage(chatId, "❌ Linking failed. The link might be expired. Please click 'Connect Bot' again from your Dashboard.");
-            return;
-          }
+        if (parts.length > 1) codeOrToken = parts[1];
+      } else if (text && /^\d{6}$/.test(text)) {
+        codeOrToken = text;
+      }
+
+      if (codeOrToken) {
+        console.log(`Attempting to link chatId ${chatId} with code/token ${codeOrToken.substring(0, 6)}...`);
+        // Try linking by code first, then by token
+        const linked = await ctx.runMutation(internal.telegram.linkUserByCodeOrToken, { chatId, codeOrToken });
+        
+        if (linked) {
+          await sendMessage(chatId, "✅ Account linked! You can now post properties by typing /post");
+          return;
+        } else {
+          console.error("Linking failed - invalid or expired code/token");
+          await sendMessage(chatId, "❌ Link failed. Please check your code or click 'Connect Bot' again from the Dashboard.");
+          return;
         }
       }
-      await sendMessage(chatId, "Welcome! Please link your account from the 24Dismil Dashboard to start posting properties.");
+      
+      await sendMessage(chatId, "Welcome! 🏠\nTo list your properties, please link your 24Dismil account.\n\nOption 1: Click 'Connect Bot' in your Dashboard.\nOption 2: Type your 6-digit linking code here.");
       return;
     }
 
     // 2. Core Bot Logic (Command Handling)
+    // ... rest of the logic remains same
     if (text === "/post") {
       await ctx.runMutation(internal.telegram.resetState, { chatId });
       await sendMessage(chatId, "Let's post a property! 🏠\nWhat is the transaction type?", {
@@ -88,7 +95,7 @@ export const handleUpdate = action({
   },
 });
 
-// --- Internal Helpers (Queries/Mutations) ---
+// --- Internal Functions (Database) ---
 
 export const getUserByChatId = internalQuery({
   args: { chatId: v.string() },
@@ -100,16 +107,67 @@ export const getUserByChatId = internalQuery({
   },
 });
 
-export const linkUserByToken = internalMutation({
-  args: { chatId: v.string(), linkToken: v.string() },
+export const generateLinkCode = mutation({
+  args: { token: v.string() },
   handler: async (ctx, args) => {
     const session = await ctx.db
       .query("sessions")
-      .withIndex("by_token", (q) => q.eq("token", args.linkToken))
+      .withIndex("by_token", (q) => q.eq("token", args.token))
       .first();
-    if (session) {
-      await ctx.db.patch(session.userId, { telegramChatId: args.chatId });
+    if (!session) throw new Error("Invalid session");
+
+    // Clear existing codes for this user
+    const existing = await ctx.db
+      .query("telegramLinkCodes")
+      .filter(q => q.eq(q.field("userId"), session.userId))
+      .collect();
+    for (const codeObj of existing) {
+      await ctx.db.delete(codeObj._id);
     }
+
+    // Generate 6-digit code
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    await ctx.db.insert("telegramLinkCodes", {
+      userId: session.userId,
+      code,
+      expiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
+    });
+
+    return code;
+  },
+});
+
+export const linkUserByCodeOrToken = internalMutation({
+  args: { chatId: v.string(), codeOrToken: v.string() },
+  handler: async (ctx, args) => {
+    const { chatId, codeOrToken } = args;
+
+    // 1. Try linking by 6-digit code
+    if (/^\d{6}$/.test(codeOrToken)) {
+      const codeRecord = await ctx.db
+        .query("telegramLinkCodes")
+        .withIndex("by_code", (q) => q.eq("code", codeOrToken))
+        .first();
+
+      if (codeRecord && codeRecord.expiresAt > Date.now()) {
+        await ctx.db.patch(codeRecord.userId, { telegramChatId: chatId });
+        await ctx.db.delete(codeRecord._id);
+        return true;
+      }
+    }
+
+    // 2. Try linking by session token (fallback for deep links)
+    const session = await ctx.db
+      .query("sessions")
+      .withIndex("by_token", (q) => q.eq("token", codeOrToken))
+      .first();
+
+    if (session) {
+      await ctx.db.patch(session.userId, { telegramChatId: chatId });
+      return true;
+    }
+
+    return false;
   },
 });
 

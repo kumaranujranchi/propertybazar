@@ -1239,29 +1239,31 @@
                 </button>
               </div>
 
-              <div class="setting-row" style="margin-top: 16px">
-                <div class="setting-info">
-                  <h4>
-                    <i class="fa-brands fa-telegram" style="color: #0088cc"></i>
-                    Telegram Integration
-                  </h4>
-                  <p>Post properties directly from Telegram using our bot.</p>
+                <div class="card premium-card" style="border: 1px solid #E2E8F0; padding: 24px;">
+                  <h3 style="display:flex; align-items:center; gap:10px; margin-bottom:15px; font-size: 1.25rem;">
+                    <i class="fa-brands fa-telegram" style="color: #229ED9; font-size: 24px;"></i> Connect Telegram Bot
+                  </h3>
+                  <p style="color: #64748B; margin-bottom: 20px; font-size: 0.95rem;">
+                    Link your account to post properties directly from Telegram. 🚀
+                  </p>
+                  <div id="tgStatus">
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                      <button id="btnConnectTelegram" class="btn-primary" style="width: 100%; display: flex; align-items:center; justify-content:center; gap:8px;">
+                        <i class="fa-brands fa-telegram"></i> Connect via Deep Link
+                      </button>
+                      
+                      <div style="border-top: 1px dashed #E2E8F0; padding-top: 15px; text-align: center;">
+                        <span style="font-size: 0.85rem; color: #64748B;">OR send this code to <a href="https://t.me/DismilBot" target="_blank" style="color: #229ED9; text-decoration: none; font-weight: 600;">@DismilBot</a>:</span>
+                        <div id="tgLinkCode" style="font-size: 2rem; font-weight: 800; letter-spacing: 5px; color: #0F172A; margin: 10px 0; background: #F8FAFC; padding: 10px; border-radius: 8px;">
+                          ------
+                        </div>
+                        <button id="btnGetTgCode" style="background: none; border: none; color: #229ED9; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                          Generate New Code
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div id="tgStatus">
-                  <button
-                    class="dash-btn"
-                    id="btnConnectTelegram"
-                    style="
-                      background: #0088cc;
-                      display: flex;
-                      align-items: center;
-                      gap: 8px;
-                    "
-                  >
-                    <i class="fa-brands fa-telegram"></i> Connect Bot
-                  </button>
-                </div>
-              </div>
 
               <div class="dash-form-group full" style="margin-top: 24px">
                 <button
@@ -1901,6 +1903,21 @@
         const botUsername = "DismilBot";
         const tgLink = `https://t.me/${botUsername}?start=${token}`;
         window.open(tgLink, "_blank");
+      });
+
+      document.getElementById("btnGetTgCode")?.addEventListener("click", async () => {
+        try {
+          const btn = document.getElementById("btnGetTgCode");
+          btn.textContent = "Generating...";
+          btn.disabled = true;
+          const code = await convex.mutation("telegram:generateLinkCode", { token });
+          document.getElementById("tgLinkCode").textContent = code;
+        } catch (err) {
+          alert("Error generating code: " + err.message);
+        } finally {
+          document.getElementById("btnGetTgCode").textContent = "Generate New Code";
+          document.getElementById("btnGetTgCode").disabled = false;
+        }
       });
 
       document.getElementById("dashWrap").style.display = "flex";
