@@ -461,17 +461,24 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any,
         const storageId = await downloadAndStoreTelegramPhoto(ctx, bestPhoto.file_id);
         
         if (storageId) {
+          const currentPhotos = data.photos || [];
           await ctx.runMutation(internal.telegram.updateState, { 
-            chatId, step: "photos", data: { photos: [...(data.photos || []), storageId] } 
+            chatId, 
+            step: "photos", 
+            data: { photos: [...currentPhotos, storageId] } 
           });
-          const count = (data.photos?.length || 0) + 1;
+          const count = currentPhotos.length + 1;
           await sendMessage(chatId, `✅ *Photo received!* (Total: ${count})\n\nSend more photos or click *Done* below.`, {
             reply_markup: {
               inline_keyboard: [[{ text: "Done ✅", callback_data: "Done ✅" }]]
             }
           });
         } else {
-          await sendMessage(chatId, "❌ Failed to process that photo. Please try again or send a different one.");
+          await sendMessage(chatId, "❌ Failed to process that photo. This usually happens if the photo is too large or the bot token is invalid. Please try again.", {
+            reply_markup: {
+              inline_keyboard: [[{ text: "Done ✅", callback_data: "Done ✅" }]]
+            }
+          });
         }
       } else {
         await sendMessage(chatId, "Please send a photo or click *Done ✅*.");

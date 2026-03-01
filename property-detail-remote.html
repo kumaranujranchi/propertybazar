@@ -608,18 +608,16 @@
         <!-- SELLER CARD -->
         <div class="detail-card" style="margin-top:16px">
           <h3 style="font-size:15px;font-weight:700;color:var(--dark);margin-bottom:14px">Listed By</h3>
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-            <div
+            <div id="ownerAvatar"
               style="width:48px;height:48px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:700">
               R</div>
             <div>
-              <div style="font-weight:700;font-size:15px;color:var(--dark)">Rajesh Kumar</div>
-              <div style="font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-user-tag"></i> Owner · Member
+              <div id="ownerName" style="font-weight:700;font-size:15px;color:var(--dark)">Rajesh Kumar</div>
+              <div id="ownerJoinDate" style="font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-user-tag"></i> Owner · Member
                 since 2019</div>
               <div style="font-size:12px;color:var(--success)"><i class="fa-solid fa-circle-check"></i> ID Verified
               </div>
             </div>
-          </div>
           <div
             style="background:var(--bg);border-radius:var(--radius-sm);padding:12px;font-size:13px;color:var(--text-muted);line-height:1.6">
             🔒 Phone number visible after contacting
@@ -904,17 +902,15 @@
         const p = await convex.query('properties:getProperty', { id });
         if (!p) return;
 
-        // ---- Resolve photo URLs ----
-        const resolvedPhotos = await Promise.all(
-          (p.photos || []).map(async (sid) => {
-            try {
-              const url = await convex.query('properties:getPhotoUrl', { storageId: sid });
-              return url || sid;
-            } catch { return sid; }
-          })
-        );
-        // fallback
-        const photos = resolvedPhotos.filter(Boolean);
+        // ---- Resolve photo URLs (Robust version) ----
+        const photos = (p.photos || []).map(item => {
+          const url = typeof item === 'object' ? item.url : item;
+          // Only return valid URL strings
+          if (url && (typeof url === 'string' && (url.startsWith('http') || url.startsWith('/')))) {
+            return url;
+          }
+          return null;
+        }).filter(Boolean);
         if (photos.length === 0) photos.push('images/property-1.webp');
 
         // ---- Helpers ----
@@ -1142,6 +1138,25 @@
           if (hlHtml) {
             highlightsList.innerHTML = hlHtml;
             highlightsCard.style.display = 'block';
+          }
+        }
+
+        // ---- Listed By (Owner Info) ----
+        if (p.ownerInfo) {
+          const ownerAvatar = document.getElementById('ownerAvatar');
+          const ownerName = document.getElementById('ownerName');
+          const ownerJoinDate = document.getElementById('ownerJoinDate');
+          
+          if (ownerName) ownerName.textContent = p.ownerInfo.name;
+          if (ownerAvatar) {
+            if (p.ownerInfo.profilePictureUrl) {
+              ownerAvatar.innerHTML = `<img src="${p.ownerInfo.profilePictureUrl}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+            } else {
+              ownerAvatar.textContent = (p.ownerInfo.name || 'P')[0].toUpperCase();
+            }
+          }
+          if (ownerJoinDate) {
+            ownerJoinDate.innerHTML = `<i class="fa-solid fa-user-tag"></i> ${p.contactDesc?.role || 'Owner'} · Member since ${p.ownerInfo.joinedYear || 2024}`;
           }
         }
 
@@ -1380,7 +1395,7 @@ Interested in Site Visit: ${visit}
 
               let spPhoto = 'images/property-1.webp';
               if (sp.photos && sp.photos[0]) {
-                try { spPhoto = await convex.query('properties:getPhotoUrl', { storageId: sp.photos[0] }) || spPhoto; } catch (e) { }
+                spPhoto = (typeof sp.photos[0] === 'object' ? sp.photos[0].url : sp.photos[0]) || spPhoto;
               }
 
               let spTitle = sp.propertyType || 'Property';

@@ -188,7 +188,15 @@ function renderPropertiesTable() {
     if (status === 'active') { statusClass = 's-active'; statusLabel = '🟢 Live'; }
     if (status === 'rejected') { statusClass = 's-rejected'; statusLabel = 'Rejected'; }
 
-    const photoSrc = p.photos && p.photos.length ? p.photos[0] : 'images/placeholder.jpg';
+    const photoSrc = (() => {
+      if (!p.photos || p.photos.length === 0) return 'images/property-1.webp';
+      const first = p.photos[0];
+      const url = typeof first === 'object' ? first.url : first;
+      if (!url || (typeof url === 'string' && !url.startsWith('http') && !url.startsWith('/'))) {
+        return 'images/property-1.webp';
+      }
+      return url;
+    })();
 
     return `
     <tr>

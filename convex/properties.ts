@@ -43,13 +43,13 @@ export const getProperties = query({
             try {
               const storageId = typeof photo === 'string' ? photo : photo.storageId;
               const url = await ctx.storage.getUrl(storageId as any);
-              return typeof photo === 'string' ? (url ?? photo) : { ...photo, url: url ?? storageId };
+              return typeof photo === 'string' ? url : { ...photo, url: url ?? null };
             } catch {
-              return photo;
+              return null;
             }
           })
         );
-        return { ...p, photos: resolvedPhotos };
+        return { ...p, photos: resolvedPhotos.filter(Boolean) };
       })
     );
   },
@@ -65,13 +65,20 @@ export const getProperty = query({
         try {
           const storageId = typeof photo === 'string' ? photo : photo.storageId;
           const url = await ctx.storage.getUrl(storageId as any);
-          return typeof photo === 'string' ? (url ?? photo) : { ...photo, url: url ?? storageId };
+          return typeof photo === 'string' ? url : { ...photo, url: url ?? null };
         } catch {
-          return photo;
+          return null;
         }
       })
     );
-    return { ...p, photos: resolvedPhotos };
+    const owner = p.userId ? await ctx.db.get(p.userId) : null;
+    const ownerInfo = owner ? {
+      name: owner.name,
+      joinedYear: new Date(owner._creationTime).getFullYear(),
+      profilePictureUrl: owner.profilePictureUrl
+    } : null;
+
+    return { ...p, photos: resolvedPhotos.filter(Boolean), ownerInfo };
   },
 });
 

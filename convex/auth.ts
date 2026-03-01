@@ -244,14 +244,14 @@ export const getMyProperties = query({
           (p.photos || []).map(async (photo: any) => {
             try {
               const sid = typeof photo === 'string' ? photo : photo.storageId;
-              const url = (await ctx.storage.getUrl(sid as any)) ?? sid;
-              return typeof photo === 'string' ? url : { ...photo, url };
+              const url = await ctx.storage.getUrl(sid as any);
+              return typeof photo === 'string' ? url : { ...photo, url: url ?? null };
             } catch {
-              return photo;
+              return null;
             }
           }),
         );
-        return { ...p, photos: resolvedPhotos };
+        return { ...p, photos: resolvedPhotos.filter(Boolean) };
       }),
     );
   },

@@ -1374,12 +1374,26 @@
           .map(
             (p) => `
       <div class="dash-prop-card" style="cursor: pointer; ${p.isFeatured ? "border: 2px solid var(--primary);" : ""}" onclick="window.location.href='property-detail.html?id=${p._id}'">
-        <img class="dash-prop-img" src="${p.photos?.[0] || "images/property-1.webp"}" alt="${p.details?.bhk} BHK ${p.propertyType}" onerror="this.src='images/property-1.webp'">
+        <img class="dash-prop-img" src="${(() => {
+          if (!p.photos || p.photos.length === 0) return "images/property-1.webp";
+          const first = p.photos[0];
+          const url = typeof first === 'object' ? first.url : first;
+          // Valid URL check: must start with http or /
+          if (!url || (typeof url === 'string' && !url.startsWith('http') && !url.startsWith('/'))) {
+            return "images/property-1.webp";
+          }
+          return url;
+        })()}" alt="Property" onerror="this.src='images/property-1.webp'">
         <div class="dash-prop-info">
           <div class="dash-prop-title">
-            ${p.details?.bhk && p.details.bhk !== "N/A" && p.details.bhk !== "0" ? p.details.bhk + " BHK " : ""}${p.propertyType || ""} in ${p.location?.locality || ""}
+            ${(() => {
+              const bhk = String(p.details?.bhk || "");
+              if (!bhk || bhk === "0" || bhk === "N/A") return p.propertyType || "";
+              const bhkClean = bhk.replace(/bhk/gi, "").trim();
+              return `${bhkClean} BHK ${p.propertyType || ""}`;
+            })()} in ${p.location?.locality || p.location?.city || "Unknown Location"}
           </div>
-          <div class="dash-prop-loc"><i class="fa-solid fa-location-dot"></i> ${p.location?.city || ""}, ${p.location?.state || ""}</div>
+          <div class="dash-prop-loc"><i class="fa-solid fa-location-dot"></i> ${p.location?.city || ""}${p.location?.city && p.location?.state ? ", " : ""}${p.location?.state || ""}</div>
           
           <div style="margin-top:8px">
             <span style="font-size:12px; color:var(--text-muted)">Posted on: ${new Date(p._creationTime).toLocaleDateString("en-IN")}</span>
