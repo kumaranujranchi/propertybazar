@@ -1751,6 +1751,30 @@ textarea {
   align-items: center;
   gap: 8px;
 }
+.footer-telegram-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #0088cc;
+  color: #fff !important;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  margin: 16px 0;
+  transition: var(--transition);
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(0, 136, 204, 0.2);
+}
+.footer-telegram-btn:hover {
+  background: #0099ee;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
+}
+.footer-telegram-btn i {
+  font-size: 18px;
+}
 .footer-download h4::before {
   content: '\f3cd';
   font-family: 'Font Awesome 6 Free';
