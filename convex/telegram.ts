@@ -34,15 +34,31 @@ export const handleUpdate = action({
 
     const chatId = String(update.message.chat.id);
     const text = update.message.text;
+    console.log(`Telegram update from ${chatId}: "${text}"`);
 
     // 1. Get user linked to this chatId
     const user = await ctx.runQuery(internal.telegram.getUserByChatId, { chatId });
+    
     if (!user) {
-      if (text?.startsWith("/start ")) {
-        const linkToken = text.split(" ")[1];
-        await ctx.runMutation(internal.telegram.linkUserByToken, { chatId, linkToken });
-        await sendMessage(chatId, "✅ Account linked! You can now post properties by typing /post");
-        return;
+      console.log(`User not found for chatId ${chatId}`);
+      if (text?.startsWith("/start")) {
+        const parts = text.split(" ");
+        if (parts.length > 1) {
+          const linkToken = parts[1];
+          console.log(`Attempting to link chatId ${chatId} with token ${linkToken.substring(0, 5)}...`);
+          await ctx.runMutation(internal.telegram.linkUserByToken, { chatId, linkToken });
+          
+          // Verify if it worked
+          const linkedUser = await ctx.runQuery(internal.telegram.getUserByChatId, { chatId });
+          if (linkedUser) {
+            await sendMessage(chatId, "✅ Account linked! You can now post properties by typing /post");
+            return;
+          } else {
+            console.error("Linking failed - session not found or expired");
+            await sendMessage(chatId, "❌ Linking failed. The link might be expired. Please click 'Connect Bot' again from your Dashboard.");
+            return;
+          }
+        }
       }
       await sendMessage(chatId, "Welcome! Please link your account from the 24Dismil Dashboard to start posting properties.");
       return;
