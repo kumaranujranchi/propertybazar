@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 2. Initialize Navigation
   initAdminNav();
+  initMobileSidebar();
 
   // 3. Fetch Data
   await loadDashboardData();
@@ -62,8 +63,32 @@ function initAdminNav() {
       const target = item.dataset.target;
       sections.forEach(sec => sec.classList.remove('active'));
       document.getElementById(`section-${target}`).classList.add('active');
+
+      // Close sidebar on mobile after navigation
+      if (window.innerWidth <= 1024) {
+        document.querySelector('.admin-sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('active');
+      }
     });
   });
+}
+
+function initMobileSidebar() {
+  const hamburger = document.getElementById('adminHamburger');
+  const overlay = document.getElementById('sidebarOverlay');
+  const sidebar = document.querySelector('.admin-sidebar');
+
+  if (hamburger && overlay && sidebar) {
+    hamburger.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+    });
+  }
 }
 
 async function loadDashboardData() {

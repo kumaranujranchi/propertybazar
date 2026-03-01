@@ -262,10 +262,66 @@
     .toast.error { border-left-color: var(--primary); }
     .toast-msg { flex: 1; font-size: 14px; }
     .toast-close { cursor: pointer; color: var(--text-muted); font-size: 15px; }
+    /* ---------- MOBILE RESPONSIVE ---------- */
+    @media (max-width: 1024px) {
+      .admin-sidebar {
+        position: fixed;
+        left: -240px;
+        z-index: 1000;
+        transition: left 0.3s ease;
+      }
+      .admin-sidebar.open { left: 0; }
+      .admin-main { margin-left: 0; width: 100%; }
+      .admin-header { padding: 15px 20px; }
+      .admin-sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+      }
+      .admin-sidebar-overlay.active { display: block; }
+      
+      .hamburger-admin {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        cursor: pointer;
+        z-index: 1001;
+        margin-right: 15px;
+      }
+      .hamburger-admin span {
+        width: 22px;
+        height: 2px;
+        background: var(--dark);
+        border-radius: 2px;
+        transition: var(--transition);
+      }
+      
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .stat-card { padding: 15px; }
+      .stat-value { font-size: 20px; }
+      
+      .panel-header { padding: 15px; flex-wrap: wrap; gap: 10px; }
+      .filter-bar { padding: 15px; flex-direction: column; gap: 10px; }
+      .filter-bar input { min-width: 100%; }
+      
+      .admin-user-info { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .admin-header-title { font-size: 18px; }
+      .admin-table th:nth-child(3), 
+      .admin-table td:nth-child(3),
+      .admin-table th:nth-child(4), 
+      .admin-table td:nth-child(4) { display: none; } /* Hide less critical columns on very small screens */
+    }
   </style>
 </head>
 <body>
 
+  <div class="admin-sidebar-overlay" id="sidebarOverlay"></div>
   <div class="admin-layout" id="adminApp" style="display:none;">
     <!-- SIDEBAR -->
     <aside class="admin-sidebar">
@@ -302,6 +358,9 @@
     <!-- MAIN -->
     <main class="admin-main">
       <header class="admin-header">
+        <div class="hamburger-admin" id="adminHamburger">
+          <span></span><span></span><span></span>
+        </div>
         <h2 class="admin-header-title" id="pageTitle">Dashboard Overview</h2>
         <div class="admin-header-user">
           <div class="admin-user-info">
