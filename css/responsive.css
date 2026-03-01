@@ -19,7 +19,9 @@
   .nav-links { display: none; }
   .hamburger { display: flex; }
   .hero { min-height: auto; padding: 40px 0; }
-  .search-body { flex-wrap: wrap; }
+  .search-tabs { background: transparent; border: none; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 8px; }
+  .search-tab { flex: none; width: auto !important; padding: 8px 16px; font-size: 13px; border-bottom: none; border-radius: var(--radius-sm); }
+  .search-tab.active { background: var(--primary); color: #fff; }
   .search-field:not(:last-child) { border-right: none; padding-right: 0; margin-right: 0; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 4px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .properties-layout { grid-template-columns: 1fr; }
