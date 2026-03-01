@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
+import { convex } from './convex.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
     const cityModal = document.getElementById('cityModal');
     const citySelectorBtn = document.getElementById('citySelectorBtn');
     const closeCityModal = document.getElementById('closeCityModal');
@@ -7,8 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentCityText = document.getElementById('currentCityText');
     const popularCityItems = document.querySelectorAll('.city-popular-item');
 
-    // Popular Cities Data (Extended)
-    const allCities = [
+    let allCities = [
         'Ahmedabad', 'Bangalore', 'Gurgaon', 'Hyderabad', 'Mumbai', 'New Delhi', 'Noida', 'Pune',
         'Bhopal', 'Bhubaneswar', 'Chandigarh', 'Chennai', 'Coimbatore', 'Faridabad',
         'Gandhinagar', 'Ghaziabad', 'Goa', 'Greater Noida', 'Indore', 'Jaipur',
@@ -16,9 +17,22 @@ document.addEventListener('DOMContentLoaded', () => {
         'Palghar', 'Patna', 'Ranchi', 'Surat', 'Thane', 'Vadodara', 'Visakhapatnam'
     ].sort();
 
-    // Init Modal
-    function initCityModal() {
+    // Fetch dynamic cities from Convex
+    async function fetchDynamicCities() {
+        try {
+            const dynamicCities = await convex.query("properties:getUniqueCities");
+            if (dynamicCities && dynamicCities.length > 0) {
+                allCities = dynamicCities;
+            }
+        } catch (err) {
+            console.error("Error fetching dynamic cities:", err);
+        }
         populateAllCities(allCities);
+    }
+
+    // Init Modal
+    async function initCityModal() {
+        await fetchDynamicCities();
         
         // Load saved city
         const savedCity = localStorage.getItem('selectedCity') || 'Select City';

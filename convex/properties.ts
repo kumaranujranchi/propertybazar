@@ -5,12 +5,12 @@ export const getProperties = query({
   args: {
     transactionType: v.optional(v.string()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     let propertiesQuery;
     if (args.transactionType) {
       propertiesQuery = ctx.db
         .query("properties")
-        .withIndex("by_transactionType", (q) => q.eq("transactionType", args.transactionType as string));
+        .withIndex("by_transactionType", (q: any) => q.eq("transactionType", args.transactionType as string));
     } else {
       propertiesQuery = ctx.db.query("properties");
     }
@@ -18,7 +18,7 @@ export const getProperties = query({
 
     // Only show properties that are NOT rejected (disabled) and NOT EXPIRED (30 days)
     // Properties with no approvalStatus are visible by default (older listings)
-    const visibleResults = results.filter(p => {
+    const visibleResults = results.filter((p: any) => {
       if (p.approvalStatus === "rejected") return false;
       
       const activationTime = p.lastActivatedAt || p._creationTime;
@@ -29,7 +29,7 @@ export const getProperties = query({
     });
 
     // Sort so featured comes first, while keeping descending order for the rest
-    const properties = visibleResults.sort((a, b) => {
+    const properties = visibleResults.sort((a: any, b: any) => {
       if (a.isFeatured && !b.isFeatured) return -1;
       if (!a.isFeatured && b.isFeatured) return 1;
       return 0;
@@ -37,7 +37,7 @@ export const getProperties = query({
 
     // Resolve storageIds to actual URLs for each property
     return await Promise.all(
-      properties.map(async (p) => {
+      properties.map(async (p: any) => {
         const resolvedPhotos = await Promise.all(
           (p.photos || []).map(async (photo: any) => {
             try {
@@ -57,7 +57,7 @@ export const getProperties = query({
 
 export const getProperty = query({
   args: { id: v.id("properties") },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     const p = await ctx.db.get(args.id);
     if (!p) return null;
     const resolvedPhotos = await Promise.all(
@@ -87,7 +87,7 @@ export const getProperty = query({
 
 export const getPhotoUrl = query({
   args: { storageId: v.any() },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     try {
       const sid = typeof args.storageId === 'string' ? args.storageId : args.storageId?.storageId;
       if (!sid) return null;
@@ -111,7 +111,7 @@ export const createProperty = mutation({
     pricing: v.any(),
     contactDesc: v.any()
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     let resolvedUserId = args.userId;
     let isFeatured = false;
 
@@ -119,7 +119,7 @@ export const createProperty = mutation({
     if (args.token) {
       const session = await ctx.db
         .query("sessions")
-        .withIndex("by_token", (q) => q.eq("token", args.token as string))
+        .withIndex("by_token", (q: any) => q.eq("token", args.token as string))
         .first();
       if (session && session.expiresAt > Date.now()) {
         resolvedUserId = session.userId;
@@ -147,7 +147,7 @@ export const createProperty = mutation({
 
         const existing = await ctx.db
           .query("properties")
-          .filter((q) => q.eq(q.field("userId"), resolvedUserId))
+          .filter((q: any) => q.eq(q.field("userId"), resolvedUserId))
           .collect();
 
         if (existing.length >= limit) {
@@ -178,10 +178,10 @@ export const createProperty = mutation({
 
 export const deleteProperty = mutation({
   args: { token: v.string(), id: v.id("properties") },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     const session = await ctx.db
       .query("sessions")
-      .withIndex("by_token", (q) => q.eq("token", args.token))
+      .withIndex("by_token", (q: any) => q.eq("token", args.token))
       .first();
     if (!session || session.expiresAt < Date.now()) throw new Error("Unauthorized");
 
@@ -214,10 +214,10 @@ export const updateProperty = mutation({
     pricing: v.any(),
     contactDesc: v.any(),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     const session = await ctx.db
       .query("sessions")
-      .withIndex("by_token", (q) => q.eq("token", args.token))
+      .withIndex("by_token", (q: any) => q.eq("token", args.token))
       .first();
     if (!session || session.expiresAt < Date.now()) throw new Error("Unauthorized");
 
@@ -243,14 +243,14 @@ export const updateProperty = mutation({
 
 export const deleteOldProperties = internalMutation({
   args: {},
-  handler: async (ctx) => {
+  handler: async (ctx: any) => {
     // 60 days ago in milliseconds
     const sixtyDaysAgo = Date.now() - 60 * 24 * 60 * 60 * 1000;
 
     // Find properties created before 60 days ago
     const oldProperties = await ctx.db
       .query("properties")
-      .filter((q) => q.lt(q.field("_creationTime"), sixtyDaysAgo))
+      .filter((q: any) => q.lt(q.field("_creationTime"), sixtyDaysAgo))
       .collect();
 
     for (const prop of oldProperties) {
@@ -272,10 +272,10 @@ export const deleteOldProperties = internalMutation({
 
 export const reactivateProperty = mutation({
   args: { token: v.string(), id: v.id("properties") },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     const session = await ctx.db
       .query("sessions")
-      .withIndex("by_token", (q) => q.eq("token", args.token))
+      .withIndex("by_token", (q: any) => q.eq("token", args.token))
       .first();
     if (!session || session.expiresAt < Date.now()) throw new Error("Unauthorized");
 
@@ -301,7 +301,7 @@ export const contactOwner = mutation({
     phone: v.string(),
     message: v.optional(v.string())
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     // 1. Find the property to get the ownerId
     const property = await ctx.db.get(args.propertyId);
     if (!property) throw new Error("Property not found");
@@ -322,13 +322,13 @@ export const contactOwner = mutation({
 
 export const getMyLeads = query({
   args: { token: v.string() },
-  handler: async (ctx, args) => {
+  handler: async (ctx: any, args: any) => {
     if (!args.token) return [];
 
     // Auth check
     const session = await ctx.db
       .query("sessions")
-      .withIndex("by_token", (q) => q.eq("token", args.token))
+      .withIndex("by_token", (q: any) => q.eq("token", args.token))
       .first();
 
     if (!session || session.expiresAt < Date.now()) return [];
@@ -336,13 +336,13 @@ export const getMyLeads = query({
     // Fetch leads for this user's properties
     const leads = await ctx.db
       .query("leads")
-      .withIndex("by_ownerId", (q) => q.eq("ownerId", session.userId))
+      .withIndex("by_ownerId", (q: any) => q.eq("ownerId", session.userId))
       .order("desc")
       .collect();
 
     // Attach property details
     const leadsWithPropertyInfo = await Promise.all(
-      leads.map(async (lead) => {
+      leads.map(async (lead: any) => {
         const prop = await ctx.db.get(lead.propertyId);
         return {
           ...lead,
@@ -354,4 +354,31 @@ export const getMyLeads = query({
 
     return leadsWithPropertyInfo;
   }
+});
+
+export const getUniqueCities = query({
+  args: {},
+  handler: async (ctx: any) => {
+    const properties = await ctx.db.query("properties").collect();
+    const cities = new Set<string>();
+    
+    properties.forEach((p: any) => {
+      if (p.location && p.location.city) {
+        cities.add(p.location.city.trim());
+      }
+    });
+
+    // Also include defaults
+    const defaults = [
+      'Ahmedabad', 'Bangalore', 'Gurgaon', 'Hyderabad', 'Mumbai', 'New Delhi', 'Noida', 'Pune',
+      'Bhopal', 'Bhubaneswar', 'Chandigarh', 'Chennai', 'Coimbatore', 'Faridabad',
+      'Gandhinagar', 'Ghaziabad', 'Goa', 'Greater Noida', 'Indore', 'Jaipur',
+      'Kochi', 'Kolkata', 'Lucknow', 'Nagpur', 'Nashik', 'Navi Mumbai',
+      'Palghar', 'Patna', 'Ranchi', 'Surat', 'Thane', 'Vadodara', 'Visakhapatnam'
+    ];
+
+    defaults.forEach(c => cities.add(c));
+
+    return Array.from(cities).sort();
+  },
 });

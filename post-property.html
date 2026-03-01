@@ -214,6 +214,13 @@
             <select class="form-input form-select" id="citySelect" disabled>
               <option value="">First Select State</option>
             </select>
+            <!-- Manual City Entry (Hidden by default) -->
+            <div id="manualCityGroup" style="display: none; margin-top: 10px;">
+              <input type="text" id="manualCityInput" class="form-input" placeholder="Enter City Name Manually">
+              <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                <i class="fa-solid fa-circle-info"></i> Your city will be added to our list.
+              </p>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-label">Locality / Area *</label>
@@ -1425,7 +1432,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2025 24Dismil.com. All rights reserved. | India's #1 Real Estate Portal</span>
+        <span>© 2026 24Dismil.com. All rights reserved. | India's #1 Real Estate Portal</span>
         <div class="footer-bottom-links">
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms of Use</a>
@@ -1615,18 +1622,33 @@
         stateSelect.add(new Option(state, state));
       });
 
+      const manualCityGroup = document.getElementById('manualCityGroup');
+      const manualCityInput = document.getElementById('manualCityInput');
+
       stateSelect.addEventListener('change', () => {
         const state = stateSelect.value;
         citySelect.innerHTML = '<option value="">Select City</option>';
+        manualCityGroup.style.display = 'none';
 
         if (state && LOCATIONS[state]) {
           citySelect.disabled = false;
           LOCATIONS[state].sort().forEach(city => {
             citySelect.add(new Option(city, city));
           });
+          // Add "Other" option
+          citySelect.add(new Option('Other (Type manually)', 'Other'));
         } else {
           citySelect.innerHTML = '<option value="">First Select State</option>';
           citySelect.disabled = true;
+        }
+      });
+
+      citySelect.addEventListener('change', () => {
+        if (citySelect.value === 'Other') {
+          manualCityGroup.style.display = 'block';
+          manualCityInput.focus();
+        } else {
+          manualCityGroup.style.display = 'none';
         }
       });
     }
@@ -1844,7 +1866,7 @@
   </div>
 
   <script src="js/main.js"></script>
-  <script src="js/city-selector.js"></script>
+  <script type="module" src="js/city-selector.js"></script>
 
 </body>
 

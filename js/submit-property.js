@@ -985,7 +985,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const location = {
       state: document.getElementById('stateSelect')?.value,
-      city: document.getElementById('citySelect')?.value,
+      city: document.getElementById('citySelect')?.value === 'Other' 
+            ? document.getElementById('manualCityInput')?.value 
+            : document.getElementById('citySelect')?.value,
       locality: document.getElementById('localityInput')?.value,
       society: document.getElementById('societyInput')?.value || undefined,
       fullAddress: document.getElementById('addressInput')?.value || undefined,
