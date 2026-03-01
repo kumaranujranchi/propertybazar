@@ -807,7 +807,17 @@
         if (!p) return;
 
         // ---- Resolve photo URLs (Robust version) ----
-        const photos = (p.photos || []).map(item => {
+        let photosData = p.photos || [];
+        
+        // Find if any photo is marked as cover
+        const coverIdx = photosData.findIndex(item => item.isCover === true);
+        if (coverIdx > 0) {
+          // Move cover photo to the front
+          const coverPhoto = photosData.splice(coverIdx, 1)[0];
+          photosData.unshift(coverPhoto);
+        }
+
+        const photos = photosData.map(item => {
           const url = typeof item === 'object' ? item.url : item;
           // Only return valid URL strings
           if (url && (typeof url === 'string' && (url.startsWith('http') || url.startsWith('/')))) {

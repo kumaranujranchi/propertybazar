@@ -196,14 +196,46 @@ function addPreview(file, index, type = 'photo') {
     // Cover Photo Checkbox (Photos only)
     if (!isVideo) {
       const coverLabel = document.createElement("label");
-      coverLabel.style.cssText = "font-size:10px; display:flex; align-items:center; gap:4px; cursor:pointer;";
+      coverLabel.className = "cover-selector-label";
+      coverLabel.style.cssText = "font-size:10px; display:flex; align-items:center; gap:6px; cursor:pointer; padding:6px 8px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0; transition:all 0.2s;";
+      
       const radio = document.createElement("input");
       radio.type = "radio";
       radio.name = "coverPhoto";
+      radio.className = "cover-radio-input";
+      radio.style.margin = "0";
       radio.value = index;
-      if (index === 0) radio.checked = true;
+
+      // Handle custom "isCover" property if provided in a future refactor or current data
+      if (file.isCover || (index === 0 && !grid.querySelector('input[name="coverPhoto"]:checked'))) {
+        radio.checked = true;
+        coverLabel.style.borderColor = "var(--primary)";
+        coverLabel.style.background = "rgba(232, 65, 24, 0.05)";
+      }
+
+      radio.addEventListener('change', () => {
+        // Update styling for all labels in this grid
+        grid.querySelectorAll('.cover-selector-label').forEach(lbl => {
+          lbl.style.borderColor = "#e2e8f0";
+          lbl.style.background = "#f8fafc";
+          lbl.querySelector('span').textContent = "Set as Thumbnail";
+          lbl.querySelector('span').style.color = "var(--text-muted)";
+        });
+        if (radio.checked) {
+          coverLabel.style.borderColor = "var(--primary)";
+          coverLabel.style.background = "rgba(232, 65, 24, 0.05)";
+          coverLabel.querySelector('span').textContent = "Main Cover Photo";
+          coverLabel.querySelector('span').style.color = "var(--primary)";
+        }
+      });
+
+      const labelText = document.createElement("span");
+      labelText.textContent = radio.checked ? "Main Cover Photo" : "Set as Thumbnail";
+      labelText.style.fontWeight = "600";
+      if (radio.checked) labelText.style.color = "var(--primary)";
+
       coverLabel.appendChild(radio);
-      coverLabel.appendChild(document.createTextNode("Set as Cover"));
+      coverLabel.appendChild(labelText);
       wrap.appendChild(coverLabel);
     }
 
@@ -225,26 +257,81 @@ function addPreview(file, index, type = 'photo') {
 }
 
 // Function to add existing storage IDs as "files" for preview
-async function addExistingPhoto(storageId) {
+// Function to add existing storage IDs as "files" for preview
+async function addExistingPhoto(photoObj) {
+  const storageId = typeof photoObj === 'object' ? photoObj.storageId : photoObj;
+  const category = photoObj.category || "Project Image";
+  const isCover = photoObj.isCover || false;
+
   try {
     const url = await convex.query("properties:getPhotoUrl", { storageId });
     if (!url) return;
     
-    // We store the storageId differently so we don't re-upload it
     const wrap = document.createElement("div");
-    wrap.style.cssText = "position:relative;width:90px;height:90px;border-radius:8px;overflow:hidden;border:1px solid var(--border)";
+    wrap.className = "preview-card";
+    wrap.style.cssText = "position:relative; background:#fff; border-radius:12px; overflow:hidden; border:1px solid var(--border); padding:8px; display:flex; flex-direction:column; gap:8px;";
     wrap.dataset.storageId = storageId;
     
     const img = document.createElement("img");
     img.src = url;
-    img.style.cssText = "width:100%;height:100%;object-fit:cover";
+    img.style.cssText = "width:100%; height:100px; object-fit:cover; border-radius:6px;";
+    wrap.appendChild(img);
+
+    // Category Selector
+    const select = document.createElement("select");
+    select.className = "form-input";
+    select.style.cssText = "font-size:11px; padding:4px 8px; height:auto; border-radius:6px;";
+    photoCategories.forEach(cat => {
+      const opt = document.createElement("option");
+      opt.value = cat;
+      opt.textContent = cat;
+      if (cat === category) opt.selected = true;
+      select.appendChild(opt);
+    });
+    wrap.appendChild(select);
+
+    // Cover Photo Radio
+    const coverLabel = document.createElement("label");
+    coverLabel.className = "cover-selector-label";
+    coverLabel.style.cssText = `font-size:10px; display:flex; align-items:center; gap:6px; cursor:pointer; padding:6px 8px; border-radius:6px; border:1px solid ${isCover ? 'var(--primary)' : '#e2e8f0'}; background: ${isCover ? 'rgba(232, 65, 24, 0.05)' : '#f8fafc'}; transition:all 0.2s;`;
+    
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "coverPhoto";
+    radio.className = "cover-radio-input";
+    radio.style.margin = "0";
+    radio.value = "existing-" + storageId;
+    if (isCover) radio.checked = true;
+
+    radio.addEventListener('change', () => {
+      photoPreviewGrid.querySelectorAll('.cover-selector-label').forEach(lbl => {
+        lbl.style.borderColor = "#e2e8f0";
+        lbl.style.background = "#f8fafc";
+        lbl.querySelector('span').textContent = "Set as Thumbnail";
+        lbl.querySelector('span').style.color = "var(--text-muted)";
+      });
+      if (radio.checked) {
+        coverLabel.style.borderColor = "var(--primary)";
+        coverLabel.style.background = "rgba(232, 65, 24, 0.05)";
+        coverLabel.querySelector('span').textContent = "Main Cover Photo";
+        coverLabel.querySelector('span').style.color = "var(--primary)";
+      }
+    });
+
+    const labelText = document.createElement("span");
+    labelText.textContent = isCover ? "Main Cover Photo" : "Set as Thumbnail";
+    labelText.style.fontWeight = "600";
+    if (isCover) labelText.style.color = "var(--primary)";
+
+    coverLabel.appendChild(radio);
+    coverLabel.appendChild(labelText);
+    wrap.appendChild(coverLabel);
     
     const removeBtn = document.createElement("div");
     removeBtn.textContent = "✕";
-    removeBtn.style.cssText = "position:absolute;top:2px;right:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;cursor:pointer;padding:0 4px;border-radius:4px;line-height:18px";
+    removeBtn.style.cssText = "position:absolute; top:4px; right:4px; background:rgba(232,65,24,0.9); color:#fff; font-size:10px; cursor:pointer; width:18px; height:18px; display:flex; align-items:center; justify-content:center; border-radius:50%;";
     removeBtn.addEventListener("click", () => wrap.remove());
     
-    wrap.appendChild(img);
     wrap.appendChild(removeBtn);
     photoPreviewGrid.appendChild(wrap);
   } catch (e) {
@@ -808,8 +895,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         // Pre-fill Step 4: Photos (Existing)
-        for (const sid of prop.photos || []) {
-          addExistingPhoto(sid);
+        for (const photoObj of p.photos || []) {
+          addExistingPhoto(photoObj);
         }
 
         // Pre-fill Step 5: Pricing & Contact
