@@ -1071,19 +1071,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     return { transactionType, propertyType, location, details, amenities, pricing, contactDesc, externalVideos };
   }
 
-  async function saveDraftToCloud() {
+  async function saveDraftToCloud(isManual = false) {
     try {
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('id')) return; // Don't save drafts while editing existing property
+      if (urlParams.get('id')) return; 
       
       const data = getFormState();
-      // Only save if at least some basic info is filled
-      if (!data.transactionType && !data.location.city && !data.details.description) return;
+      // Allow saving if at least Transaction Type is selected
+      if (!data.transactionType) return;
 
       await convex.mutation("drafts:saveDraft", { token: getToken(), data });
-      console.log("Auto-save: Draft saved.");
-    } catch (err) { console.error("Auto-save failed:", err); }
+      console.log("Draft saved successfully.");
+      if (isManual) window.showToast("Progress saved to your Dashboard drafts!", "success");
+    } catch (err) { 
+      console.error("Save failed:", err); 
+      if (isManual) window.showToast("Failed to save draft.", "error");
+    }
   }
+
+  // Explicit Save Button Handler
+  async function handleManualSave(btn) {
+    const prevText = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+    btn.disabled = true;
+    await saveDraftToCloud(true);
+    btn.innerHTML = prevText;
+    btn.disabled = false;
+  }
+
+  // Attempt to save when leaving the page
+  window.addEventListener('beforeunload', () => {
+    saveDraftToCloud(); // Fire and forget on leave
+  });
 
   let autoSaveTimer;
   function triggerAutoSave() {
@@ -1297,6 +1316,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.querySelectorAll('.btn-next').forEach(btn => {
     btn.addEventListener('click', saveDraftToCloud);
+  });
+
+  // Attach Save Draft button listeners
+  document.querySelectorAll('.btn-save-draft').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleManualSave(btn);
+    });
   });
 
   // Check for draft on load

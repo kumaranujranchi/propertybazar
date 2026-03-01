@@ -613,7 +613,9 @@
   // Load Drafts
   const draftsList = document.getElementById('myDraftsList');
   try {
+    console.log("Fetching draft for user...");
     const draft = await convex.query('drafts:getDraft', { token });
+    console.log("Draft query result:", draft);
     if (!draft) {
       draftsList.innerHTML = `<div class="dash-empty">
         <div style="font-size:32px;margin-bottom:12px;opacity:0.6"><i class="fa-solid fa-file-circle-xmark"></i></div>
@@ -748,12 +750,21 @@
 
   navItems.forEach(item => {
     item.addEventListener('click', () => {
+      console.log("Nav item clicked:", item.getAttribute('data-section'));
       navItems.forEach(n => n.classList.remove('active'));
       sections.forEach(s => s.classList.remove('active'));
       
       item.classList.add('active');
-      const targetId = 'sec-' + item.getAttribute('data-section');
-      document.getElementById(targetId).classList.add('active');
+      const sectionName = item.getAttribute('data-section');
+      const targetId = 'sec-' + sectionName;
+      const targetEl = document.getElementById(targetId);
+      
+      if (targetEl) {
+        targetEl.classList.add('active');
+        console.log("Switched to section:", targetId);
+      } else {
+        console.error("Target section not found:", targetId);
+      }
       
       if (window.innerWidth <= 900) {
         window.scrollTo({ top: document.querySelector('.dash-content-wrap').offsetTop - 20, behavior: 'smooth' });
