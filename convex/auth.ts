@@ -54,7 +54,12 @@ export const register = mutation({
       expiresAt: Date.now() + SESSION_DURATION_MS,
     });
 
-    return { token, name: args.name, email: args.email.toLowerCase() };
+    return { 
+      token, 
+      name: args.name, 
+      email: args.email.toLowerCase(),
+      isAdmin: false // New users are never admin by default
+    };
   },
 });
 
@@ -81,7 +86,12 @@ export const login = mutation({
       expiresAt: Date.now() + SESSION_DURATION_MS,
     });
 
-    return { token, name: user.name, email: user.email };
+    return { 
+      token, 
+      name: user.name, 
+      email: user.email,
+      isAdmin: user.isAdmin || false
+    };
   },
 });
 
@@ -119,7 +129,12 @@ export const googleLogin = mutation({
       expiresAt: Date.now() + SESSION_DURATION_MS,
     });
 
-    return { token, name: user.name, email: user.email };
+    return { 
+      token, 
+      name: user.name, 
+      email: user.email,
+      isAdmin: user.isAdmin || false
+    };
   },
 });
 
@@ -199,6 +214,7 @@ export const getMe = query({
       reraCertificateUrl: user.reraCertificateUrl,
       reraStatus: user.reraStatus,
       settings: user.settings,
+      isAdmin: user.isAdmin || false,
     };
   },
 });

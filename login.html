@@ -483,8 +483,9 @@
       btn.disabled = true;
       document.getElementById("authErr").style.display = "none";
       try {
-        await login(email, password);
-        window.location.href = getRedirect();
+        const result = await login(email, password);
+        const redirectUrl = result.isAdmin ? "admin.html" : getRedirect();
+        window.location.href = redirectUrl;
       } catch (err) {
         showError(err.message || "Login failed. Try again.");
       } finally {
@@ -508,8 +509,9 @@
       btn.disabled = true;
       document.getElementById("authErr").style.display = "none";
       try {
-        await register(name, email, password);
-        window.location.href = getRedirect();
+        const result = await register(name, email, password);
+        const redirectUrl = result.isAdmin ? "admin.html" : getRedirect();
+        window.location.href = redirectUrl;
       } catch (err) {
         showError(err.message || "Registration failed. Try again.");
       } finally {

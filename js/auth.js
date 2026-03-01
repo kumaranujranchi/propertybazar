@@ -25,19 +25,19 @@ export function getCachedUser() {
 // ============== API calls ==============
 export async function register(name, email, password) {
   const result = await convex.mutation('auth:register', { name, email, password });
-  saveSession(result.token, { name: result.name, email: result.email });
+  saveSession(result.token, { name: result.name, email: result.email, isAdmin: result.isAdmin });
   return result;
 }
 
 export async function login(email, password) {
   const result = await convex.mutation('auth:login', { email, password });
-  saveSession(result.token, { name: result.name, email: result.email });
+  saveSession(result.token, { name: result.name, email: result.email, isAdmin: result.isAdmin });
   return result;
 }
 
 export async function googleLogin(uid, email, name) {
   const result = await convex.mutation('auth:googleLogin', { uid, email, name });
-  saveSession(result.token, { name: result.name, email: result.email, provider: 'google' });
+  saveSession(result.token, { name: result.name, email: result.email, isAdmin: result.isAdmin, provider: 'google' });
   return result;
 }
 
@@ -100,7 +100,7 @@ export async function initNavAuth() {
         ${firstName}
       </span>`;
     loginBtn.style.cssText = 'border:none; background:none; padding:0;';
-    loginBtn.href = 'dashboard.html';
+    loginBtn.href = user.isAdmin ? 'admin.html' : 'dashboard.html';
     // No logout button in nav — user logs out from inside the dashboard
   } else {
     loginBtn.textContent = 'Login / Register';
