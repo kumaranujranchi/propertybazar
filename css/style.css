@@ -501,9 +501,6 @@ textarea {
   }
 
   /* Show only the Post Property button and hamburger on mobile */
-  .nav-city {
-    display: none;
-  }
   .nav-links {
     display: none;
   }
