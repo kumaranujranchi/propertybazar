@@ -75,7 +75,10 @@ export const getProperty = query({
     const ownerInfo = owner ? {
       name: owner.name,
       joinedYear: new Date(owner._creationTime).getFullYear(),
-      profilePictureUrl: owner.profilePictureUrl
+      profilePictureUrl: owner.profilePictureUrl,
+      companyName: owner.companyName,
+      officeAddress: owner.officeAddress,
+      subscriptionTier: owner.subscriptionTier
     } : null;
 
     return { ...p, photos: resolvedPhotos.filter(Boolean), ownerInfo };

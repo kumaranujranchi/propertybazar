@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/city-dropdown.css">
+  <link rel="stylesheet" href="css/property-detail-new.css">
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
   <style>
     /* ---- Gallery skeleton shimmer ---- */
@@ -355,14 +356,32 @@
   </header>
 
   <!-- PAGE BREADCRUMB BAR -->
-  <div style="background:#fff;border-bottom:1px solid var(--border);padding:14px 0;margin-top:64px">
+  <!-- HERO COVER SECTION -->
+  <section class="property-hero" id="propertyHero">
+    <img src="images/property-1.webp" alt="Property Cover" class="hero-cover" id="heroCoverImg">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <div class="hero-badges" id="heroBadges">
+          <!-- Badges injected here -->
+        </div>
+        <div class="hero-price" id="heroPrice">₹--</div>
+        <h1 class="hero-title" id="heroTitle">Property Title</h1>
+        <div class="hero-location" id="heroLocation">
+          <i class="fa-solid fa-location-dot"></i> <span>Location details</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BREADCRUMB -->
+  <div style="background:#fff;border-bottom:1px solid var(--border);padding:14px 0;">
     <div class="container">
       <div class="page-breadcrumb" style="color:var(--text-muted)">
         <a href="index.html" style="color:var(--text-muted)">Home</a> <i class="fa-solid fa-chevron-right"
           style="font-size:10px"></i>
         <a href="properties.html" style="color:var(--text-muted)">Properties</a> <i class="fa-solid fa-chevron-right"
           style="font-size:10px"></i>
-        <span style="color:var(--text)">3 BHK Apartment in Noida</span>
+        <span style="color:var(--text)">Property Details</span>
       </div>
     </div>
   </div>
@@ -373,263 +392,99 @@
 
       <!-- LEFT COLUMN -->
       <div>
-        <!-- GALLERY -->
-        <div class="detail-gallery" style="margin-top:24px">
-          <div class="gallery-main gallery-skeleton">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-              alt="Property Main View" id="mainGalleryImg" style="opacity:0;width:100%;height:100%;object-fit:cover">
+        <!-- NEW GALLERY GRID -->
+        <div class="detail-gallery-grid" id="galleryGrid">
+          <div class="gallery-item gallery-main-item gallery-skeleton" id="galleryItem0">
+            <img src="" alt="Main View" id="img0">
           </div>
-          <div class="gallery-thumb gallery-skeleton" id="galleryThumb2">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-              alt="Property View 2" id="galleryImg2"
-              style="opacity:0;cursor:pointer;width:100%;height:100%;object-fit:cover">
+          <div class="gallery-item gallery-skeleton" id="galleryItem1">
+            <img src="" alt="View 2" id="img1">
           </div>
-          <div class="gallery-thumb gallery-skeleton" style="position:relative" id="galleryThumb3">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-              alt="Property View 3" id="galleryImg3"
-              style="opacity:0;cursor:pointer;width:100%;height:100%;object-fit:cover">
-            <div class="gallery-more" id="galleryMore" style="display:none"></div>
+          <div class="gallery-item gallery-skeleton" id="galleryItem2" style="position:relative">
+            <img src="" alt="View 3" id="img2">
+            <div class="gallery-more-overlay" id="galleryMoreOverlay" style="display:none">+N Photos</div>
           </div>
         </div>
 
-        <!-- TITLE CARD -->
-        <div class="detail-card">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
-            <div>
-              <div id="topTags" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
-                <!-- Dynamic Tags (BUY/RENT, Verified, RERA, etc.) injected here -->
-              </div>
-              <div class="detail-price">₹--</div>
-              <div id="priceStats" style="font-size:13px;color:var(--text-muted);margin-top:2px"></div>
-              <h1 class="detail-title">Luxurious 3 BHK Flat in Premium Society</h1>
-              <div class="detail-location"><i class="fa-solid fa-location-dot"></i> <a href="#"
-                  style="color:var(--primary)">Sector 62</a>, Noida, Uttar Pradesh</div>
-            </div>
-            <div style="display:flex;gap:8px">
-              <button
-                style="width:40px;height:40px;border:1.5px solid var(--border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;transition:var(--transition)"
-                title="Save" onmouseover="this.style.borderColor='var(--primary)'"
-                onmouseout="this.style.borderColor='var(--border)'"><i class="fa-regular fa-heart"></i></button>
-              <button
-                style="width:40px;height:40px;border:1.5px solid var(--border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer"
-                title="Share"><i class="fa-solid fa-share-nodes"></i></button>
-            </div>
-          </div>
-
-          <!-- SPEC CARDS -->
-          <div class="detail-specs">
-            <div class="detail-spec">
-              <div class="detail-spec-icon"><i class="fa-solid fa-bed"></i></div>
-              <div class="detail-spec-value">3 BHK</div>
-              <div class="detail-spec-label">Bedrooms</div>
-            </div>
-            <div class="detail-spec">
-              <div class="detail-spec-icon"><i class="fa-solid fa-ruler-combined"></i></div>
-              <div class="detail-spec-value">1,450 sq.ft</div>
-              <div class="detail-spec-label">Built-up Area</div>
-            </div>
-            <div class="detail-spec">
-              <div class="detail-spec-icon"><i class="fa-solid fa-compass"></i></div>
-              <div class="detail-spec-value">East</div>
-              <div class="detail-spec-label">Facing</div>
-            </div>
-            <div class="detail-spec">
-              <div class="detail-spec-icon"><i class="fa-solid fa-building"></i></div>
-              <div class="detail-spec-value">8th / 18</div>
-              <div class="detail-spec-label">Floor</div>
-            </div>
-            <div class="detail-spec">
-              <div class="detail-spec-icon"><i class="fa-solid fa-car"></i></div>
-              <div class="detail-spec-value">1 Covered</div>
-              <div class="detail-spec-label">Parking</div>
-            </div>
-            <div class="detail-spec">
-              <div class="detail-spec-icon"><i class="fa-solid fa-calendar-days"></i></div>
-              <div class="detail-spec-value">Jan 2020</div>
-              <div class="detail-spec-label">Built On</div>
-            </div>
+        <!-- KEY SPECS SECTION -->
+        <div class="detail-section">
+          <h2 class="section-title"><i class="fa-solid fa-list-check"></i> Property Highlights</h2>
+          <div class="specs-grid" id="mainSpecsGrid">
+            <!-- Dynamic Spec Cards (BHK, Area, Facing, Floor, etc.) -->
           </div>
         </div>
 
-        <!-- DESCRIPTION -->
-        <div class="detail-card">
-          <h2 style="font-size:18px;font-weight:700;color:var(--dark);margin-bottom:14px">Property Description</h2>
-          <p id="dynamicDescription"
-            style="font-size:14px;color:var(--text-muted);line-height:1.8;white-space:pre-wrap;">No description provided
-            for this property.</p>
-          <div id="detailTags" style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
-            <!-- Dynamic Tags will be injected here -->
-          </div>
+        <!-- DESCRIPTION SECTION -->
+        <div class="detail-section">
+          <h2 class="section-title"><i class="fa-solid fa-align-left"></i> Description</h2>
+          <p id="dynamicDescription" style="font-size:15px;color:var(--text);line-height:1.8;white-space:pre-wrap;">
+            No description provided.
+          </p>
         </div>
 
-        <!-- AMENITIES -->
-        <div class="detail-card">
-          <h2 style="font-size:18px;font-weight:700;color:var(--dark);margin-bottom:16px">Amenities & Features</h2>
+        <!-- AMENITIES SECTION -->
+        <div class="detail-section" id="amenitiesSection">
+          <h2 class="section-title"><i class="fa-solid fa-star"></i> Amenities & Features</h2>
           <div class="amenities-grid">
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-swimming-pool"></i></div> Swimming Pool
-            </div>
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-dumbbell"></i></div> Fully Equipped Gym
-            </div>
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-house-chimney-user"></i></div> Clubhouse
-            </div>
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-shield-halved"></i></div> 24x7 Security
-            </div>
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-bolt"></i></div> Power Backup
-            </div>
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-elevator"></i></div> High-Speed Lifts
-            </div>
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-tree"></i></div> Landscaped Garden
-            </div>
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-car"></i></div> Covered Parking
-            </div>
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-gamepad"></i></div> Children Play Area
-            </div>
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-fire-extinguisher"></i></div> Fire Safety
-            </div>
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-walkie-talkie"></i></div> Intercom
-            </div>
-            <div class="amenity-item">
-              <div class="amenity-icon"><i class="fa-solid fa-recycle"></i></div> Waste Management
-            </div>
+            <!-- Dynamic Amenities -->
           </div>
         </div>
 
-        <!-- EMI CALCULATOR -->
-        <div class="detail-card">
-          <h2 style="font-size:18px;font-weight:700;color:var(--dark);margin-bottom:16px"><i
-              class="fa-solid fa-calculator"></i> EMI Calculator</h2>
-          <div class="emi-inputs">
-            <div class="emi-field">
-              <div class="emi-field-val" style="margin-bottom:6px">
-                <label style="font-size:12px;font-weight:600;color:var(--text-muted)">Loan Amount</label>
-                <span id="emi-loan-val" style="font-size:13px;font-weight:700;color:var(--dark)">₹68L</span>
-              </div>
-              <input type="range" id="emi-loan" min="500000" max="50000000" step="500000" value="6800000">
-            </div>
-            <div class="emi-field">
-              <div class="emi-field-val" style="margin-bottom:6px">
-                <label style="font-size:12px;font-weight:600;color:var(--text-muted)">Interest Rate (per annum)</label>
-                <span id="emi-rate-val" style="font-size:13px;font-weight:700;color:var(--dark)">8.5%</span>
-              </div>
-              <input type="range" id="emi-rate" min="6" max="15" step="0.1" value="8.5">
-            </div>
-            <div class="emi-field">
-              <div class="emi-field-val" style="margin-bottom:6px">
-                <label style="font-size:12px;font-weight:600;color:var(--text-muted)">Loan Tenure</label>
-                <span id="emi-tenure-val" style="font-size:13px;font-weight:700;color:var(--dark)">20 yrs</span>
-              </div>
-              <input type="range" id="emi-tenure" min="5" max="30" step="1" value="20">
-            </div>
+        <!-- FLOOR PLAN SECTION -->
+        <div class="detail-section" id="floorPlanSection" style="display:none">
+          <h2 class="section-title"><i class="fa-solid fa-draw-polygon"></i> Floor Plan</h2>
+          <div class="floor-plan-container">
+            <img src="" alt="Floor Plan" id="floorPlanImg" class="floor-plan-img">
           </div>
-          <div class="emi-result">
-            <div class="emi-amount" id="emi-result">₹--</div>
-            <div class="emi-label">Estimated Monthly EMI</div>
-          </div>
-          <p style="font-size:11px;color:var(--text-muted);margin-top:10px;text-align:center">*Approximate value. Actual
-            EMI may vary based on bank policies.</p>
         </div>
 
-        <!-- LOCATION -->
-        <div class="detail-card">
-          <h2 style="font-size:18px;font-weight:700;color:var(--dark);margin-bottom:14px"><i
-              class="fa-solid fa-location-dot"></i> Location Map</h2>
-          <div
-            style="background:var(--bg);border-radius:var(--radius-sm);height:260px;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);flex-direction:column;gap:10px">
-            <div style="font-size:40px"><i class="fa-solid fa-map-location-dot"></i></div>
-            <p style="font-size:14px;color:var(--text-muted)">Sector 62, Noida, Uttar Pradesh 201301</p>
-            <a href="https://maps.google.com?q=Sector+62+Noida" target="_blank" class="btn btn-outline btn-sm">Open in
-              Google Maps ↗</a>
+        <!-- ADVANCED DETAILS TABLES -->
+        <div id="advancedDetailsContainer">
+            <!-- Dynamic Detailed Tables -->
+        </div>
+
+        <!-- LOCATION MAP -->
+        <div class="detail-section">
+          <h2 class="section-title"><i class="fa-solid fa-map-location-dot"></i> Location</h2>
+          <div style="background:var(--bg);border-radius:12px;height:300px;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);flex-direction:column;gap:15px">
+            <div style="font-size:48px; color:var(--primary)"><i class="fa-solid fa-location-arrow"></i></div>
+            <p id="fullAddressText" style="font-size:15px;color:var(--text-muted); text-align:center; padding:0 20px"></p>
+            <a href="#" target="_blank" id="googleMapsBtn" class="btn btn-primary btn-sm">Open in Google Maps ↗</a>
           </div>
-          <!-- Removed hardcoded map distances -->
         </div>
       </div>
 
-      <!-- RIGHT COLUMN — CONTACT CARD -->
-      <div style="margin-top:24px">
-        <!-- NEW VIEW ADVERTISER CARD -->
-        <div class="contact-card" style="text-align: center; padding: 32px 24px;">
-          <h3 style="font-size: 20px; font-weight: 800; color: var(--dark); margin-bottom: 8px;">Interested in this
-            property?</h3>
-          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Get complete details and contact
-            the owner directly.</p>
-          <button class="adv-submit-btn" id="btnOpenAdvModal" style="margin-top: 0;">View Advertiser Details</button>
+      <!-- RIGHT COLUMN — STICKY SIDEBAR -->
+      <div class="sticky-sidebar">
+        <!-- CONTACT WIDGET -->
+        <div class="contact-widget">
+          <h3>Interested?</h3>
+          <p>Get instant contact details and schedule a direct site visit.</p>
+          <button class="btn-white" id="btnOpenAdvModal">View Advertiser Details</button>
         </div>
 
-        <!-- OLD CONTACT CARD (Kept for fallback/emails but hidden by default to prefer new modal) -->
-        <div class="contact-card" style="margin-top:24px; display: none;">
-          <h3>Contact Owner / Agent</h3>
-          <p>Get more details about this property for FREE</p>
-          <div class="contact-form-group">
-            <label>Your Name</label>
-            <input type="text" id="contactName" placeholder="Enter your full name">
-          </div>
-          <div class="contact-form-group">
-            <label>Mobile Number</label>
-            <input type="tel" id="contactPhone" placeholder="+91 XXXXX XXXXX">
-          </div>
-          <div class="contact-form-group">
-            <label>Email (Optional)</label>
-            <input type="email" id="contactEmail" placeholder="your@email.com">
-          </div>
-          <div class="contact-form-group">
-            <label>Message</label>
-            <textarea id="contactMessage" rows="3"
-              placeholder="Hi, I am interested in this property. Please contact me.">Hi, I am interested in this property. Please contact me.</textarea>
-          </div>
-          <div class="contact-btns">
-            <button class="contact-btn contact-btn-call" id="btnCallNow"><i class="fa-solid fa-phone"></i> Call
-              Now</button>
-            <button class="contact-btn contact-btn-wa" id="btnWhatsApp"><i class="fa-brands fa-whatsapp"></i>
-              WhatsApp</button>
-            <button class="contact-btn contact-btn-email" id="btnSendEnquiry"><i class="fa-solid fa-envelope"></i> Send
-              Enquiry</button>
-          </div>
-          <div id="contactSuccess"
-            style="display:none; color:#10b981; font-weight:bold; margin-top:14px; text-align:center; padding:10px; background:rgba(16,185,129,0.1); border-radius:8px;">
-            <i class="fa-solid fa-circle-check"></i> Enquiry Sent Successfully!
-          </div>
-          <div id="contactLoader" class="loader" style="display:none; margin: 10px auto;"></div>
-          <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:14px">By submitting, you agree
-            to our <a href="#" style="color:var(--primary)">Terms</a> & <a href="#" style="color:var(--primary)">Privacy
-              Policy</a></p>
-        </div>
-
-        <!-- SELLER CARD -->
-        <div class="detail-card" style="margin-top:16px">
-          <h3 style="font-size:15px;font-weight:700;color:var(--dark);margin-bottom:14px">Listed By</h3>
-            <div id="ownerAvatar"
-              style="width:48px;height:48px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:700">
-              R</div>
-            <div>
-              <div id="ownerName" style="font-weight:700;font-size:15px;color:var(--dark)">Rajesh Kumar</div>
-              <div id="ownerJoinDate" style="font-size:12px;color:var(--text-muted)"><i class="fa-solid fa-user-tag"></i> Owner · Member
-                since 2019</div>
-              <div style="font-size:12px;color:var(--success)"><i class="fa-solid fa-circle-check"></i> ID Verified
-              </div>
+        <!-- POSTED BY SECTION -->
+        <div class="detail-section" style="margin-top:24px">
+          <h3 style="font-size:16px;font-weight:700;margin-bottom:20px;color:var(--dark)">Listed By</h3>
+          <div class="posted-by-card">
+            <div id="ownerAvatar" class="poster-avatar" style="display:flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-size:32px;font-weight:700">24</div>
+            <div class="poster-details">
+              <div class="poster-badge" id="posterBadge"><i class="fa-solid fa-user-check"></i> Individual</div>
+              <h4 id="ownerName">Advertiser</h4>
+              <p id="ownerJoinDate" style="font-size:13px;color:var(--text-muted)">Member since 2024</p>
+              <div style="font-size:13px;color:var(--success);margin-top:4px"><i class="fa-solid fa-circle-check"></i> ID Verified</div>
             </div>
-          <div
-            style="background:var(--bg);border-radius:var(--radius-sm);padding:12px;font-size:13px;color:var(--text-muted);line-height:1.6">
-            🔒 Phone number visible after contacting
+          </div>
+          <div style="background:#f8fafc;border-radius:12px;padding:16px;font-size:13px;color:var(--text-muted);line-height:1.6;margin-top:20px;border:1px solid rgba(0,0,0,0.05)">
+            <i class="fa-solid fa-lock"></i> Contact details are hidden for privacy. Click the button above to unlock.
           </div>
         </div>
 
-        <!-- KEY HIGHLIGHTS -->
-        <div id="keyHighlightsCard" class="detail-card" style="margin-top:16px; display: none;">
-          <h3 style="font-size:15px;font-weight:700;color:var(--dark);margin-bottom:14px">Key Highlights</h3>
-          <div id="keyHighlightsList" style="display:flex;flex-direction:column;gap:10px">
-            <!-- Dynamic Highlights will be injected here -->
-          </div>
+        <!-- EMI CALCULATOR SMALL -->
+        <div class="detail-section" style="margin-top:16px">
+           <h3 style="font-size:16px;font-weight:700;margin-bottom:16px"><i class="fa-solid fa-calculator"></i> EMI Estimator</h3>
+           <div id="emi-result-sidebar" style="font-size:24px;font-weight:800;color:var(--primary);margin-bottom:4px">₹0</div>
+           <div style="font-size:12px;color:var(--text-muted)">Est. monthly EMI @ 8.5%</div>
         </div>
       </div>
     </div>
@@ -926,26 +781,21 @@
         const priceStr = '₹' + price.toLocaleString('en-IN');
         const ppsf = area > 0 ? Math.round(price / area) : 0;
 
+        function buildTag(icon, text, colorClass = 'primary') {
+          return `<span class="badge badge-${colorClass}" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700"><i class="fa-solid ${icon}"></i> ${text}</span>`;
+        }
+
         // Title
         let title = p.propertyType;
         if (!isLand && !isCommercial && bhk && bhk !== '0') title = `${bhk} BHK ${p.propertyType}`;
 
         // ---- Update page title / breadcrumb ----
         document.title = `${title} in ${p.location?.locality || p.location?.city} | 24Dismil.com`;
-        document.querySelector('.page-breadcrumb span')?.textContent && (
-          document.querySelector('.page-breadcrumb span').textContent = title
-        );
-
-        // Gallery element refs
-        const mainImg = document.getElementById('mainGalleryImg');
-        const galleryImg2 = document.getElementById('galleryImg2');
-        const galleryImg3 = document.getElementById('galleryImg3');
-        const galleryThumb2 = document.getElementById('galleryThumb2');
-        const galleryThumb3 = document.getElementById('galleryThumb3');
-        const galleryMore = document.getElementById('galleryMore');
+        
+        const bcrumbSpan = document.querySelector('.page-breadcrumb span');
+        if (bcrumbSpan) bcrumbSpan.textContent = title;
 
         // ---- Lightbox setup ----
-
         const lb = document.getElementById('photolightbox');
         const lbImg = document.getElementById('lbMainImg');
         const lbCounter = document.getElementById('lbCounter');
@@ -1043,45 +893,121 @@
         const priceEl = document.querySelector('.detail-price');
         if (priceEl) priceEl.textContent = priceStr;
 
-        const priceStats = document.getElementById('priceStats');
-        if (priceStats) {
-          let stats = [];
-          if (ppsf > 0) stats.push(`₹${ppsf.toLocaleString('en-IN')} per sq.ft`);
-          if (p.pricing?.expectedPrice > 500000) {
-            // Basic EMI math (approx 8.5% for 20y)
-            const emi = Math.round((p.pricing.expectedPrice * 0.8) * 0.008678);
-            stats.push(`EMI starts at ₹${emi.toLocaleString('en-IN')}/mo`);
-          }
-          priceStats.textContent = stats.join(' · ');
+        // ---- Update New Hero Section ----
+        const heroCover = document.getElementById('heroCoverImg');
+        const heroTitle = document.getElementById('heroTitle');
+        const heroPrice = document.getElementById('heroPrice');
+        const heroLocation = document.getElementById('heroLocation');
+        const heroBadges = document.getElementById('heroBadges');
+
+        if (heroCover && photos[0]) heroCover.src = photos[0];
+        if (heroTitle) heroTitle.textContent = title;
+        if (heroPrice) heroPrice.textContent = priceStr;
+        if (heroLocation) heroLocation.querySelector('span').textContent = `${p.location?.locality || ''}, ${p.location?.city || ''}`;
+
+        // Populate Hero Badges
+        if (heroBadges) {
+          const isRent = p.transactionType?.toLowerCase().includes('rent');
+          let badgesHtml = buildTag(isRent ? 'fa-key' : 'fa-house', isRent ? 'RENT' : 'BUY', isRent ? 'warning' : 'primary');
+          if (p.verified) badgesHtml += buildTag('fa-circle-check', 'Verified', 'verified');
+          if (p.details?.status === 'Ready to Move' || p.status === 'ready') badgesHtml += buildTag('fa-check', 'Ready to Move', 'success');
+          heroBadges.innerHTML = badgesHtml;
         }
-        const detailTitle = document.querySelector('.detail-title');
-        if (detailTitle) detailTitle.textContent = `${title} in ${p.location?.society || p.location?.locality || ''}`;
-        const detailLoc = document.querySelector('.detail-location');
-        if (detailLoc) detailLoc.innerHTML = `📍 ${p.location?.locality || ''}, ${p.location?.city || ''}, ${p.location?.state || ''}`;
 
-        // ---- Specs ----
-        const specsEl = document.querySelector('.detail-specs');
-        if (specsEl) {
-          const specs = [];
-          if (!isLand && !isCommercial && bhk && bhk !== '0') {
-            specs.push({ icon: '🛏️', val: `${bhk} BHK`, label: 'Bedrooms' });
+        // ---- Update New Gallery Grid ----
+        photos.forEach((src, i) => {
+          if (i > 2) return;
+          const img = document.getElementById(`img${i}`);
+          const wrap = document.getElementById(`galleryItem${i}`);
+          if (img) {
+            img.src = src;
+            img.onload = () => wrap && wrap.classList.remove('gallery-skeleton');
+            img.addEventListener('click', () => lbOpen(i));
           }
-          if (area > 0) specs.push({ icon: '📐', val: `${area.toLocaleString('en-IN')} sq.ft`, label: 'Built-up Area' });
-          if (p.details?.carpetArea) specs.push({ icon: '📏', val: `${p.details.carpetArea} sq.ft`, label: 'Carpet Area' });
-          if (p.details?.facing) specs.push({ icon: '🧭', val: p.details.facing, label: 'Facing' });
-          if (!isLand && p.details?.floorNumber) {
-            specs.push({ icon: '🏢', val: `${p.details.floorNumber}${p.details.totalFloors ? ' / ' + p.details.totalFloors : ''}`, label: 'Floor' });
-          }
-          if (!isLand && p.details?.furnishing) specs.push({ icon: '🛋️', val: p.details.furnishing, label: 'Furnishing' });
-          if (p.details?.parking && p.details.parking !== 'None') specs.push({ icon: '🚗', val: p.details.parking, label: 'Parking' });
-          if (p.details?.constructionYear) specs.push({ icon: '📅', val: p.details.constructionYear, label: 'Built Year' });
+        });
 
-          specsEl.innerHTML = specs.map(s => `
-        <div class="detail-spec">
-          <div class="detail-spec-icon">${s.icon}</div>
-          <div class="detail-spec-value">${s.val}</div>
-          <div class="detail-spec-label">${s.label}</div>
-        </div>`).join('');
+        // "+N Photos" overlay
+        const galleryMoreOverlay = document.getElementById('galleryMoreOverlay');
+        if (galleryMoreOverlay && photos.length > 3) {
+          galleryMoreOverlay.textContent = `+${photos.length - 3} Photos`;
+          galleryMoreOverlay.style.display = 'flex';
+          galleryMoreOverlay.addEventListener('click', () => lbOpen(3));
+        }
+
+        // ---- Main Specs Grid (Highlights) ----
+        const mainSpecsGrid = document.getElementById('mainSpecsGrid');
+        if (mainSpecsGrid) {
+          const highlights = [];
+          if (!isLand && !isCommercial && bhk && bhk !== '0') highlights.push({ icon: 'fa-bed', val: `${bhk} BHK`, label: 'Bedrooms' });
+          if (area > 0) highlights.push({ icon: 'fa-ruler-combined', val: `${area.toLocaleString('en-IN')} sq.ft`, label: 'Built-up Area' });
+          if (p.details?.facing) highlights.push({ icon: 'fa-compass', val: p.details.facing, label: 'Facing' });
+          if (!isLand && p.details?.floorNumber) highlights.push({ icon: 'fa-building', val: `${p.details.floorNumber}${p.details.totalFloors ? ' / ' + p.details.totalFloors : ''}`, label: 'Floor' });
+          if (!isLand && p.details?.furnishing) highlights.push({ icon: 'fa-couch', val: p.details.furnishing, label: 'Furnishing' });
+          if (p.details?.parking && p.details.parking !== 'None') highlights.push({ icon: 'fa-car', val: p.details.parking, label: 'Parking' });
+
+          mainSpecsGrid.innerHTML = highlights.map(h => `
+            <div class="spec-card">
+              <div class="spec-icon"><i class="fa-solid ${h.icon}"></i></div>
+              <div class="spec-info">
+                <span class="spec-label">${h.label}</span>
+                <span class="spec-value">${h.val}</span>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // ---- Advanced Details (Categorized) ----
+        const advancedContainer = document.getElementById('advancedDetailsContainer');
+        if (advancedContainer) {
+          let tablesHtml = '';
+          
+          // Helper for rows
+          const renderRow = (label, val) => val ? `<div class="info-row"><span class="info-label">${label}</span><span class="info-value">${val}</span></div>` : '';
+
+          // 1. Area & Orientation
+          let areaRows = renderRow('Built-up Area', area > 0 ? `${area} sq.ft` : '');
+          areaRows += renderRow('Carpet Area', p.details?.carpetArea ? `${p.details.carpetArea} sq.ft` : '');
+          areaRows += renderRow('Facing', p.details?.facing);
+          areaRows += renderRow('Road Width', p.details?.roadWidth ? `${p.details.roadWidth} ft` : '');
+          
+          if (areaRows) {
+            tablesHtml += `
+              <div class="detail-section">
+                <h2 class="section-title"><i class="fa-solid fa-ruler-max"></i> Area & Orientation</h2>
+                <div class="detail-info-grid">${areaRows}</div>
+              </div>`;
+          }
+
+          // 2. Configuration & Features
+          let configRows = renderRow('Bedrooms', bhk !== '0' ? bhk : '');
+          configRows += renderRow('Bathrooms', p.details?.bathrooms);
+          configRows += renderRow('Balconies', p.details?.balconies);
+          configRows += renderRow('Furnishing', p.details?.furnishing);
+          configRows += renderRow('Floor', p.details?.floorNumber ? `${p.details.floorNumber} of ${p.details.totalFloors || 'N/A'}` : '');
+          
+          if (configRows) {
+            tablesHtml += `
+              <div class="detail-section">
+                <h2 class="section-title"><i class="fa-solid fa-house-chimney-window"></i> Configuration</h2>
+                <div class="detail-info-grid">${configRows}</div>
+              </div>`;
+          }
+
+          // 3. Construction & Legal
+          let constructRows = renderRow('Property Status', p.details?.status);
+          constructRows += renderRow('Built Year', p.details?.constructionYear);
+          constructRows += renderRow('Ownership', p.details?.ownershipType);
+          constructRows += renderRow('RERA ID', p.details?.rera);
+          
+          if (constructRows) {
+            tablesHtml += `
+              <div class="detail-section">
+                <h2 class="section-title"><i class="fa-solid fa-gavel"></i> Construction & Records</h2>
+                <div class="detail-info-grid">${constructRows}</div>
+              </div>`;
+          }
+
+          advancedContainer.innerHTML = tablesHtml;
         }
 
         // ---- Description ----
@@ -1090,80 +1016,64 @@
           descEl.textContent = p.details.description;
         }
 
-        // ---- Dynamic Property Tags (Consolidated) ----
-        function buildTag(icon, text, colorClass = 'primary') {
-          return `<span class="badge badge-${colorClass}" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700"><i class="fa-solid ${icon}"></i> ${text}</span>`;
+        // ---- Floor Plan ----
+        const floorPlanSection = document.getElementById('floorPlanSection');
+        const floorPlanImg = document.getElementById('floorPlanImg');
+        const floorPlanPhoto = (p.photos || []).find(ph => ph.label === 'Floor Plan');
+        if (floorPlanSection && floorPlanPhoto) {
+          floorPlanImg.src = floorPlanPhoto.url;
+          floorPlanSection.style.display = 'block';
         }
 
-        const topTags = document.getElementById('topTags');
-        const detailTags = document.getElementById('detailTags'); // tags under description
-
-        let commonTags = '';
-        const isRent = p.transactionType?.toLowerCase().includes('rent');
-        commonTags += buildTag(isRent ? 'fa-key' : 'fa-house', isRent ? 'RENT' : 'BUY', isRent ? 'warning' : 'primary');
-        if (p.verified) commonTags += buildTag('fa-circle-check', 'Verified', 'verified');
-        if (p.details?.status === 'Ready to Move' || p.status === 'ready') commonTags += buildTag('fa-check', 'Ready to Move', 'success');
-        if (p.details?.rera) commonTags += `<span style="background:#EFF6FF;color:#3B82F6;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700"><i class="fa-solid fa-file-contract"></i> RERA: ${p.details.rera}</span>`;
-
-        if (topTags) topTags.innerHTML = commonTags;
-        if (detailTags) {
-          // Add some specific tags for description area if needed
-          let descTags = commonTags;
-          if (p.contactDesc?.role === 'Owner') descTags += buildTag('fa-user-check', 'Owner Listing', 'info');
-          detailTags.innerHTML = descTags;
+        // ---- Location Details ----
+        const fullAddressText = document.getElementById('fullAddressText');
+        if (fullAddressText) {
+          fullAddressText.textContent = `${p.location?.society ? p.location.society + ', ' : ''}${p.location?.locality || ''}, ${p.location?.city || ''}, ${p.location?.state || ''} - ${p.location?.pinCode || ''}`;
+        }
+        const mapsBtn = document.getElementById('googleMapsBtn');
+        if (mapsBtn) {
+          const addr = encodeURIComponent(`${p.location?.locality || ''} ${p.location?.city || ''} ${p.location?.pinCode || ''}`);
+          mapsBtn.href = `https://maps.google.com?q=${addr}`;
         }
 
-        // ---- Key Highlights ----
-        const highlightsCard = document.getElementById('keyHighlightsCard');
-        const highlightsList = document.getElementById('keyHighlightsList');
-        if (highlightsCard && highlightsList) {
-          let hlHtml = '';
-          if (p.details?.rera) {
-            hlHtml += `
-            <div style="display:flex;align-items:center;gap:10px;font-size:13px">
-              <span style="width:28px;height:28px;background:rgba(16,185,129,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-check" style="color:#10b981"></i></span>
-              <span style="color:var(--text)">RERA Registered Project</span>
-            </div>`;
-          }
-          if (p.verified) {
-            hlHtml += `
-            <div style="display:flex;align-items:center;gap:10px;font-size:13px">
-              <span style="width:28px;height:28px;background:rgba(59,130,246,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-magnifying-glass" style="color:#3fb8f6"></i></span>
-              <span style="color:var(--text)">Physically Verified Listing</span>
-            </div>`;
-          }
-          if (p.contactDesc?.role === 'Owner') {
-            hlHtml += `
-            <div style="display:flex;align-items:center;gap:10px;font-size:13px">
-              <span style="width:28px;height:28px;background:rgba(245,158,11,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-handshake" style="color:#f59e0b"></i></span>
-              <span style="color:var(--text)">Zero Brokerage (Direct Owner)</span>
-            </div>`;
-          }
-          if (hlHtml) {
-            highlightsList.innerHTML = hlHtml;
-            highlightsCard.style.display = 'block';
-          }
+        // ---- Sidebar EMI ----
+        const emiResultSidebar = document.getElementById('emi-result-sidebar');
+        if (emiResultSidebar && price > 500000) {
+           const emi = Math.round((price * 0.8) * 0.008678);
+           emiResultSidebar.textContent = `₹${emi.toLocaleString('en-IN')}`;
         }
 
-        // ---- Listed By (Owner Info) ----
+        // ---- Listed By (Owner/Company Info) ----
         if (p.ownerInfo) {
           const ownerAvatar = document.getElementById('ownerAvatar');
           const ownerName = document.getElementById('ownerName');
           const ownerJoinDate = document.getElementById('ownerJoinDate');
+          const posterBadge = document.getElementById('posterBadge');
           
-          if (ownerName) ownerName.textContent = p.ownerInfo.name;
+          const isCompany = p.ownerInfo.companyName && p.ownerInfo.companyName.trim() !== '';
+          
+          if (ownerName) ownerName.textContent = isCompany ? p.ownerInfo.companyName : p.ownerInfo.name;
+          
+          if (posterBadge) {
+            posterBadge.innerHTML = isCompany ? 
+              `<i class="fa-solid fa-building"></i> Company` : 
+              `<i class="fa-solid fa-user-check"></i> Individual`;
+          }
+
           if (ownerAvatar) {
             if (p.ownerInfo.profilePictureUrl) {
-              ownerAvatar.innerHTML = `<img src="${p.ownerInfo.profilePictureUrl}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+              ownerAvatar.innerHTML = `<img src="${p.ownerInfo.profilePictureUrl}" style="width:100%;height:100%;border-radius:20px;object-fit:cover;">`;
               ownerAvatar.style.background = 'transparent';
             } else {
-              // Show the "24" brand logo as default avatar
-              ownerAvatar.innerHTML = `<div style="width:100%;height:100%;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:900;font-family:'Poppins', sans-serif">24</div>`;
-              ownerAvatar.style.background = 'transparent';
+              const initial = (isCompany ? p.ownerInfo.companyName : p.ownerInfo.name || 'U')[0].toUpperCase();
+              ownerAvatar.innerHTML = initial;
             }
           }
+
           if (ownerJoinDate) {
-            ownerJoinDate.innerHTML = `<i class="fa-solid fa-user-tag"></i> ${p.contactDesc?.role || 'Owner'} · Member since ${p.ownerInfo.joinedYear || 2024}`;
+            const memberSince = p.ownerInfo.joinedYear || 2024;
+            const role = p.contactDesc?.role || (isCompany ? 'Agent' : 'Owner');
+            ownerJoinDate.innerHTML = `<i class="fa-solid fa-user-tag"></i> ${role} · Member since ${memberSince}`;
           }
         }
 
