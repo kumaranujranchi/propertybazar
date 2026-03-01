@@ -107,6 +107,38 @@ export const getUserByChatId = internalQuery({
   },
 });
 
+export const createTelegramProperty = internalMutation({
+  args: {
+    userId: v.id("users"),
+    transactionType: v.string(),
+    propertyType: v.string(),
+    price: v.number(),
+    location: v.any(),
+    details: v.any(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("properties", {
+      userId: args.userId,
+      transactionType: args.transactionType,
+      propertyType: args.propertyType,
+      pricing: {
+        expectedPrice: args.price,
+      },
+      location: {
+        city: "",
+        state: "",
+        locality: args.location.address || "",
+        address: args.location.address || "",
+      },
+      details: args.details,
+      amenities: [],
+      photos: [],
+      isFeatured: false,
+      approvalStatus: "pending",
+    });
+  },
+});
+
 export const generateLinkCode = mutation({
   args: { token: v.string() },
   handler: async (ctx, args) => {
@@ -229,7 +261,17 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any)
         });
         await sendMessage(chatId, "Great! Now, what is the property type?", {
           reply_markup: {
-            keyboard: [[{ text: "Flat" }, { text: "House" }], [{ text: "Plot" }, { text: "Commercial" }]],
+            keyboard: [
+              [{ text: "Apartment" }, { text: "House" }], 
+              [{ text: "Plot" }, { text: "Commercial" }]
+            ],
+            one_time_keyboard: true, resize_keyboard: true
+          }
+        });
+      } else {
+        await sendMessage(chatId, "Please select one of the options below ⬇️", {
+          reply_markup: {
+            keyboard: [[{ text: "Buy" }, { text: "Rent" }]],
             one_time_keyboard: true, resize_keyboard: true
           }
         });
@@ -237,8 +279,44 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any)
       break;
     
     case "propertyType":
+      const validPropType = ["Apartment", "House", "Plot", "Commercial", "Flat"].includes(text);
+      if (validPropType) {
+        let nextStep = "location";
+        let msg = "Where is the property located? You can type the address or share your location 📍";
+        let markup: any = {
+          keyboard: [[{ text: "Share Location", request_location: true }]],
+          resize_keyboard: true
+        };
+
+        if (["Apartment", "House", "Flat"].includes(text)) {
+          nextStep = "bhk";
+          msg = "How many BHK? 🏠";
+          markup = {
+            keyboard: [[{ text: "1 BHK" }, { text: "2 BHK" }], [{ text: "3 BHK" }, { text: "4+ BHK" }]],
+            one_time_keyboard: true, resize_keyboard: true
+          };
+        }
+
+        await ctx.runMutation(internal.telegram.updateState, { 
+          chatId, step: nextStep, data: { propertyType: text === "Apartment" ? "Flat" : text } 
+        });
+        await sendMessage(chatId, msg, markup);
+      } else {
+        await sendMessage(chatId, "Please select the property type from the buttons below ⬇️", {
+          reply_markup: {
+            keyboard: [
+              [{ text: "Apartment" }, { text: "House" }], 
+              [{ text: "Plot" }, { text: "Commercial" }]
+            ],
+            one_time_keyboard: true, resize_keyboard: true
+          }
+        });
+      }
+      break;
+
+    case "bhk":
       await ctx.runMutation(internal.telegram.updateState, { 
-        chatId, step: "location", data: { propertyType: text } 
+        chatId, step: "location", data: { bhk: text.split(" ")[0] } 
       });
       await sendMessage(chatId, "Where is the property located? You can type the address or share your location 📍", {
         reply_markup: {
@@ -249,8 +327,9 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any)
       break;
 
     case "location":
-      const locData = update.message.location 
-        ? { lat: update.message.location.latitude, lng: update.message.location.longitude }
+      const isLocation = !!update.message.location;
+      const locData = isLocation
+        ? { lat: update.message.location.latitude, lng: update.message.location.longitude, address: "Location shared via GPS" }
         : { address: text };
       
       await ctx.runMutation(internal.telegram.updateState, { 
@@ -260,11 +339,16 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any)
       break;
 
     case "price":
+      const priceNum = parseInt(text.replace(/,/g, ""));
+      if (isNaN(priceNum)) {
+        await sendMessage(chatId, "Please enter a valid number for the price.");
+        return;
+      }
       await ctx.runMutation(internal.telegram.updateState, { 
-        chatId, step: "finish", data: { price: text } 
+        chatId, step: "finish", data: { price: priceNum } 
       });
-      // In a real app, we'd add photo handling here. For MVP, let's wrap up.
-      await sendMessage(chatId, `Summary of your listing:\n- ${data.transactionType} ${data.propertyType}\n- Price: ₹${text}\n\nConfirm to post?`, {
+      const summary = `Summary of your listing:\n- ${data.transactionType} ${data.propertyType}\n- BHK: ${data.bhk || "N/A"}\n- Price: ₹${priceNum.toLocaleString("en-IN")}\n\nConfirm to post?`;
+      await sendMessage(chatId, summary, {
         reply_markup: {
           keyboard: [[{ text: "Confirm ✅" }, { text: "Cancel ❌" }]],
           one_time_keyboard: true, resize_keyboard: true
@@ -274,9 +358,25 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any)
 
     case "finish":
       if (text === "Confirm ✅") {
-        // Here we'd call properties:createProperty mutation
+        // Find user to get ID
+        const user = await ctx.runQuery(internal.telegram.getUserByChatId, { chatId });
+        if (!user) {
+          await sendMessage(chatId, "Account error. Please try linking again.");
+          return;
+        }
+
+        // Call the mutation to create property
+        await ctx.runMutation(internal.telegram.createTelegramProperty, {
+          userId: user._id,
+          transactionType: data.transactionType.toLowerCase() === "buy" ? "sell" : "rent",
+          propertyType: data.propertyType,
+          price: data.price,
+          location: data.location,
+          details: { bhk: data.bhk || "0" }
+        });
+
         await sendMessage(chatId, "🚀 Property posted successfully! You can view it on your dashboard.");
-        await ctx.runMutation(internal.telegram.resetState, { chatId }); // Delete state
+        await ctx.runMutation(internal.telegram.resetState, { chatId });
       } else {
         await sendMessage(chatId, "Listing cancelled.");
         await ctx.runMutation(internal.telegram.resetState, { chatId });
