@@ -18,7 +18,7 @@ export const saveDraft = mutation({
 
     const existing = await ctx.db
       .query("drafts")
-      .withIndex("by_userId", (q) => q.eq("userId", session.userId))
+      .filter((q) => q.eq(q.field("userId"), session.userId))
       .first();
 
     if (existing) {
@@ -40,18 +40,22 @@ export const saveDraft = mutation({
 export const getDraft = query({
   args: { token: v.string() },
   handler: async (ctx, args) => {
-    if (!args.token) return null;
     try {
+      if (!args.token) return null;
+      
       const session = await ctx.db
         .query("sessions")
         .withIndex("by_token", (q) => q.eq("token", args.token))
         .first();
 
-      if (!session || session.expiresAt < Date.now()) return null;
+      if (!session || session.expiresAt < Date.now()) {
+        console.log("GetDraft: No valid session found");
+        return null;
+      }
 
       const draft = await ctx.db
         .query("drafts")
-        .withIndex("by_userId", (q) => q.eq("userId", session.userId))
+        .filter((q) => q.eq(q.field("userId"), session.userId))
         .first();
         
       return draft;
@@ -74,7 +78,7 @@ export const deleteDraft = mutation({
 
     const draft = await ctx.db
       .query("drafts")
-      .withIndex("by_userId", (q) => q.eq("userId", session.userId))
+      .filter((q) => q.eq(q.field("userId"), session.userId))
       .first();
 
     if (draft) {
