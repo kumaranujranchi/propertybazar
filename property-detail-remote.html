@@ -1151,8 +1151,11 @@
           if (ownerAvatar) {
             if (p.ownerInfo.profilePictureUrl) {
               ownerAvatar.innerHTML = `<img src="${p.ownerInfo.profilePictureUrl}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+              ownerAvatar.style.background = 'transparent';
             } else {
-              ownerAvatar.textContent = (p.ownerInfo.name || 'P')[0].toUpperCase();
+              ownerAvatar.innerHTML = `<img src="images/favicon.svg" style="width:100%;height:100%;border-radius:50%;object-fit:contain;background:var(--primary);padding:4px;">`;
+              ownerAvatar.style.background = 'var(--primary)';
+              ownerAvatar.textContent = '';
             }
           }
           if (ownerJoinDate) {
