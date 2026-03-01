@@ -436,17 +436,17 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any,
       break;
 
     case "photos":
-      if (text === "Done ✅") {
+      if (text.includes("Done") || text.includes("DONE")) {
         await ctx.runMutation(internal.telegram.updateState, { chatId, step: "finish", data: {} });
-        const summary = `📋 **Listing Summary**\n` + 
-                        `- Type: ${data.transactionType} ${data.propertyType}\n` +
-                        `- Config: ${data.bhk || "N/A"}\n` +
-                        `- Status: ${data.status}\n` +
-                        `- Area: ${data.area} sq.ft\n` +
-                        `- Location: ${data.location.locality || data.location.city}\n` +
-                        `- Price: ₹${data.price.toLocaleString("en-IN")}\n` +
-                        `- Photos: ${data.photos?.length || 0} attached\n\n` +
-                        `**Confirm to post?**`;
+        const summary = `📋 *Listing Summary*\n` + 
+                        `• Type: ${data.transactionType} ${data.propertyType}\n` +
+                        `• Config: ${data.bhk || "N/A"}\n` +
+                        `• Status: ${data.status}\n` +
+                        `• Area: ${data.area} sq.ft\n` +
+                        `• Location: ${data.location.locality || data.location.city}\n` +
+                        `• Price: ₹${data.price.toLocaleString("en-IN")}\n` +
+                        `• Photos: *${data.photos?.length || 0}* attached\n\n` +
+                        `*Confirm to post?*`;
         await sendMessage(chatId, summary, {
           reply_markup: {
             inline_keyboard: [[
@@ -464,17 +464,22 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any,
           await ctx.runMutation(internal.telegram.updateState, { 
             chatId, step: "photos", data: { photos: [...(data.photos || []), storageId] } 
           });
-          await sendMessage(chatId, `Photo received! Total: ${ (data.photos?.length || 0) + 1 }. Send more or click Done. ✅`);
+          const count = (data.photos?.length || 0) + 1;
+          await sendMessage(chatId, `✅ *Photo received!* (Total: ${count})\n\nSend more photos or click *Done* below.`, {
+            reply_markup: {
+              inline_keyboard: [[{ text: "Done ✅", callback_data: "Done ✅" }]]
+            }
+          });
         } else {
           await sendMessage(chatId, "❌ Failed to process that photo. Please try again or send a different one.");
         }
       } else {
-        await sendMessage(chatId, "Please send a photo or click 'Done ✅'.");
+        await sendMessage(chatId, "Please send a photo or click *Done ✅*.");
       }
       break;
 
     case "finish":
-      if (text === "Confirm ✅") {
+      if (text.includes("Confirm") || text.includes("CONFIRM")) {
         const user = await ctx.runQuery(internal.telegram.getUserByChatId, { chatId });
         if (!user) {
           await sendMessage(chatId, "Account error. Please link again.");
@@ -541,7 +546,12 @@ async function sendMessage(chatId: string, text: string, extra = {}) {
     await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text, ...extra }),
+      body: JSON.stringify({ 
+        chat_id: chatId, 
+        text, 
+        parse_mode: "Markdown",
+        ...extra 
+      }),
     });
   } catch (err) {
     console.error("Telegram sendMessage error:", err);
