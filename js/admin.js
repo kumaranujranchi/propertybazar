@@ -34,11 +34,16 @@ async function checkAdminAuth() {
   
   try {
     // We try to call a simple admin query to verify token/access
-    const user = await convex.query("admin:getDashboardStats", { token });
+    const stats = await convex.query("admin:getDashboardStats", { token });
     document.getElementById('adminApp').style.display = 'flex';
   } catch (err) {
     console.error("Admin Auth Failed", err);
-    alert("You do not have administrative access. Please login first.");
+    const msg = err.message || "";
+    if (msg.includes("Unauthorized") || msg.includes("Administrative access")) {
+      alert("⚠️ Unauthorized Access: You do not have permission to view the Admin Panel.");
+    } else {
+      alert("Your session has expired or you are not logged in. Please login first.");
+    }
     window.location.href = "index.html";
   }
 }

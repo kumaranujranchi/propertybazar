@@ -11,7 +11,7 @@ async function requireAdmin(ctx: any, token: string) {
 
   const session = await ctx.db
     .query("sessions")
-    .withIndex("by_token", (q) => q.eq("token", token))
+    .withIndex("by_token", (q: any) => q.eq("token", token))
     .first();
 
   if (!session || session.expiresAt < Date.now()) {
@@ -21,6 +21,10 @@ async function requireAdmin(ctx: any, token: string) {
   const user = await ctx.db.get(session.userId);
   if (!user) {
     throw new Error("User not found");
+  }
+
+  if (!user.isAdmin) {
+    throw new Error("Unauthorized: Administrative access required");
   }
 
   return user;

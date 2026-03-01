@@ -41,6 +41,7 @@ export default defineSchema({
       emailNotifications: v.boolean(),
       smsNotifications: v.boolean(),
     })),
+    isAdmin: v.optional(v.boolean()),
   }).index("by_email", ["email"]),
 
   sessions: defineTable({
