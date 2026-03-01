@@ -43,7 +43,9 @@ export default defineSchema({
       smsNotifications: v.boolean(),
     })),
     isAdmin: v.optional(v.boolean()),
-  }).index("by_email", ["email"]),
+    telegramChatId: v.optional(v.string()),
+  }).index("by_email", ["email"])
+    .index("by_telegramChatId", ["telegramChatId"]),
 
   sessions: defineTable({
     userId: v.id("users"),
@@ -66,4 +68,11 @@ export default defineSchema({
     lastUpdated: v.number(),
   }).index("by_userId", ["userId"])
     .index("by_lastUpdated", ["lastUpdated"]),
+
+  telegramStates: defineTable({
+    chatId: v.string(),
+    step: v.string(),
+    data: v.any(),
+    lastUpdated: v.number(),
+  }).index("by_chatId", ["chatId"]),
 });
