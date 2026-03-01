@@ -10,4 +10,10 @@ crons.daily(
   internal.properties.deleteOldProperties
 );
 
+crons.daily(
+  "delete-old-drafts",
+  { hourUTC: 0, minuteUTC: 0 },
+  internal.drafts.deleteOldDrafts
+);
+
 export default crons;

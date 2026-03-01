@@ -59,4 +59,11 @@ export default defineSchema({
     inquirerPhone: v.string(),
     message: v.optional(v.string())
   }).index("by_ownerId", ["ownerId"]),
+
+  drafts: defineTable({
+    userId: v.id("users"),
+    data: v.any(),
+    lastUpdated: v.number(),
+  }).index("by_userId", ["userId"])
+    .index("by_lastUpdated", ["lastUpdated"]),
 });
