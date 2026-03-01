@@ -116,3 +116,34 @@ export const deleteProperty = mutation({
     return { success: true };
   }
 });
+
+/**
+ * One-time mutation to create the dedicated admin user
+ * Run this from Convex Dashboard -> Functions -> admin:seedAdminUser
+ */
+export const seedAdminUser = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const email = "admin@24dismil.com";
+    const existing = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", email))
+      .first();
+
+    if (existing) {
+      // If user exists, just make sure they are admin
+      await ctx.db.patch(existing._id, { isAdmin: true });
+      return { status: "Updated existing user to Admin", userId: existing._id };
+    }
+
+    const userId = await ctx.db.insert("users", {
+      name: "Super Admin",
+      email: email,
+      passwordHash: "17xydjg", // Hash for 'Admin@2026'
+      isAdmin: true,
+      subscriptionTier: "premium"
+    });
+
+    return { status: "Created new Admin user", userId };
+  },
+});
