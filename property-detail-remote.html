@@ -1133,14 +1133,33 @@
         const amenGrid = document.querySelector('.amenities-grid');
         if (amenGrid && p.amenities?.length > 0) {
           const icons = {
-            'Swimming Pool': '🏊', 'Gym': '💪', 'Clubhouse': '🏠', 'Security': '🔒',
-            'Power Backup': '⚡', 'Lift': '🛗', 'Garden': '🌳', 'Parking': '🚗',
-            'Play Area': '🎮', 'Fire Safety': '🔥', 'Intercom': '📡', 'CCTV': '📹',
-            'WiFi': '📶', 'Gas Pipeline': '🔥', 'Solar': '☀️'
+            'Water Supply': 'fa-solid fa-droplet',
+            'Rainwater Harvesting': 'fa-solid fa-cloud-rain',
+            'Lift': 'fa-solid fa-elevator',
+            'Garbage Disposal': 'fa-solid fa-trash-can',
+            'Solar Energy': 'fa-solid fa-sun',
+            'Drainage': 'fa-solid fa-pipe-valve',
+            'Escalator': 'fa-solid fa-stairs',
+            'Loading Access': 'fa-solid fa-truck-ramp-box',
+            '24x7 Security': 'fa-solid fa-user-shield',
+            'Gated Society': 'fa-solid fa-gate',
+            'CCTV': 'fa-solid fa-video',
+            'Intercom': 'fa-solid fa-phone-volume',
+            'Fire Safety': 'fa-solid fa-fire-extinguisher',
+            'Boundary Wall': 'fa-solid fa-border-all',
+            'Private Terrace': 'fa-solid fa-tree',
+            'Swimming Pool': 'fa-solid fa-person-swimming',
+            'Gymnasium': 'fa-solid fa-dumbbell',
+            'Childrens Play Area': 'fa-solid fa-child-reaching',
+            'Clubhouse': 'fa-solid fa-building-user',
+            'Garden / Park': 'fa-solid fa-tree',
+            'WiFi': 'fa-solid fa-wifi',
+            'Room Service': 'fa-solid fa-bell-concierge',
+            'Daily Housekeeping': 'fa-solid fa-broom-ball'
           };
           amenGrid.innerHTML = p.amenities.map(a => {
-            const icon = Object.entries(icons).find(([k]) => a.toLowerCase().includes(k.toLowerCase()))?.[1] || '✅';
-            return `<div class="amenity-item"><div class="amenity-icon">${icon}</div> ${a}</div>`;
+            const iconClass = Object.entries(icons).find(([k]) => a.toLowerCase().includes(k.toLowerCase()))?.[1] || 'fa-solid fa-check-circle';
+            return `<div class="amenity-item"><div class="amenity-icon"><i class="${iconClass}"></i></div> ${a}</div>`;
           }).join('');
         } else if (amenGrid) {
           document.getElementById('amenities')?.remove();
