@@ -16,9 +16,17 @@ export const getProperties = query({
     }
     const results = await propertiesQuery.order("desc").collect();
 
-    // Only show properties that are NOT rejected (disabled)
+    // Only show properties that are NOT rejected (disabled) and NOT EXPIRED (30 days)
     // Properties with no approvalStatus are visible by default (older listings)
-    const visibleResults = results.filter(p => p.approvalStatus !== "rejected");
+    const visibleResults = results.filter(p => {
+      if (p.approvalStatus === "rejected") return false;
+      
+      const activationTime = p.lastActivatedAt || p._creationTime;
+      const daysSinceActivation = (Date.now() - activationTime) / (1000 * 60 * 60 * 24);
+      if (daysSinceActivation > 30) return false;
+      
+      return true;
+    });
 
     // Sort so featured comes first, while keeping descending order for the rest
     const properties = visibleResults.sort((a, b) => {
@@ -152,6 +160,7 @@ export const createProperty = mutation({
       contactDesc: args.contactDesc,
       isFeatured: isFeatured,
       approvalStatus: "pending",
+      lastActivatedAt: Date.now(),
     });
     return propertyId;
   },
@@ -249,6 +258,27 @@ export const deleteOldProperties = internalMutation({
 
     return { deletedCount: oldProperties.length };
   }
+});
+
+export const reactivateProperty = mutation({
+  args: { token: v.string(), id: v.id("properties") },
+  handler: async (ctx, args) => {
+    const session = await ctx.db
+      .query("sessions")
+      .withIndex("by_token", (q) => q.eq("token", args.token))
+      .first();
+    if (!session || session.expiresAt < Date.now()) throw new Error("Unauthorized");
+
+    const prop = await ctx.db.get(args.id);
+    if (!prop) throw new Error("Property not found");
+    if (prop.userId !== session.userId) throw new Error("Unauthorized: You do not own this property");
+
+    await ctx.db.patch(args.id, {
+      lastActivatedAt: Date.now(),
+    });
+    
+    return { success: true };
+  },
 });
 
 // =================== LEADS SYSTEM ===================

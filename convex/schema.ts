@@ -16,6 +16,7 @@ export default defineSchema({
     contactDesc: v.any(),
     isFeatured: v.optional(v.boolean()),
     approvalStatus: v.optional(v.string()), // 'pending', 'approved', 'rejected'
+    lastActivatedAt: v.optional(v.number()),
   }).index("by_transactionType", ["transactionType"])
     .index("by_city", ["location.city"])
     .index("by_featured", ["isFeatured"])

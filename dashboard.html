@@ -533,7 +533,8 @@
             <br>
             ${(() => {
               if (p.isFeatured) return '<span class="prop-status-tag status-featured"><i class="fa-solid fa-star"></i> Featured Posting</span>';
-              const diff = Date.now() - p._creationTime;
+              const activationTime = p.lastActivatedAt || p._creationTime;
+              const diff = Date.now() - activationTime;
               const daysUsed = Math.floor(diff / (1000 * 60 * 60 * 24));
               const daysLeft = Math.max(0, 30 - daysUsed);
               if (daysLeft <= 0) return '<span class="prop-status-tag" style="background:#fee2e2;color:#b91c1c">Expired (30 days limit)</span>';
@@ -542,6 +543,14 @@
           </div>
 
           <div class="dash-prop-actions">
+            ${(() => {
+              const activationTime = p.lastActivatedAt || p._creationTime;
+              const daysUsed = Math.floor((Date.now() - activationTime) / (1000 * 60 * 60 * 24));
+              if (daysUsed >= 30) {
+                return `<button class="dash-action-btn btn-reactivate-prop" style="background:var(--primary); color:#fff; border-color:var(--primary)" data-id="${p._id}" onclick="event.stopPropagation()"><i class="fa-solid fa-rotate-right"></i> Reactivate</button>`;
+              }
+              return '';
+            })()}
             <a href="post-property.html?id=${p._id}" class="dash-action-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
             <button class="dash-action-btn danger btn-delete-prop" data-id="${p._id}" onclick="event.stopPropagation()"><i class="fa-solid fa-trash"></i> Delete</button>
           </div>
@@ -565,6 +574,24 @@
             btn.innerHTML = '<i class="fa-solid fa-trash"></i> Delete';
             btn.disabled = false;
           }
+        }
+      });
+    });
+
+    // Attach Reactivate Listeners
+    document.querySelectorAll('.btn-reactivate-prop').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const id = btn.getAttribute('data-id');
+        try {
+          btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Reactivating...';
+          btn.disabled = true;
+          await convex.mutation('properties:reactivateProperty', { token, id });
+          if (typeof window.showToast === 'function') window.showToast('Property reactivated for 30 days!', 'success');
+          setTimeout(() => window.location.reload(), 1500);
+        } catch (err) {
+          alert('Error: ' + err.message);
+          btn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Reactivate';
+          btn.disabled = false;
         }
       });
     });
