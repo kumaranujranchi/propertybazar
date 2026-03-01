@@ -128,6 +128,7 @@ export const createTelegramProperty = internalMutation({
     details: v.any(),
   },
   handler: async (ctx, args) => {
+    // Ensure all mandatory fields from schema.ts are present
     return await ctx.db.insert("properties", {
       userId: args.userId,
       transactionType: args.transactionType,
@@ -136,14 +137,22 @@ export const createTelegramProperty = internalMutation({
         expectedPrice: args.price,
       },
       location: {
-        city: "",
-        state: "",
-        locality: args.location.address || "",
+        city: args.location.city || "",
+        state: args.location.state || "",
+        locality: args.location.locality || args.location.address || "",
         address: args.location.address || "",
+        pinCode: args.location.pinCode || "",
       },
-      details: args.details,
+      details: {
+        ...args.details,
+        builtUpArea: args.details.area || "0",
+        propertyStatus: args.details.status || "Ready to Move",
+      },
       amenities: [],
       photos: [],
+      contactDesc: { 
+        description: `Posted via Telegram Bot on ${new Date().toLocaleDateString()}` 
+      },
       isFeatured: false,
       approvalStatus: "pending",
     });
@@ -266,65 +275,69 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any,
 
   switch (step) {
     case "transactionType":
-      if (["Buy", "Rent"].includes(text)) {
+      const txMap: Record<string, string> = { "Buy (Sell)": "Sale", "Rent": "Rent", "PG / Co-living": "PG" };
+      const selectedTx = txMap[text] || text;
+      
+      if (["Sale", "Rent", "PG"].includes(selectedTx)) {
         await ctx.runMutation(internal.telegram.updateState, { 
-          chatId, step: "propertyType", data: { transactionType: text } 
+          chatId, step: "propertyType", data: { transactionType: selectedTx } 
         });
-        await sendMessage(chatId, "Great! Now, what is the property type?", {
+        await sendMessage(chatId, "Great! What is the property type? (Mandatory) 🏠", {
           reply_markup: {
             inline_keyboard: [
-              [{ text: "Apartment", callback_data: "Apartment" }, { text: "House", callback_data: "House" }], 
-              [{ text: "Plot", callback_data: "Plot" }, { text: "Commercial", callback_data: "Commercial" }]
+              [{ text: "Apartment", callback_data: "Apartment" }, { text: "Villa / House", callback_data: "House" }], 
+              [{ text: "Plot / Land", callback_data: "Plot" }, { text: "Commercial", callback_data: "Commercial" }],
+              [{ text: "PG Room", callback_data: "PG Room" }, { text: "Warehouse", callback_data: "Warehouse" }],
+              [{ text: "Hotel / Resort", callback_data: "Hotel" }, { text: "Lodge", callback_data: "Lodge" }]
             ]
           }
         });
       } else {
-        await sendMessage(chatId, "Please select one of the options below ⬇️", {
+        await sendMessage(chatId, "Please select the transaction type: (Mandatory) ⬇️", {
           reply_markup: {
-            inline_keyboard: [[
-              { text: "Buy (Sell)", callback_data: "Buy" }, 
-              { text: "Rent", callback_data: "Rent" }
-            ]]
+            inline_keyboard: [
+              [{ text: "Buy (Sell)", callback_data: "Buy (Sell)" }, { text: "Rent", callback_data: "Rent" }],
+              [{ text: "PG / Co-living", callback_data: "PG / Co-living" }]
+            ]
           }
         });
       }
       break;
     
     case "propertyType":
-      const validPropType = ["Apartment", "House", "Plot", "Commercial", "Flat"].includes(text);
+      const validPropType = ["Apartment", "House", "Plot", "Commercial", "PG Room", "Warehouse", "Hotel", "Lodge", "Flat"].includes(text);
       if (validPropType) {
-        let nextStep = "location";
-        let msg = "Where is the property located? You can type the address or share your location 📍";
-        let markup: any = {
-          inline_keyboard: [[{ text: "Share Location", request_location: true }]] // Note: Inline buttons can't request location in the same way as keyboard buttons usually
-        };
-        // For location, we might actually need a regular keyboard or just ask them to type
-        // Let's stick to regular keyboard for Location as it has "request_location"
-        let useRegularKeyboard = false;
-
-        if (["Apartment", "House", "Flat"].includes(text)) {
-          nextStep = "bhk";
-          msg = "How many BHK? 🏠";
-          markup = {
-            inline_keyboard: [
-              [{ text: "1 BHK", callback_data: "1 BHK" }, { text: "2 BHK", callback_data: "2 BHK" }], 
-              [{ text: "3 BHK", callback_data: "3 BHK" }, { text: "4+ BHK", callback_data: "4+ BHK" }]
-            ]
-          };
-        } else {
-          useRegularKeyboard = true;
-          markup = {
-            keyboard: [[{ text: "Share Location", request_location: true }]],
-            one_time_keyboard: true, resize_keyboard: true
-          };
-        }
-
+        const pType = text === "Apartment" ? "Flat" : text;
+        const isResidential = ["Flat", "House"].includes(pType);
+        
         await ctx.runMutation(internal.telegram.updateState, { 
-          chatId, step: nextStep, data: { propertyType: text === "Apartment" ? "Flat" : text } 
+          chatId, step: isResidential ? "bhk" : "status", data: { propertyType: pType } 
         });
-        await sendMessage(chatId, msg, { reply_markup: markup });
+
+        if (isResidential) {
+          await sendMessage(chatId, "How many BHK? (Mandatory) 🛌", {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: "1 RK", callback_data: "1RK" }, { text: "1 BHK", callback_data: "1BHK" }], 
+                [{ text: "2 BHK", callback_data: "2BHK" }, { text: "3 BHK", callback_data: "3BHK" }],
+                [{ text: "4 BHK", callback_data: "4BHK" }, { text: "4.5 BHK", callback_data: "4.5BHK" }],
+                [{ text: "5 BHK", callback_data: "5BHK" }, { text: "Others", callback_data: "Others" }]
+              ]
+            }
+          });
+        } else {
+          await sendMessage(chatId, "What is the property status? (Mandatory) 🏗️", {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: "Ready to Move", callback_data: "Ready to Move" }],
+                [{ text: "Under Construction", callback_data: "Under Construction" }],
+                [{ text: "New Launch", callback_data: "New Launch" }]
+              ]
+            }
+          });
+        }
       } else {
-        await sendMessage(chatId, "Please select the property type from the buttons below ⬇️", {
+        await sendMessage(chatId, "Please select property type from buttons ⬇️", {
           reply_markup: {
             inline_keyboard: [
               [{ text: "Apartment", callback_data: "Apartment" }, { text: "House", callback_data: "House" }], 
@@ -337,38 +350,83 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any,
 
     case "bhk":
       await ctx.runMutation(internal.telegram.updateState, { 
-        chatId, step: "location", data: { bhk: text.split(" ")[0] } 
+        chatId, step: "status", data: { bhk: text } 
       });
-      await sendMessage(chatId, "Where is the property located? You can type the address or share your location 📍", {
+      await sendMessage(chatId, "What is the property status? (Mandatory) 🏗️", {
         reply_markup: {
-          keyboard: [[{ text: "Share Location", request_location: true }]],
+          inline_keyboard: [
+            [{ text: "Ready to Move", callback_data: "Ready to Move" }],
+            [{ text: "Under Construction", callback_data: "Under Construction" }],
+            [{ text: "New Launch", callback_data: "New Launch" }]
+          ]
+        }
+      });
+      break;
+
+    case "status":
+      await ctx.runMutation(internal.telegram.updateState, { 
+        chatId, step: "area", data: { status: text } 
+      });
+      await sendMessage(chatId, "What is the Built-up Area in sq.ft? (Mandatory) 📏\n(Example: 1200)");
+      break;
+
+    case "area":
+      const areaNum = parseInt(text.replace(/[^0-9]/g, ""));
+      if (isNaN(areaNum)) {
+        await sendMessage(chatId, "Please enter a valid number for area.");
+        return;
+      }
+      await ctx.runMutation(internal.telegram.updateState, { 
+        chatId, step: "location", data: { area: areaNum } 
+      });
+      await sendMessage(chatId, "Where is the property located?\n\nType the **City** (Mandatory) 📍", {
+        reply_markup: {
+          keyboard: [[{ text: "Share My Location", request_location: true }]],
           one_time_keyboard: true, resize_keyboard: true
         }
       });
       break;
 
     case "location":
-      const isLocation = !!update.message?.location;
-      const locData = isLocation
-        ? { lat: update.message.location.latitude, lng: update.message.location.longitude, address: "Location shared via GPS" }
-        : { address: text };
-      
+      const isLocUpdate = !!update.message?.location;
+      if (isLocUpdate) {
+        const loc = update.message.location;
+        await ctx.runMutation(internal.telegram.updateState, { 
+          chatId, step: "price", data: { location: { lat: loc.latitude, lng: loc.longitude, address: "GPS Location", city: "Shared via GPS" } } 
+        });
+        await sendMessage(chatId, "What is the expected Price/Rent in Rupees? (Mandatory) 💸\n(Example: 4500000 or 15000)");
+      } else {
+        await ctx.runMutation(internal.telegram.updateState, { 
+          chatId, step: "locality", data: { location: { city: text } } 
+        });
+        await sendMessage(chatId, "Enter the **Locality / Area** name: (Mandatory) 🏘️");
+      }
+      break;
+
+    case "locality":
       await ctx.runMutation(internal.telegram.updateState, { 
-        chatId, step: "price", data: { location: locData } 
+        chatId, step: "price", data: { location: { ...data.location, locality: text, address: `${text}, ${data.location.city}` } } 
       });
-      await sendMessage(chatId, "What is the expected price/rent in Rupees? (e.g., 4500000 or 15000)");
+      await sendMessage(chatId, "What is the expected Price/Rent in Rupees? (Mandatory) 💸\n(Example: 4500000 or 15000)");
       break;
 
     case "price":
-      const priceNum = parseInt(text.replace(/,/g, ""));
+      const priceNum = parseInt(text.replace(/[^0-9]/g, ""));
       if (isNaN(priceNum)) {
-        await sendMessage(chatId, "Please enter a valid number for the price.");
+        await sendMessage(chatId, "Please enter a valid number for price.");
         return;
       }
       await ctx.runMutation(internal.telegram.updateState, { 
         chatId, step: "finish", data: { price: priceNum } 
       });
-      const summary = `Summary of your listing:\n- ${data.transactionType} ${data.propertyType}\n- BHK: ${data.bhk || "N/A"}\n- Price: ₹${priceNum.toLocaleString("en-IN")}\n\nConfirm to post?`;
+      const summary = `📋 **Listing Summary**\n` + 
+                      `- Type: ${data.transactionType} ${data.propertyType}\n` +
+                      `- Config: ${data.bhk || "N/A"}\n` +
+                      `- Status: ${data.status}\n` +
+                      `- Area: ${data.area} sq.ft\n` +
+                      `- Location: ${data.location.locality || data.location.city}\n` +
+                      `- Price: ₹${priceNum.toLocaleString("en-IN")}\n\n` +
+                      `**Confirm to post?**`;
       await sendMessage(chatId, summary, {
         reply_markup: {
           inline_keyboard: [[
@@ -383,23 +441,23 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any,
       if (text === "Confirm ✅") {
         const user = await ctx.runQuery(internal.telegram.getUserByChatId, { chatId });
         if (!user) {
-          await sendMessage(chatId, "Account error. Please try linking again.");
+          await sendMessage(chatId, "Account error. Please link again.");
           return;
         }
 
         await ctx.runMutation(internal.telegram.createTelegramProperty, {
           userId: user._id,
-          transactionType: data.transactionType.toLowerCase() === "buy" ? "sell" : "rent",
+          transactionType: data.transactionType.toLowerCase() === "sale" || data.transactionType === "Buy" ? "sell" : "rent",
           propertyType: data.propertyType,
           price: data.price,
           location: data.location,
-          details: { bhk: data.bhk || "0" }
+          details: { bhk: data.bhk || "0", status: data.status, area: data.area }
         });
 
-        await sendMessage(chatId, "🚀 Property posted successfully! You can view it on your dashboard.");
+        await sendMessage(chatId, "🚀 **Property posted successfully!**\n\nIt is now visible in your Dashboard. Our team will review and approve it shortly.\n\nType /post for a new listing.");
         await ctx.runMutation(internal.telegram.resetState, { chatId });
       } else {
-        await sendMessage(chatId, "Listing cancelled.");
+        await sendMessage(chatId, "Listing cancelled. Type /post to start fresh.");
         await ctx.runMutation(internal.telegram.resetState, { chatId });
       }
       break;
