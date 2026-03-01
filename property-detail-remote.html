@@ -1153,9 +1153,9 @@
               ownerAvatar.innerHTML = `<img src="${p.ownerInfo.profilePictureUrl}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
               ownerAvatar.style.background = 'transparent';
             } else {
-              ownerAvatar.innerHTML = `<img src="images/favicon.svg" style="width:100%;height:100%;border-radius:50%;object-fit:contain;background:var(--primary);padding:4px;">`;
-              ownerAvatar.style.background = 'var(--primary)';
-              ownerAvatar.textContent = '';
+              // Show the "24" brand logo as default avatar
+              ownerAvatar.innerHTML = `<div style="width:100%;height:100%;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:900;font-family:'Poppins', sans-serif">24</div>`;
+              ownerAvatar.style.background = 'transparent';
             }
           }
           if (ownerJoinDate) {
