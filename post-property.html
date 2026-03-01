@@ -1472,10 +1472,12 @@
   <script>
     // ---- Property-type-aware Step 3 fields ----
     function applyPropertyTypeUX() {
-      // Get selected property type from step 1 (2nd grid)
+      // Get selected property type from step 1 (3rd grid because grid 1 is 'Posting as' and grid 2 is 'Transaction Type')
       const step1Grids = document.querySelectorAll('#formStep1 .form-type-grid');
-      if (!step1Grids[1]) return;
-      const activeType = step1Grids[1].querySelector('.active .name');
+      // grid[0] is Posting As, grid[1] is Transaction Type, grid[2] is Property Type
+      if (!step1Grids[2]) return;
+      
+      const activeType = step1Grids[2].querySelector('.active .name');
       const propType = activeType ? activeType.innerText.toLowerCase() : '';
 
       const isLand = /plot|land/i.test(propType);
@@ -1491,11 +1493,11 @@
         const el = document.getElementById(id);
         if (el) {
           el.style.display = hidden ? 'none' : '';
-          // Clear value when hiding so it doesn't get submitted
-          if (hidden) {
-            const input = el.querySelector('input,select,textarea');
-            if (input && input.type !== 'radio' && input.type !== 'checkbox') input.value = '';
-          }
+          // Avoid clearing values while user is interacting as it causes data loss
+          // if (hidden) {
+          //   const input = el.querySelector('input,select,textarea');
+          //   if (input && input.type !== 'radio' && input.type !== 'checkbox') input.value = '';
+          // }
         }
       };
 

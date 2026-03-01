@@ -830,10 +830,11 @@
         // ---- Helpers ----
         const isLand = /plot|land/i.test(p.propertyType || '');
         const isCommercial = /commercial|shop|office|warehouse/i.test(p.propertyType || '');
-        const bhk = p.details?.bhk;
-        const price = p.pricing?.expectedPrice || 0;
+        const bhkRaw = p.details?.bhk || '';
+        const bhk = bhkRaw.toString().replace(/bhk/i, '').trim();
+        const price = p.pricing?.expectedPrice || p.pricing?.rent || p.pricing?.pricePerMonth || 0;
         const area = p.details?.builtUpArea || 0;
-        const priceStr = '₹' + price.toLocaleString('en-IN');
+        const priceStr = price > 0 ? '₹' + price.toLocaleString('en-IN') : 'Price on Request';
         const ppsf = area > 0 ? Math.round(price / area) : 0;
 
         function buildTag(icon, text, colorClass = 'primary') {
