@@ -1226,30 +1226,30 @@
           <!-- New Lodge Pricing Fields -->
           <div class="form-group" id="fgPricePerDay" style="display:none">
             <label class="form-label">Price per Day (₹) *</label>
-            <input type="number" class="form-input" placeholder="e.g. 500">
+            <input type="number" id="lodgePriceDayInput" class="form-input" placeholder="e.g. 500">
           </div>
           <div class="form-group" id="fgPricePerWeek" style="display:none">
             <label class="form-label">Price per Week (₹) (Optional)</label>
-            <input type="number" class="form-input" placeholder="e.g. 3000">
+            <input type="number" id="lodgePriceWeekInput" class="form-input" placeholder="e.g. 3000">
           </div>
           <div class="form-group" id="fgPricePerMonth" style="display:none">
             <label class="form-label">Price per Month (₹) (Optional)</label>
-            <input type="number" class="form-input" placeholder="e.g. 10000">
+            <input type="number" id="lodgePriceMonthInput" class="form-input" placeholder="e.g. 10000">
           </div>
           <div class="form-group" id="fgSecurityDeposit" style="display:none">
             <label class="form-label">Security Deposit (₹) (if any)</label>
-            <input type="number" class="form-input" placeholder="e.g. 1500">
+            <input type="number" id="lodgeSecurityDepositInput" class="form-input" placeholder="e.g. 1500">
           </div>
           <div class="form-group" id="fgElectricityExtra" style="display:none">
             <label class="form-label">Electricity Charges</label>
-            <select class="form-input form-select">
+            <select id="lodgeElectricitySelect" class="form-input form-select">
               <option>Included</option>
               <option>Extra</option>
             </select>
           </div>
           <div class="form-group" id="fgGstExtra" style="display:none">
             <label class="form-label">GST Charges</label>
-            <select class="form-input form-select">
+            <select id="lodgeGstSelect" class="form-input form-select">
               <option>Included</option>
               <option>Extra</option>
             </select>
@@ -1581,6 +1581,14 @@
       hide('fgPriceType', isHospOrLodge);
       hide('fgMaintCharges', isHospOrLodge);
       hide('fgTokenAmt', isHospOrLodge);
+
+      // Handle Label for Rent vs Buy
+      const transType = step1Grids[1]?.querySelector(".active .name")?.innerText.trim() || "";
+      const isRent = transType.toLowerCase().includes('rent');
+      const expectedPriceLabel = document.querySelector('#fgExpectedPrice .form-label');
+      if (expectedPriceLabel) {
+        expectedPriceLabel.textContent = isRent ? 'Monthly Rent (₹) *' : 'Expected Price (₹) *';
+      }
 
       // Also update Step 3 title to match context
       const step3Title = document.querySelector('#formStep3 .form-card-title');

@@ -945,21 +945,43 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Pre-fill Step 5: Pricing & Contact
-        const priceInputs = document.querySelectorAll("#formStep5 .form-input");
-        if (priceInputs[0]) {
-          priceInputs[0].value = prop.pricing.expectedPrice;
-          priceInputs[1].value = prop.pricing.pricingType || '';
-          priceInputs[2].value = prop.pricing.priceType || '';
-          priceInputs[3].value = prop.pricing.maintenance || '';
-          priceInputs[4].value = prop.pricing.tokenAmount || '';
-          if (document.getElementById('negotiableSelect')) document.getElementById('negotiableSelect').value = prop.pricing.negotiable === true ? 'true' : 'false';
-          if (document.getElementById('availabilityDateInput')) document.getElementById('availabilityDateInput').value = prop.pricing.availabilityDate || '';
-          if (document.getElementById('contactNameInput')) document.getElementById('contactNameInput').value = prop.contactDesc.name;
-          if (document.getElementById('contactMobileInput')) document.getElementById('contactMobileInput').value = prop.contactDesc.mobile;
-          if (document.getElementById('contactEmailInput')) document.getElementById('contactEmailInput').value = prop.contactDesc.email;
-          if (document.getElementById('contactRoleSelect')) document.getElementById('contactRoleSelect').value = prop.contactDesc.role || '';
-          if (document.getElementById('contactTimeSelect')) document.getElementById('contactTimeSelect').value = prop.contactDesc.contactTime || '';
-        }
+        const p = prop.pricing || {};
+        const setVal = (id, val) => {
+          const el = document.getElementById(id);
+          if (el) el.value = val !== undefined ? val : '';
+        };
+
+        setVal('expectedPriceInput', p.expectedPrice);
+        setVal('pricingTypeSelect', p.pricingType);
+        setVal('priceTypeSelect', p.priceType);
+        setVal('maintenanceChargesInput', p.maintenance);
+        setVal('tokenAmountInput', p.tokenAmount);
+        setVal('negotiableSelect', p.negotiable === true ? 'true' : 'false');
+        setVal('availabilityDateInput', p.availabilityDate);
+
+        // Commercial Pricing
+        setVal('commercialRentInput', p.rent);
+        setVal('commercialLeasePeriodInput', p.leasePeriod);
+        setVal('commercialLockInPeriodInput', p.lockInPeriod);
+        setVal('commercialSecurityDepositInput', p.securityDeposit);
+        setVal('commercialCamChargesInput', p.camCharges);
+        setVal('commercialRentPerSqFtInput', p.rentPerSqFt);
+        setVal('commercialEscalationInput', p.escalationPercent);
+
+        // Hospitality Pricing
+        setVal('lodgePriceDayInput', p.pricePerDay);
+        setVal('lodgePriceWeekInput', p.pricePerWeek);
+        setVal('lodgePriceMonthInput', p.pricePerMonth);
+        setVal('lodgeSecurityDepositInput', p.securityDeposit); // Same field shared or separate? In HTML it was unique id
+        setVal('lodgeElectricitySelect', p.electricityExtra);
+        setVal('lodgeGstSelect', p.gstExtra);
+
+        const c = prop.contactDesc || {};
+        setVal('contactNameInput', c.name);
+        setVal('contactMobileInput', c.mobile);
+        setVal('contactEmailInput', c.email);
+        setVal('contactRoleSelect', c.role);
+        setVal('contactTimeSelect', c.contactTime);
       }
     } catch (err) {
       console.error("Error loading property for edit:", err);
@@ -1181,6 +1203,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       tokenAmount: Number(document.getElementById('tokenAmountInput')?.value) || undefined,
       negotiable: document.getElementById('negotiableSelect')?.value === 'true',
       availabilityDate: document.getElementById('availabilityDateInput')?.value || undefined,
+      // Commercial
       rent: Number(document.getElementById('commercialRentInput')?.value) || undefined,
       leasePeriod: document.getElementById('commercialLeasePeriodInput')?.value || undefined,
       lockInPeriod: document.getElementById('commercialLockInPeriodInput')?.value || undefined,
@@ -1188,6 +1211,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       camCharges: Number(document.getElementById('commercialCamChargesInput')?.value) || undefined,
       rentPerSqFt: Number(document.getElementById('commercialRentPerSqFtInput')?.value) || undefined,
       escalationPercent: Number(document.getElementById('commercialEscalationInput')?.value) || undefined,
+      // Hospitality
+      pricePerDay: Number(document.getElementById('lodgePriceDayInput')?.value) || undefined,
+      pricePerWeek: Number(document.getElementById('lodgePriceWeekInput')?.value) || undefined,
+      pricePerMonth: Number(document.getElementById('lodgePriceMonthInput')?.value) || undefined,
+      electricityExtra: document.getElementById('lodgeElectricitySelect')?.value || undefined,
+      gstExtra: document.getElementById('lodgeGstSelect')?.value || undefined,
     };
 
     const contactDesc = {

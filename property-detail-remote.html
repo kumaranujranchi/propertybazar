@@ -832,7 +832,12 @@
         const isCommercial = /commercial|shop|office|warehouse/i.test(p.propertyType || '');
         const bhkRaw = p.details?.bhk || '';
         const bhk = bhkRaw.toString().replace(/bhk/i, '').trim();
-        const price = p.pricing?.expectedPrice || p.pricing?.rent || p.pricing?.pricePerMonth || 0;
+        
+        // Comprehensive price fallback
+        let price = p.pricing?.expectedPrice || 0;
+        if (!price || price === 0) {
+          price = p.pricing?.rent || p.pricing?.pricePerMonth || p.pricing?.pricePerDay || 0;
+        }
         const area = p.details?.builtUpArea || 0;
         const priceStr = price > 0 ? '₹' + price.toLocaleString('en-IN') : 'Price on Request';
         const ppsf = area > 0 ? Math.round(price / area) : 0;
