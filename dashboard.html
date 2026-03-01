@@ -202,6 +202,7 @@
     <div class="dash-nav-item active" data-section="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</div>
     <div class="dash-nav-item" data-section="profile"><i class="fa-solid fa-user"></i> My Profile</div>
     <div class="dash-nav-item" data-section="properties"><i class="fa-solid fa-house"></i> My Properties</div>
+    <div class="dash-nav-item" data-section="drafts"><i class="fa-solid fa-file-pen"></i> My Drafts</div>
     <div class="dash-nav-item" data-section="leads"><i class="fa-solid fa-address-card"></i> My Leads</div>
     <div class="dash-nav-item" data-section="plans"><i class="fa-solid fa-star"></i> Plan & Subscriptions</div>
     <div class="dash-nav-item" data-section="payments"><i class="fa-solid fa-receipt"></i> Payment History</div>
@@ -307,6 +308,17 @@
         </div>
         <div id="myPropertiesList">
           <div class="dash-empty">Loading your properties...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: My Drafts -->
+    <div class="dash-section" id="sec-drafts">
+      <div class="dash-card">
+        <div class="dash-card-title">My Drafts</div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Saved drafts of properties you haven't posted yet. These are kept for 10 days.</p>
+        <div id="myDraftsList">
+          <div class="dash-empty">Checking for drafts...</div>
         </div>
       </div>
     </div>
@@ -596,6 +608,45 @@
         }
       });
     });
+  }
+
+  // Load Drafts
+  const draftsList = document.getElementById('myDraftsList');
+  try {
+    const draft = await convex.query('drafts:getDraft', { token });
+    if (!draft) {
+      draftsList.innerHTML = `<div class="dash-empty">
+        <div style="font-size:32px;margin-bottom:12px;opacity:0.6"><i class="fa-solid fa-file-circle-xmark"></i></div>
+        <p style="font-weight:700;color:var(--dark)">No active drafts</p>
+        <p style="font-size:13px">Your auto-saved progress will appear here.</p>
+      </div>`;
+    } else {
+      const d = draft.data;
+      const title = `${d.details?.bhk ? d.details.bhk + ' BHK ' : ''}${d.propertyType || 'Property'} in ${d.location?.locality || d.location?.city || 'Incomplete Location'}`;
+      draftsList.innerHTML = `
+        <div class="dash-prop-card">
+          <div class="dash-prop-info">
+            <div class="dash-prop-title">${title}</div>
+            <div class="dash-prop-loc"><i class="fa-solid fa-clock-rotate-left"></i> Last updated: ${new Date(draft.lastUpdated).toLocaleString('en-IN')}</div>
+            <div class="dash-prop-actions">
+              <a href="post-property.html" class="dash-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-file-signature"></i> Resume Editing
+              </a>
+              <button class="dash-action-btn danger" id="btnDeleteDraft"><i class="fa-solid fa-trash"></i> Discard Draft</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('btnDeleteDraft').onclick = async () => {
+        if (confirm('Are you sure you want to discard this draft?')) {
+          await convex.mutation('drafts:deleteDraft', { token });
+          window.location.reload();
+        }
+      };
+    }
+  } catch (err) {
+    console.error("Failed to fetch draft:", err);
+    draftsList.innerHTML = `<div class="dash-empty">Error loading drafts.</div>`;
   }
 
   // Load Leads
