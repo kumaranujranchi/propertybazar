@@ -42,7 +42,11 @@ export const handleUpdate = action({
       await answerCallbackQuery(update.callback_query.id);
     } else if (update.message) {
       chatId = String(update.message.chat.id);
-      text = update.message.text?.trim();
+      if (update.message.photo) {
+        text = "_PHOTO_"; // Sentinel for handleFlowStep
+      } else {
+        text = update.message.text?.trim();
+      }
     } else {
       return;
     }
@@ -126,6 +130,7 @@ export const createTelegramProperty = internalMutation({
     price: v.number(),
     location: v.any(),
     details: v.any(),
+    photos: v.optional(v.array(v.string())), // storageIds
   },
   handler: async (ctx, args) => {
     // Ensure all mandatory fields from schema.ts are present
@@ -149,7 +154,11 @@ export const createTelegramProperty = internalMutation({
         propertyStatus: args.details.status || "Ready to Move",
       },
       amenities: [],
-      photos: [],
+      photos: (args.photos || []).map((storageId, index) => ({
+        storageId,
+        category: "Exterior",
+        isCover: index === 0
+      })),
       contactDesc: { 
         description: `Posted via Telegram Bot on ${new Date().toLocaleDateString()}` 
       },
@@ -417,24 +426,51 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any,
         return;
       }
       await ctx.runMutation(internal.telegram.updateState, { 
-        chatId, step: "finish", data: { price: priceNum } 
+        chatId, step: "photos", data: { price: priceNum, photos: [] } 
       });
-      const summary = `📋 **Listing Summary**\n` + 
-                      `- Type: ${data.transactionType} ${data.propertyType}\n` +
-                      `- Config: ${data.bhk || "N/A"}\n` +
-                      `- Status: ${data.status}\n` +
-                      `- Area: ${data.area} sq.ft\n` +
-                      `- Location: ${data.location.locality || data.location.city}\n` +
-                      `- Price: ₹${priceNum.toLocaleString("en-IN")}\n\n` +
-                      `**Confirm to post?**`;
-      await sendMessage(chatId, summary, {
+      await sendMessage(chatId, "Please send one or more photos of the property! (Optional) 📸\n\nClick **'Done ✅'** when you are finished.", {
         reply_markup: {
-          inline_keyboard: [[
-            { text: "Confirm ✅", callback_data: "Confirm ✅" }, 
-            { text: "Cancel ❌", callback_data: "Cancel ❌" }
-          ]]
+          inline_keyboard: [[{ text: "Done ✅", callback_data: "Done ✅" }]]
         }
       });
+      break;
+
+    case "photos":
+      if (text === "Done ✅") {
+        await ctx.runMutation(internal.telegram.updateState, { chatId, step: "finish", data: {} });
+        const summary = `📋 **Listing Summary**\n` + 
+                        `- Type: ${data.transactionType} ${data.propertyType}\n` +
+                        `- Config: ${data.bhk || "N/A"}\n` +
+                        `- Status: ${data.status}\n` +
+                        `- Area: ${data.area} sq.ft\n` +
+                        `- Location: ${data.location.locality || data.location.city}\n` +
+                        `- Price: ₹${data.price.toLocaleString("en-IN")}\n` +
+                        `- Photos: ${data.photos?.length || 0} attached\n\n` +
+                        `**Confirm to post?**`;
+        await sendMessage(chatId, summary, {
+          reply_markup: {
+            inline_keyboard: [[
+              { text: "Confirm ✅", callback_data: "Confirm ✅" }, 
+              { text: "Cancel ❌", callback_data: "Cancel ❌" }
+            ]]
+          }
+        });
+      } else if (text === "_PHOTO_") {
+        const photoArr = update.message.photo;
+        const bestPhoto = photoArr[photoArr.length - 1]; // Highest resolution
+        const storageId = await downloadAndStoreTelegramPhoto(ctx, bestPhoto.file_id);
+        
+        if (storageId) {
+          await ctx.runMutation(internal.telegram.updateState, { 
+            chatId, step: "photos", data: { photos: [...(data.photos || []), storageId] } 
+          });
+          await sendMessage(chatId, `Photo received! Total: ${ (data.photos?.length || 0) + 1 }. Send more or click Done. ✅`);
+        } else {
+          await sendMessage(chatId, "❌ Failed to process that photo. Please try again or send a different one.");
+        }
+      } else {
+        await sendMessage(chatId, "Please send a photo or click 'Done ✅'.");
+      }
       break;
 
     case "finish":
@@ -451,10 +487,11 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any,
           propertyType: data.propertyType,
           price: data.price,
           location: data.location,
-          details: { bhk: data.bhk || "0", status: data.status, area: data.area }
+          details: { bhk: data.bhk || "0", status: data.status, area: data.area },
+          photos: data.photos
         });
 
-        await sendMessage(chatId, "🚀 **Property posted successfully!**\n\nIt is now visible in your Dashboard. Our team will review and approve it shortly.\n\nType /post for a new listing.");
+        await sendMessage(chatId, "🚀 **Property posted successfully!**\n\nIt is now visible in your Dashboard with the photos you sent. Our team will review it shortly.");
         await ctx.runMutation(internal.telegram.resetState, { chatId });
       } else {
         await sendMessage(chatId, "Listing cancelled. Type /post to start fresh.");
@@ -462,6 +499,38 @@ async function handleFlowStep(ctx: any, chatId: string, state: any, update: any,
       }
       break;
   }
+}
+
+// Storage Helpers
+async function downloadAndStoreTelegramPhoto(ctx: any, fileId: string): Promise<string | null> {
+  try {
+    const fileUrl = await getFileUrl(fileId);
+    if (!fileUrl) return null;
+
+    const response = await fetch(fileUrl);
+    const blob = await response.blob();
+    
+    // storage.store() is available in actions
+    return await ctx.storage.store(blob);
+  } catch (err) {
+    console.error("Photo download error:", err);
+    return null;
+  }
+}
+
+async function getFileUrl(fileId: string): Promise<string | null> {
+  if (!BOT_TOKEN) return null;
+  const url = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data.ok) {
+      return `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
+    }
+  } catch (err) {
+    console.error("getFileUrl error:", err);
+  }
+  return null;
 }
 
 // External API Call Helpers
