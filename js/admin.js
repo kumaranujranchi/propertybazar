@@ -20,8 +20,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('userSearch').addEventListener('input', renderUsersTable);
   
   // Logout
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem("pb_session");
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    const { logout } = await import('./auth.js');
+    await logout();
     window.location.href = "login.html";
   });
 });
