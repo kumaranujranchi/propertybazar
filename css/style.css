@@ -1721,6 +1721,15 @@ textarea {
   color: var(--primary);
 }
 
+@media (max-width: 768px) {
+  .footer-bottom {
+    padding-bottom: 80px; /* Space for AI Search bubble */
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+}
+
 /* ========== FOOTER DOWNLOAD APP ========== */
 .footer-download {
   background: rgba(255, 255, 255, 0.04);
