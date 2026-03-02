@@ -6,7 +6,8 @@ function buildTitle(p) {
   const type = p.propertyType || '';
   const isLand = /plot|land/i.test(type);
   const isCommercial = /commercial|shop|office|warehouse/i.test(type);
-  const bhk = p.details?.bhk;
+  const bhkRaw = String(p.details?.bhk || "");
+  const bhk = bhkRaw.replace(/bhk/gi, "").trim();
 
   if (isLand) return `${type} in ${loc}`;
   if (isCommercial) return `${type} in ${loc}`;
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const title = buildTitle(p);
       const specs = buildSpecs(p);
       const area = p.details?.builtUpArea || 0;
-      const price = p.pricing?.expectedPrice || 0;
+      const price = p.pricing?.expectedPrice || p.pricing?.rent || p.pricing?.pricePerDay || 0;
       const score = calculateQualityScore(p);
 
       return {

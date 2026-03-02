@@ -1340,7 +1340,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (document.getElementById('propertyStatusSelect')) document.getElementById('propertyStatusSelect').value = d.details.status || '';
       if (document.getElementById('builtUpAreaInput')) document.getElementById('builtUpAreaInput').value = d.details.builtUpArea || '';
       if (document.getElementById('descriptionInput')) document.getElementById('descriptionInput').value = d.details.description || '';
-      // ... (Rest of the fields would go here, but these are the main ones)
     }
 
     // Amenities
@@ -1348,6 +1347,51 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.querySelectorAll('.amenity-pill').forEach(pill => {
         if (d.amenities.includes(pill.dataset.value)) pill.classList.add('active');
       });
+    }
+
+    // Step 5: Pricing & Contact
+    if (d.pricing) {
+        const p = d.pricing;
+        const setVal = (id, val) => {
+          const el = document.getElementById(id);
+          if (el) el.value = val !== undefined ? val : '';
+        };
+
+        setVal('expectedPriceInput', p.expectedPrice);
+        setVal('pricingTypeSelect', p.pricingType);
+        setVal('priceTypeSelect', p.priceType);
+        setVal('maintenanceChargesInput', p.maintenance);
+        setVal('tokenAmountInput', p.tokenAmount);
+        setVal('negotiableSelect', p.negotiable === true ? 'true' : 'false');
+        setVal('availabilityDateInput', p.availabilityDate);
+
+        // Commercial Pricing
+        setVal('commercialRentInput', p.rent);
+        setVal('commercialLeasePeriodInput', p.leasePeriod);
+        setVal('commercialLockInPeriodInput', p.lockInPeriod);
+        setVal('commercialSecurityDepositInput', p.securityDeposit);
+        setVal('commercialCamChargesInput', p.camCharges);
+
+        // Hospitality Pricing
+        setVal('lodgePriceDayInput', p.pricePerDay);
+        setVal('lodgePriceWeekInput', p.pricePerWeek);
+        setVal('lodgePriceMonthInput', p.pricePerMonth);
+        setVal('lodgeSecurityDepositInput', p.securityDeposit);
+        setVal('lodgeElectricitySelect', p.electricityExtra);
+        setVal('lodgeGstSelect', p.gstExtra);
+    }
+
+    if (d.contactDesc) {
+        const c = d.contactDesc;
+        const setVal = (id, val) => {
+          const el = document.getElementById(id);
+          if (el) el.value = val !== undefined ? val : '';
+        };
+        setVal('contactNameInput', c.name);
+        setVal('contactMobileInput', c.mobile);
+        setVal('contactEmailInput', c.email);
+        setVal('contactRoleSelect', c.role);
+        setVal('contactTimeSelect', c.contactTime);
     }
 
     window.showToast("Progress resumed from your last draft!", "success");

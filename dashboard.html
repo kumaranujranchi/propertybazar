@@ -1426,7 +1426,16 @@
             <button class="dash-action-btn danger btn-delete-prop" data-id="${p._id}" onclick="event.stopPropagation()"><i class="fa-solid fa-trash"></i> Delete</button>
           </div>
         </div>
-        <div class="dash-prop-price">₹${(p.pricing?.expectedPrice || 0).toLocaleString("en-IN")}</div>
+        <div class="dash-prop-price">
+          ₹${(p.pricing?.expectedPrice || p.pricing?.rent || p.pricing?.pricePerDay || 0).toLocaleString("en-IN")}
+          ${(() => {
+            const tt = (p.transactionType || "").toLowerCase();
+            const pt = (p.propertyType || "").toLowerCase();
+            if (tt.includes("rent") || tt.includes("pg")) return "/mo";
+            if (/lodge|hotel|resort/i.test(pt)) return "/day";
+            return "";
+          })()}
+        </div>
       </div>
     `,
           )
