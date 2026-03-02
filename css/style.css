@@ -574,8 +574,7 @@ textarea {
   border-bottom: 1px solid var(--border);
 }
 .search-tab {
-  flex: 1 1 0;
-  width: 0;
+  flex: 1 1 auto;
   text-align: center;
   padding: 16px 12px;
   font-size: 14px;
@@ -630,7 +629,8 @@ textarea {
   appearance: none;
 }
 .search-field select {
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 8px center/16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")
+    no-repeat right 8px center/16px;
   padding-right: 28px;
 }
 .search-field input:focus,
@@ -1741,8 +1741,8 @@ textarea {
   align-self: start; /* Prevents vertical stretching in grid */
 }
 .footer-download::before {
-  content: '\f3cd';
-  font-family: 'Font Awesome 6 Free';
+  content: "\f3cd";
+  font-family: "Font Awesome 6 Free";
   font-weight: 900;
   position: absolute;
   right: -15px;
@@ -1785,8 +1785,8 @@ textarea {
   font-size: 18px;
 }
 .footer-download h4::before {
-  content: '\f3cd';
-  font-family: 'Font Awesome 6 Free';
+  content: "\f3cd";
+  font-family: "Font Awesome 6 Free";
   font-weight: 900;
   color: var(--primary);
   font-size: 16px;
@@ -1806,7 +1806,9 @@ textarea {
   height: 42px;
   width: auto;
   border-radius: 6px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   display: block;
 }
 .app-badge:hover {
@@ -3562,4 +3564,3 @@ textarea {
 #mapPreviewContainer.loaded #mapPlaceholder {
   display: none !important;
 }
-

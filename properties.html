@@ -70,10 +70,10 @@
 <div style="background:#fff;border-bottom:1px solid var(--border);padding:12px 0;position:sticky;top:64px;z-index:100;box-shadow:var(--shadow-sm)">
   <div class="container">
     <form class="search-form" id="searchForm" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <div class="search-tabs" style="background:transparent;border:none">
-        <div class="search-tab active" data-type="buy" style="padding:8px 16px;font-size:13px"><i class="fa-solid fa-house"></i> Buy</div>
-        <div class="search-tab" data-type="rent" style="padding:8px 16px;font-size:13px"><i class="fa-solid fa-key"></i> Rent</div>
-        <div class="search-tab" data-type="commercial" style="padding:8px 16px;font-size:13px"><i class="fa-solid fa-building"></i> Commercial</div>
+      <div class="search-tabs" style="background:transparent;border:none;flex-shrink:0;display:flex;gap:5px">
+        <div class="search-tab active" data-type="buy" style="padding:8px 16px;font-size:13px;flex:none;width:auto"><i class="fa-solid fa-house"></i> Buy</div>
+        <div class="search-tab" data-type="rent" style="padding:8px 16px;font-size:13px;flex:none;width:auto"><i class="fa-solid fa-key"></i> Rent</div>
+        <div class="search-tab" data-type="commercial" style="padding:8px 16px;font-size:13px;flex:none;width:auto"><i class="fa-solid fa-building"></i> Commercial</div>
       </div>
       <input type="text" id="hero-location" placeholder="🔍 Search city, locality or project..." style="flex:1;padding:8px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;min-width:200px" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
       <button type="submit" class="btn btn-primary" style="padding:9px 20px">🔍 Search</button>
