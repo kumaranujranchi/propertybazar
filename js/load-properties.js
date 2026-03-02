@@ -55,7 +55,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         propType: p.propertyType,
         bhk: parseInt(p.details?.bhk) || 0,
         price,
-        priceDisplay: '₹' + price.toLocaleString('en-IN') + (((p.transactionType || '').toLowerCase().includes('rent') || (p.transactionType || '').toLowerCase().includes('pg')) ? '/mo' : ''),
+        priceDisplay: '₹' + price.toLocaleString('en-IN') + (() => {
+          const tt = (p.transactionType || '').toLowerCase();
+          const pt = (p.propertyType || '').toLowerCase();
+          if (tt.includes('rent') || tt.includes('pg')) return '/mo';
+          if (/lodge|hotel|resort/i.test(pt)) return '/day';
+          return '';
+        })(),
         title,
         specs,   // property-type-aware specs
         location: `${p.location?.locality || ''}, ${p.location?.city || ''}`,
