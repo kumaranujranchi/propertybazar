@@ -1153,7 +1153,12 @@
         <div class="form-grid">
           <!-- Standard Pricing Fields (Hidden for Lodge) -->
           <div class="form-group" id="fgExpectedPrice">
-            <label class="form-label">Expected Price (₹) *</label>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+              <label class="form-label" style="margin-bottom:0">Expected Price (₹) *</label>
+              <label style="font-size: 13px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                <input type="checkbox" id="priceOnRequestCheckbox" style="cursor:pointer; width:16px; height:16px"> Price on Request
+              </label>
+            </div>
             <input type="number" id="expectedPriceInput" class="form-input" placeholder="e.g. 8500000">
           </div>
           <div class="form-group" id="fgPricingType">

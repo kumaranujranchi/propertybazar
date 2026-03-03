@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         bhk: parseInt(p.details?.bhk) || 0,
         price,
         priceDisplay: (() => {
-          if (price <= 0) return 'Price on Request';
+          if (pricing.isPriceOnRequest || price <= 0) return 'Price on Request';
           const tt = (p.transactionType || '').toLowerCase();
           const pt = (p.propertyType || '').toLowerCase();
           let suffix = '';

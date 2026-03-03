@@ -948,9 +948,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         const p = prop.pricing || {};
         const setVal = (id, val) => {
           const el = document.getElementById(id);
-          if (el) el.value = (val !== undefined && val !== null) ? val : '';
+          if (el) {
+            if (el.type === 'checkbox') {
+              el.checked = !!val;
+              el.dispatchEvent(new Event('change'));
+            } else {
+              el.value = (val !== undefined && val !== null) ? val : '';
+              el.dispatchEvent(new Event('change'));
+            }
+          }
         };
 
+        setVal('priceOnRequestCheckbox', p.isPriceOnRequest);
         setVal('expectedPriceInput', p.expectedPrice);
         setVal('pricingTypeSelect', p.pricingType);
         setVal('priceTypeSelect', p.priceType);
@@ -1209,6 +1218,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const pricing = {
       expectedPrice: parseNum('expectedPriceInput'),
+      isPriceOnRequest: document.getElementById('priceOnRequestCheckbox')?.checked || false,
       pricingType: document.getElementById('pricingTypeSelect')?.value || undefined,
       priceType: document.getElementById('priceTypeSelect')?.value || undefined,
       maintenance: parseNum('maintenanceChargesInput'),
@@ -1369,9 +1379,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         const p = d.pricing;
         const setVal = (id, val) => {
           const el = document.getElementById(id);
-          if (el) el.value = (val !== undefined && val !== null) ? val : '';
+          if (el) {
+            if (el.type === 'checkbox') {
+              el.checked = !!val;
+              el.dispatchEvent(new Event('change'));
+            } else {
+              el.value = (val !== undefined && val !== null) ? val : '';
+              el.dispatchEvent(new Event('change'));
+            }
+          }
         };
 
+        setVal('priceOnRequestCheckbox', p.isPriceOnRequest);
         setVal('expectedPriceInput', p.expectedPrice);
         setVal('pricingTypeSelect', p.pricingType);
         setVal('priceTypeSelect', p.priceType);
