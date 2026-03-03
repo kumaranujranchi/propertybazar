@@ -11,6 +11,7 @@ export default defineSchema({
     amenities: v.array(v.string()),
     photos: v.array(v.any()), // Supports objects: { storageId, category, isCover }
     videos: v.optional(v.array(v.any())), // Supports objects: { storageId, category }
+    configurations: v.optional(v.array(v.any())), // e.g. { name, area, price, photos: [{storageId, category}] }
     externalVideos: v.optional(v.array(v.string())), // Youtube/Vimeo links
     pricing: v.any(),
     contactDesc: v.any(),

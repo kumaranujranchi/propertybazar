@@ -944,6 +944,26 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
         }
 
+        // Pre-fill Configurations
+        if (prop.configurations && Array.isArray(prop.configurations)) {
+          const cfgContainer = document.getElementById('configContainer');
+          if (cfgContainer) {
+            cfgContainer.innerHTML = '';
+            prop.configurations.forEach((c) => {
+              const row = document.createElement('div');
+              row.className = 'config-row';
+              row.style.cssText = 'display:flex; gap:8px; align-items:center;';
+              row.innerHTML = `
+                <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1" value="${(c.name||'').replace(/"/g,'&quot;')}">
+                <input type="number" class="form-input config-area" placeholder="Area (sq.ft)" style="width:140px" value="${c.area||''}">
+                <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:160px" value="${c.price||''}">
+                <button type="button" class="btn btn-outline btn-sm remove-config-btn">✕</button>
+              `;
+              cfgContainer.appendChild(row);
+            });
+          }
+        }
+
         // Pre-fill Step 5: Pricing & Contact
         const p = prop.pricing || {};
         const setVal = (id, val) => {
@@ -1067,6 +1087,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     btnRewriteAi.addEventListener('click', handleRewrite);
     aiSuggestionBox.addEventListener('click', handleRewrite);
   }
+
+  // Configurations UI: Add / Remove rows
+  const addConfigBtnEl = document.getElementById('addConfigBtn');
+  if (addConfigBtnEl) {
+    addConfigBtnEl.addEventListener('click', () => {
+      const container = document.getElementById('configContainer');
+      if (!container) return;
+      const row = document.createElement('div');
+      row.className = 'config-row';
+      row.style.cssText = 'display:flex; gap:8px; align-items:center;';
+      row.innerHTML = `
+        <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1">
+        <input type="number" class="form-input config-area" placeholder="Area (sq.ft)" style="width:140px">
+        <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:160px">
+        <button type="button" class="btn btn-outline btn-sm remove-config-btn">✕</button>
+      `;
+      container.appendChild(row);
+      updateConfigRemoveButtons();
+    });
+  }
+
+  function updateConfigRemoveButtons() {
+    const rows = document.querySelectorAll('#configContainer .config-row');
+    rows.forEach((r, idx) => {
+      const btn = r.querySelector('.remove-config-btn');
+      if (!btn) return;
+      btn.style.display = rows.length > 1 ? 'inline-block' : 'none';
+      btn.onclick = () => { r.remove(); updateConfigRemoveButtons(); };
+    });
+  }
+  // Initialize remove buttons for any existing rows
+  updateConfigRemoveButtons();
 
   // ========== DRAFT SYSTEM ==========
   function getFormState() {
@@ -1276,7 +1328,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (q && a) customFAQs.push({ question: q, answer: a });
     });
 
-    return { posterType, transactionType, propertyType, location, details, amenities, pricing, contactDesc, externalVideos, customFAQs };
+    // Collect Configurations (flat types)
+    const configurations = [];
+    document.querySelectorAll('#configContainer .config-row').forEach(row => {
+      const name = row.querySelector('.config-name')?.value.trim();
+      const area = row.querySelector('.config-area')?.value ? Number(row.querySelector('.config-area').value) : undefined;
+      const price = row.querySelector('.config-price')?.value ? Number(row.querySelector('.config-price').value) : undefined;
+      if (name) configurations.push({ name, area, price });
+    });
+
+    return { posterType, transactionType, propertyType, location, details, amenities, pricing, contactDesc, externalVideos, customFAQs, configurations };
   }
 
   async function saveDraftToCloud(isManual = false) {

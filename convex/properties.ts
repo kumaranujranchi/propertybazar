@@ -71,6 +71,38 @@ export const getProperty = query({
         }
       })
     );
+    // Resolve videos if present
+    const resolvedVideos = await Promise.all(
+      (p.videos || []).map(async (video: any) => {
+        try {
+          const storageId = typeof video === 'string' ? video : video.storageId;
+          const url = await ctx.storage.getUrl(storageId as any);
+          return typeof video === 'string' ? url : { ...video, url: url ?? null };
+        } catch {
+          return null;
+        }
+      })
+    );
+
+    // Resolve configuration photo URLs (if any)
+    let resolvedConfigurations = p.configurations || [];
+    if (Array.isArray(p.configurations)) {
+      resolvedConfigurations = await Promise.all(
+        p.configurations.map(async (cfg: any) => {
+          if (!cfg || !Array.isArray(cfg.photos)) return cfg;
+          const photos = await Promise.all(
+            cfg.photos.map(async (ph: any) => {
+              try {
+                const sid = typeof ph === 'string' ? ph : ph.storageId;
+                const url = await ctx.storage.getUrl(sid as any);
+                return typeof ph === 'string' ? url : { ...ph, url: url ?? null };
+              } catch { return null; }
+            })
+          );
+          return { ...cfg, photos: photos.filter(Boolean) };
+        })
+      );
+    }
     const owner = p.userId ? await ctx.db.get(p.userId) : null;
     const ownerInfo = owner ? {
       name: owner.name,
@@ -81,7 +113,7 @@ export const getProperty = query({
       subscriptionTier: owner.subscriptionTier
     } : null;
 
-    return { ...p, photos: resolvedPhotos.filter(Boolean), ownerInfo };
+    return { ...p, photos: resolvedPhotos.filter(Boolean), videos: resolvedVideos.filter(Boolean), configurations: resolvedConfigurations, ownerInfo };
   },
 });
 
@@ -107,6 +139,7 @@ export const createProperty = mutation({
     amenities: v.array(v.string()),
     photos: v.array(v.any()),
     videos: v.optional(v.array(v.any())),
+    configurations: v.optional(v.array(v.any())),
     externalVideos: v.optional(v.array(v.string())),
     pricing: v.any(),
     contactDesc: v.any(),
@@ -167,6 +200,7 @@ export const createProperty = mutation({
       amenities: args.amenities,
       photos: args.photos,
       videos: args.videos,
+      configurations: args.configurations,
       externalVideos: args.externalVideos,
       pricing: args.pricing,
       contactDesc: args.contactDesc,
@@ -214,6 +248,7 @@ export const updateProperty = mutation({
     amenities: v.array(v.string()),
     photos: v.array(v.any()),
     videos: v.optional(v.array(v.any())),
+    configurations: v.optional(v.array(v.any())),
     externalVideos: v.optional(v.array(v.string())),
     pricing: v.any(),
     contactDesc: v.any(),
@@ -239,6 +274,7 @@ export const updateProperty = mutation({
       amenities: args.amenities,
       photos: args.photos,
       videos: args.videos,
+      configurations: args.configurations,
       externalVideos: args.externalVideos,
       pricing: args.pricing,
       contactDesc: args.contactDesc,

@@ -510,11 +510,25 @@
           </div>
         </div>
 
-        <!-- FLOOR PLAN -->
-        <div id="floorPlan" class="detail-section-card" id="floorPlanSection" style="display:none">
-          <h2 class="section-h2"><i class="fa-solid fa-draw-polygon"></i> Site & Floor Plan</h2>
-          <div class="floor-plan-container">
-            <img src="" alt="Floor Plan" id="floorPlanImg" style="width: 100%; border-radius: 8px;">
+        <!-- FLOOR PLANS (multiple) -->
+        <div id="floorPlanSection" class="detail-section-card" style="display:none">
+          <h2 class="section-h2"><i class="fa-solid fa-draw-polygon"></i> Site & Floor Plans</h2>
+          <div id="floorPlanCarousel" style="display:flex; gap:12px; overflow-x:auto; padding:8px 4px;">
+            <!-- Floor plan cards inserted here -->
+          </div>
+          <div id="projectConfigsList" style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap">
+            <!-- Configuration badges (2BHK, 3BHK, etc) -->
+          </div>
+        </div>
+
+        <!-- PROJECT VIDEOS -->
+        <div id="projectVideos" class="detail-section-card" style="display:none">
+          <h2 class="section-h2"><i class="fa-solid fa-video"></i> Project Videos</h2>
+          <div id="projectVideoGrid" style="display:flex; gap:12px; flex-wrap:wrap;">
+            <!-- Uploaded videos will render here -->
+          </div>
+          <div id="projectExternalVideos" style="margin-top:12px; display:flex; gap:8px; flex-direction:column">
+            <!-- External video links (YouTube/Vimeo) -->
           </div>
         </div>
 
@@ -1220,13 +1234,75 @@
         const descEl = document.getElementById('dynamicDescription');
         if (descEl && p.details?.description) descEl.textContent = p.details.description;
 
-        // ---- Floor Plan ----
+        // ---- Floor Plans (multiple) ----
         const floorPlanSection = document.getElementById('floorPlanSection');
-        const floorPlanImg = document.getElementById('floorPlanImg');
-        const floorPlanPhoto = (p.photos || []).find(ph => ph.label === 'Floor Plan');
-        if (floorPlanSection && floorPlanPhoto) {
-          floorPlanImg.src = floorPlanPhoto.url;
+        const floorCarousel = document.getElementById('floorPlanCarousel');
+        const configsList = document.getElementById('projectConfigsList');
+        const floorPhotos = (p.photos || []).filter(ph => ph && ph.category && ph.category.toLowerCase().includes('floor'));
+        if (floorPlanSection && floorPhotos && floorPhotos.length > 0) {
+          floorCarousel.innerHTML = '';
+          floorPhotos.forEach(fp => {
+            const url = typeof fp === 'string' ? fp : fp.url || '';
+            const card = document.createElement('div');
+            card.style.cssText = 'min-width:260px; max-width:400px; border-radius:8px; overflow:hidden; background:#fff; border:1px solid var(--border);';
+            card.innerHTML = `<img src="${url}" style="width:100%; height:180px; object-fit:cover; display:block">`;
+            card.addEventListener('click', () => {
+              const idx = photos.indexOf(url);
+              if (idx >= 0) lbOpen(idx);
+              else window.open(url, '_blank');
+            });
+            floorCarousel.appendChild(card);
+          });
+          // Show section
           floorPlanSection.style.display = 'block';
+        }
+
+        // ---- Configurations (flat types) ----
+        if (configsList && p.configurations && Array.isArray(p.configurations) && p.configurations.length > 0) {
+          configsList.innerHTML = '';
+          p.configurations.forEach(c => {
+            const badge = document.createElement('div');
+            badge.style.cssText = 'background:#f8fafc; padding:8px 12px; border-radius:8px; border:1px solid var(--border); font-weight:700;';
+            let txt = c.name || '';
+            if (c.area) txt += ` • ${c.area} sq.ft`;
+            if (c.price) txt += ` • ₹${Number(c.price).toLocaleString('en-IN')}`;
+            badge.textContent = txt;
+            configsList.appendChild(badge);
+          });
+          // Ensure floor plan section visible when configs exist
+          if (floorPlanSection) floorPlanSection.style.display = 'block';
+        }
+
+        // ---- Project Videos (separate section) ----
+        const projectVideoSection = document.getElementById('projectVideos');
+        const videoGrid = document.getElementById('projectVideoGrid');
+        const extVideoContainer = document.getElementById('projectExternalVideos');
+        const uploadedVideos = p.videos || [];
+        const externalVideos = p.externalVideos || [];
+        if ((uploadedVideos && uploadedVideos.length > 0) || (externalVideos && externalVideos.length > 0)) {
+          if (videoGrid) {
+            videoGrid.innerHTML = '';
+            (uploadedVideos || []).forEach(v => {
+              const url = typeof v === 'string' ? v : v.url || '';
+              const wrap = document.createElement('div');
+              wrap.style.cssText = 'width:320px; border-radius:8px; overflow:hidden; background:#000;';
+              wrap.innerHTML = `<video controls src="${url}" style="width:100%; height:180px; object-fit:cover"></video>`;
+              videoGrid.appendChild(wrap);
+            });
+          }
+          if (extVideoContainer) {
+            extVideoContainer.innerHTML = '';
+            externalVideos.forEach(link => {
+              const a = document.createElement('a');
+              a.href = link;
+              a.target = '_blank';
+              a.rel = 'noopener';
+              a.style.cssText = 'color:var(--primary); font-weight:700;';
+              a.textContent = link;
+              extVideoContainer.appendChild(a);
+            });
+          }
+          if (projectVideoSection) projectVideoSection.style.display = 'block';
         }
 
         // ---- Location Details ----

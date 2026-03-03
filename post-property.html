@@ -324,6 +324,23 @@
             <input type="hidden" id="bhkTypeSelect" value="2BHK">
           </div>
 
+          <!-- Project Configurations (Multiple flat types) -->
+          <div style="grid-column:1 / -1; margin-top:12px;">
+            <h4 style="font-size:14px; font-weight:700; margin-bottom:10px;">Project Configurations (Flat types)</h4>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Add multiple flat configurations like 2BHK, 3BHK with optional area and price. These are useful for builders and project listings.</p>
+            <div id="configContainer" style="display:flex; flex-direction:column; gap:8px;">
+              <div class="config-row" style="display:flex; gap:8px; align-items:center;">
+                <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1">
+                <input type="number" class="form-input config-area" placeholder="Area (sq.ft)" style="width:140px">
+                <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:160px">
+                <button type="button" class="btn btn-outline btn-sm remove-config-btn" style="display:none">✕</button>
+              </div>
+            </div>
+            <div style="margin-top:8px">
+              <button type="button" id="addConfigBtn" class="btn btn-outline btn-sm"><i class="fa-solid fa-plus"></i> Add Configuration</button>
+            </div>
+          </div>
+
           <div class="form-group full" id="fgCustomBhk" style="display:none">
             <label class="form-label">Enter Custom Configuration *</label>
             <input type="text" class="form-input" id="customBhkInput" placeholder="e.g. 7 BHK, Duplex">
