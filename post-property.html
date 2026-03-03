@@ -1171,9 +1171,9 @@
           <div class="form-group" id="fgPriceType">
             <label class="form-label">Price Type</label>
             <select id="priceTypeSelect" class="form-input form-select">
-              <option>Fixed</option>
-              <option>Negotiable</option>
-              <option>Price on request</option>
+              <option value="Fixed">Fixed</option>
+              <option value="Negotiable">Negotiable</option>
+              <option value="Price on request">Price on request</option>
             </select>
           </div>
           <div class="form-group" id="fgMaintCharges">
@@ -1703,6 +1703,40 @@
       const tile = e.target.closest('#formStep1 .form-type-grid .type-card');
       if (tile) setTimeout(applyPropertyTypeUX, 50);
     });
+    // ---- Price on Request Logic ----
+    const porCheckbox = document.getElementById('priceOnRequestCheckbox');
+    const priceInput = document.getElementById('expectedPriceInput');
+    const priceTypeSelect = document.getElementById('priceTypeSelect');
+
+    if (porCheckbox && priceInput && priceTypeSelect) {
+      const updatePorState = (isRequested) => {
+        if (isRequested) {
+          priceInput.disabled = true;
+          priceInput.style.opacity = '0.5';
+          priceInput.placeholder = 'Price on Request enabled';
+          priceTypeSelect.value = 'Price on request';
+          porCheckbox.checked = true;
+        } else {
+          priceInput.disabled = false;
+          priceInput.style.opacity = '1';
+          priceInput.placeholder = 'e.g. 8500000';
+          porCheckbox.checked = false;
+          if (priceTypeSelect.value === 'Price on request') {
+            priceTypeSelect.value = 'Fixed';
+          }
+        }
+      };
+
+      porCheckbox.addEventListener('change', (e) => updatePorState(e.target.checked));
+      priceTypeSelect.addEventListener('change', (e) => {
+        if (e.target.value === 'Price on request') {
+          updatePorState(true);
+        } else {
+          updatePorState(false);
+        }
+      });
+    }
+
     // ---- Opportunity Score Logic ----
     function updateOpportunityScore() {
       let score = 0;

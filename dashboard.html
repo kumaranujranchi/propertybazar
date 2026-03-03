@@ -1430,14 +1430,19 @@
           ${(() => {
             const pricing = p.pricing || {};
             const price = pricing.expectedPrice || pricing.rent || pricing.pricePerDay || pricing.plotRatePerSqFt || 0;
-            if (pricing.isPriceOnRequest || price <= 0) return 'Price on Request';
-            const tt = (p.transactionType || "").toLowerCase();
-            const pt = (p.propertyType || "").toLowerCase();
-            let suffix = "";
-            if (tt.includes("rent") || tt.includes("pg")) suffix = "/mo";
-            else if (/lodge|hotel|resort/i.test(pt)) suffix = "/day";
-            else if (pricing.plotRatePerSqFt && !pricing.expectedPrice) suffix = "/sq.ft";
-            return `₹${price.toLocaleString("en-IN")}${suffix}`;
+            const isPor = pricing.isPriceOnRequest === true || pricing.priceType === 'Price on request';
+            if (isPor) return 'Price on Request';
+            
+            if (price > 0) {
+              const tt = (p.transactionType || "").toLowerCase();
+              const pt = (p.propertyType || "").toLowerCase();
+              let suffix = "";
+              if (tt.includes("rent") || tt.includes("pg")) suffix = "/mo";
+              else if (/lodge|hotel|resort/i.test(pt)) suffix = "/day";
+              else if (pricing.plotRatePerSqFt && !pricing.expectedPrice) suffix = "/sq.ft";
+              return `₹${price.toLocaleString("en-IN")}${suffix}`;
+            }
+            return 'Price on Request';
           })()}
         </div>
       </div>

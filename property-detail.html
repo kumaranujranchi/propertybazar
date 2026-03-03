@@ -836,7 +836,8 @@
         // Comprehensive price fallback
         let price = p.pricing?.expectedPrice || p.pricing?.rent || p.pricing?.pricePerDay || 0;
         const area = p.details?.builtUpArea || 0;
-        const priceStr = (p.pricing?.isPriceOnRequest || price <= 0) ? 'Price on Request' : '₹' + price.toLocaleString('en-IN');
+        const isPor = p.pricing?.isPriceOnRequest === true || p.pricing?.priceType === 'Price on request';
+        const priceStr = isPor ? 'Price on Request' : (price > 0 ? '₹' + price.toLocaleString('en-IN') : 'Price on Request');
         const ppsf = area > 0 ? Math.round(price / area) : 0;
 
         function buildTag(icon, text, colorClass = 'primary') {

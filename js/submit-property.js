@@ -1062,8 +1062,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const parseNum = (id) => {
       const el = document.getElementById(id);
       if (!el || !el.value) return undefined;
-      const clean = String(el.value).replace(/,/g, '').replace(/\s/g, '');
-      const num = Number(clean);
+      // Remove everything except numbers and decimal point
+      const clean = String(el.value).replace(/[^\d.]/g, '');
+      const num = parseFloat(clean);
       return isNaN(num) ? undefined : num;
     };
 
@@ -1218,7 +1219,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const pricing = {
       expectedPrice: parseNum('expectedPriceInput'),
-      isPriceOnRequest: document.getElementById('priceOnRequestCheckbox')?.checked || false,
+      isPriceOnRequest: document.getElementById('priceOnRequestCheckbox')?.checked || document.getElementById('priceTypeSelect')?.value === 'Price on request',
       pricingType: document.getElementById('pricingTypeSelect')?.value || undefined,
       priceType: document.getElementById('priceTypeSelect')?.value || undefined,
       maintenance: parseNum('maintenanceChargesInput'),

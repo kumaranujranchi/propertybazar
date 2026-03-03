@@ -57,14 +57,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         bhk: parseInt(p.details?.bhk) || 0,
         price,
         priceDisplay: (() => {
-          if (pricing.isPriceOnRequest || price <= 0) return 'Price on Request';
-          const tt = (p.transactionType || '').toLowerCase();
-          const pt = (p.propertyType || '').toLowerCase();
-          let suffix = '';
-          if (tt.includes('rent') || tt.includes('pg')) suffix = '/mo';
-          else if (/lodge|hotel|resort/i.test(pt)) suffix = '/day';
-          else if (pricing.plotRatePerSqFt && !pricing.expectedPrice) suffix = '/sq.ft';
-          return '₹' + price.toLocaleString('en-IN') + suffix;
+          const isPor = pricing.isPriceOnRequest === true || pricing.priceType === 'Price on request';
+          if (isPor) return 'Price on Request';
+          
+          if (price > 0) {
+            const tt = (p.transactionType || '').toLowerCase();
+            const pt = (p.propertyType || '').toLowerCase();
+            let suffix = '';
+            if (tt.includes('rent') || tt.includes('pg')) suffix = '/mo';
+            else if (/lodge|hotel|resort/i.test(pt)) suffix = '/day';
+            else if (pricing.plotRatePerSqFt && !pricing.expectedPrice) suffix = '/sq.ft';
+            return '₹' + price.toLocaleString('en-IN') + suffix;
+          }
+          return 'Price on Request';
         })(),
         title,
         specs,   // property-type-aware specs
