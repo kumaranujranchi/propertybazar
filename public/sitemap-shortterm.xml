@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Example entry; run `node scripts/generate-sitemap-shortterm.js` after configuring your API or set PROJECTS_API env -->
+  <url>
+    <loc>https://24dismil.com/projects/sample-project-slug</loc>
+    <lastmod>2026-03-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

@@ -1305,6 +1305,57 @@
           if (projectVideoSection) projectVideoSection.style.display = 'block';
         }
 
+        // ---- JSON-LD Rich Snippet (dynamic) ----
+        try {
+          const ld = {
+            "@context": "https://schema.org",
+            "@type": "ApartmentComplex",
+            name: p.details?.propertyTitle || title,
+            url: window.location.href,
+            image: photos.slice(0, 5),
+            description: p.details?.description || '',
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: p.location?.locality || p.location?.city || '',
+              addressRegion: p.location?.state || '',
+              postalCode: p.location?.pinCode || ''
+            },
+            offers: {
+              "@type": "AggregateOffer",
+              lowPrice: p.pricing?.expectedPrice || null,
+              highPrice: p.pricing?.expectedPrice || null,
+              priceCurrency: "INR"
+            },
+            hasPart: (p.configurations || []).map(c => ({
+              "@type": "Apartment",
+              name: c.name || '',
+              description: `${c.area ? c.area + ' sq.ft — ' : ''}${c.price ? 'Starting ₹' + c.price : ''}`
+            }))
+          };
+
+          // Attach video object if present
+          const firstVideo = (p.videos && p.videos.length > 0 && p.videos[0].url) ? p.videos[0] : null;
+          const firstExt = (p.externalVideos && p.externalVideos.length > 0) ? p.externalVideos[0] : null;
+          if (firstVideo || firstExt) {
+            ld.video = {
+              "@type": "VideoObject",
+              name: p.details?.propertyTitle ? `${p.details.propertyTitle} Walkthrough` : `${title} Walkthrough`,
+              description: p.details?.description || '',
+              thumbnailUrl: photos[0] || '',
+              uploadDate: (firstVideo && firstVideo.uploadDate) ? firstVideo.uploadDate : undefined,
+              contentUrl: firstVideo ? firstVideo.url : undefined,
+              embedUrl: firstExt || undefined
+            };
+          }
+
+          const ldScript = document.createElement('script');
+          ldScript.type = 'application/ld+json';
+          ldScript.text = JSON.stringify(ld);
+          document.head.appendChild(ldScript);
+        } catch (e) {
+          console.error('Failed to attach JSON-LD', e);
+        }
+
         // ---- Location Details ----
         const fullAddressText = document.getElementById('fullAddressText');
         const addressStr = `${p.location?.society ? p.location.society + ', ' : ''}${p.location?.locality || ''}, ${p.location?.city || ''}, ${p.location?.state || ''}${p.location?.pinCode ? ' - ' + p.location.pinCode : ''}`;
