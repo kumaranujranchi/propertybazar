@@ -171,6 +171,85 @@
     .lb-thumb:hover {
       opacity: 0.85;
     }
+
+    /* ---- Project Details Modern Grid ---- */
+    .info-grid-3col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 10px;
+    }
+
+    .info-col {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .info-col:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+
+    .info-col h3 {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .info-col h3::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    .info-row-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px dashed #e2e8f0;
+      font-size: 14px;
+    }
+    .info-row-flex:last-child {
+      border-bottom: none;
+    }
+
+    .info-row-flex label {
+      color: var(--text-muted);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .info-row-flex label i {
+      width: 20px;
+      color: var(--primary);
+      font-size: 15px;
+      opacity: 0.9;
+      text-align: center;
+    }
+
+    .info-row-flex b {
+      color: var(--dark);
+      font-weight: 700;
+      text-align: right;
+    }
+
+    @media (max-width: 768px) {
+      .info-grid-3col {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
@@ -1031,66 +1110,66 @@
         const advancedContainer = document.getElementById('advancedDetailsContainer');
         if (advancedContainer) {
           let tablesHtml = '';
-          const renderRow = (label, val) => {
+          const renderRow = (label, val, icon = 'fa-circle-check') => {
             if (val === undefined || val === null || val === "" || val === 0 || val === false) return '';
             let displayVal = val;
             if (typeof val === 'boolean') displayVal = val ? 'Yes' : 'No';
-            return `<div class="info-row-flex"><label>${label}</label><b>${displayVal}</b></div>`;
+            return `<div class="info-row-flex"><label><i class="fa-solid ${icon}"></i> ${label}</label><b>${displayVal}</b></div>`;
           };
 
           // 1. Area & Orientation
           let areaRows = '';
-          if (p.details?.plotArea) areaRows += renderRow('Plot Area', `${p.details.plotArea} sq.ft`);
-          if (area > 0) areaRows += renderRow('Built-up Area', `${area} sq.ft`);
-          if (p.details?.carpetArea) areaRows += renderRow('Carpet Area', `${p.details.carpetArea} sq.ft`);
-          if (p.details?.superBuiltUpArea) areaRows += renderRow('Super Built-up Area', `${p.details.superBuiltUpArea} sq.ft`);
-          areaRows += renderRow('Facing', p.details?.facing);
-          areaRows += renderRow('Road Width', p.details?.roadWidth ? `${p.details.roadWidth} ft` : '');
-          areaRows += renderRow('Frontage', p.details?.frontageWidth || p.details?.frontage);
+          if (p.details?.plotArea) areaRows += renderRow('Plot Area', `${p.details.plotArea} sq.ft`, 'fa-ruler-combined');
+          if (area > 0) areaRows += renderRow('Built-up Area', `${area} sq.ft`, 'fa-vector-square');
+          if (p.details?.carpetArea) areaRows += renderRow('Carpet Area', `${p.details.carpetArea} sq.ft`, 'fa-border-none');
+          if (p.details?.superBuiltUpArea) areaRows += renderRow('Super Built-up Area', `${p.details.superBuiltUpArea} sq.ft`, 'fa-expand');
+          areaRows += renderRow('Facing', p.details?.facing, 'fa-compass');
+          areaRows += renderRow('Road Width', p.details?.roadWidth ? `${p.details.roadWidth} ft` : '', 'fa-road');
+          areaRows += renderRow('Frontage', p.details?.frontageWidth || p.details?.frontage, 'fa-arrows-left-right');
           if (areaRows) tablesHtml += `<div class="info-col"><h3>AREA & ORIENTATION</h3>${areaRows}</div>`;
 
           // 2. Configuration & Features
           let configRows = '';
-          if (!isLand && !isCommercial && bhk !== '0') configRows += renderRow('Bedrooms', bhk);
-          configRows += renderRow('Bathrooms', p.details?.bathrooms);
-          configRows += renderRow('Balconies', p.details?.balconies);
-          configRows += renderRow('Furnishing', p.details?.furnishing);
-          configRows += renderRow('Floor', p.details?.floorNumber !== undefined ? `${p.details.floorNumber} of ${p.details.totalFloors || 'N/A'}` : '');
-          configRows += renderRow('Parking', p.details?.parking);
+          if (!isLand && !isCommercial && bhk !== '0') configRows += renderRow('Bedrooms', bhk, 'fa-bed');
+          configRows += renderRow('Bathrooms', p.details?.bathrooms, 'fa-bath');
+          configRows += renderRow('Balconies', p.details?.balconies, 'fa-table-columns');
+          configRows += renderRow('Furnishing', p.details?.furnishing, 'fa-couch');
+          configRows += renderRow('Floor', p.details?.floorNumber !== undefined ? `${p.details.floorNumber} of ${p.details.totalFloors || 'N/A'}` : '', 'fa-building');
+          configRows += renderRow('Parking', p.details?.parking, 'fa-car');
           
           // Commercial/Warehouse specific config
-          configRows += renderRow('Workstations', p.details?.workstations);
-          configRows += renderRow('Cabins', p.details?.cabins);
-          configRows += renderRow('Meeting Rooms', p.details?.meetingRooms);
-          configRows += renderRow('Washrooms', p.details?.washrooms);
-          configRows += renderRow('AC Type', p.details?.acType);
-          configRows += renderRow('Power Backup', p.details?.powerBackupCapacity);
+          configRows += renderRow('Workstations', p.details?.workstations, 'fa-desktop');
+          configRows += renderRow('Cabins', p.details?.cabins, 'fa-door-closed');
+          configRows += renderRow('Meeting Rooms', p.details?.meetingRooms, 'fa-users-rectangle');
+          configRows += renderRow('Washrooms', p.details?.washrooms, 'fa-restroom');
+          configRows += renderRow('AC Type', p.details?.acType, 'fa-snowflake');
+          configRows += renderRow('Power Backup', p.details?.powerBackupCapacity, 'fa-plug');
           
           if (configRows) tablesHtml += `<div class="info-col"><h3>CONFIGURATION</h3>${configRows}</div>`;
 
           // 3. Construction & Legal
-          let constructRows = renderRow('Status', p.details?.status);
-          constructRows += renderRow('Built Year', p.details?.constructionYear);
-          constructRows += renderRow('Ownership', p.details?.ownershipType);
-          constructRows += renderRow('RERA ID', p.details?.rera);
-          constructRows += renderRow('Approval Authority', p.details?.approvalAuthority);
-          constructRows += renderRow('Occupancy Cert', p.details?.occupancyCertificate);
-          constructRows += renderRow('Completion Cert', p.details?.completionCertificate);
+          let constructRows = renderRow('Status', p.details?.status, 'fa-clock');
+          constructRows += renderRow('Built Year', p.details?.constructionYear, 'fa-calendar-days');
+          constructRows += renderRow('Ownership', p.details?.ownershipType, 'fa-key');
+          constructRows += renderRow('RERA ID', p.details?.rera, 'fa-id-card');
+          constructRows += renderRow('Approval Authority', p.details?.approvalAuthority, 'fa-stamp');
+          constructRows += renderRow('Occupancy Cert', p.details?.occupancyCertificate, 'fa-file-circle-check');
+          constructRows += renderRow('Completion Cert', p.details?.completionCertificate, 'fa-file-circle-check');
           
           if (constructRows) tablesHtml += `<div class="info-col"><h3>LEGAL & STATUS</h3>${constructRows}</div>`;
 
           // 4. Specialized Details (Warehouse / Hospitality)
           let specialRows = '';
           if (p.propertyType?.toLowerCase().includes('warehouse')) {
-            specialRows += renderRow('Warehouse Type', p.details?.warehouseType);
-            specialRows += renderRow('Clear Height', p.details?.clearHeight ? `${p.details.clearHeight} ft` : '');
-            specialRows += renderRow('Dock Doors', p.details?.dockDoors);
-            specialRows += renderRow('Truck Parking', p.details?.truckParking);
+            specialRows += renderRow('Warehouse Type', p.details?.warehouseType, 'fa-warehouse');
+            specialRows += renderRow('Clear Height', p.details?.clearHeight ? `${p.details.clearHeight} ft` : '', 'fa-up-down');
+            specialRows += renderRow('Dock Doors', p.details?.dockDoors, 'fa-door-open');
+            specialRows += renderRow('Truck Parking', p.details?.truckParking, 'fa-truck-front');
           }
           if (p.propertyType?.toLowerCase().includes('hotel') || p.propertyType?.toLowerCase().includes('resort') || p.propertyType?.toLowerCase().includes('lodge')) {
-            specialRows += renderRow('Star Rating', p.details?.starRating);
-            specialRows += renderRow('Total Rooms', p.details?.totalRooms);
-            specialRows += renderRow('Occupancy Rate', p.details?.occupancyRate ? `${p.details.occupancyRate}%` : '');
+            specialRows += renderRow('Star Rating', p.details?.starRating, 'fa-star');
+            specialRows += renderRow('Total Rooms', p.details?.totalRooms, 'fa-bed');
+            specialRows += renderRow('Occupancy Rate', p.details?.occupancyRate ? `${p.details.occupancyRate}%` : '', 'fa-chart-pie');
           }
           if (specialRows) tablesHtml += `<div class="info-col"><h3>SPECIFICATIONS</h3>${specialRows}</div>`;
 
@@ -1123,17 +1202,17 @@
 
         // ---- Financials (render into advancedDetailsContainer if populated) ----
         if (advancedContainer && p.pricing) {
-          const renderRow = (label, val) => {
+          const renderRow = (label, val, icon = 'fa-circle-check') => {
             if (val === undefined || val === null || val === '' || val === 0 || val === false) return '';
             let displayVal = (typeof val === 'boolean') ? (val ? 'Yes' : 'No') : val;
-            return `<div class="info-row-flex"><label>${label}</label><b>${displayVal}</b></div>`;
+            return `<div class="info-row-flex"><label><i class="fa-solid ${icon}"></i> ${label}</label><b>${displayVal}</b></div>`;
           };
           let finRows = '';
-          if (p.pricing.maintenance) finRows += renderRow('Maintenance', `₹${Number(p.pricing.maintenance).toLocaleString('en-IN')}/mo`);
-          if (p.pricing.tokenAmount) finRows += renderRow('Token Amount', `₹${Number(p.pricing.tokenAmount).toLocaleString('en-IN')}`);
-          if (p.pricing.securityDeposit) finRows += renderRow('Security Deposit', `₹${Number(p.pricing.securityDeposit).toLocaleString('en-IN')}`);
-          if (p.pricing.negotiable !== undefined) finRows += renderRow('Negotiable', p.pricing.negotiable ? 'Yes' : 'No');
-          if (p.pricing.availabilityDate) finRows += renderRow('Available From', p.pricing.availabilityDate);
+          if (p.pricing.maintenance) finRows += renderRow('Maintenance', `₹${Number(p.pricing.maintenance).toLocaleString('en-IN')}/mo`, 'fa-tools');
+          if (p.pricing.tokenAmount) finRows += renderRow('Token Amount', `₹${Number(p.pricing.tokenAmount).toLocaleString('en-IN')}`, 'fa-hand-holding-dollar');
+          if (p.pricing.securityDeposit) finRows += renderRow('Security Deposit', `₹${Number(p.pricing.securityDeposit).toLocaleString('en-IN')}`, 'fa-shield-heart');
+          if (p.pricing.negotiable !== undefined) finRows += renderRow('Negotiable', p.pricing.negotiable ? 'Yes' : 'No', 'fa-comments-dollar');
+          if (p.pricing.availabilityDate) finRows += renderRow('Available From', p.pricing.availabilityDate, 'fa-clock-rotate-left');
           if (finRows) advancedContainer.innerHTML += `<div class="info-col"><h3>FINANCIALS</h3>${finRows}</div>`;
         }
 
