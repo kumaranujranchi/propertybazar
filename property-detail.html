@@ -474,13 +474,15 @@
           </div>
         </div>
 
-        <!-- LOCATION MAP -->
         <div id="location" class="detail-section-card">
           <h2 class="section-h2"><i class="fa-solid fa-map-location-dot"></i> Geographic Location</h2>
-          <div style="background:var(--bg); border-radius:12px; height:320px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); flex-direction:column; gap:16px">
-            <div style="font-size:48px; color:var(--primary)"><i class="fa-solid fa-location-arrow"></i></div>
-            <p id="fullAddressText" style="font-size:15px; color:var(--text-muted); text-align:center; padding:0 32px">Loading address...</p>
-            <a href="#" target="_blank" id="googleMapsBtn" class="btn btn-primary" style="padding: 10px 24px;">View on Google Maps</a>
+          <div id="mapContainer" style="background:var(--bg); border-radius:12px; height:320px; overflow:hidden; border:1px solid var(--border); position:relative;">
+            <div id="mapPlaceholder" style="height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px">
+              <div style="font-size:48px; color:var(--primary)"><i class="fa-solid fa-location-arrow"></i></div>
+              <p id="fullAddressText" style="font-size:15px; color:var(--text-muted); text-align:center; padding:0 32px">Loading address...</p>
+              <a href="#" target="_blank" id="googleMapsBtn" class="btn btn-primary" style="padding: 10px 24px;">View on Google Maps</a>
+            </div>
+            <iframe id="googleMapIframe" width="100%" height="100%" style="border:0; display:none;" allowfullscreen="" loading="lazy"></iframe>
           </div>
         </div>
 
@@ -842,7 +844,17 @@
         let price = p.pricing?.expectedPrice || p.pricing?.rent || p.pricing?.pricePerDay || 0;
         const area = p.details?.builtUpArea || 0;
         const isPor = p.pricing?.isPriceOnRequest === true || p.pricing?.priceType === 'Price on request';
-        const priceStr = isPor ? 'Price on Request' : (price > 0 ? '₹' + price.toLocaleString('en-IN') : 'Price on Request');
+        
+        let priceStr = isPor ? 'Price on Request' : (price > 0 ? '₹' + price.toLocaleString('en-IN') : 'Price on Request');
+        
+        // Add pricing unit
+        if (!isPor && price > 0) {
+          if (p.pricing?.pricingType === 'Per Sqft') {
+            priceStr += ' <span style="font-size:14px; color:var(--text-muted); font-weight:400">/ sq.ft</span>';
+          } else {
+            priceStr += ' <span style="font-size:14px; color:var(--text-muted); font-weight:400">(Total Price)</span>';
+          }
+        }
         const ppsf = area > 0 ? Math.round(price / area) : 0;
 
         function buildTag(icon, text, colorClass = 'primary') {
@@ -916,7 +928,7 @@
 
         // ---- Price & Title card ----
         const priceEl = document.querySelector('.detail-price');
-        if (priceEl) priceEl.textContent = priceStr;
+        if (priceEl) priceEl.innerHTML = priceStr;
 
         // ---- Update New Hero Section ----
         const heroCover = document.getElementById('heroCoverImg');
@@ -927,7 +939,7 @@
 
         if (heroCover && photos[0]) heroCover.src = photos[0];
         if (heroTitle) heroTitle.textContent = title;
-        if (heroPrice) heroPrice.textContent = priceStr;
+        if (heroPrice) heroPrice.innerHTML = priceStr;
         if (heroLocation) heroLocation.querySelector('span').textContent = `${p.location?.locality || ''}, ${p.location?.city || ''}`;
 
         // Populate Hero Badges
@@ -1140,13 +1152,40 @@
 
         // ---- Location Details ----
         const fullAddressText = document.getElementById('fullAddressText');
+        const addressStr = `${p.location?.society ? p.location.society + ', ' : ''}${p.location?.locality || ''}, ${p.location?.city || ''}, ${p.location?.state || ''}${p.location?.pinCode ? ' - ' + p.location.pinCode : ''}`;
+        
         if (fullAddressText) {
-          fullAddressText.textContent = `${p.location?.society ? p.location.society + ', ' : ''}${p.location?.locality || ''}, ${p.location?.city || ''}, ${p.location?.state || ''} - ${p.location?.pinCode || ''}`;
+          fullAddressText.textContent = addressStr;
         }
+        
         const mapsBtn = document.getElementById('googleMapsBtn');
+        const mapIframe = document.getElementById('googleMapIframe');
+        const mapPlaceholder = document.getElementById('mapPlaceholder');
+        
         if (mapsBtn) {
-          const addr = encodeURIComponent(`${p.location?.locality || ''} ${p.location?.city || ''} ${p.location?.pinCode || ''}`);
-          mapsBtn.href = `https://maps.google.com?q=${addr}`;
+          const encodedAddr = encodeURIComponent(addressStr);
+          mapsBtn.href = `https://maps.google.com?q=${encodedAddr}`;
+          
+          // Try to show a real map via embed
+          if (mapIframe && mapPlaceholder) {
+            let embedUrl = "";
+            if (p.location?.googleMapsLink && p.location.googleMapsLink.includes('pb=')) {
+                // If it looks like an embed URL already, use it
+                embedUrl = p.location.googleMapsLink;
+            } else {
+                // Otherwise use the free search API (needs to be configured, but we can try building a search embed)
+                // Using standard Google Maps Embed API for Search (no key required for some basic views sometimes, or just redirect)
+                // Actually, for a real map without key, we can use the place API search embed style if possible
+                // Fallback: Use the address to pinpoint
+                embedUrl = `https://maps.google.com/maps?q=${encodedAddr}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+            }
+            
+            if (embedUrl) {
+                mapIframe.src = embedUrl;
+                mapIframe.style.display = 'block';
+                mapPlaceholder.style.display = 'none';
+            }
+          }
         }
 
         // ---- FAQ Accordion Logic ----
