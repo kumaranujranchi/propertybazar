@@ -349,6 +349,7 @@ function renderFilteredProperties() {
 
 function buildPropertyCardHTML(p) {
   const detailUrl = `property-detail.html?id=${p.id}`;
+  const callUrl = `${detailUrl}&msg=call`;
   return `
   <div class="property-card" onclick="handlePropertyListingClick(event, '${detailUrl}')">
     <div class="prop-img-wrap">
@@ -378,8 +379,7 @@ function buildPropertyCardHTML(p) {
       <div class="prop-footer">
         <div class="badge ${p.status === 'ready' ? 'badge-success' : 'badge-warning'}">${p.status === 'ready' ? '✅ Ready to Move' : '🏗️ Under Construction'}</div>
         <div class="prop-contact-btns">
-          <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()">📞 Call</button>
-          <button class="prop-btn prop-btn-msg" onclick="event.stopPropagation()">💬 Chat</button>
+          <button class="prop-btn prop-btn-call" onclick="event.stopPropagation(); window.location.href='${callUrl}'"><i class="fa-solid fa-phone"></i> Call</button>
         </div>
       </div>
     </div>

@@ -763,6 +763,15 @@
         const phoneEl = document.getElementById('advInputPhone');
         const termsEl = document.getElementById('advCheckTerms');
 
+        // Check login state
+        const token = localStorage.getItem('pb_session');
+        if (!token) {
+          if (confirm('Please login to view contact details and connect with the owner.')) {
+            window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+          }
+          return;
+        }
+
         if (!nameEl.value.trim() || !phoneEl.value.trim()) {
           alert('Please enter your Name and Mobile Number.');
           return;
@@ -775,7 +784,8 @@
         this.disabled = true;
         this.textContent = 'Submitting...';
 
-        // Fallback submit delay
+        // Reveal owner details (Lead creation happens here in the real DB flow)
+        // For the static fallback/demo:
         await new Promise(r => setTimeout(r, 800));
 
         // Success UI update
@@ -785,11 +795,6 @@
         // Reveal owner details
         advHeaderPhone.textContent = '+91 ' + REAL_OWNER_PHONE;
         advHeaderName.textContent = REAL_OWNER_NAME;
-
-        // Reset fields
-        nameEl.value = '';
-        phoneEl.value = '';
-        termsEl.checked = false;
       });
     }
 
@@ -1278,6 +1283,21 @@
             slider.closest('section')?.remove();
           }
         } catch (e) { console.error(e); }
+
+        // ---- Auto-open Modal logic ----
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('msg') === 'call') {
+          const advModal = document.getElementById('advModal');
+          if (advModal) {
+            advModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            // Set masked phone and hidden name on open
+            const advHeaderPhone = document.getElementById('advPhoneDisplay');
+            const advHeaderName = document.getElementById('advNameDisplay');
+            if (advHeaderPhone) advHeaderPhone.textContent = maskPhone(REAL_OWNER_PHONE);
+            if (advHeaderName) advHeaderName.textContent = 'Name Hidden';
+          }
+        }
 
       } catch (err) {
         console.error('Failed to load property details:', err);

@@ -89,7 +89,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         facing: p.details?.facing || '',
         parking: p.details?.parking && p.details.parking !== 'None' ? 1 : 0,
         description: p.details?.description || '',
-        price_per_sqft: area > 0 ? Math.round(price / area) : 0,
+        price_per_sqft: (() => {
+          if (pricing.pricingType === 'Per Sqft' && pricing.expectedPrice) return pricing.expectedPrice;
+          return area > 0 ? Math.round(price / area) : 0;
+        })(),
         // Preserve raw Convex data for detail page
         _raw: p,
       };
@@ -156,6 +159,7 @@ function renderHomepageSliders(props) {
 
 function buildPropertyCardHTML(p) {
   const detailUrl = `property-detail.html?id=${p.id}`;
+  const callUrl = `${detailUrl}&msg=call`;
   return `
   <div class="property-card" onclick="window.location.href='${detailUrl}'">
     <div class="prop-img-wrap">
@@ -174,7 +178,9 @@ function buildPropertyCardHTML(p) {
       </div>
       <div class="prop-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 12px">
         <div class="badge ${p.status === 'ready' ? 'badge-success' : 'badge-warning'}" style="font-size: 10px">${p.status === 'ready' ? '✅ Ready' : '🏗️ Under Const.'}</div>
-        <div style="font-size: 12px; font-weight: 700; color: var(--primary)">View Details →</div>
+        <div class="prop-contact-btns">
+          <button class="prop-btn prop-btn-call" onclick="event.stopPropagation(); window.location.href='${callUrl}'" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: #f8fafc; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px"><i class="fa-solid fa-phone"></i> Call</button>
+        </div>
       </div>
     </div>
   </div>`;
