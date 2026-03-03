@@ -44,7 +44,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const title = buildTitle(p);
       const specs = buildSpecs(p);
       const area = p.details?.builtUpArea || 0;
-      const price = p.pricing?.expectedPrice || p.pricing?.rent || p.pricing?.pricePerDay || 0;
+      const pricing = p.pricing || {};
+      const price = pricing.expectedPrice || pricing.rent || pricing.pricePerDay || pricing.plotRatePerSqFt || 0;
       const score = calculateQualityScore(p);
 
       return {
@@ -55,12 +56,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         propType: p.propertyType,
         bhk: parseInt(p.details?.bhk) || 0,
         price,
-        priceDisplay: '₹' + price.toLocaleString('en-IN') + (() => {
+        priceDisplay: (() => {
+          if (price <= 0) return 'Price on Request';
           const tt = (p.transactionType || '').toLowerCase();
           const pt = (p.propertyType || '').toLowerCase();
-          if (tt.includes('rent') || tt.includes('pg')) return '/mo';
-          if (/lodge|hotel|resort/i.test(pt)) return '/day';
-          return '';
+          let suffix = '';
+          if (tt.includes('rent') || tt.includes('pg')) suffix = '/mo';
+          else if (/lodge|hotel|resort/i.test(pt)) suffix = '/day';
+          else if (pricing.plotRatePerSqFt && !pricing.expectedPrice) suffix = '/sq.ft';
+          return '₹' + price.toLocaleString('en-IN') + suffix;
         })(),
         title,
         specs,   // property-type-aware specs

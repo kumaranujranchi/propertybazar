@@ -948,7 +948,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const p = prop.pricing || {};
         const setVal = (id, val) => {
           const el = document.getElementById(id);
-          if (el) el.value = val !== undefined ? val : '';
+          if (el) el.value = (val !== undefined && val !== null) ? val : '';
         };
 
         setVal('expectedPriceInput', p.expectedPrice);
@@ -972,9 +972,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         setVal('lodgePriceDayInput', p.pricePerDay);
         setVal('lodgePriceWeekInput', p.pricePerWeek);
         setVal('lodgePriceMonthInput', p.pricePerMonth);
-        setVal('lodgeSecurityDepositInput', p.securityDeposit); // Same field shared or separate? In HTML it was unique id
+        setVal('lodgeSecurityDepositInput', p.securityDeposit);
         setVal('lodgeElectricitySelect', p.electricityExtra);
         setVal('lodgeGstSelect', p.gstExtra);
+
+        // Land Pricing
+        setVal('plotRateSqFtInput', p.plotRatePerSqFt);
+        setVal('plotDevChargesInput', p.plotDevCharges);
 
         const c = prop.contactDesc || {};
         setVal('contactNameInput', c.name);
@@ -1046,6 +1050,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ========== DRAFT SYSTEM ==========
   function getFormState() {
+    const parseNum = (id) => {
+      const el = document.getElementById(id);
+      if (!el || !el.value) return undefined;
+      const clean = String(el.value).replace(/,/g, '').replace(/\s/g, '');
+      const num = Number(clean);
+      return isNaN(num) ? undefined : num;
+    };
+
     const step1Grids = document.querySelectorAll("#formStep1 .form-type-grid");
     const posterType = step1Grids[0]?.querySelector(".active .name")?.innerText.trim() || "Owner";
     const transactionType = step1Grids[1]?.querySelector(".active .name")?.innerText.trim() || "";
@@ -1076,14 +1088,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     const details = {
       bhk: document.getElementById('bhkTypeSelect')?.value === 'Others' ? document.getElementById('customBhkInput')?.value : document.getElementById('bhkTypeSelect')?.value,
       status: document.getElementById('propertyStatusSelect')?.value,
-      builtUpArea: Number(document.getElementById('builtUpAreaInput')?.value) || 0,
-      carpetArea: Number(document.getElementById('carpetAreaInput')?.value) || undefined,
-      floorNumber: Number(document.getElementById('floorNumberInput')?.value) || undefined,
-      totalFloors: Number(document.getElementById('totalFloorsInput')?.value) || undefined,
+      builtUpArea: parseNum('builtUpAreaInput') || 0,
+      carpetArea: parseNum('carpetAreaInput'),
+      floorNumber: parseNum('floorNumberInput'),
+      totalFloors: parseNum('totalFloorsInput'),
       furnishing: document.getElementById('furnishingStatusSelect')?.value,
       facing: document.getElementById('facingSelect')?.value || undefined,
       parking: document.getElementById('parkingSelect')?.value || undefined,
-      constructionYear: Number(document.getElementById('constructionYearInput')?.value) || undefined,
+      constructionYear: parseNum('constructionYearInput'),
       rera: document.getElementById('reraInput')?.value || undefined,
       description: document.getElementById('descriptionInput')?.value || "",
       propertyTitle: document.getElementById('propertyTitleInput')?.value || undefined,
@@ -1096,11 +1108,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       storeRoom: document.getElementById('cbStoreRoom')?.checked || false,
       basement: document.getElementById('cbBasement')?.checked || false,
       floorConfig: document.getElementById('floorConfigInput')?.value || undefined,
-      plotArea: Number(document.getElementById('plotAreaInput')?.value) || undefined,
-      superBuiltUpArea: Number(document.getElementById('superBuiltUpAreaInput')?.value) || undefined,
-      openArea: Number(document.getElementById('openAreaInput')?.value) || undefined,
-      frontageWidth: Number(document.getElementById('frontageWidthInput')?.value) || undefined,
-      roadWidth: Number(document.getElementById('roadWidthInput')?.value) || undefined,
+      plotArea: parseNum('plotAreaInput'),
+      superBuiltUpArea: parseNum('superBuiltUpAreaInput'),
+      openArea: parseNum('openAreaInput'),
+      frontageWidth: parseNum('frontageWidthInput'),
+      roadWidth: parseNum('roadWidthInput'),
       ageOfProperty: document.getElementById('ageOfPropertySelect')?.value || undefined,
       constructionQuality: document.getElementById('constructionQualitySelect')?.value || undefined,
       flooringType: document.getElementById('flooringTypeInput')?.value || undefined,
@@ -1196,27 +1208,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const pricing = {
-      expectedPrice: Number(document.getElementById('expectedPriceInput')?.value) || 0,
-      pricingType: document.getElementById('pricingTypeSelect')?.value,
+      expectedPrice: parseNum('expectedPriceInput'),
+      pricingType: document.getElementById('pricingTypeSelect')?.value || undefined,
       priceType: document.getElementById('priceTypeSelect')?.value || undefined,
-      maintenance: Number(document.getElementById('maintenanceChargesInput')?.value) || undefined,
-      tokenAmount: Number(document.getElementById('tokenAmountInput')?.value) || undefined,
+      maintenance: parseNum('maintenanceChargesInput'),
+      tokenAmount: parseNum('tokenAmountInput'),
       negotiable: document.getElementById('negotiableSelect')?.value === 'true',
       availabilityDate: document.getElementById('availabilityDateInput')?.value || undefined,
       // Commercial
-      rent: Number(document.getElementById('commercialRentInput')?.value) || undefined,
+      rent: parseNum('commercialRentInput'),
       leasePeriod: document.getElementById('commercialLeasePeriodInput')?.value || undefined,
       lockInPeriod: document.getElementById('commercialLockInPeriodInput')?.value || undefined,
-      securityDeposit: Number(document.getElementById('commercialSecurityDepositInput')?.value) || undefined,
-      camCharges: Number(document.getElementById('commercialCamChargesInput')?.value) || undefined,
-      rentPerSqFt: Number(document.getElementById('commercialRentPerSqFtInput')?.value) || undefined,
-      escalationPercent: Number(document.getElementById('commercialEscalationInput')?.value) || undefined,
+      securityDeposit: parseNum('commercialSecurityDepositInput'),
+      camCharges: parseNum('commercialCamChargesInput'),
+      rentPerSqFt: parseNum('commercialRentPerSqFtInput'),
+      escalationPercent: parseNum('commercialEscalationInput'),
       // Hospitality
-      pricePerDay: Number(document.getElementById('lodgePriceDayInput')?.value) || undefined,
-      pricePerWeek: Number(document.getElementById('lodgePriceWeekInput')?.value) || undefined,
-      pricePerMonth: Number(document.getElementById('lodgePriceMonthInput')?.value) || undefined,
+      pricePerDay: parseNum('lodgePriceDayInput'),
+      pricePerWeek: parseNum('lodgePriceWeekInput'),
+      pricePerMonth: parseNum('lodgePriceMonthInput'),
       electricityExtra: document.getElementById('lodgeElectricitySelect')?.value || undefined,
       gstExtra: document.getElementById('lodgeGstSelect')?.value || undefined,
+      // Land
+      plotRatePerSqFt: parseNum('plotRateSqFtInput'),
+      plotDevCharges: parseNum('plotDevChargesInput'),
     };
 
     const contactDesc = {
@@ -1354,7 +1369,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const p = d.pricing;
         const setVal = (id, val) => {
           const el = document.getElementById(id);
-          if (el) el.value = val !== undefined ? val : '';
+          if (el) el.value = (val !== undefined && val !== null) ? val : '';
         };
 
         setVal('expectedPriceInput', p.expectedPrice);
@@ -1371,6 +1386,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         setVal('commercialLockInPeriodInput', p.lockInPeriod);
         setVal('commercialSecurityDepositInput', p.securityDeposit);
         setVal('commercialCamChargesInput', p.camCharges);
+        setVal('commercialRentPerSqFtInput', p.rentPerSqFt);
+        setVal('commercialEscalationInput', p.escalationPercent);
 
         // Hospitality Pricing
         setVal('lodgePriceDayInput', p.pricePerDay);
@@ -1379,6 +1396,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         setVal('lodgeSecurityDepositInput', p.securityDeposit);
         setVal('lodgeElectricitySelect', p.electricityExtra);
         setVal('lodgeGstSelect', p.gstExtra);
+
+        // Land Pricing
+        setVal('plotRateSqFtInput', p.plotRatePerSqFt);
+        setVal('plotDevChargesInput', p.plotDevCharges);
     }
 
     if (d.contactDesc) {
