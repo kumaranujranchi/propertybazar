@@ -568,7 +568,7 @@
         <!-- FAQ SECTION -->
         <div id="faq" class="detail-section-card">
           <h2 class="section-h2"><i class="fa-solid fa-circle-question"></i> FAQs about this Property</h2>
-          <div class="faq-wrap">
+          <div class="faq-wrap" id="faqAccordion">
             <div class="faq-item">
               <button class="faq-trigger">Is this property ready for immediate possession? <i class="fa-solid fa-chevron-down"></i></button>
               <div class="faq-content">Yes, this property is currently in "Ready to Move" status according to the listings updated by the owner.</div>
@@ -1267,16 +1267,33 @@
           }
         }
 
+        // ---- FAQ Dynamic Rendering ----
+        const faqAccordion = document.getElementById('faqAccordion');
+        if (faqAccordion && p.customFAQs && p.customFAQs.length > 0) {
+          faqAccordion.innerHTML = p.customFAQs.map(f => `
+            <div class="faq-item">
+              <button class="faq-trigger">${f.question} <i class="fa-solid fa-chevron-down"></i></button>
+              <div class="faq-content">${f.answer}</div>
+            </div>
+          `).join('');
+        }
+
         // ---- FAQ Accordion Logic ----
-        document.querySelectorAll('.faq-trigger').forEach(btn => {
-          btn.addEventListener('click', () => {
-             const item = btn.parentElement;
-             const isOpen = item.classList.contains('open');
-             // Close all others
-             document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-             if (!isOpen) item.classList.add('open');
+        // Re-bind listeners after dynamic render
+        const bindFAQListeners = () => {
+          document.querySelectorAll('.faq-trigger').forEach(btn => {
+            // Remove old listeners to avoid multiple fires
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            newBtn.addEventListener('click', () => {
+              const item = newBtn.parentElement;
+              const isOpen = item.classList.contains('open');
+              document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+              if (!isOpen) item.classList.add('open');
+            });
           });
-        });
+        };
+        bindFAQListeners();
 
         // ---- Sub-nav Scroll Logic ----
         const subnavLinks = document.querySelectorAll('.subnav-link');

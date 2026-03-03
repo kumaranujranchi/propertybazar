@@ -995,6 +995,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         setVal('contactEmailInput', c.email);
         setVal('contactRoleSelect', c.role);
         setVal('contactTimeSelect', c.contactTime);
+
+        // Pre-fill Custom FAQs
+        if (prop.customFAQs && prop.customFAQs.length > 0) {
+          const faqContainer = document.getElementById('faqContainer');
+          if (faqContainer) {
+            faqContainer.innerHTML = ''; // Clear defaults
+            prop.customFAQs.forEach(f => {
+              if (window.createFAQRow) window.createFAQRow(f.question, f.answer);
+            });
+          }
+        }
       }
     } catch (err) {
       console.error("Error loading property for edit:", err);
@@ -1258,7 +1269,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (input.value.trim()) externalVideos.push(input.value.trim());
     });
 
-    return { posterType, transactionType, propertyType, location, details, amenities, pricing, contactDesc, externalVideos };
+    const customFAQs = [];
+    document.querySelectorAll('.faq-row').forEach(row => {
+      const q = row.querySelector('.faq-question')?.value.trim();
+      const a = row.querySelector('.faq-answer')?.value.trim();
+      if (q && a) customFAQs.push({ question: q, answer: a });
+    });
+
+    return { posterType, transactionType, propertyType, location, details, amenities, pricing, contactDesc, externalVideos, customFAQs };
   }
 
   async function saveDraftToCloud(isManual = false) {

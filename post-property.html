@@ -1262,7 +1262,19 @@
           <!-- End Lodge Pricing Fields -->
         </div>
 
-        <hr style="border:none;border-top:1px solid var(--border);margin:24px 0">
+        <hr style="border:none;border-top:1px solid var(--border);margin:32px 0">
+        <h3 style="font-size:16px;font-weight:700;color:var(--dark);margin-bottom:8px">Frequently Asked Questions (Optional)</h3>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:20px">Add custom FAQs to help potential buyers/tenants understand your property better.</p>
+        
+        <div id="faqContainer">
+          <!-- FAQ Rows will be added here -->
+        </div>
+        
+        <button type="button" id="btnAddFAQ" class="btn btn-outline btn-sm" style="margin-top:10px">
+          <i class="fa-solid fa-plus"></i> Add a Question
+        </button>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:32px 0">
         <h3 style="font-size:16px;font-weight:700;color:var(--dark);margin-bottom:18px">Your Contact Details</h3>
 
         <div
@@ -1837,6 +1849,34 @@
 
     // Initial run
     window.addEventListener('load', updateOpportunityScore);
+
+    // FAQ Builder Logic
+    const faqContainer = document.getElementById('faqContainer');
+    const btnAddFAQ = document.getElementById('btnAddFAQ');
+
+    function createFAQRow(q = '', a = '') {
+      const row = document.createElement('div');
+      row.className = 'faq-row';
+      row.style = 'background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:12px; position:relative;';
+      row.innerHTML = `
+        <button type="button" class="btn-remove-faq" style="position:absolute; top:12px; right:12px; border:none; background:none; color:var(--danger); cursor:pointer; font-size:14px; opacity:0.6;" onclick="this.parentElement.remove()">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+        <div class="form-group" style="margin-bottom:12px">
+          <label class="form-label" style="font-size:12px">Question</label>
+          <input type="text" class="form-input faq-question" placeholder="e.g. Is the price negotiable?" value="${q}">
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label" style="font-size:12px">Answer</label>
+          <textarea class="form-input faq-answer" rows="1" placeholder="e.g. Yes, we are open to reasonable offers." style="height:auto; min-height:45px; padding:10px;">${a}</textarea>
+        </div>
+      `;
+      faqContainer.appendChild(row);
+    }
+
+    if (btnAddFAQ) {
+      btnAddFAQ.addEventListener('click', () => createFAQRow());
+    }
   </script>
   <!-- CITY SELECTION MODAL -->
   <div class="city-modal-overlay" id="cityModal">
