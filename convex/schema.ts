@@ -14,6 +14,7 @@ export default defineSchema({
     externalVideos: v.optional(v.array(v.string())), // Youtube/Vimeo links
     pricing: v.any(),
     contactDesc: v.any(),
+    posterType: v.optional(v.string()),
     isFeatured: v.optional(v.boolean()),
     approvalStatus: v.optional(v.string()), // 'pending', 'approved', 'rejected'
     lastActivatedAt: v.optional(v.number()),
