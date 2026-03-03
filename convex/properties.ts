@@ -210,6 +210,21 @@ export const createProperty = mutation({
       approvalStatus: "pending",
       lastActivatedAt: Date.now(),
     });
+
+    // Remove any lingering draft for this user (defensive server-side cleanup)
+    try {
+      if (resolvedUserId) {
+        const existingDraft = await ctx.db
+          .query("drafts")
+          .filter((q: any) => q.eq(q.field("userId"), resolvedUserId))
+          .first();
+        if (existingDraft) {
+          await ctx.db.delete(existingDraft._id);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to cleanup draft after createProperty:", e);
+    }
     return propertyId;
   },
 });
@@ -281,6 +296,24 @@ export const updateProperty = mutation({
       posterType: args.posterType,
       customFAQs: args.customFAQs,
     });
+
+    // Defensive: remove any draft for this user after update as well
+    try {
+      const session = await ctx.db
+        .query("sessions")
+        .withIndex("by_token", (q: any) => q.eq("token", args.token))
+        .first();
+      const userIdToClean = session ? session.userId : null;
+      if (userIdToClean) {
+        const existingDraft = await ctx.db
+          .query("drafts")
+          .filter((q: any) => q.eq(q.field("userId"), userIdToClean))
+          .first();
+        if (existingDraft) await ctx.db.delete(existingDraft._id);
+      }
+    } catch (e) {
+      console.error("Failed to cleanup draft after updateProperty:", e);
+    }
     return { success: true };
   },
 });
