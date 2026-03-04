@@ -627,12 +627,28 @@ window.showToast = function(message, type = 'success') {
     container.className = 'toast-container';
     document.body.appendChild(container);
   }
+  // if it's a warning message we want bottom animation
+  if (type === 'warning') {
+    container.classList.add('bottom');
+  }
 
   const toast = document.createElement('div');
   toast.className = `toast-notification ${type}`;
   
-  const icon = type === 'success' ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-circle-exclamation"></i>';
-  const titleText = type === 'success' ? 'Success' : 'Error';
+  let icon, titleText;
+  if (type === 'success') {
+    icon = '<i class="fa-solid fa-circle-check"></i>';
+    titleText = 'Success';
+  } else if (type === 'error') {
+    icon = '<i class="fa-solid fa-circle-exclamation"></i>';
+    titleText = 'Error';
+  } else if (type === 'warning') {
+    icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+    titleText = 'Notice';
+  } else {
+    icon = '<i class="fa-solid fa-circle-info"></i>';
+    titleText = '';
+  }
 
   toast.innerHTML = `
     <div class="toast-icon">${icon}</div>

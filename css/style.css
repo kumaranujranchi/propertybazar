@@ -38,6 +38,17 @@
   gap: 10px;
   pointer-events: none;
 }
+/* bottom-centered container for warnings / coming soon notifications */
+.toast-container.bottom {
+  top: auto;
+  bottom: 20px;
+  right: 50%;
+  left: auto;
+  transform: translateX(50%);
+  /* show latest at bottom, slide up */
+  flex-direction: column-reverse;
+}
+
 .toast-notification {
   background: #fff;
   border-left: 4px solid var(--primary);
@@ -54,10 +65,22 @@
   transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   pointer-events: auto;
 }
+/* when container is bottom, we slide vertically from below with smooth easing */
+.toast-container.bottom .toast-notification {
+  transform: translateY(120%);
+  transition: all 0.5s ease-out;
+}
+
 .toast-notification.show {
   transform: translateX(0);
   opacity: 1;
 }
+/* override for bottom container */
+.toast-container.bottom .toast-notification.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
 .toast-notification.success {
   border-left-color: var(--success);
 }
@@ -70,6 +93,13 @@
 .toast-notification.error .toast-icon {
   color: var(--primary);
 }
+.toast-notification.warning {
+  border-left-color: var(--warning);
+}
+.toast-notification.warning .toast-icon {
+  color: var(--warning);
+}
+
 .toast-icon {
   font-size: 20px;
 }
