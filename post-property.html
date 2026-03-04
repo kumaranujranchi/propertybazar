@@ -207,6 +207,21 @@
         <h2 class="form-card-title">Step 2: Where is your property?</h2>
         <p class="form-card-subtitle">Add the exact location for better visibility</p>
 
+        <!-- Category selector to help filter listings -->
+        <div class="form-group" style="max-width: 420px; margin-bottom: 18px;">
+          <label class="form-label">Category</label>
+          <select id="propertyCategory" class="form-input form-select">
+            <option value="">Select Category</option>
+            <option>Residential</option>
+            <option>Commercial</option>
+            <option>Office</option>
+            <option>Retail</option>
+            <option>Industrial</option>
+            <option>PG / Hostel</option>
+          </select>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">Helps buyers filter and find your listing.</p>
+        </div>
+
         <!-- GOOGLE LOCATION SEARCH -->
         <div class="form-group full" style="margin-bottom: 24px;">
           <label class="form-label">Search Location on Google (Optional)</label>
@@ -1346,7 +1361,7 @@
 
     <!-- SIDEBAR: Opportunity Score -->
     <aside class="post-sidebar" style="position: sticky; top: 100px;">
-      <div class="form-card" style="padding: 24px; border: 2px solid var(--primary); background: #fff;">
+      <div class="form-card sidebar-score" style="padding: 24px;">
         <h3
           style="font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--dark); display: flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-chart-line" style="color: var(--primary)"></i> Opportunity Score
@@ -1381,7 +1396,7 @@
       </div>
 
       <!-- SIDEBAR: Location Preview -->
-      <div id="sidebarLocationPreview" class="form-card" style="padding: 24px; margin-top: 24px;">
+      <div id="sidebarLocationPreview" class="form-card sidebar-location" style="padding: 24px; margin-top: 24px;">
         <h3
           style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--dark); display: flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-map-location-dot" style="color: var(--primary)"></i> Location Preview

@@ -2581,6 +2581,10 @@ textarea {
   margin: 40px auto 60px;
   padding: 0 20px;
 }
+/* Slightly widen main content and make sidebar a touch wider for clarity */
+.post-body {
+  grid-template-columns: minmax(0, 1fr) 360px;
+}
 .form-card {
   background: #fff;
   border-radius: var(--radius-lg);
@@ -2594,6 +2598,28 @@ textarea {
   color: var(--dark);
   margin-bottom: 4px;
 }
+
+/* Section title inside form cards */
+.form-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
+/* Sidebar card accents */
+.post-sidebar .form-card {
+  padding: 20px;
+}
+.sidebar-score {
+  border-left: 6px solid var(--primary);
+}
+.sidebar-location {
+  border-left: 6px solid rgba(232,65,24,0.12);
+}
+
+.post-sidebar .form-card h3 { margin-top: 0; }
 .form-card-subtitle {
   font-size: 14px;
   color: var(--text-muted);
