@@ -1,6 +1,66 @@
 import { convex } from "./convex.js";
 import { requireAuth, getToken } from "./auth.js";
 
+// Watermark SVG (uses the provided favicon.svg content)
+const WATERMARK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">\n  <rect width="100" height="100" rx="20" fill="#e84118"/>\n  <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="800" font-size="60" fill="white">24</text>\n</svg>`;
+
+// Apply an SVG watermark onto an image File and return a new File (WebP)
+function applyWatermark(file, svgString, options = {}) {
+  const { scale = 0.20, margin = 24, opacity = 0.95, quality = 0.9 } = options;
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.src = ev.target.result;
+      img.onload = () => {
+        try {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          const svgDataUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgString);
+          const svgImg = new Image();
+          svgImg.onload = () => {
+            const intrinsicW = svgImg.naturalWidth || 100;
+            const intrinsicH = svgImg.naturalHeight || 100;
+            const wmWidth = Math.round(canvas.width * scale);
+            const ratio = intrinsicW / intrinsicH || 1;
+            const wmHeight = Math.round(wmWidth / ratio);
+            const x = canvas.width - wmWidth - margin;
+            const y = canvas.height - wmHeight - margin;
+            ctx.globalAlpha = opacity;
+            ctx.drawImage(svgImg, x, y, wmWidth, wmHeight);
+            ctx.globalAlpha = 1;
+
+            canvas.toBlob(
+              (blob) => {
+                if (!blob) return reject(new Error("Failed to create watermarked blob"));
+                const ext = file.name.replace(/\.[^/.]+$/, "") + ".webp";
+                const newFile = new File([blob], ext, { type: "image/webp", lastModified: Date.now() });
+                resolve(newFile);
+              },
+              "image/webp",
+              quality,
+            );
+          };
+          svgImg.onerror = (e) => {
+            // If SVG fails to load, fall back to original file
+            resolve(file);
+          };
+          svgImg.src = svgDataUrl;
+        } catch (err) {
+          resolve(file);
+        }
+      };
+      img.onerror = () => resolve(file);
+    };
+    reader.onerror = () => reject(new Error("Failed to read image file for watermarking"));
+  });
+}
+
 // ========== PHOTO HANDLING ==========
 const photoFileInput = document.getElementById("photoFileInput");
 const photoUploadArea = document.getElementById("photoUploadArea");
@@ -147,8 +207,9 @@ async function handleFiles(files, type = 'photo') {
 
     for (const file of toProcess) {
       const compressedFile = await compressImage(file);
-      selectedFiles.push(compressedFile);
-      addPreview(compressedFile, selectedFiles.length - 1, 'photo');
+      const watermarkedFile = await applyWatermark(compressedFile, WATERMARK_SVG);
+      selectedFiles.push(watermarkedFile);
+      addPreview(watermarkedFile, selectedFiles.length - 1, 'photo');
     }
     if (uploadArea) uploadArea.style.opacity = "1";
   }
