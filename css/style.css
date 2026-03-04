@@ -100,6 +100,50 @@
   color: var(--warning);
 }
 
+/* ========== Centered, larger warning toast (Apple-like slide-up) ========== */
+.toast-container.warning.centered {
+  top: auto;
+  bottom: 8%;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10001;
+}
+.toast-container.warning.centered .toast-notification {
+  min-width: 420px;
+  max-width: 720px;
+  padding: 18px 22px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(30px) scale(0.98);
+  opacity: 0;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease-out;
+  pointer-events: auto;
+}
+.toast-container.warning.centered .toast-notification.show {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+.toast-notification .toast-action {
+  margin-left: 12px;
+  background: var(--warning);
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.18);
+}
+.toast-notification .toast-action:hover {
+  opacity: 0.95;
+}
+
+
 .toast-icon {
   font-size: 20px;
 }

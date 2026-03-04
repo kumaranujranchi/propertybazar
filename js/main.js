@@ -621,15 +621,13 @@ function initTypingEffect() {
 
 // ========== GLOBAL TOAST NOTIFICATIONS ==========
 window.showToast = function(message, type = 'success') {
-  let container = document.querySelector('.toast-container');
+  // Use a dedicated container for warning (centered) so other toasts remain top-right
+  const containerSelector = type === 'warning' ? '.toast-container.warning' : '.toast-container';
+  let container = document.querySelector(containerSelector);
   if (!container) {
     container = document.createElement('div');
-    container.className = 'toast-container';
+    container.className = 'toast-container' + (type === 'warning' ? ' warning bottom centered' : '');
     document.body.appendChild(container);
-  }
-  // if it's a warning message we want bottom animation
-  if (type === 'warning') {
-    container.classList.add('bottom');
   }
 
   const toast = document.createElement('div');
@@ -650,12 +648,15 @@ window.showToast = function(message, type = 'success') {
     titleText = '';
   }
 
+  // Add an optional action button for warnings (user can acknowledge)
+  const actionHtml = type === 'warning' ? `<button class="toast-action">Got it</button>` : '';
   toast.innerHTML = `
     <div class="toast-icon">${icon}</div>
     <div class="toast-content">
       <div class="toast-title">${titleText}</div>
       <div class="toast-message">${message}</div>
     </div>
+    ${actionHtml}
     <div class="toast-close"><i class="fa-solid fa-xmark"></i></div>
   `;
 
@@ -682,8 +683,18 @@ window.showToast = function(message, type = 'success') {
 
   closeBtn.addEventListener('click', removeToast);
   
-  // Auto-remove after 4.5 seconds
-  setTimeout(removeToast, 4500);
+  // Auto-remove timeout: longer for warnings so users can read/act
+  const autoRemoveMs = type === 'warning' ? 8000 : 4500;
+  const autoRemoveTimer = setTimeout(removeToast, autoRemoveMs);
+
+  // If the toast has an action button (e.g., 'Got it') wire it to dismiss
+  const actionBtn = toast.querySelector('.toast-action');
+  if (actionBtn) {
+    actionBtn.addEventListener('click', () => {
+      clearTimeout(autoRemoveTimer);
+      removeToast();
+    });
+  }
 };
 
 // ==========================================================================
