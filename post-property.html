@@ -205,127 +205,149 @@
       <!-- STEP 2: Location -->
       <div class="form-card form-step" id="formStep2" style="display:none">
         <h2 class="form-card-title">Step 2: Where is your property?</h2>
-        <p class="form-card-subtitle">Add the exact location for better visibility</p>
+        <p class="form-card-subtitle" style="margin-bottom: 24px;">Add the exact location for better visibility</p>
 
-        <!-- Category selector to help filter listings (custom grouped select with icons) -->
-        <div class="form-group" style="max-width: 520px; margin-bottom: 18px;">
-          <label class="form-label">Category</label>
-          <div class="custom-select" data-name="propertyCategory">
-            <input type="hidden" name="propertyCategory" id="propertyCategory" value="">
-            <div class="custom-select-button" tabindex="0" role="button" aria-haspopup="listbox">
-              <div class="label"><i class="fa-solid fa-layer-group"></i> <span class="selected-text">Select Category</span></div>
-              <div class="chev"><i class="fa-solid fa-chevron-down"></i></div>
+        <!-- Category Selector Redesign -->
+        <div class="form-section-card" style="padding-top: 20px;">
+          <div class="form-section-title"><i class="fa-solid fa-layer-group"></i> Property Category</div>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Select the most accurate category for your listing.</p>
+          
+          <div class="visual-category-grid" id="categoryVisualSelector">
+            <div class="category-visual-item" data-value="Apartment">
+              <i class="fa-solid fa-building"></i>
+              <span>Apartment</span>
             </div>
-            <div class="custom-select-list" role="listbox" style="display:none">
-              <div class="custom-select-group">
-                <div class="custom-select-group-title">Residential</div>
-                <div class="custom-select-item" data-value="Apartment"><i class="fa-solid fa-building"></i>Apartment</div>
-                <div class="custom-select-item" data-value="Villa"><i class="fa-solid fa-house-chimney"></i>Villa</div>
-                <div class="custom-select-item" data-value="PG / Hostel"><i class="fa-solid fa-bed"></i>PG / Hostel</div>
-              </div>
-              <div class="custom-select-group">
-                <div class="custom-select-group-title">Commercial</div>
-                <div class="custom-select-item" data-value="Office"><i class="fa-solid fa-briefcase"></i>Office</div>
-                <div class="custom-select-item" data-value="Retail"><i class="fa-solid fa-store"></i>Retail</div>
-                <div class="custom-select-item" data-value="Industrial"><i class="fa-solid fa-industry"></i>Industrial</div>
-              </div>
+            <div class="category-visual-item" data-value="Villa">
+              <i class="fa-solid fa-house-chimney"></i>
+              <span>Villa / House</span>
+            </div>
+            <div class="category-visual-item" data-value="PG / Hostel">
+              <i class="fa-solid fa-bed"></i>
+              <span>PG / Hostel</span>
+            </div>
+            <div class="category-visual-item" data-value="Office">
+              <i class="fa-solid fa-briefcase"></i>
+              <span>Office</span>
+            </div>
+            <div class="category-visual-item" data-value="Retail">
+              <i class="fa-solid fa-store"></i>
+              <span>Retail</span>
+            </div>
+            <div class="category-visual-item" data-value="Industrial">
+              <i class="fa-solid fa-industry"></i>
+              <span>Industrial</span>
             </div>
           </div>
-          <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">Helps buyers filter and find your listing.</p>
+          <input type="hidden" id="propertyCategory" value="">
         </div>
 
-        <!-- GOOGLE LOCATION SEARCH -->
-        <div class="form-group full" style="margin-bottom: 24px;">
-          <label class="form-label">Search Location on Google (Optional)</label>
-          <div style="position: relative;">
+        <!-- GOOGLE LOCATION SEARCH (Premium Wrapper) -->
+        <div class="location-search-premium">
+          <label class="form-label" style="font-weight: 700;"><i class="fa-brands fa-google"></i> Smart Location Search</label>
+          <div style="position: relative; margin-top: 8px;">
             <i class="fa-solid fa-magnifying-glass-location"
               style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
             <input type="text" id="googleLocationSearch" class="form-input"
-              placeholder="Search for your society, building or area..."
-              style="padding-left: 44px; border: 2px solid rgba(232, 65, 24, 0.2);">
+              placeholder="Start typing your society, building or area..."
+              style="padding-left: 44px; border: 2px solid rgba(232, 65, 24, 0.3); height: 52px; background: #fff;">
           </div>
-          <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;"><i class="fa-solid fa-circle-info"></i>
-            Selecting from Google automatically fills State, City and PIN code.</p>
+          <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px; display: flex; align-items: center; gap: 5px;">
+            <i class="fa-solid fa-bolt" style="color: #f5a623"></i>
+            Tip: Selecting from Google automatically fills State, City and PIN code for you.
+          </p>
         </div>
 
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">State *</label>
-            <select class="form-input form-select" id="stateSelect">
-              <option value="">Select State</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">City *</label>
-            <select class="form-input form-select" id="citySelect" disabled>
-              <option value="">First Select State</option>
-            </select>
-            <!-- Manual City Entry (Hidden by default) -->
-            <div id="manualCityGroup" style="display: none; margin-top: 10px;">
-              <input type="text" id="manualCityInput" class="form-input" placeholder="Enter City Name Manually">
-              <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
-                <i class="fa-solid fa-circle-info"></i> Your city will be added to our list.
-              </p>
+        <!-- ADDRESS DETAILS SECTION -->
+        <div class="form-section-card">
+          <div class="form-section-title"><i class="fa-solid fa-map-location-dot"></i> Address Details</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">State *</label>
+              <select class="form-input form-select" id="stateSelect">
+                <option value="">Select State</option>
+              </select>
             </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Locality / Area *</label>
-            <input type="text" id="localityInput" class="form-input" placeholder="e.g. Sector 62, Koramangala">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Society / Project Name</label>
-            <input type="text" id="societyInput" class="form-input" placeholder="e.g. Prestige Lakeside Habitat">
-          </div>
-          <div class="form-group full">
-            <label class="form-label">Full Address</label>
-            <textarea id="addressInput" class="form-input" rows="3"
-              placeholder="Flat No., Building Name, Street, Landmark..."></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">PIN Code *</label>
-            <input type="text" id="pinCodeInput" class="form-input" placeholder="6-digit PIN code">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Landmark (Optional)</label>
-            <input type="text" id="landmarkInput" class="form-input" placeholder="Near Metro Station, Mall, etc.">
-          </div>
-          <div class="form-group full" id="fgMapLink">
-            <label class="form-label">Google Map Link (Optional)</label>
-            <div style="position: relative;">
-              <i class="fa-solid fa-link"
-                style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
-              <input type="text" id="googleMapLinkInput" class="form-input" placeholder="Paste Google Map URL here..."
-                style="padding-left: 44px;">
+            <div class="form-group">
+              <label class="form-label">City *</label>
+              <select class="form-input form-select" id="citySelect" disabled>
+                <option value="">First Select State</option>
+              </select>
+              <!-- Manual City Entry -->
+              <div id="manualCityGroup" style="display: none; margin-top: 10px;">
+                <input type="text" id="manualCityInput" class="form-input" placeholder="Enter City Name Manually">
+              </div>
             </div>
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;"><i class="fa-solid fa-lightbulb"></i>
-              Paste a direct link to the location on Google Maps for better accuracy.</p>
-          </div>
-        </div>
-        <h3
-          style="font-size:16px;font-weight:700;margin-top:20px;margin-bottom:12px;color:var(--dark);padding-bottom:8px;border-bottom:1px solid var(--border)">
-          Nearby Distances (Optional)</h3>
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Distance from Metro (km)</label>
-            <input type="number" class="form-input" id="metroDistance" placeholder="e.g. 0.5" step="0.1" min="0">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Distance from School (km)</label>
-            <input type="number" class="form-input" id="schoolDistance" placeholder="e.g. 1.2" step="0.1" min="0">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Distance from Mall (km)</label>
-            <input type="number" class="form-input" id="mallDistance" placeholder="e.g. 2.5" step="0.1" min="0">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Distance from Hospital (km)</label>
-            <input type="number" class="form-input" id="hospitalDistance" placeholder="e.g. 1.0" step="0.1" min="0">
+            <div class="form-group">
+              <label class="form-label">Locality / Area *</label>
+              <input type="text" id="localityInput" class="form-input" placeholder="e.g. Sector 62, Koramangala">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Society / Project Name</label>
+              <input type="text" id="societyInput" class="form-input" placeholder="e.g. Prestige Lakeside Habitat">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Full Address</label>
+              <textarea id="addressInput" class="form-input" rows="3"
+                placeholder="Flat No., Building Name, Street, Landmark..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">PIN Code *</label>
+              <input type="text" id="pinCodeInput" class="form-input" placeholder="6-digit PIN code">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Landmark (Optional)</label>
+              <input type="text" id="landmarkInput" class="form-input" placeholder="Near Metro Station, Mall, etc.">
+            </div>
+            <div class="form-group full" id="fgMapLink" style="margin-top: 10px;">
+              <label class="form-label"><i class="fa-solid fa-link"></i> Google Map Link (Optional)</label>
+              <div style="position: relative;">
+                <input type="text" id="googleMapLinkInput" class="form-input" placeholder="Paste Google Map URL here..."
+                  style="border-style: dashed;">
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="form-actions" style="display:flex; gap:10px; justify-content: space-between;">
+        <!-- CONNECTIVITY SECTION -->
+        <div class="form-section-card">
+          <div class="form-section-title"><i class="fa-solid fa-route"></i> Nearby Distances (Optional)</div>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Mentioning distances to key amenities helps attract serious buyers.</p>
+          
+          <div class="connectivity-icons-grid">
+            <div class="connectivity-input-group">
+              <label><i class="fa-solid fa-train-subway"></i> Metro Station</label>
+              <div class="input-wrapper">
+                <input type="number" class="form-input" id="metroDistance" placeholder="0.5" step="0.1" min="0">
+                <span class="unit">KM</span>
+              </div>
+            </div>
+            <div class="connectivity-input-group">
+              <label><i class="fa-solid fa-school"></i> Schools</label>
+              <div class="input-wrapper">
+                <input type="number" class="form-input" id="schoolDistance" placeholder="1.2" step="0.1" min="0">
+                <span class="unit">KM</span>
+              </div>
+            </div>
+            <div class="connectivity-input-group">
+              <label><i class="fa-solid fa-bag-shopping"></i> Shopping Malls</label>
+              <div class="input-wrapper">
+                <input type="number" class="form-input" id="mallDistance" placeholder="2.5" step="0.1" min="0">
+                <span class="unit">KM</span>
+              </div>
+            </div>
+            <div class="connectivity-input-group">
+              <label><i class="fa-solid fa-hospital"></i> Hospitals</label>
+              <div class="input-wrapper">
+                <input type="number" class="form-input" id="hospitalDistance" placeholder="1.0" step="0.1" min="0">
+                <span class="unit">KM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions" style="display:flex; gap:12px; justify-content: space-between; margin-top: 10px;">
           <button class="btn btn-outline btn-save-draft" style="flex:1"><i class="fa-solid fa-floppy-disk"></i> Save Draft</button>
-          <button class="btn btn-primary btn-app-nav btn-next-step" style="flex:1.5">Next: Details <i class="fa-solid fa-arrow-right"></i></button>
+          <button class="btn btn-primary btn-app-nav btn-next-step" style="flex:1.5; font-size: 16px;">Next: Property Details <i class="fa-solid fa-arrow-right"></i></button>
         </div>
       </div>
 
@@ -1408,20 +1430,19 @@
       </div>
 
       <!-- SIDEBAR: Location Preview -->
-      <div id="sidebarLocationPreview" class="form-card sidebar-location" style="padding: 24px; margin-top: 24px;">
-        <h3
-          style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--dark); display: flex; align-items: center; gap: 8px;">
+      <div id="sidebarLocationPreview" class="sidebar-preview-card" style="margin-top: 24px;">
+        <div class="sidebar-preview-header">
           <i class="fa-solid fa-map-location-dot" style="color: var(--primary)"></i> Location Preview
-        </h3>
-        <div id="mapPreviewContainer"
-          style="width: 100%; height: 200px; background: #f3f4f6; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--border);">
-          <iframe id="googleMapIframe" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen
-            src=""></iframe>
-          <div id="mapPlaceholder"
-            style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; color: var(--text-muted); text-align: center; padding: 20px;">
-            <i class="fa-solid fa-map-pin"
-              style="font-size: 24px; margin-bottom: 10px; color: var(--primary); opacity: 0.5;"></i>
-            <p style="font-size: 12px;">Map will appear here once you select a location.</p>
+        </div>
+        <div class="sidebar-preview-body">
+          <div id="mapPreviewContainer"
+            style="width: 100%; height: 200px; background: #f3f4f6; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--border);">
+            <iframe id="googleMapIframe" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen
+              src=""></iframe>
+            <div id="mapPlaceholder" class="map-placeholder-premium">
+              <i class="fa-solid fa-map-pin" style="font-size: 28px; color: var(--primary); opacity: 0.6;"></i>
+              <p style="font-size: 13px; font-weight: 500; max-width: 180px; text-align: center;">Map will appear here once you select a location.</p>
+            </div>
           </div>
         </div>
       </div>

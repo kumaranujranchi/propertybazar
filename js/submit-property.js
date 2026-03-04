@@ -479,6 +479,22 @@ function initInteractiveForm() {
       pill.classList.toggle('active');
     });
   });
+
+  // Visual Category Selector (Step 2)
+  const categoryGrid = document.getElementById('categoryVisualSelector');
+  if (categoryGrid) {
+    const hiddenInput = document.getElementById('propertyCategory');
+    categoryGrid.querySelectorAll('.category-visual-item').forEach(item => {
+      item.addEventListener('click', () => {
+        categoryGrid.querySelectorAll('.category-visual-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        if (hiddenInput) {
+          hiddenInput.value = item.dataset.value;
+          hiddenInput.dispatchEvent(new Event('change'));
+        }
+      });
+    });
+  }
 }
 
 function initGooglePlaces() {
@@ -789,6 +805,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('googleMapLinkInput')) document.getElementById('googleMapLinkInput').value = prop.location.googleMapLink || '';
         if (document.getElementById('googleLocationSearch')) document.getElementById('googleLocationSearch').value = prop.location.googleSearch || '';
         
+        // Category pre-fill
+        if (prop.details?.category) {
+          const catHidden = document.getElementById('propertyCategory');
+          if (catHidden) catHidden.value = prop.details.category;
+          document.querySelectorAll('#categoryVisualSelector .category-visual-item').forEach(item => {
+            if (item.dataset.value === prop.details.category) item.classList.add('active');
+            else item.classList.remove('active');
+          });
+        }
+
         // Distances
         if (document.getElementById('metroDistance')) document.getElementById('metroDistance').value = prop.location.metroDistance || '';
         if (document.getElementById('schoolDistance')) document.getElementById('schoolDistance').value = prop.location.schoolDistance || '';
@@ -1221,6 +1247,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     const details = {
+      category: document.getElementById('propertyCategory')?.value,
       bhk: document.getElementById('bhkTypeSelect')?.value === 'Others' ? document.getElementById('customBhkInput')?.value : document.getElementById('bhkTypeSelect')?.value,
       status: document.getElementById('propertyStatusSelect')?.value,
       builtUpArea: parseNum('builtUpAreaInput') || 0,
@@ -1477,6 +1504,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (document.getElementById('landmarkInput')) document.getElementById('landmarkInput').value = d.location.landmark || '';
       if (document.getElementById('googleMapLinkInput')) document.getElementById('googleMapLinkInput').value = d.location.googleMapLink || '';
       if (document.getElementById('googleLocationSearch')) document.getElementById('googleLocationSearch').value = d.location.googleSearch || '';
+
+      // Category pre-fill for draft
+      if (d.details?.category) {
+        const catHidden = document.getElementById('propertyCategory');
+        if (catHidden) catHidden.value = d.details.category;
+        document.querySelectorAll('#categoryVisualSelector .category-visual-item').forEach(item => {
+          if (item.dataset.value === d.details.category) item.classList.add('active');
+          else item.classList.remove('active');
+        });
+      }
     }
 
     // Step 3: Details
