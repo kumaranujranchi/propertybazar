@@ -2008,6 +2008,23 @@
   <script src="js/main.js"></script>
   <script type="module" src="js/city-selector.js"></script>
 
+  <!-- Dev helper: open Step 2 when visiting with ?openStep=2 -->
+  <script>
+    (function(){
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('openStep') === '2') {
+          document.querySelectorAll('.form-step').forEach(el => el.style.display = 'none');
+          const s2 = document.getElementById('formStep2');
+          if (s2) {
+            s2.style.display = 'block';
+            setTimeout(() => s2.scrollIntoView({behavior: 'smooth', block: 'center'}), 150);
+          }
+        }
+      } catch (err) { console.warn('openStep helper:', err); }
+    })();
+  </script>
+
 </body>
 
 
