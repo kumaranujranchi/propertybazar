@@ -6,7 +6,7 @@ const WATERMARK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 
 
 // Apply an SVG watermark onto an image File and return a new File (WebP)
 function applyWatermark(file, svgString, options = {}) {
-  const { scale = 0.20, margin = 24, opacity = 0.95, quality = 0.9 } = options;
+  const { scale = 0.12, margin = 12, maxWidth = 120, opacity = 0.60, quality = 0.9 } = options;
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -26,7 +26,8 @@ function applyWatermark(file, svgString, options = {}) {
           svgImg.onload = () => {
             const intrinsicW = svgImg.naturalWidth || 100;
             const intrinsicH = svgImg.naturalHeight || 100;
-            const wmWidth = Math.round(canvas.width * scale);
+            let wmWidth = Math.round(canvas.width * scale);
+            if (maxWidth) wmWidth = Math.min(wmWidth, maxWidth);
             const ratio = intrinsicW / intrinsicH || 1;
             const wmHeight = Math.round(wmWidth / ratio);
             const x = canvas.width - wmWidth - margin;
