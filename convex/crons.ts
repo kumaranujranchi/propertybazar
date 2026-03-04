@@ -16,4 +16,11 @@ crons.daily(
   internal.drafts.deleteOldDrafts
 );
 
+// Generate and publish short-term sitemap daily (1:00 UTC)
+crons.daily(
+  "generate-shortterm-sitemap",
+  { hourUTC: 1, minuteUTC: 0 },
+  internal.sitemaps.generateShorttermSitemap
+);
+
 export default crons;

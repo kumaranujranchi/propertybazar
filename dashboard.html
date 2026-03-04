@@ -1322,54 +1322,36 @@
         console.error("Failed to fetch properties:", err);
         console.warn("Failed to fetch properties:", err);
       }
-      const propertyCount = properties ? properties.length : 0;
 
-      document.getElementById("statPosted").textContent = propertyCount;
+      // Helper: fetch and render only the properties section (keeps user on same dashboard page)
+      async function fetchAndRenderProperties() {
+        try {
+          properties = await convex.query("auth:getMyProperties", { token });
+        } catch (err) {
+          console.error("Failed to refresh properties:", err);
+        }
 
-      const limit = user.limit || 1;
-      const limitLeft = Math.max(0, limit - propertyCount);
-      document.getElementById("statFreeLeft").textContent = limitLeft;
+        const propertyCount = properties ? properties.length : 0;
+        document.getElementById("statPosted").textContent = propertyCount;
+        const limit = user.limit || 1;
+        const limitLeft = Math.max(0, limit - propertyCount);
+        document.getElementById("statFreeLeft").textContent = limitLeft;
+        document.getElementById("usageText").textContent = `${propertyCount} of ${limit} used`;
+        const pct = Math.min(100, Math.round((propertyCount / limit) * 100));
+        document.getElementById("usageBar").style.width = pct + "%";
+        document.getElementById("usageBar").style.background = pct >= 100 ? "#EF4444" : "var(--primary)";
 
-      // Set Tier Badge
-      const t = user.subscriptionTier;
-      const iconEl = document.getElementById("tierIconContainer");
-      if (t === "premium")
-        iconEl.innerHTML =
-          '<i class="fa-solid fa-star" style="color:#FFD700"></i>';
-      else if (t?.startsWith("agent"))
-        iconEl.innerHTML = '<i class="fa-solid fa-briefcase"></i>';
-      else iconEl.innerHTML = '<i class="fa-solid fa-tag"></i>';
-
-      const tierName = user.subscriptionTier || "free";
-      document.querySelectorAll(".dash-stat-label")[2].textContent =
-        tierName.charAt(0).toUpperCase() + tierName.slice(1) + " Plan";
-
-      document.getElementById("usageText").textContent =
-        `${propertyCount} of ${limit} used`;
-      const pct = Math.min(100, Math.round((propertyCount / limit) * 100));
-      document.getElementById("usageBar").style.width = pct + "%";
-      document.getElementById("usageBar").style.background =
-        pct >= 100 ? "#EF4444" : "var(--primary)";
-
-      // Conditional Upgrade Banner
-      if (user.subscriptionTier === "free") {
-        document.getElementById("upgradeCard").style.display = "block";
-      } else {
-        const pStatus = document.querySelector("#sec-dashboard .dash-card p");
-        if (pStatus)
-          pStatus.textContent = `You are on the ${tierName} plan. Your listings will be featured automatically!`;
-      }
-
-      const list = document.getElementById("myPropertiesList");
-
-      if (!properties || properties.length === 0) {
-        list.innerHTML = `<div class="dash-empty">
+        const list = document.getElementById("myPropertiesList");
+        if (!properties || properties.length === 0) {
+          list.innerHTML = `<div class="dash-empty">
       <div style="font-size:40px;margin-bottom:12px"><i class="fa-solid fa-house"></i></div>
       <p style="font-weight:700;color:var(--dark)">No properties listed yet</p>
       <p style="font-size:13px">Post your first property to get started!</p>
       <a href="post-property.html" class="btn btn-primary" style="margin-top:14px;display:inline-block"><i class="fa-solid fa-plus"></i> Post Property</a>
     </div>`;
-      } else {
+          return;
+        }
+
         list.innerHTML = properties
           .map(
             (p) => `
@@ -1378,7 +1360,6 @@
           if (!p.photos || p.photos.length === 0) return "images/property-1.webp";
           const first = p.photos[0];
           const url = typeof first === 'object' ? first.url : first;
-          // Valid URL check: must start with http or /
           if (!url || (typeof url === 'string' && !url.startsWith('http') && !url.startsWith('/'))) {
             return "images/property-1.webp";
           }
@@ -1467,7 +1448,24 @@
                   token,
                   id,
                 });
-                window.location.reload();
+
+                // Remove from local list and update UI in-place (don't reload whole page)
+                properties = properties.filter((p) => p._id !== id);
+                const card = btn.closest('.dash-prop-card');
+                if (card && card.parentNode) card.parentNode.removeChild(card);
+
+                // Update counts & usage
+                const propertyCount = properties ? properties.length : 0;
+                document.getElementById("statPosted").textContent = propertyCount;
+                const limit = user.limit || 1;
+                const limitLeft = Math.max(0, limit - propertyCount);
+                document.getElementById("statFreeLeft").textContent = limitLeft;
+                document.getElementById("usageText").textContent = `${propertyCount} of ${limit} used`;
+                const pct = Math.min(100, Math.round((propertyCount / limit) * 100));
+                document.getElementById("usageBar").style.width = pct + "%";
+                document.getElementById("usageBar").style.background = pct >= 100 ? "#EF4444" : "var(--primary)";
+
+                if (typeof window.showToast === "function") window.showToast("Property deleted successfully", "success");
               } catch (err) {
                 alert("Error deleting property: " + err.message);
                 btn.innerHTML = '<i class="fa-solid fa-trash"></i> Delete';
@@ -1494,7 +1492,9 @@
                   "Property reactivated for 30 days!",
                   "success",
                 );
-              setTimeout(() => window.location.reload(), 1500);
+
+              // Refresh properties list to reflect new activation state
+              await fetchAndRenderProperties();
             } catch (err) {
               alert("Error: " + err.message);
               btn.innerHTML =
@@ -1504,6 +1504,8 @@
           });
         });
       }
+      // Render properties using helper so actions don't redirect away
+      await fetchAndRenderProperties();
 
       // Load Drafts
       const draftsList = document.getElementById("myDraftsList");
@@ -1536,8 +1538,19 @@
       `;
           document.getElementById("btnDeleteDraft").onclick = async () => {
             if (confirm("Are you sure you want to discard this draft?")) {
-              await convex.mutation("drafts:deleteDraft", { token });
-              window.location.reload();
+              try {
+                await convex.mutation("drafts:deleteDraft", { token });
+                if (typeof window.showToast === 'function') window.showToast('Draft discarded', 'success');
+                draftsList.innerHTML = `<div class="dash-empty">
+        <div style="font-size:32px;margin-bottom:12px;opacity:0.6"><i class="fa-solid fa-file-circle-xmark"></i></div>
+        <p style="font-weight:700;color:var(--dark)">No active drafts</p>
+        <p style="font-size:13px">Your auto-saved progress will appear here.</p>
+      </div>`;
+                await fetchAndRenderProperties();
+              } catch (err) {
+                console.error('Failed to delete draft', err);
+                alert('Failed to discard draft: ' + (err.message || 'Unknown error'));
+              }
             }
           };
         }
