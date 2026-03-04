@@ -1506,6 +1506,41 @@
           });
         });
       }
+      // Stats counts & tier badge (must be declared before fetchAndRenderProperties and later references)
+      const propertyCount = properties ? properties.length : 0;
+      document.getElementById("statPosted").textContent = propertyCount;
+
+      const limit = user.limit || 1;
+      const limitLeft = Math.max(0, limit - propertyCount);
+      document.getElementById("statFreeLeft").textContent = limitLeft;
+
+      // Set Tier Badge
+      const t = user.subscriptionTier;
+      const iconEl = document.getElementById("tierIconContainer");
+      if (t === "premium")
+        iconEl.innerHTML = '<i class="fa-solid fa-star" style="color:#FFD700"></i>';
+      else if (t?.startsWith("agent"))
+        iconEl.innerHTML = '<i class="fa-solid fa-briefcase"></i>';
+      else iconEl.innerHTML = '<i class="fa-solid fa-tag"></i>';
+
+      const tierName = user.subscriptionTier || "free";
+      document.querySelectorAll(".dash-stat-label")[2].textContent =
+        tierName.charAt(0).toUpperCase() + tierName.slice(1) + " Plan";
+
+      document.getElementById("usageText").textContent = `${propertyCount} of ${limit} used`;
+      const pct = Math.min(100, Math.round((propertyCount / limit) * 100));
+      document.getElementById("usageBar").style.width = pct + "%";
+      document.getElementById("usageBar").style.background = pct >= 100 ? "#EF4444" : "var(--primary)";
+
+      // Conditional Upgrade Banner
+      if (user.subscriptionTier === "free") {
+        document.getElementById("upgradeCard").style.display = "block";
+      } else {
+        const pStatus = document.querySelector("#sec-dashboard .dash-card p");
+        if (pStatus)
+          pStatus.textContent = `You are on the ${tierName} plan. Your listings will be featured automatically!`;
+      }
+
       // Render properties using helper so actions don't redirect away
       await fetchAndRenderProperties();
 
