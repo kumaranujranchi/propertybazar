@@ -207,18 +207,30 @@
         <h2 class="form-card-title">Step 2: Where is your property?</h2>
         <p class="form-card-subtitle">Add the exact location for better visibility</p>
 
-        <!-- Category selector to help filter listings -->
-        <div class="form-group" style="max-width: 420px; margin-bottom: 18px;">
+        <!-- Category selector to help filter listings (custom grouped select with icons) -->
+        <div class="form-group" style="max-width: 520px; margin-bottom: 18px;">
           <label class="form-label">Category</label>
-          <select id="propertyCategory" class="form-input form-select">
-            <option value="">Select Category</option>
-            <option>Residential</option>
-            <option>Commercial</option>
-            <option>Office</option>
-            <option>Retail</option>
-            <option>Industrial</option>
-            <option>PG / Hostel</option>
-          </select>
+          <div class="custom-select" data-name="propertyCategory">
+            <input type="hidden" name="propertyCategory" id="propertyCategory" value="">
+            <div class="custom-select-button" tabindex="0" role="button" aria-haspopup="listbox">
+              <div class="label"><i class="fa-solid fa-layer-group"></i> <span class="selected-text">Select Category</span></div>
+              <div class="chev"><i class="fa-solid fa-chevron-down"></i></div>
+            </div>
+            <div class="custom-select-list" role="listbox" style="display:none">
+              <div class="custom-select-group">
+                <div class="custom-select-group-title">Residential</div>
+                <div class="custom-select-item" data-value="Apartment"><i class="fa-solid fa-building"></i>Apartment</div>
+                <div class="custom-select-item" data-value="Villa"><i class="fa-solid fa-house-chimney"></i>Villa</div>
+                <div class="custom-select-item" data-value="PG / Hostel"><i class="fa-solid fa-bed"></i>PG / Hostel</div>
+              </div>
+              <div class="custom-select-group">
+                <div class="custom-select-group-title">Commercial</div>
+                <div class="custom-select-item" data-value="Office"><i class="fa-solid fa-briefcase"></i>Office</div>
+                <div class="custom-select-item" data-value="Retail"><i class="fa-solid fa-store"></i>Retail</div>
+                <div class="custom-select-item" data-value="Industrial"><i class="fa-solid fa-industry"></i>Industrial</div>
+              </div>
+            </div>
+          </div>
           <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">Helps buyers filter and find your listing.</p>
         </div>
 
@@ -2027,5 +2039,39 @@
 
 </body>
 
+
+  <script>
+    // Custom grouped select behavior for Category
+    document.addEventListener('click', function(e){
+      // Toggle list when clicking the button
+      const btn = e.target.closest('.custom-select-button');
+      if (btn) {
+        const wrap = btn.parentElement;
+        const list = wrap.querySelector('.custom-select-list');
+        const isOpen = list.style.display === 'block';
+        document.querySelectorAll('.custom-select-list').forEach(l => l.style.display = 'none');
+        list.style.display = isOpen ? 'none' : 'block';
+        return;
+      }
+
+      // Selecting an item
+      const item = e.target.closest('.custom-select-item');
+      if (item) {
+        const wrap = item.closest('.custom-select');
+        const hidden = wrap.querySelector('input[type="hidden"]');
+        hidden.value = item.getAttribute('data-value');
+        wrap.querySelector('.selected-text').textContent = item.getAttribute('data-value');
+        wrap.querySelector('.custom-select-list').style.display = 'none';
+        // trigger input event for Opportunity Score recalculation
+        hidden.dispatchEvent(new Event('input'));
+        return;
+      }
+
+      // Clicked outside: close any open lists
+      if (!e.target.closest('.custom-select')) {
+        document.querySelectorAll('.custom-select-list').forEach(l => l.style.display = 'none');
+      }
+    });
+  </script>
 
 </html>
