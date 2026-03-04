@@ -1292,8 +1292,10 @@
       import { convex } from "./js/convex.js";
       import { getToken } from "./js/auth.js";
 
-      const user = await requireAuth("login.html");
-      if (!user) throw new Error("Not logged in");
+      (async function(){
+        try {
+          const user = await requireAuth("login.html");
+          if (!user) throw new Error("Not logged in");
 
       // Nav
       document.getElementById("dashNavName").innerHTML =
@@ -1970,6 +1972,16 @@
       });
 
       document.getElementById("dashWrap").style.display = "flex";
+        } catch (err) {
+          console.error('Dashboard init error', err);
+          try {
+            const wrap = document.querySelector('.dash-content-wrap') || document.body;
+            wrap.innerHTML = '<div style="padding:24px;color:#111;font-weight:600">Failed to load dashboard. See console for details.</div>';
+          } catch (e) {
+            document.body.innerHTML = '<div style="padding:24px;color:#111;font-weight:600">Failed to load dashboard. See console for details.</div>';
+          }
+        }
+      })();
     </script>
     <script type="module" src="js/city-selector.js"></script>
   </body>
