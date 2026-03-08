@@ -23,4 +23,10 @@ crons.daily(
   internal.sitemaps.generateShorttermSitemap
 );
 
+crons.daily(
+  "ping-search-engines",
+  { hourUTC: 2, minuteUTC: 0 },
+  internal.sitemaps.pingSearchEngines
+);
+
 export default crons;

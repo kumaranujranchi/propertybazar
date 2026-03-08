@@ -1,5 +1,6 @@
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
+import { internal } from "./_generated/api";
 
 /**
  * Helper to check if the current user is an admin
@@ -102,6 +103,10 @@ export const updatePropertyStatus = mutation({
     await ctx.db.patch(args.propertyId, {
       approvalStatus: args.status
     });
+
+    if (args.status === "approved") {
+      await ctx.runMutation(internal.sitemaps.pingSearchEngines);
+    }
 
     return { success: true };
   },

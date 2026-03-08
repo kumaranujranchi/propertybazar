@@ -116,3 +116,22 @@ ${dynamicUrls}
 </urlset>`;
   }
 });
+
+export const pingSearchEngines = internalMutation({
+  args: {},
+  handler: async (ctx: any) => {
+    const sitemapUrl = "https://24dismil.com/sitemap.xml";
+    const googlePing = `https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`;
+    
+    try {
+      const response = await fetch(googlePing);
+      if (response.ok) {
+        console.log("Google pinged successfully");
+      } else {
+        console.error("Google ping failed", response.status);
+      }
+    } catch (error) {
+      console.error("Error pinging Google", error);
+    }
+  }
+});
