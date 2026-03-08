@@ -17,4 +17,19 @@ http.route({
   }),
 });
 
+http.route({
+  path: "/sitemap.xml",
+  method: "GET",
+  handler: httpAction(async (ctx) => {
+    const xml = await ctx.runMutation(api.sitemaps.getSitemapXml);
+    return new Response(xml, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/xml",
+        "Cache-Control": "public, max-age=3600",
+      },
+    });
+  }),
+});
+
 export default http;

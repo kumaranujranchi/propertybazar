@@ -69,3 +69,50 @@ export const triggerGenerateShorttermSitemap = mutation({
     }
   }
 });
+
+export const getSitemapXml = internalMutation({
+  args: {},
+  handler: async (ctx: any) => {
+    const domain = "https://24dismil.com";
+    const staticPages = [
+      { loc: "", priority: "1.0", changefreq: "daily" },
+      { loc: "/about.html", priority: "0.8", changefreq: "monthly" },
+      { loc: "/contact.html", priority: "0.8", changefreq: "monthly" },
+      { loc: "/properties.html", priority: "0.9", changefreq: "daily" },
+      { loc: "/pricing.html", priority: "0.7", changefreq: "monthly" },
+      { loc: "/login.html", priority: "0.5", changefreq: "monthly" },
+      { loc: "/post-property.html", priority: "0.7", changefreq: "monthly" },
+      { loc: "/privacy.html", priority: "0.3", changefreq: "monthly" },
+      { loc: "/terms.html", priority: "0.3", changefreq: "monthly" },
+    ];
+
+    const properties = await ctx.db
+      .query("properties")
+      .filter((q: any) => q.eq(q.field("approvalStatus"), "approved"))
+      .collect();
+
+    const staticUrls = staticPages.map(page => `  <url>
+    <loc>${domain}${page.loc}</loc>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`).join("\n");
+
+    const dynamicUrls = properties.map((p: any) => {
+      const idStr = p._id.toString();
+      const loc = `${domain}/property-detail.html?id=${encodeURIComponent(idStr)}`;
+      const lastmod = new Date(p.lastActivatedAt || p._creationTime).toISOString().split('T')[0];
+      return `  <url>
+    <loc>${loc}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+    }).join("\n");
+
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${staticUrls}
+${dynamicUrls}
+</urlset>`;
+  }
+});

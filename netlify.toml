@@ -24,3 +24,8 @@
   to = "https://24dismil.com/:splat"
   status = 301
   force = true
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "https://compassionate-mockingbird-459.convex.site/sitemap.xml"
+  status = 200
