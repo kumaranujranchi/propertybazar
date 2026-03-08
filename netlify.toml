@@ -6,3 +6,21 @@
   for = "/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
+
+[[redirects]]
+  from = "http://www.24dismil.com/*"
+  to = "https://24dismil.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.24dismil.com/*"
+  to = "https://24dismil.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://24dismil.com/*"
+  to = "https://24dismil.com/:splat"
+  status = 301
+  force = true
