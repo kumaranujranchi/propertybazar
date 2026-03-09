@@ -1,3 +1,7 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 /* premium-houssed-style.css - Redesign for propertybazar */
 :root {
   --primary: #e84b1e;
@@ -443,4 +447,18 @@ body {
   max-width: 100%;
   box-sizing: border-box;
   overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: normal;
+}
+
+#dynamicDescription, .property-description {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-all; /* Fallback for very long strings */
+  word-break: break-word; /* Modern browsers */
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.8;
 }
