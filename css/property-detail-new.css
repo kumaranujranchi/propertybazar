@@ -468,6 +468,18 @@ body {
      grid-template-columns: repeat(2, minmax(0, 1fr)) !important; 
      gap: 8px !important;
   }
+  .amenity-item {
+     padding: 10px !important;
+     display: flex !important;
+     align-items: center !important;
+     gap: 10px !important;
+  }
+  .amenity-item i, .amenity-icon {
+     width: 24px !important;
+     display: flex !important;
+     justify-content: center !important;
+     flex-shrink: 0 !important;
+  }
 }
   
   #dynamicDescription, .property-description {
