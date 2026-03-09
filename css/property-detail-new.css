@@ -385,27 +385,62 @@ body {
     gap: 20px; 
     overflow-x: auto; 
     -webkit-overflow-scrolling: touch; 
-    padding-bottom: 4px; /* Space for scrollbar if visible */
+    padding-bottom: 4px;
   }
   .subnav-link { white-space: nowrap; }
   .detail-section-card { padding: 20px; }
 }
 
 @media (max-width: 576px) {
+  .container { padding: 0 12px; }
+  .detail-section-card { padding: 16px; border-radius: 8px; }
   .summary-price { font-size: 24px; }
   .summary-title { font-size: 18px; }
-  .section-h2 { font-size: 18px; }
+  .section-h2 { font-size: 18px; margin-bottom: 16px; }
   .gallery-primary-box { aspect-ratio: 4 / 3; }
+  
   .spec-item-box { padding: 12px; gap: 10px; }
   .spec-item-icon { width: 36px; height: 36px; font-size: 16px; flex-shrink: 0; }
   .spec-item-info span:last-child { font-size: 14px; }
+  
+  .amenities-grid { 
+     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important; 
+     gap: 8px !important;
+  }
+  .amenity-item { 
+     padding: 8px 10px !important;
+     font-size: 12px !important;
+  }
+  .amenity-item span {
+     white-space: normal;
+     word-break: break-word;
+  }
+}
+
+@media (max-width: 360px) {
+  .amenities-grid { 
+     grid-template-columns: 1fr !important;
+  }
+  .houssed-specs {
+     grid-template-columns: 1fr !important;
+  }
 }
 
 /* Fix for horizontal scroll on body */
 body {
   overflow-x: hidden;
+  width: 100%;
 }
 
+/* Ensure container doesn't force overflow */
 .container {
-  overflow-x: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ensure section cards and their content don't exceed container */
+.detail-section-card, .summary-card-top, .sticky-sidebar {
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
 }
