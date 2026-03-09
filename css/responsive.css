@@ -187,7 +187,6 @@
   .header .container { padding: 0 16px; }
   .nav { gap: 10px; justify-content: space-between; }
   .nav-group-left { gap: 6px; }
-  .nav-logo-text { display: none; }
   .nav-btn-post { display: none; }
   .nav-city { display: none; }
   .nav-logo-icon { width: 26px; height: 26px; font-size: 14px; }
@@ -302,7 +301,6 @@
   .nav-btn-post i { margin-right: 0; }
   
   /* Core */
-  .nav-logo-text { display: none; }
   .nav-city { font-size: 11px; }
   .nav { gap: 8px; }
   
