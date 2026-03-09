@@ -1256,7 +1256,7 @@
             const isMobile = windowWidth <= 480;
             const imgHeight = isMobile ? '220px' : '180px';
             card.style.cssText = 'width:280px; max-width:85vw; border-radius:8px; overflow:hidden; background:#fff; border:1px solid var(--border); flex-shrink:0; cursor:pointer; display: flex; flex-direction: column; height: 100%;';
-            card.innerHTML = `<img src="${url}" style="width:100%; height:${imgHeight}; object-fit:cover; display:block; flex:1">`;
+            card.innerHTML = `<img src="${url}" style="width:100%; height:${imgHeight} !important; object-fit:cover; display:block; flex:1">`;
             card.addEventListener('click', () => {
               const idx = photos.indexOf(url);
               if (idx >= 0) lbOpen(idx);
