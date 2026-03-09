@@ -193,7 +193,7 @@ body {
   min-height: 100%;
   position: relative;
   -webkit-text-size-adjust: 100%;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Prevent horizontal scroll on body */
 }
 .advantage-grid {
   display: grid;

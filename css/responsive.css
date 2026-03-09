@@ -161,8 +161,27 @@
   }
   
   .footer-download { grid-column: 1 / -1; margin-top: 10px; }
-  .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.05); margin-top: 40px; padding-top: 30px; flex-direction: column; gap: 15px; text-align: center; }
-  .footer-bottom-links { flex-wrap: wrap; justify-content: center; }
+  .footer-bottom { 
+    border-top: 1px solid rgba(255, 255, 255, 0.05); 
+    margin-top: 40px; 
+    padding-top: 30px; 
+    flex-direction: column; 
+    gap: 15px; 
+    text-align: center; 
+    width: 100%;
+    overflow: hidden;
+  }
+  .footer-bottom-links { 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 10px;
+    width: 100%;
+  }
+  .footer-bottom span {
+    display: block;
+    width: 100%;
+    word-break: break-word;
+  }
 
   /* Nav */
   .header .container { padding: 0 16px; }
