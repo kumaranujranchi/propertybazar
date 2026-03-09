@@ -482,6 +482,10 @@ body {
   }
 }
   
+  #floorPlanCarousel {
+    align-items: stretch !important;
+  }
+
   #dynamicDescription, .property-description {
     word-break: break-all; /* Aggressive wrapping for mobile */
     font-size: 14px;
