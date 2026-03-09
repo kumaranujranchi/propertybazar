@@ -411,11 +411,11 @@ body {
 
 @media (max-width: 640px) {
   .houssed-specs {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px;
   }
-  .detail-section-card { padding: 14px; }
-  .container { padding: 0 10px; }
+  .detail-section-card { padding: 14px; overflow-x: hidden; }
+  .container { padding: 0 10px; width: 100%; max-width: 100vw; }
 }
 
 @media (max-width: 576px) {
@@ -436,8 +436,9 @@ body {
   }
   
   .amenities-grid { 
-     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important; 
+     grid-template-columns: repeat(2, minmax(0, 1fr)) !important; 
      gap: 8px !important;
+     width: 100% !important;
   }
   .amenity-item { 
      padding: 8px 10px !important;

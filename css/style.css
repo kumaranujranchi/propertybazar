@@ -170,27 +170,30 @@
   color: var(--dark);
 }
 
-/* ========== RESET & BASE ========== */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+/* ========== GLOBAL RESET ========== */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
+
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
 }
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: "Inter", sans-serif;
   color: var(--text);
   background: var(--bg);
   line-height: 1.6;
-  overflow-x: hidden;
-  width: 100%;
 }
-/* ... */
 .advantage-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -572,18 +575,25 @@ textarea {
   /* Mobile navbar: logo left, actions right */
   .nav {
     justify-content: space-between;
+    gap: 10px;
   }
 
-  /* Show only the Post Property button and hamburger on mobile */
-  .nav-links {
+  .nav-links, .nav-btn-login {
     display: none;
   }
-  .nav-btn-login {
-    display: none;
-  }
+  
   .hamburger {
     display: flex;
   }
+}
+
+@media (max-width: 450px) {
+  .header .container { padding: 0 12px; }
+  .nav-city, .nav-group-right .nav-btn-post {
+    display: none !important;
+  }
+  .nav-logo { font-size: 18px; }
+  .nav-logo-icon { width: 28px; height: 28px; font-size: 14px; }
 }
 .hero-badge {
   display: inline-flex;

@@ -167,12 +167,11 @@
   /* Nav */
   .header .container { padding: 0 16px; }
   .nav { gap: 10px; }
-  .nav-group-left { gap: 8px; }
+  .nav-group-left { gap: 6px; }
   .nav-logo-text { display: none; }
-  .nav-city { padding: 4px 8px; font-size: 11px; }
-  .nav-group-right { gap: 12px; }
-  .nav-btn-post { padding: 6px 12px; font-size: 12px; }
-  .nav-btn-login { display: none; }
+  .nav-btn-post { display: none; }
+  .nav-city { display: none; }
+  .nav-logo-icon { width: 26px; height: 26px; font-size: 14px; }
 
   /* Property Posting Flow Optimization */
   .post-hero { padding: 40px 0; text-align: center; }
@@ -238,7 +237,7 @@
   .gallery-thumb { display: none; }
   .detail-specs { grid-template-columns: repeat(2, 1fr); }
   .detail-price { font-size: 26px; }
-  .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+  .amenities-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .contact-btns { flex-direction: column; gap: 8px; }
   .contact-btn { width: 100%; text-align: center; }
 
@@ -304,7 +303,7 @@
   .team-grid { grid-template-columns: 1fr 1fr; }
   .about-stats { grid-template-columns: 1fr 1fr; }
   .detail-specs { grid-template-columns: repeat(2, 1fr); }
-  .amenities-grid { grid-template-columns: 1fr 1fr; }
+  .amenities-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .form-type-grid { grid-template-columns: repeat(2, 1fr); }
   .dash-stats { grid-template-columns: 1fr 1fr; }
 
