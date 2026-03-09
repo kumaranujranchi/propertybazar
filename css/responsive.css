@@ -166,7 +166,7 @@
 
   /* Nav */
   .header .container { padding: 0 16px; }
-  .nav { gap: 10px; }
+  .nav { gap: 10px; justify-content: space-between; }
   .nav-group-left { gap: 6px; }
   .nav-logo-text { display: none; }
   .nav-btn-post { display: none; }

@@ -171,7 +171,9 @@
 }
 
 /* ========== GLOBAL RESET ========== */
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -179,15 +181,19 @@
 
 html {
   scroll-behavior: smooth;
-  width: 100%;
-  overflow-x: hidden;
+  height: 100%;
 }
 
 body {
   font-family: "Inter", sans-serif;
   color: var(--text);
-  background: var(--bg);
   line-height: 1.6;
+  background-color: var(--bg);
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
 }
 .advantage-grid {
   display: grid;
