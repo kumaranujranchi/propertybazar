@@ -65,6 +65,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid var(--border);
+  min-width: 0; /* Prevents flex items from overflowing */
 }
 
 .summary-price {
@@ -158,6 +159,19 @@ body {
   gap: 20px;
 }
 
+@media (max-width: 640px) {
+  .houssed-specs {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .houssed-specs {
+    grid-template-columns: 1fr;
+  }
+}
+
 .spec-item-box {
   display: flex;
   align-items: center;
@@ -203,6 +217,20 @@ body {
   gap: 40px;
 }
 
+@media (max-width: 1024px) {
+  .info-grid-3col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .info-grid-3col {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
 .info-col h3 {
   font-size: 15px;
   color: var(--text-muted);
@@ -224,6 +252,7 @@ body {
 
 .info-row-flex b {
   color: var(--text);
+  word-break: break-word; /* Prevents long values from cutting off */
 }
 
 /* ---- FAQ Accordion ---- */
@@ -277,6 +306,18 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+}
+
+@media (max-width: 991px) {
+  .connectivity-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .connectivity-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .conn-card {
@@ -337,14 +378,34 @@ body {
 
 /* ---- Mobile Adjustments ---- */
 @media (max-width: 991px) {
-  .property-top-wrapper { flex-direction: column; }
+  .property-top-wrapper { flex-direction: column; gap: 16px; }
   .info-grid-3col { grid-template-columns: 1fr; gap: 24px; }
   .connectivity-grid { grid-template-columns: repeat(2, 1fr); }
-  .subnav-links { gap: 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .subnav-links { 
+    gap: 20px; 
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
+    padding-bottom: 4px; /* Space for scrollbar if visible */
+  }
+  .subnav-link { white-space: nowrap; }
   .detail-section-card { padding: 20px; }
 }
 
 @media (max-width: 576px) {
   .summary-price { font-size: 24px; }
+  .summary-title { font-size: 18px; }
   .section-h2 { font-size: 18px; }
+  .gallery-primary-box { aspect-ratio: 4 / 3; }
+  .spec-item-box { padding: 12px; gap: 10px; }
+  .spec-item-icon { width: 36px; height: 36px; font-size: 16px; flex-shrink: 0; }
+  .spec-item-info span:last-child { font-size: 14px; }
+}
+
+/* Fix for horizontal scroll on body */
+body {
+  overflow-x: hidden;
+}
+
+.container {
+  overflow-x: hidden;
 }
