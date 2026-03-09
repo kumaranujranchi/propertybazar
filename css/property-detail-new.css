@@ -460,10 +460,10 @@ body {
   
 @media (max-width: 480px) {
   .houssed-specs {
-    grid-template-columns: 1fr !important;
-    gap: 12px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
   }
-  .spec-item-box { padding: 12px; }
+  .spec-item-box { padding: 10px; }
   .amenities-grid { 
      grid-template-columns: repeat(2, minmax(0, 1fr)) !important; 
      gap: 8px !important;
@@ -478,10 +478,11 @@ body {
 
 @media (max-width: 360px) {
   .amenities-grid { 
-     grid-template-columns: minmax(0, 1fr) !important;
+     grid-template-columns: repeat(2, minmax(0, 1fr)) !important; 
   }
   .houssed-specs {
-     grid-template-columns: minmax(0, 1fr) !important;
+     grid-template-columns: repeat(2, minmax(0, 1fr)) !important; 
+     gap: 6px !important;
   }
 }
 
