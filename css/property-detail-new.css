@@ -432,6 +432,11 @@ body {
      white-space: normal;
      word-break: break-word;
   }
+  
+  #dynamicDescription, .property-description {
+    word-break: break-all; /* Aggressive wrapping for mobile */
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 360px) {
