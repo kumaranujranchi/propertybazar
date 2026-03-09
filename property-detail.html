@@ -1252,7 +1252,7 @@
           floorPhotos.forEach(fp => {
             const url = typeof fp === 'string' ? fp : fp.url || '';
             const card = document.createElement('div');
-            card.style.cssText = 'min-width:260px; max-width:400px; border-radius:8px; overflow:hidden; background:#fff; border:1px solid var(--border);';
+            card.style.cssText = 'min-width:260px; max-width:100%; border-radius:8px; overflow:hidden; background:#fff; border:1px solid var(--border); flex-shrink:0;';
             card.innerHTML = `<img src="${url}" style="width:100%; height:180px; object-fit:cover; display:block">`;
             card.addEventListener('click', () => {
               const idx = photos.indexOf(url);
@@ -1270,9 +1270,10 @@
           configsList.innerHTML = '';
           p.configurations.forEach(c => {
             const badge = document.createElement('div');
-            badge.style.cssText = 'background:#f8fafc; padding:8px 12px; border-radius:8px; border:1px solid var(--border); font-weight:700;';
-            let txt = c.name || '';
-            if (c.area) txt += ` • ${c.area} sq.ft`;
+            badge.className = 'badge badge-outline';
+            badge.style.cssText = 'padding:6px 12px; font-size:12px; border:1px solid var(--border); border-radius:6px; background:#fff;';
+            let txt = `${c.bhk || ''} BHK ${c.type || ''}`;
+            if (c.size) txt += ` • ${c.size} sqft`;
             if (c.price) txt += ` • ₹${Number(c.price).toLocaleString('en-IN')}`;
             badge.textContent = txt;
             configsList.appendChild(badge);
@@ -1287,30 +1288,29 @@
         const extVideoContainer = document.getElementById('projectExternalVideos');
         const uploadedVideos = p.videos || [];
         const externalVideos = p.externalVideos || [];
-        if ((uploadedVideos && uploadedVideos.length > 0) || (externalVideos && externalVideos.length > 0)) {
-          if (videoGrid) {
+        
+        if (projectVideoSection && ((uploadedVideos.length > 0) || (externalVideos.length > 0))) {
+          if (videoGrid && uploadedVideos.length > 0) {
             videoGrid.innerHTML = '';
-            (uploadedVideos || []).forEach(v => {
+            uploadedVideos.forEach(v => {
               const url = typeof v === 'string' ? v : v.url || '';
               const wrap = document.createElement('div');
-              wrap.style.cssText = 'width:320px; border-radius:8px; overflow:hidden; background:#000;';
-              wrap.innerHTML = `<video controls src="${url}" style="width:100%; height:180px; object-fit:cover"></video>`;
+              wrap.style.cssText = 'width:calc(100vw - 64px); max-width:400px; flex-shrink:0; border-radius:8px; overflow:hidden; background:#000;';
+              wrap.innerHTML = `<video controls src="${url}" style="width:100%; height:200px; object-fit:cover"></video>`;
               videoGrid.appendChild(wrap);
             });
           }
-          if (extVideoContainer) {
+          if (extVideoContainer && externalVideos.length > 0) {
             extVideoContainer.innerHTML = '';
             externalVideos.forEach(link => {
               const a = document.createElement('a');
-              a.href = link;
-              a.target = '_blank';
-              a.rel = 'noopener';
-              a.style.cssText = 'color:var(--primary); font-weight:700;';
+              a.href = link; a.target = '_blank'; a.rel = 'noopener';
+              a.style.cssText = 'color:var(--primary); font-weight:700; display:block; margin-bottom:8px;';
               a.textContent = link;
               extVideoContainer.appendChild(a);
             });
           }
-          if (projectVideoSection) projectVideoSection.style.display = 'block';
+          projectVideoSection.style.display = 'block';
         }
 
         // ---- JSON-LD Rich Snippet (dynamic) ----

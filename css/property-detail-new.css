@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 
+img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
 /* premium-houssed-style.css - Redesign for propertybazar */
 :root {
   --primary: #e84b1e;
@@ -139,6 +144,8 @@ body {
   margin-top: 24px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
+  overflow-x: hidden; /* Prevent internal content from stretching card */
+  max-width: 100%;
 }
 
 .section-h2 {
@@ -248,15 +255,22 @@ body {
   justify-content: space-between;
   margin-bottom: 12px;
   font-size: 14px;
+  gap: 12px;
+  min-width: 0;
 }
 
 .info-row-flex label {
   color: var(--text-muted);
+  flex-shrink: 0;
+  max-width: 50%;
+  word-break: break-word;
 }
 
 .info-row-flex b {
   color: var(--text);
+  text-align: right;
   word-break: break-word; /* Prevents long values from cutting off */
+  min-width: 0;
 }
 
 /* ---- FAQ Accordion ---- */
