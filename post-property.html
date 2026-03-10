@@ -374,7 +374,7 @@
         <p class="form-card-subtitle">More details = more inquiries. Fill as much as possible.</p>
 
         <div class="form-grid">
-          <div class="form-group full" id="fgBhk">
+          <div class="form-group full" id="fgBhk" data-show-for="apartment,villa">
             <label class="form-label">How many BHK? *</label>
             <div class="segmented-control" id="bhkSelector">
               <div class="segment-item" data-value="1RK">1 RK</div>
@@ -407,7 +407,7 @@
             </div>
           </div>
 
-          <div class="form-group full" id="fgCustomBhk" style="display:none">
+          <div class="form-group full" id="fgCustomBhk" style="display:none" data-show-for="apartment,villa">
             <label class="form-label">Enter Custom Configuration *</label>
             <input type="text" class="form-input" id="customBhkInput" placeholder="e.g. 7 BHK, Duplex">
           </div>
@@ -422,17 +422,17 @@
             <input type="hidden" id="propertyStatusSelect" value="Ready to Move">
           </div>
 
-          <div class="form-group" id="fgBuiltUpArea">
+          <div class="form-group" id="fgBuiltUpArea" data-show-for="apartment,villa,commercial,warehouse">
             <label class="form-label">Built-up Area (sq.ft) *</label>
             <input type="number" id="builtUpAreaInput" class="form-input" placeholder="e.g. 1450">
           </div>
-          <div class="form-group" id="fgCarpetArea">
+          <div class="form-group" id="fgCarpetArea" data-show-for="apartment,villa,commercial,warehouse">
             <label class="form-label">Carpet Area (sq.ft)</label>
             <input type="number" id="carpetAreaInput" class="form-input" placeholder="e.g. 1100">
           </div>
 
           <!-- Villa/House Specific Fields -->
-          <div id="fgVillaDetails"
+          <div id="fgVillaDetails" data-show-for="villa"
             style="display:none; grid-column: 1 / -1; gap: 20px; display: flex; flex-direction: column;">
             <div
               style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
@@ -633,7 +633,7 @@
           </div>
 
           <!-- Commercial Specific Fields -->
-          <div id="fgCommercialDetails"
+          <div id="fgCommercialDetails" data-show-for="commercial"
             style="display:none; grid-column: 1 / -1; gap: 20px; flex-direction: column; margin-top:20px;">
             <div
               style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
@@ -816,17 +816,17 @@
           </div>
 
           <!-- New Plot/Land Specific Fields -->
-          <div class="form-group" id="fgRatePerSqFt" style="display:none">
+          <div class="form-group" id="fgRatePerSqFt" style="display:none" data-show-for="land">
             <label class="form-label">Rate Per Sq Ft (₹) *</label>
             <input type="number" id="plotRateSqFtInput" class="form-input" placeholder="e.g. 1100">
           </div>
-          <div class="form-group" id="fgDevCharges" style="display:none">
+          <div class="form-group" id="fgDevCharges" style="display:none" data-show-for="land">
             <label class="form-label">Development Charges (₹)</label>
             <input type="number" id="plotDevChargesInput" class="form-input" placeholder="e.g. 50000">
           </div>
 
           <!-- New Lodge Specific Fields -->
-          <div class="form-group" id="fgRoomType" style="display:none">
+          <div class="form-group" id="fgRoomType" style="display:none" data-show-for="hospitality">
             <label class="form-label">Room Type *</label>
             <div class="segmented-control" id="roomTypeSelector">
               <div class="segment-item active" data-value="Single Bed">Single</div>
@@ -838,7 +838,7 @@
           </div>
 
           <!-- New Hospitality Details (Hotel / Resort / Guest House) -->
-          <div id="fgHospitalityDetails"
+          <div id="fgHospitalityDetails" data-show-for="hospitality"
             style="display:none; grid-column: 1 / -1; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
             <div class="form-group" style="width: 100%;">
               <div
@@ -992,7 +992,7 @@
             </div>
           </div>
           <!-- Shared Field: Facing Direction -->
-          <div class="form-group full" id="fgFacing">
+          <div class="form-group full" id="fgFacing" data-show-for="apartment,villa,commercial,land,warehouse,hospitality">
             <label class="form-label">Facing Direction</label>
             <div class="facing-grid">
               <div class="face-item" data-value="East">East</div>
@@ -1008,16 +1008,16 @@
           </div>
 
           <!-- Flat/Apartment Specific Fields -->
-          <div class="form-group" id="fgFloor">
+          <div class="form-group" id="fgFloor" data-show-for="apartment,commercial">
             <label class="form-label">Floor Number</label>
             <input type="number" id="floorNumberInput" class="form-input" placeholder="e.g. 5">
           </div>
-          <div class="form-group" id="fgTotalFloors">
+          <div class="form-group" id="fgTotalFloors" data-show-for="apartment,villa,commercial,warehouse">
             <label class="form-label">Total Floors in Building</label>
             <input type="number" id="totalFloorsInput" class="form-input" placeholder="e.g. 18">
           </div>
 
-          <div class="form-group full" id="fgFurnishing">
+          <div class="form-group full" id="fgFurnishing" data-show-for="apartment,villa,commercial,hospitality">
             <label class="form-label">Furnishing Status</label>
             <div class="visual-cards" id="furnishingSelector">
               <div class="selection-card active" data-value="Unfurnished">
@@ -1036,7 +1036,7 @@
             <input type="hidden" id="furnishingStatusSelect" value="Unfurnished">
           </div>
 
-          <div class="form-group" id="fgParking">
+          <div class="form-group" id="fgParking" data-show-for="apartment,villa,commercial,warehouse">
             <label class="form-label">Car Parking</label>
             <select id="parkingSelect" class="form-input form-select">
               <option>None</option>
@@ -1046,11 +1046,11 @@
               <option>2+ Parking</option>
             </select>
           </div>
-          <div class="form-group" id="fgYear">
+          <div class="form-group" id="fgYear" data-show-for="apartment,villa,commercial,warehouse">
             <label class="form-label">Year of Construction</label>
             <input type="number" id="constructionYearInput" class="form-input" placeholder="e.g. 2020">
           </div>
-          <div class="form-group" id="fgRera">
+          <div class="form-group" id="fgRera" data-show-for="apartment,villa,commercial,land">
             <label class="form-label">RERA Number (Optional)</label>
             <input type="text" id="reraInput" class="form-input" placeholder="e.g. MH/2023/12345">
           </div>
@@ -1234,7 +1234,7 @@
 
         <div class="form-grid">
           <!-- Standard Pricing Fields (Hidden for Lodge) -->
-          <div class="form-group" id="fgExpectedPrice">
+          <div class="form-group" id="fgExpectedPrice" data-show-for="apartment,villa,land">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
               <label class="form-label" style="margin-bottom:0">Expected Price (₹) *</label>
               <label style="font-size: 13px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 500;">
@@ -1243,14 +1243,14 @@
             </div>
             <input type="number" id="expectedPriceInput" class="form-input" placeholder="e.g. 8500000">
           </div>
-          <div class="form-group" id="fgPricingType">
+          <div class="form-group" id="fgPricingType" data-show-for="apartment,villa,land,commercial,warehouse">
             <label class="form-label">Pricing Type *</label>
             <select id="pricingTypeSelect" class="form-input form-select">
               <option value="Per Unit">Per Unit (Total Price)</option>
               <option value="Per Sqft">Per Square Foot</option>
             </select>
           </div>
-          <div class="form-group" id="fgPriceType">
+          <div class="form-group" id="fgPriceType" data-show-for="apartment,villa,land,commercial,warehouse">
             <label class="form-label">Price Type</label>
             <select id="priceTypeSelect" class="form-input form-select">
               <option value="Fixed">Fixed</option>
@@ -1258,28 +1258,28 @@
               <option value="Price on request">Price on request</option>
             </select>
           </div>
-          <div class="form-group" id="fgMaintCharges">
+          <div class="form-group" id="fgMaintCharges" data-show-for="apartment,villa,commercial,warehouse">
             <label class="form-label">Maintenance Charges (₹/mo)</label>
             <input type="number" id="maintenanceChargesInput" class="form-input" placeholder="e.g. 5000">
           </div>
-          <div class="form-group" id="fgTokenAmt">
+          <div class="form-group" id="fgTokenAmt" data-show-for="apartment,villa,commercial,warehouse">
             <label class="form-label">Token Amount (For Rent)</label>
             <input type="number" id="tokenAmountInput" class="form-input" placeholder="e.g. 100000">
           </div>
-          <div class="form-group" id="fgNegotiableStatus">
+          <div class="form-group" id="fgNegotiableStatus" data-show-for="apartment,villa,land,commercial,warehouse">
             <label class="form-label">Negotiable?</label>
             <select id="negotiableSelect" class="form-input form-select">
               <option value="false">No</option>
               <option value="true">Yes</option>
             </select>
           </div>
-          <div class="form-group" id="fgAvailabilityDate">
+          <div class="form-group" id="fgAvailabilityDate" data-show-for="apartment,villa,land,commercial,warehouse">
             <label class="form-label">Availability Date</label>
             <input type="date" id="availabilityDateInput" class="form-input">
           </div>
 
           <!-- New Commercial Pricing Fields -->
-          <div id="fgCommercialPricing"
+          <div id="fgCommercialPricing" data-show-for="commercial,warehouse"
             style="display:none; grid-column: 1 / -1; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
             <div class="form-group" style="width: 100%;">
               <div
@@ -1311,30 +1311,30 @@
           </div>
 
           <!-- New Lodge Pricing Fields -->
-          <div class="form-group" id="fgPricePerDay" style="display:none">
+          <div class="form-group" id="fgPricePerDay" style="display:none" data-show-for="hospitality">
             <label class="form-label">Price per Day (₹) *</label>
             <input type="number" id="lodgePriceDayInput" class="form-input" placeholder="e.g. 500">
           </div>
-          <div class="form-group" id="fgPricePerWeek" style="display:none">
+          <div class="form-group" id="fgPricePerWeek" style="display:none" data-show-for="hospitality">
             <label class="form-label">Price per Week (₹) (Optional)</label>
             <input type="number" id="lodgePriceWeekInput" class="form-input" placeholder="e.g. 3000">
           </div>
-          <div class="form-group" id="fgPricePerMonth" style="display:none">
+          <div class="form-group" id="fgPricePerMonth" style="display:none" data-show-for="hospitality">
             <label class="form-label">Price per Month (₹) (Optional)</label>
             <input type="number" id="lodgePriceMonthInput" class="form-input" placeholder="e.g. 10000">
           </div>
-          <div class="form-group" id="fgSecurityDeposit" style="display:none">
+          <div class="form-group" id="fgSecurityDeposit" style="display:none" data-show-for="hospitality">
             <label class="form-label">Security Deposit (₹) (if any)</label>
             <input type="number" id="lodgeSecurityDepositInput" class="form-input" placeholder="e.g. 1500">
           </div>
-          <div class="form-group" id="fgElectricityExtra" style="display:none">
+          <div class="form-group" id="fgElectricityExtra" style="display:none" data-show-for="hospitality">
             <label class="form-label">Electricity Charges</label>
             <select id="lodgeElectricitySelect" class="form-input form-select">
               <option>Included</option>
               <option>Extra</option>
             </select>
           </div>
-          <div class="form-group" id="fgGstExtra" style="display:none">
+          <div class="form-group" id="fgGstExtra" style="display:none" data-show-for="hospitality">
             <label class="form-label">GST Charges</label>
             <select id="lodgeGstSelect" class="form-input form-select">
               <option>Included</option>
@@ -1569,118 +1569,65 @@
   </script>
   <script>
     // ---- Property-type-aware Step 3 fields ----
+    // ---- Property-type-aware Step 3 fields ----
     function applyPropertyTypeUX() {
-      // Get selected property type from step 1 (3rd grid because grid 1 is 'Posting as' and grid 2 is 'Transaction Type')
       const step1Grids = document.querySelectorAll('#formStep1 .form-type-grid');
-      // grid[0] is Posting As, grid[1] is Transaction Type, grid[2] is Property Type
       if (!step1Grids[2]) return;
       
       const activeType = step1Grids[2].querySelector('.active .name');
-      const propType = activeType ? activeType.innerText.toLowerCase() : '';
+      const rawPropType = activeType ? activeType.innerText.toLowerCase() : '';
 
-      const isLand = /plot|land/i.test(propType);
-      const isCommercial = /commercial|shop|office|warehouse/i.test(propType);
-      const isWarehouse = /warehouse|industrial|godown/i.test(propType);
-      const isHospitality = /hotel|resort|guest house|lodge|service apartment|pg room/i.test(propType);
-      const isLodge = /lodge|pg room/i.test(propType) && !isHospitality; // old simple lodge (kept for legacy)
-      const isVilla = /villa|house/i.test(propType);
-      const hideResidential = isLand || isCommercial || isWarehouse || isHospitality;
-      const hideStandardRes = hideResidential || isVilla;
+      // 1. Normalize Property Type
+      let propType = 'apartment'; // Default
+      if (/plot|land/i.test(rawPropType)) propType = 'land';
+      else if (/warehouse|industrial|godown/i.test(rawPropType)) propType = 'warehouse';
+      else if (/commercial|shop|office/i.test(rawPropType)) propType = 'commercial';
+      else if (/hotel|resort|guest house|lodge|service apartment|pg room/i.test(rawPropType)) propType = 'hospitality';
+      else if (/villa|house/i.test(rawPropType)) propType = 'villa';
 
-      const hide = (id, hidden) => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.style.display = hidden ? 'none' : '';
-          // Avoid clearing values while user is interacting as it causes data loss
-          // if (hidden) {
-          //   const input = el.querySelector('input,select,textarea');
-          //   if (input && input.type !== 'radio' && input.type !== 'checkbox') input.value = '';
-          // }
+      const isLand = propType === 'land';
+      const isWarehouse = propType === 'warehouse';
+      const isCommercial = propType === 'commercial';
+      const isHospitality = propType === 'hospitality';
+      const isVilla = propType === 'villa';
+      const isLodge = /lodge|pg room/i.test(rawPropType);
+
+      // 2. Declarative Visibility (The New Way)
+      const typeAwareElements = document.querySelectorAll('[data-show-for]');
+      typeAwareElements.forEach(el => {
+        const supportedTypes = el.getAttribute('data-show-for').split(',');
+        const shouldShow = supportedTypes.includes(propType);
+        
+        // Preserve original flex/grid display if defined in style, otherwise default to block
+        if (shouldShow) {
+          if (el.style.gridColumn) el.style.display = 'flex';
+          else el.style.display = 'block';
+        } else {
+          el.style.display = 'none';
         }
-      };
+      });
 
-      // Residential fields to hide for Land/Commercial/Lodge/Villa (since Villa has its own)
-      hide('fgBhk', hideStandardRes);
-      hide('fgFloor', hideStandardRes);
-      hide('fgTotalFloors', hideStandardRes);
-      hide('fgFurnishing', hideStandardRes);
-      hide('fgParking', hideStandardRes);
-      hide('fgYear', hideStandardRes);
-      hide('fgBuiltUpArea', isLand || isHospitality || isCommercial || isWarehouse || isVilla);
-      hide('fgCarpetArea', isLand || isHospitality || isCommercial || isWarehouse || isVilla);
+      // 3. Special Manual Logic (Exceptions or edge cases)
+      
+      // Commercial vs Warehouse sub-fields
+      const rentSqft = document.getElementById('whRentPerSqftGrp');
+      const escalGrp = document.getElementById('whEscalationGrp');
+      if (rentSqft) rentSqft.style.display = isWarehouse ? 'block' : 'none';
+      if (escalGrp) escalGrp.style.display = isWarehouse ? 'block' : 'none';
 
-      // Location extended details only for Commercial/Warehouse
-      if (document.getElementById('fgDistanceMetrics')) {
-        document.getElementById('fgDistanceMetrics').style.display = (isCommercial || isWarehouse) ? 'flex' : 'none';
+      // Distance Metrics (only for Commercial/Warehouse)
+      const distMetrics = document.getElementById('fgDistanceMetrics');
+      if (distMetrics) distMetrics.style.display = (isCommercial || isWarehouse) ? 'flex' : 'none';
+
+      // Lodge specific fields (Lodge is a subset of Hospitality)
+      if (isLodge) {
+        ['fgAcNonAc', 'fgAttachedBathroom', 'fgBedType', 'fgRoomSize'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'block';
+        });
       }
 
-      // Villa specific fields
-      hide('fgVillaDetails', !isVilla);
-
-      // Commercial specific fields
-      hide('fgCommercialDetails', !isCommercial || isWarehouse); // Don't show commercial for warehouse
-
-      // Warehouse specific fields
-      hide('fgWarehouseDetails', !isWarehouse);
-
-      // Hospitality specific fields
-      hide('fgHospitalityDetails', !isHospitality);
-      if (isHospitality) {
-        const el = document.getElementById('fgHospitalityDetails');
-        if (el) el.style.display = 'flex';
-      }
-
-      // Shared Commercial/Warehouse Pricing
-      hide('fgCommercialPricing', !(isCommercial || isWarehouse));
-      if (isCommercial || isWarehouse) {
-        let el = document.getElementById('fgCommercialPricing');
-        if (el) el.style.display = 'flex';
-
-        let rentSqft = document.getElementById('whRentPerSqftGrp');
-        let escalGrp = document.getElementById('whEscalationGrp');
-        if (rentSqft) rentSqft.style.display = isWarehouse ? 'block' : 'none';
-        if (escalGrp) escalGrp.style.display = isWarehouse ? 'block' : 'none';
-      }
-
-      if (isCommercial && !isWarehouse) {
-        let el = document.getElementById('fgCommercialDetails');
-        if (el) el.style.display = 'flex';
-      } else if (isWarehouse) {
-        let el = document.getElementById('fgWarehouseDetails');
-        if (el) el.style.display = 'flex';
-      }
-
-      // Land specific fields to show only for Land
-      hide('fgRatePerSqFt', !isLand);
-      hide('fgDevCharges', !isLand);
-      hide('fgPlc', !isLand);
-      hide('fgLoan', !isLand);
-      hide('fgEmi', !isLand);
-
-      // Hospitality/Lodge pricing fields
-      const isHospOrLodge = isHospitality || isLodge;
-      hide('fgRoomType', !isLodge); // Old simple lodge room type field
-      hide('fgAcNonAc', !isLodge);
-      hide('fgAttachedBathroom', !isLodge);
-      hide('fgBedType', !isLodge);
-      hide('fgRoomSize', !isLodge);
-
-      // Pricing fields for Hospitality
-      hide('fgPricePerDay', !isHospOrLodge);
-      hide('fgPricePerWeek', !isHospOrLodge);
-      hide('fgPricePerMonth', !isHospOrLodge);
-      hide('fgSecurityDeposit', !isHospOrLodge);
-      hide('fgElectricityExtra', !isHospOrLodge);
-      hide('fgGstExtra', !isHospOrLodge);
-
-      // Standard pricing fields to hide for Hospitality / Lodge
-      hide('fgExpectedPrice', isHospOrLodge || isCommercial || isWarehouse);
-      hide('fgPricingType', isHospOrLodge || isCommercial || isWarehouse);
-      hide('fgPriceType', isHospOrLodge);
-      hide('fgMaintCharges', isHospOrLodge);
-      hide('fgTokenAmt', isHospOrLodge);
-
-      // Handle Label for Rent vs Buy
+      // Handle Label for Rent vs Buy (Pricing context)
       const transType = step1Grids[1]?.querySelector(".active .name")?.innerText.trim() || "";
       const isRent = transType.toLowerCase().includes('rent');
       const expectedPriceLabel = document.querySelector('#fgExpectedPrice .form-label');
@@ -1688,14 +1635,13 @@
         expectedPriceLabel.textContent = isRent ? 'Monthly Rent (₹) *' : 'Expected Price (₹) *';
       }
 
-      // Also update Step 3 title to match context
+      // Update Step 3 Title
       const step3Title = document.querySelector('#formStep3 .form-card-title');
       if (step3Title) {
         if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
         else if (isWarehouse) step3Title.textContent = 'Step 3: Warehouse / Industrial Details';
         else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
-        else if (isHospitality) step3Title.textContent = /pg room/i.test(propType) ? 'Step 3: PG Room Details' : 'Step 3: Hotel / Hospitality Details';
-        else if (isLodge) step3Title.textContent = 'Step 3: Lodge Details';
+        else if (isHospitality) step3Title.textContent = /pg room/i.test(rawPropType) ? 'Step 3: PG Room Details' : 'Step 3: Hotel / Hospitality Details';
         else if (isVilla) step3Title.textContent = 'Step 3: Villa / House Details';
         else step3Title.textContent = 'Step 3: Property Details';
       }
