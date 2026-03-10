@@ -120,7 +120,8 @@ RULES:
 1. Mirror the Original Language: If the input is in Hindi, respond in Hindi. If English, respond in English. If Hinglish, respond in Hinglish.
 2. Structure: Use bullet points for key features and a clean, easy-to-read format. Highlight the main selling points.
 3. Tone: Professional, persuasive, and trustworthy.
-4. Output: ONLY output the rewritten description. Do not include introductory text like "Here is the rewritten description:" or "Sure, I can help with that". Do not use markdown code blocks \`\`\` around the entire response unless formatting a specific part. JUST PROVIDE THE RAW TEXT. Do NOT use markdown bolding (e.g., do not use **word**). Use plain text for headers or bullet points.`;
+4. Output: ONLY output the rewritten description. Do not include introductory text like "Here is the rewritten description:" or "Sure, I can help with that". Do not use markdown code blocks \`\`\` around the entire response unless formatting a specific part. JUST PROVIDE THE RAW TEXT. Do NOT use markdown bolding (e.g., do not use **word**). Use plain text for headers or bullet points.
+5. NO REASONING: DO NOT include any internal thoughts, reasoning blocks, or tags like <think> in your output. Start directly with the professional description.`;
 
       const messages = [
         { role: "system", content: systemPrompt },
@@ -147,10 +148,13 @@ RULES:
       let aiResponse = data.choices[0]?.message?.content?.trim() || "";
 
       // Post-process to remove internal reasoning/thought blocks (e.g. <think>...</think>)
-      aiResponse = aiResponse.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+      // This regex handles both closed blocks and unclosed tags at the end of output
+      aiResponse = aiResponse.replace(/<think>[\s\S]*?(?:<\/think>|$)/gi, "");
+      aiResponse = aiResponse.replace(/<\/think>/gi, ""); // Remove any stray closing tags
+      aiResponse = aiResponse.trim();
 
       // Remove common introductory headers or meta-text
-      aiResponse = aiResponse.replace(/^(Rewritten Property Description:|Revised Description:|Here is the rewritten description:)/i, "").trim();
+      aiResponse = aiResponse.replace(/^(Rewritten Property Description:|Revised Description:|Here is the rewritten description:|Professional Description:)/i, "").trim();
 
       // Post-process to remove markdown bolding and ensure plain text
       aiResponse = aiResponse.replace(/\*\*/g, "");
