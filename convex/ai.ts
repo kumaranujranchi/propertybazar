@@ -146,6 +146,12 @@ RULES:
       const data = await response.json();
       let aiResponse = data.choices[0]?.message?.content?.trim() || "";
 
+      // Post-process to remove internal reasoning/thought blocks (e.g. <think>...</think>)
+      aiResponse = aiResponse.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+
+      // Remove common introductory headers or meta-text
+      aiResponse = aiResponse.replace(/^(Rewritten Property Description:|Revised Description:|Here is the rewritten description:)/i, "").trim();
+
       // Post-process to remove markdown bolding and ensure plain text
       aiResponse = aiResponse.replace(/\*\*/g, "");
 
