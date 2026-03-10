@@ -898,7 +898,8 @@
           </div>
 
           <!-- New Lodge Specific Fields -->
-          <div class="form-group" id="fgRoomType" style="display:none" data-show-for="hospitality">
+          <!-- Lodge / PG Room Specific Fields -->
+          <div class="form-group" id="fgRoomType" style="display:none" data-show-for="lodge">
             <label class="form-label">Room Type *</label>
             <div class="segmented-control" id="roomTypeSelector">
               <div class="segment-item active" data-value="Single Bed">Single</div>
@@ -909,8 +910,38 @@
             <input type="hidden" id="roomTypeSelect" value="Single Bed">
           </div>
 
+          <div class="form-group" id="fgAcNonAc" style="display:none" data-show-for="lodge">
+            <label class="form-label">AC / Non-AC *</label>
+            <select class="form-input form-select" id="acNonAcSelect">
+              <option value="AC">AC</option>
+              <option value="Non-AC">Non-AC</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="fgAttachedBathroom" style="display:none" data-show-for="lodge">
+            <label class="form-label">Bathroom Type *</label>
+            <select class="form-input form-select" id="attachedBathroomSelect">
+              <option value="Attached">Attached</option>
+              <option value="Common">Common</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="fgBedType" style="display:none" data-show-for="lodge">
+            <label class="form-label">Bed Type *</label>
+            <select class="form-input form-select" id="bedTypeSelect">
+              <option value="Single">Single</option>
+              <option value="Double">Double</option>
+              <option value="Bunk Bed">Bunk Bed</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="fgRoomSize" style="display:none" data-show-for="lodge">
+            <label class="form-label">Room Size (sq.ft) (Optional)</label>
+            <input type="number" id="roomSizeInput" class="form-input" placeholder="e.g. 120">
+          </div>
+
           <!-- New Hospitality Details (Hotel / Resort / Guest House) -->
-          <div id="fgHospitalityDetails" data-show-for="hospitality"
+          <div id="fgHospitalityDetails" data-show-for="hotel"
             style="display:none; grid-column: 1 / -1; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
             <div class="form-group" style="width: 100%;">
               <div
@@ -1064,7 +1095,7 @@
             </div>
           </div>
           <!-- Shared Field: Facing Direction -->
-          <div class="form-group full" id="fgFacing" data-show-for="apartment,villa,commercial,land,warehouse,hospitality">
+          <div class="form-group full" id="fgFacing" data-show-for="apartment,villa,commercial,land,warehouse,hotel,lodge">
             <label class="form-label">Facing Direction</label>
             <div class="facing-grid">
               <div class="face-item" data-value="East">East</div>
@@ -1089,7 +1120,7 @@
             <input type="number" id="totalFloorsInput" class="form-input" placeholder="e.g. 18">
           </div>
 
-          <div class="form-group full" id="fgFurnishing" data-show-for="apartment,villa,commercial,hospitality">
+          <div class="form-group full" id="fgFurnishing" data-show-for="apartment,villa,commercial,hotel,lodge">
             <label class="form-label">Furnishing Status</label>
             <div class="visual-cards" id="furnishingSelector">
               <div class="selection-card active" data-value="Unfurnished">
@@ -1383,30 +1414,30 @@
           </div>
 
           <!-- New Lodge Pricing Fields -->
-          <div class="form-group" id="fgPricePerDay" style="display:none" data-show-for="hospitality">
+          <div class="form-group" id="fgPricePerDay" style="display:none" data-show-for="hotel,lodge">
             <label class="form-label">Price per Day (₹) *</label>
             <input type="number" id="lodgePriceDayInput" class="form-input" placeholder="e.g. 500">
           </div>
-          <div class="form-group" id="fgPricePerWeek" style="display:none" data-show-for="hospitality">
+          <div class="form-group" id="fgPricePerWeek" style="display:none" data-show-for="hotel,lodge">
             <label class="form-label">Price per Week (₹) (Optional)</label>
             <input type="number" id="lodgePriceWeekInput" class="form-input" placeholder="e.g. 3000">
           </div>
-          <div class="form-group" id="fgPricePerMonth" style="display:none" data-show-for="hospitality">
+          <div class="form-group" id="fgPricePerMonth" style="display:none" data-show-for="hotel,lodge">
             <label class="form-label">Price per Month (₹) (Optional)</label>
             <input type="number" id="lodgePriceMonthInput" class="form-input" placeholder="e.g. 10000">
           </div>
-          <div class="form-group" id="fgSecurityDeposit" style="display:none" data-show-for="hospitality">
+          <div class="form-group" id="fgSecurityDeposit" style="display:none" data-show-for="hotel,lodge">
             <label class="form-label">Security Deposit (₹) (if any)</label>
             <input type="number" id="lodgeSecurityDepositInput" class="form-input" placeholder="e.g. 1500">
           </div>
-          <div class="form-group" id="fgElectricityExtra" style="display:none" data-show-for="hospitality">
+          <div class="form-group" id="fgElectricityExtra" style="display:none" data-show-for="hotel,lodge">
             <label class="form-label">Electricity Charges</label>
             <select id="lodgeElectricitySelect" class="form-input form-select">
               <option>Included</option>
               <option>Extra</option>
             </select>
           </div>
-          <div class="form-group" id="fgGstExtra" style="display:none" data-show-for="hospitality">
+          <div class="form-group" id="fgGstExtra" style="display:none" data-show-for="hotel,lodge">
             <label class="form-label">GST Charges</label>
             <select id="lodgeGstSelect" class="form-input form-select">
               <option>Included</option>
@@ -1654,15 +1685,16 @@
       if (/plot|land/i.test(rawPropType)) propType = 'land';
       else if (/warehouse|industrial|godown/i.test(rawPropType)) propType = 'warehouse';
       else if (/commercial|shop|office/i.test(rawPropType)) propType = 'commercial';
-      else if (/hotel|resort|guest house|lodge|service apartment|pg room/i.test(rawPropType)) propType = 'hospitality';
+      else if (/hotel|resort|guest house|service apartment/i.test(rawPropType)) propType = 'hotel';
+      else if (/lodge|pg room/i.test(rawPropType)) propType = 'lodge';
       else if (/villa|house/i.test(rawPropType)) propType = 'villa';
 
       const isLand = propType === 'land';
       const isWarehouse = propType === 'warehouse';
       const isCommercial = propType === 'commercial';
-      const isHospitality = propType === 'hospitality';
+      const isHotel = propType === 'hotel';
+      const isLodge = propType === 'lodge';
       const isVilla = propType === 'villa';
-      const isLodge = /lodge|pg room/i.test(rawPropType);
 
         // 2. Declarative Visibility (The New Way)
         const typeAwareElements = document.querySelectorAll('[data-show-for]');
@@ -1712,7 +1744,8 @@
         if (isLand) step3Title.textContent = 'Step 3: Plot / Land Details';
         else if (isWarehouse) step3Title.textContent = 'Step 3: Warehouse / Industrial Details';
         else if (isCommercial) step3Title.textContent = 'Step 3: Commercial Property Details';
-        else if (isHospitality) step3Title.textContent = /pg room/i.test(rawPropType) ? 'Step 3: PG Room Details' : 'Step 3: Hotel / Hospitality Details';
+        else if (isHotel) step3Title.textContent = 'Step 3: Hotel / Hospitality Details';
+        else if (isLodge) step3Title.textContent = /pg room/i.test(rawPropType) ? 'Step 3: PG Room Details' : 'Step 3: Lodge Details';
         else if (isVilla) step3Title.textContent = 'Step 3: Villa / House Details';
         else step3Title.textContent = 'Step 3: Property Details';
       }

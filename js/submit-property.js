@@ -1015,6 +1015,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('cbHospitalityHotelLicense')) document.getElementById('cbHospitalityHotelLicense').checked = prop.details.hotelLicense || false;
         if (document.getElementById('cbHospitalityFSSAI')) document.getElementById('cbHospitalityFSSAI').checked = prop.details.fssaiLicense || false;
         if (document.getElementById('cbHospitalityTourismReg')) document.getElementById('cbHospitalityTourismReg').checked = prop.details.tourismRegistration || false;
+        
+        // Pre-fill Lodge Specific
+        if (document.getElementById('roomTypeSelect')) {
+          const val = prop.details.roomType || 'Single Bed';
+          document.getElementById('roomTypeSelect').value = val;
+          document.querySelectorAll('#roomTypeSelector .segment-item').forEach(item => {
+            item.classList.toggle('active', item.getAttribute('data-value') === val);
+          });
+        }
+        if (document.getElementById('acNonAcSelect')) document.getElementById('acNonAcSelect').value = prop.details.acNonAc || 'AC';
+        if (document.getElementById('attachedBathroomSelect')) document.getElementById('attachedBathroomSelect').value = prop.details.attachedBathroom || 'Attached';
+        if (document.getElementById('bedTypeSelect')) document.getElementById('bedTypeSelect').value = prop.details.bedType || 'Single';
+        if (document.getElementById('roomSizeInput')) document.getElementById('roomSizeInput').value = prop.details.roomSize || '';
 
         // Pre-fill Amenities (Pills)
         if (prop.amenities) {
@@ -1394,8 +1407,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       pricePerDay: parseNum('lodgePriceDayInput'),
       pricePerWeek: parseNum('lodgePriceWeekInput'),
       pricePerMonth: parseNum('lodgePriceMonthInput'),
-      electricityExtra: document.getElementById('lodgeElectricitySelect')?.value || undefined,
-      gstExtra: document.getElementById('lodgeGstSelect')?.value || undefined,
+      lodgeSecurityDeposit: parseNum('lodgeSecurityDepositInput'),
+      lodgeElectricity: document.getElementById('lodgeElectricitySelect')?.value || undefined,
+      lodgeGst: document.getElementById('lodgeGstSelect')?.value || undefined,
+      // Restore Lodge Detailed Fields
+      roomType: document.getElementById('roomTypeSelect')?.value || undefined,
+      acNonAc: document.getElementById('acNonAcSelect')?.value || undefined,
+      attachedBathroom: document.getElementById('attachedBathroomSelect')?.value || undefined,
+      bedType: document.getElementById('bedTypeSelect')?.value || undefined,
+      roomSize: parseNum('roomSizeInput'),
       // Land
       plotRatePerSqFt: parseNum('plotRateSqFtInput'),
       plotDevCharges: parseNum('plotDevChargesInput'),
