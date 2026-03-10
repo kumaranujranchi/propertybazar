@@ -153,8 +153,9 @@ RULES:
       aiResponse = aiResponse.replace(/<\/think>/gi, ""); // Remove any stray closing tags
       aiResponse = aiResponse.trim();
 
-      // Remove common introductory headers or meta-text
-      aiResponse = aiResponse.replace(/^(Rewritten Property Description:|Revised Description:|Here is the rewritten description:|Professional Description:)/i, "").trim();
+      // Remove common introductory headers or meta-text that AI often includes
+      // This regex handles potential leading whitespace or newlines and more header variants
+      aiResponse = aiResponse.replace(/^[\s\n]*(?:Rewritten (?:Property )?Description:|Revised Description:|Here is the rewritten description:|Professional Description:|Cleaned Description:|Cleaned text:)/i, "").trim();
 
       // Post-process to remove markdown bolding and ensure plain text
       aiResponse = aiResponse.replace(/\*\*/g, "");

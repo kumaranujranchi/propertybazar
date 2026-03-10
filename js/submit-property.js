@@ -1158,6 +1158,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         const result = await convex.action("ai:rewriteDescription", { text });
         if (result && result.success) {
           descriptionInput.value = result.text;
+          
+          // Manually trigger input event so auto-save and Suggestion Box update
+          descriptionInput.dispatchEvent(new Event('input', { bubbles: true }));
+          
           window.showToast("Description professionally rewritten!", "success");
           aiSuggestionBox.style.display = 'none';
         } else {
