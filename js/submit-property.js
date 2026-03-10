@@ -1742,8 +1742,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  document.querySelectorAll('.btn-next').forEach(btn => {
-    btn.addEventListener('click', saveDraftToCloud);
+  // Auto-save on navigation
+  document.querySelectorAll('.btn-next, .btn-next-step, .btn-prev-step').forEach(btn => {
+    btn.addEventListener('click', () => saveDraftToCloud());
   });
 
   // Attach Save Draft button listeners
