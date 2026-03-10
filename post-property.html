@@ -202,6 +202,7 @@
               <div class="name">Lodge</div>
             </div>
           </div>
+          <input type="hidden" id="propertyCategory" value="Apartment">
         </div>
 
         <div class="form-actions" style="display:flex; gap:10px; justify-content: space-between;">
@@ -215,39 +216,6 @@
         <h2 class="form-card-title">Step 2: Where is your property?</h2>
         <p class="form-card-subtitle" style="margin-bottom: 24px;">Add the exact location for better visibility</p>
 
-        <!-- Category Selector Redesign -->
-        <div class="form-section-card" style="padding-top: 20px;">
-          <div class="form-section-title"><i class="fa-solid fa-layer-group"></i> Property Category</div>
-          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Select the most accurate category for your listing.</p>
-          
-          <div class="visual-category-grid" id="categoryVisualSelector">
-            <div class="category-visual-item" data-value="Apartment">
-              <i class="fa-solid fa-building"></i>
-              <span>Apartment</span>
-            </div>
-            <div class="category-visual-item" data-value="Villa">
-              <i class="fa-solid fa-house-chimney"></i>
-              <span>Villa / House</span>
-            </div>
-            <div class="category-visual-item" data-value="PG / Hostel">
-              <i class="fa-solid fa-bed"></i>
-              <span>PG / Hostel</span>
-            </div>
-            <div class="category-visual-item" data-value="Office">
-              <i class="fa-solid fa-briefcase"></i>
-              <span>Office</span>
-            </div>
-            <div class="category-visual-item" data-value="Retail">
-              <i class="fa-solid fa-store"></i>
-              <span>Retail</span>
-            </div>
-            <div class="category-visual-item" data-value="Industrial">
-              <i class="fa-solid fa-industry"></i>
-              <span>Industrial</span>
-            </div>
-          </div>
-          <input type="hidden" id="propertyCategory" value="">
-        </div>
 
         <!-- GOOGLE LOCATION SEARCH (Premium Wrapper) -->
         <div class="location-search-premium">
@@ -363,7 +331,7 @@
         </div>
 
         <div class="form-actions" style="display:flex; gap:12px; justify-content: space-between; margin-top: 10px;">
-          <button class="btn btn-outline btn-save-draft" style="flex:1"><i class="fa-solid fa-floppy-disk"></i> Save Draft</button>
+          <button class="btn btn-outline btn-prev-step" style="flex:1"><i class="fa-solid fa-arrow-left"></i> Back</button>
           <button class="btn btn-primary btn-app-nav btn-next-step" style="flex:1.5; font-size: 16px;">Next: Property Details <i class="fa-solid fa-arrow-right"></i></button>
         </div>
       </div>
@@ -1133,7 +1101,7 @@
         </div>
 
         <div class="form-actions" style="display:flex; gap:10px; justify-content: space-between; margin-top:28px">
-          <button class="btn btn-outline btn-save-draft" style="flex:1"><i class="fa-solid fa-floppy-disk"></i> Save Draft</button>
+          <button class="btn btn-outline btn-prev-step" style="flex:1"><i class="fa-solid fa-arrow-left"></i> Back</button>
           <button class="btn btn-primary btn-app-nav btn-next-step" style="flex:1.5">Next: Photos <i class="fa-solid fa-arrow-right"></i></button>
         </div>
       </div>
@@ -1222,7 +1190,7 @@
           </ul>
         </div>
         <div class="form-actions" style="display:flex; gap:10px; justify-content: space-between; margin-top:28px">
-          <button class="btn btn-outline btn-save-draft" style="flex:1"><i class="fa-solid fa-floppy-disk"></i> Save Draft</button>
+          <button class="btn btn-outline btn-prev-step" style="flex:1"><i class="fa-solid fa-arrow-left"></i> Back</button>
           <button class="btn btn-primary btn-app-nav btn-next-step" style="flex:1.5">Next: Pricing <i class="fa-solid fa-arrow-right"></i></button>
         </div>
       </div>
@@ -1403,7 +1371,7 @@
         </div>
 
         <div class="form-actions" style="display:flex; gap:10px; justify-content: space-between; margin-top:28px">
-          <button class="btn btn-outline btn-save-draft" style="flex:1"><i class="fa-solid fa-floppy-disk"></i> Save Draft</button>
+          <button class="btn btn-outline btn-prev-step" style="flex:1"><i class="fa-solid fa-arrow-left"></i> Back</button>
           <button class="btn btn-primary btn-app-nav" id="btnSubmitProperty" style="flex:1.5"><i class="fa-solid fa-rocket"></i> Post Property FREE</button>
         </div>
       </div> <!-- End Step 5 -->

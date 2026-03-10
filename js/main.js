@@ -517,6 +517,16 @@ function initPostSteps() {
     opt.addEventListener('click', () => {
       opt.closest('.form-type-grid').querySelectorAll('.form-type-option').forEach(o => o.classList.remove('active'));
       opt.classList.add('active');
+      
+      // Update propertyCategory hidden input if this is the property type grid
+      const gridTitle = opt.closest('div').querySelector('.filter-group-title')?.innerText;
+      if (gridTitle === 'Property Type') {
+        const catHidden = document.getElementById('propertyCategory');
+        if (catHidden) {
+          catHidden.value = opt.querySelector('.name').innerText;
+          catHidden.dispatchEvent(new Event('change'));
+        }
+      }
     });
   });
 
