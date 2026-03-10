@@ -1664,20 +1664,19 @@
       const isVilla = propType === 'villa';
       const isLodge = /lodge|pg room/i.test(rawPropType);
 
-      // 2. Declarative Visibility (The New Way)
-      const typeAwareElements = document.querySelectorAll('[data-show-for]');
-      typeAwareElements.forEach(el => {
-        const supportedTypes = el.getAttribute('data-show-for').split(',');
-        const shouldShow = supportedTypes.includes(propType);
-        
-        // Preserve original flex/grid display if defined in style, otherwise default to block
-        if (shouldShow) {
-          if (el.style.gridColumn) el.style.display = 'flex';
-          else el.style.display = 'block';
-        } else {
-          el.style.display = 'none';
-        }
-      });
+        // 2. Declarative Visibility (The New Way)
+        const typeAwareElements = document.querySelectorAll('[data-show-for]');
+        typeAwareElements.forEach(el => {
+          const supportedTypes = el.getAttribute('data-show-for').split(',');
+          const shouldShow = supportedTypes.includes(propType);
+
+          if (shouldShow) {
+            // Restore original display (could be block, flex, etc. from CSS or inline style)
+            el.style.display = '';
+          } else {
+            el.style.display = 'none';
+          }
+        });
 
       // 3. Special Manual Logic (Exceptions or edge cases)
       
