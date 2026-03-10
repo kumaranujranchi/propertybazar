@@ -1758,14 +1758,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Check for draft on load
   async function checkExistingDraft() {
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('id')) return; // Don't prompt for draft if editing
+    const resumeNow = urlParams.get('resume') === 'true';
+    
+    if (urlParams.get('id')) return; // Don't prompt for draft if editing live property
 
     try {
       const draft = await convex.query("drafts:getDraft", { token: getToken() });
       if (draft) {
-        // Simple confirmation (could be a prettier modal)
-        if (confirm("You have a saved draft from a previous session. Would you like to resume?")) {
+        if (resumeNow) {
+          // User came from dashboard "Resume Editing" link
           loadDraft(draft);
+          return;
+        }
+
+        // Show custom redesign modal instead of confirm()
+        const modal = document.getElementById('draftResumeModal');
+        const btnResume = document.getElementById('btnResumeDraft');
+        const btnNew = document.getElementById('btnStartNewListing');
+
+        if (modal && btnResume && btnNew) {
+          modal.classList.add('open');
+
+          btnResume.onclick = () => {
+            loadDraft(draft);
+            modal.classList.remove('open');
+            window.showToast("Draft resumed successfully", "success");
+          };
+
+          btnNew.onclick = () => {
+            modal.classList.remove('open');
+            // If they start new, we could potentially delete the old draft, 
+            // but keeping it is safer for now.
+          };
+        } else {
+          // Fallback if modal HTML is missing
+          if (confirm("You have a saved draft from a previous session. Would you like to resume?")) {
+            loadDraft(draft);
+          }
         }
       }
     } catch (err) { console.error("Error checking draft:", err); }
