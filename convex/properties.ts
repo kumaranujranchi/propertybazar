@@ -16,15 +16,16 @@ export const getProperties = query({
     }
     const results = await propertiesQuery.order("desc").collect();
 
-    // Only show properties that are NOT rejected (disabled) and NOT EXPIRED (30 days)
+    // Only show properties that are APPROVED and NOT EXPIRED (30 days)
     // Properties with no approvalStatus are visible by default (older listings)
     const visibleResults = results.filter((p: any) => {
-      if (p.approvalStatus === "rejected") return false;
-      
+      // Hide rejected or pending properties
+      if (p.approvalStatus === "rejected" || p.approvalStatus === "pending") return false;
+
       const activationTime = p.lastActivatedAt || p._creationTime;
       const daysSinceActivation = (Date.now() - activationTime) / (1000 * 60 * 60 * 24);
       if (daysSinceActivation > 30) return false;
-      
+
       return true;
     });
 
@@ -363,7 +364,7 @@ export const reactivateProperty = mutation({
     await ctx.db.patch(args.id, {
       lastActivatedAt: Date.now(),
     });
-    
+
     return { success: true };
   },
 });
@@ -438,7 +439,7 @@ export const getUniqueCities = query({
   handler: async (ctx: any) => {
     const properties = await ctx.db.query("properties").collect();
     const cities = new Set<string>();
-    
+
     properties.forEach((p: any) => {
       if (p.location && p.location.city) {
         cities.add(p.location.city.trim());
