@@ -781,8 +781,6 @@
       btnSendEnquiry.addEventListener('click', async function () {
         var name = document.getElementById('contactName')?.value.trim();
         var phone = document.getElementById('contactPhone')?.value.trim();
-        var email = document.getElementById('contactEmail')?.value.trim();
-        var message = document.getElementById('contactMessage')?.value.trim();
         var successMsg = document.getElementById('contactSuccess');
         var loader = document.getElementById('contactLoader');
 
@@ -791,19 +789,14 @@
           return;
         }
 
-        // If the DB-based handler has been attached (via module script below),
-        // this default handler is replaced and won't run. But if no ?id= in URL
-        // OR contactOwner mutation is unavailable, we show a friendly success.
         this.style.display = 'none';
         if (loader) loader.style.display = 'block';
 
-        // Simulate small delay for UX
         await new Promise(r => setTimeout(r, 800));
 
         if (loader) loader.style.display = 'none';
         if (successMsg) successMsg.style.display = 'block';
 
-        // Clear fields
         const nameInp = document.getElementById('contactName');
         const phoneInp = document.getElementById('contactPhone');
         const emailInp = document.getElementById('contactEmail');
@@ -821,15 +814,6 @@
         }, 5000);
       });
     }
-      document.getElementById('contactEmail').value = '';
-      document.getElementById('contactMessage').value = 'Hi, I am interested in this property. Please contact me.';
-
-      var btn = this;
-      setTimeout(function () {
-        if (successMsg) successMsg.style.display = 'none';
-        btn.style.display = 'inline-block';
-      }, 5000);
-    });
 
     // ---- NEW ADVERTISER MODAL FALLBACK LOGIC ----
     const advModal = document.getElementById('advModal');
@@ -850,16 +834,20 @@
     let PROPERTY_ID = null;
 
     function maskPhone(phone) {
-      if (!phone) return '+91 98***543**';
-      return '+91 ' + phone.substring(0, 2) + '***' + phone.substring(5, 8) + '**';
+      if (!phone) return '+91 98*** 543**';
+      const clean = phone.toString().replace(/\D/g, '');
+      if (clean.length < 10) return '+91 ' + clean;
+      return '+91 ' + clean.substring(0, 2) + '*** ' + clean.substring(5, 8) + '**';
     }
 
     if (btnOpenAdvModal) {
       btnOpenAdvModal.addEventListener('click', () => {
         advModal.classList.add('open');
         document.body.style.overflow = 'hidden';
-        // Set masked phone and hidden name on open
-        advHeaderPhone.textContent = maskPhone(REAL_OWNER_PHONE);
+        
+        // Use window.REAL_OWNER_PHONE if set by the module script below
+        const phone = window.REAL_OWNER_PHONE || REAL_OWNER_PHONE;
+        advHeaderPhone.textContent = maskPhone(phone);
         advHeaderName.textContent = 'Name Hidden';
       });
     }
@@ -1122,8 +1110,8 @@
         const advPhoneDisplay = document.getElementById('advPhoneDisplay');
         const advNameDisplay = document.getElementById('advNameDisplay');
         const advBtnSubmit = document.getElementById('advBtnSubmit');
-        const REAL_OWNER_PHONE = p.contactDesc?.mobile || '';
-        const REAL_OWNER_NAME = p.contactDesc?.name || 'Owner';
+        window.REAL_OWNER_PHONE = p.contactDesc?.mobile || '';
+        window.REAL_OWNER_NAME = p.contactDesc?.name || 'Owner';
 
         if (advBtnSubmit) {
           const newBtn = advBtnSubmit.cloneNode(true);
@@ -1142,8 +1130,8 @@
               });
               this.style.display = 'none';
               document.getElementById('advSuccessMsg').style.display = 'block';
-              if (advPhoneDisplay) advPhoneDisplay.textContent = '+91 ' + REAL_OWNER_PHONE;
-              if (advNameDisplay) advNameDisplay.textContent = REAL_OWNER_NAME;
+              if (advPhoneDisplay) advPhoneDisplay.textContent = '+91 ' + window.REAL_OWNER_PHONE;
+              if (advNameDisplay) advNameDisplay.textContent = window.REAL_OWNER_NAME;
             } catch (err) {
               alert('Failed: ' + err.message);
               this.disabled = false;
