@@ -222,7 +222,18 @@
   .amenity-pill-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
   .amenity-pill { font-size: 12px; padding: 8px 10px; }
   
-  .post-sidebar { position: static !important; order: 2; }
+  .post-sidebar { 
+    position: static !important; 
+    order: 2; 
+    width: 100% !important;
+    margin-top: 20px !important;
+  }
+  .sidebar-score {
+    padding: 20px !important;
+  }
+  .sidebar-preview-card {
+    margin-top: 15px !important;
+  }
   
   .form-type-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
   
@@ -238,6 +249,38 @@
   .form-actions { flex-direction: column-reverse; gap: 10px; }
   .form-actions .btn { width: 100%; justify-content: center; }
   .btn-next-step { width: 100% !important; }
+
+  /* Flex stack utility for mobile */
+  .flex-stack-mobile {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .flex-stack-mobile > * {
+    width: 100% !important;
+    flex: none !important;
+  }
+
+  /* Progress indicator refinements */
+  .steps-indicator {
+    padding: 0 10px;
+    gap: 0;
+    justify-content: space-between;
+  }
+  .step-dot {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  .step-line {
+    height: 2px;
+    flex-grow: 1;
+    min-width: 10px;
+  }
+  .step-label {
+    font-size: 9px;
+    margin-top: 6px;
+    white-space: nowrap;
+  }
 
   .benefits-strip { gap: 12px !important; margin-top: 20px !important; }
   .benefits-strip > div { font-size: 11px !important; gap: 4px !important; }
