@@ -114,8 +114,16 @@ RULES:
 
         // Smart Filtering logic
         suggestions = properties.filter((p: any) => {
-          // City match
-          if (filters.city && p.location?.city?.toLowerCase() !== filters.city.toLowerCase()) return false;
+          // City/Locality match
+          if (filters.city) {
+            const searchCity = filters.city.toLowerCase();
+            const pCity = p.location?.city?.toLowerCase() || "";
+            const pLocality = p.location?.locality?.toLowerCase() || "";
+            if (pCity !== searchCity && !pLocality.includes(searchCity)) {
+              return false;
+            }
+          }
+          
           // Property Type match (flexible for Plot/Land)
           if (filters.propType) {
             const targetProp = filters.propType.toLowerCase();
