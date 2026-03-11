@@ -334,6 +334,16 @@
               <input type="tel" id="advInputPhone" class="adv-input-text" placeholder="Mobile Number"
                 style="padding-left:106px;">
             </div>
+
+            <!-- WhatsApp OTP Section -->
+            <div id="advOtpSection" style="display:none; margin-top:20px; padding:15px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;">
+              <label class="adv-label" style="color: #166534;"><i class="fa-brands fa-whatsapp"></i> WhatsApp OTP sent!</label>
+              <div class="adv-input-wrap" style="margin-top:8px;">
+                <i class="fa-solid fa-key adv-input-icon"></i>
+                <input type="text" id="advInputOtp" class="adv-input-text" placeholder="Enter OTP (any value works)">
+              </div>
+              <p style="font-size:11px; color:#166534; margin-top:8px;">For demo, any 4-digit OTP will be accepted.</p>
+            </div>
           </div>
 
           <!-- Right Column: Optional Info -->
@@ -368,7 +378,7 @@
 
             <button class="adv-submit-btn" id="advBtnSubmit">Get Contact Details</button>
             <div id="advSuccessMsg" class="adv-success-box" style="display:none;">
-              <i class="fa-solid fa-circle-check"></i> Details shared! Contact information is now visible above.
+              <i class="fa-solid fa-circle-check"></i> Your details have been successfully captured. The property owner will contact you shortly.
             </div>
           </div>
 
@@ -624,6 +634,21 @@
           <div style="margin-top: 16px; padding: 12px; background: #f8faff; border-radius: 8px; font-size: 12px; color: var(--text-muted); border-left: 3px solid var(--primary);">
             Listed by verified owner. 0% Brokerage apply.
           </div>
+
+          <!-- Public Contact Info -->
+          <div id="publicContactInfo" style="display:none; margin-top:16px; border-top:1px solid #eee; padding-top:12px;">
+            <div style="font-size:11px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; font-weight:700">Call Directly</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div id="publicNameRow" style="display:flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-user" style="color:var(--primary); width:16px"></i>
+                <span id="publicName" style="font-weight:600; font-size:14px"></span>
+              </div>
+              <div id="publicPhoneRow" style="display:flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-phone" style="color:var(--primary); width:16px"></i>
+                <a id="publicPhone" href="" style="font-weight:700; font-size:15px; color:var(--text)"></a>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- EMI CALCULATOR CARD -->
@@ -876,10 +901,15 @@
 
     // Fallback form submit
     if (advBtnSubmit) {
+      let isFallbackOtpSent = false;
+      let isFallbackVerified = false;
+
       advBtnSubmit.addEventListener('click', async function () {
         const nameEl = document.getElementById('advInputName');
         const phoneEl = document.getElementById('advInputPhone');
         const termsEl = document.getElementById('advCheckTerms');
+        const otpSection = document.getElementById('advOtpSection');
+        const otpInput = document.getElementById('advInputOtp');
 
         // Check login state
         const token = localStorage.getItem('pb_session');
@@ -899,11 +929,34 @@
           return;
         }
 
+        if (!isFallbackOtpSent) {
+          this.disabled = true;
+          this.textContent = 'Sending OTP...';
+          await new Promise(r => setTimeout(r, 800));
+          if (otpSection) otpSection.style.display = 'block';
+          isFallbackOtpSent = true;
+          this.disabled = false;
+          this.textContent = 'Verify & Unlock Details';
+          return;
+        }
+
+        if (!isFallbackVerified) {
+          if (!otpInput.value.trim()) {
+            alert('Please enter the OTP sent to your WhatsApp.');
+            return;
+          }
+          this.disabled = true;
+          this.textContent = 'Verifying...';
+          await new Promise(r => setTimeout(r, 800));
+          isFallbackVerified = true;
+          this.disabled = false;
+          // Continue to final reveal
+        }
+
         this.disabled = true;
         this.textContent = 'Submitting...';
 
         // Reveal owner details (Lead creation happens here in the real DB flow)
-        // For the static fallback/demo:
         await new Promise(r => setTimeout(r, 800));
 
         // Success UI update
@@ -1121,17 +1174,48 @@
           const newBtn = advBtnSubmit.cloneNode(true);
           advBtnSubmit.parentNode.replaceChild(newBtn, advBtnSubmit);
           window.advBtnSubmit = newBtn; // Update global reference for closeAdvModal()
+          
+          let isOtpSent = false;
+          let isVerified = false;
+
           newBtn.addEventListener('click', async function () {
             const name = document.getElementById('advInputName').value.trim();
             const phone = document.getElementById('advInputPhone').value.trim();
+            const otpSection = document.getElementById('advOtpSection');
+            const otpInput = document.getElementById('advInputOtp');
+
             if (!name || !phone) { alert('Please enter Name and Mobile'); return; }
             if (!document.getElementById('advCheckTerms').checked) { alert('Please agree to terms'); return; }
+
+            if (!isOtpSent) {
+              this.disabled = true;
+              this.textContent = 'Sending OTP...';
+              await new Promise(r => setTimeout(r, 800));
+              if (otpSection) otpSection.style.display = 'block';
+              isOtpSent = true;
+              this.disabled = false;
+              this.textContent = 'Verify & Unlock Details';
+              return;
+            }
+
+            if (!isVerified) {
+              if (!otpInput.value.trim()) {
+                alert('Please enter the OTP sent to your WhatsApp');
+                return;
+              }
+              this.disabled = true;
+              this.textContent = 'Verifying...';
+              await new Promise(r => setTimeout(r, 800));
+              isVerified = true;
+              this.disabled = false;
+              // Continue to final submit
+            }
 
             this.disabled = true;
             this.textContent = 'Submitting...';
             try {
               await convex.mutation('properties:contactOwner', {
-                propertyId: id, name, phone, email: '', message: 'Advertiser Modal Enquiry'
+                propertyId: id, name, phone, email: '', message: 'Advertiser Modal Enquiry (WhatsApp Verified)'
               });
               this.style.display = 'none';
               document.getElementById('advSuccessMsg').style.display = 'block';
@@ -1143,6 +1227,32 @@
               this.textContent = 'Get Contact Details';
             }
           });
+        }
+
+        // ---- Public Contact Info (Sidebar) ----
+        const publicContactInfo = document.getElementById('publicContactInfo');
+        const publicName = document.getElementById('publicName');
+        const publicPhone = document.getElementById('publicPhone');
+        
+        const hasPublicName = p.contactDesc?.name && p.contactDesc.name.trim();
+        const hasPublicPhone = p.contactDesc?.mobile && p.contactDesc.mobile.trim();
+        
+        if (publicContactInfo && (hasPublicName || hasPublicPhone)) {
+          publicContactInfo.style.display = 'block';
+          if (hasPublicName) {
+            publicName.textContent = p.contactDesc.name;
+            document.getElementById('publicNameRow').style.display = 'flex';
+          } else {
+            document.getElementById('publicNameRow').style.display = 'none';
+          }
+          
+          if (hasPublicPhone) {
+            publicPhone.textContent = '+91 ' + p.contactDesc.mobile;
+            publicPhone.href = 'tel:+91' + p.contactDesc.mobile;
+            document.getElementById('publicPhoneRow').style.display = 'flex';
+          } else {
+            document.getElementById('publicPhoneRow').style.display = 'none';
+          }
         }
         // ---- Advanced Details (Categorized - Houssed Style) ----
         const advancedContainer = document.getElementById('advancedDetailsContainer');
