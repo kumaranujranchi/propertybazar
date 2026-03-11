@@ -37,7 +37,7 @@ JSON SCHEMA:
   "type": "buy" | "rent",
   "propType": "Apartment" | "Villa" | "Plot" | "Commercial" | "PG" | "Lodge",
   "bhk": number,
-  "city": string,
+  "city": "Extract ONLY the exact city or locality name (e.g. 'Patna', 'Patut'). Do NOT include state or district details in parenthesis.",
   "maxPrice": number,
   "amenities": string[],
   "userName": "Extract name if provided",
@@ -119,7 +119,12 @@ RULES:
             const searchCity = filters.city.toLowerCase();
             const pCity = p.location?.city?.toLowerCase() || "";
             const pLocality = p.location?.locality?.toLowerCase() || "";
-            if (pCity !== searchCity && !pLocality.includes(searchCity)) {
+            if (
+              pCity !== searchCity && 
+              !pLocality.includes(searchCity) && 
+              (!pLocality || !searchCity.includes(pLocality)) &&
+              (!pCity || !searchCity.includes(pCity))
+            ) {
               return false;
             }
           }
