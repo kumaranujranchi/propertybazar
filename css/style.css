@@ -2734,6 +2734,13 @@ textarea {
   background-position: right 14px center;
   padding-right: 36px;
 }
+.post-body {
+  grid-template-columns: minmax(0, 1fr) 340px;
+}
+.post-body > div:first-child {
+  min-width: 0;
+  overflow: hidden;
+}
 .form-type-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

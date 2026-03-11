@@ -1063,12 +1063,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             prop.configurations.forEach((c) => {
               const row = document.createElement('div');
               row.className = 'config-row';
-              row.style.cssText = 'display:flex; gap:8px; align-items:center;';
+              row.style.cssText = 'display:flex; gap:8px; align-items:center; flex-wrap:wrap;';
               row.innerHTML = `
-                <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1" value="${(c.name||'').replace(/"/g,'&quot;')}">
-                <div style="display:flex; gap:4px; width:220px;">
-                  <input type="number" class="form-input config-area" placeholder="Area" style="flex:1" value="${c.area||''}">
-                  <select class="form-input config-area-unit" style="width:100px; font-size:12px; padding:0 5px;">
+                <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1; min-width:120px" value="${(c.name||'').replace(/"/g,'&quot;')}">
+                <div style="display:flex; gap:4px; flex:1; min-width:180px;">
+                  <input type="number" class="form-input config-area" placeholder="Area" style="flex:1; min-width:60px" value="${c.area||''}">
+                  <select class="form-input config-area-unit" style="min-width:80px; font-size:12px; padding:0 5px;">
                     <option value="Square Foot" ${c.areaUnit === 'Square Foot' ? 'selected' : ''}>sq ft</option>
                     <option value="Square Yard (Gaj)" ${c.areaUnit === 'Square Yard (Gaj)' ? 'selected' : ''}>sq yard</option>
                     <option value="Square Meter" ${c.areaUnit === 'Square Meter' ? 'selected' : ''}>sq m</option>
@@ -1089,7 +1089,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <option value="Ares" ${c.areaUnit === 'Ares' ? 'selected' : ''}>Ares</option>
                   </select>
                 </div>
-                <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:140px" value="${c.price||''}">
+                <input type="number" class="form-input config-price" placeholder="Price (₹)" style="flex:1; min-width:100px" value="${c.price||''}">
                 <button type="button" class="btn btn-outline btn-sm remove-config-btn">✕</button>
               `;
               cfgContainer.appendChild(row);
@@ -1240,12 +1240,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!container) return;
       const row = document.createElement('div');
       row.className = 'config-row';
-      row.style.cssText = 'display:flex; gap:8px; align-items:center;';
+      row.style.cssText = 'display:flex; gap:8px; align-items:center; flex-wrap:wrap;';
       row.innerHTML = `
-        <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1">
-        <div style="display:flex; gap:4px; width:220px;">
-          <input type="number" class="form-input config-area" placeholder="Area" style="flex:1">
-          <select class="form-input config-area-unit" style="width:100px; font-size:12px; padding:0 5px;">
+        <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1; min-width:120px">
+        <div style="display:flex; gap:4px; flex:1; min-width:180px;">
+          <input type="number" class="form-input config-area" placeholder="Area" style="flex:1; min-width:60px">
+          <select class="form-input config-area-unit" style="min-width:80px; font-size:12px; padding:0 5px;">
             <option value="Square Foot">sq ft</option>
             <option value="Square Yard (Gaj)">sq yard</option>
             <option value="Square Meter">sq m</option>
@@ -1266,7 +1266,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <option value="Ares">Ares</option>
           </select>
         </div>
-        <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:140px">
+        <input type="number" class="form-input config-price" placeholder="Price (₹)" style="flex:1; min-width:100px">
         <button type="button" class="btn btn-outline btn-sm remove-config-btn">✕</button>
       `;
       container.appendChild(row);

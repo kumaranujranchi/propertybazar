@@ -197,7 +197,7 @@
   .post-hero p { font-size: 14px; }
   
   .post-body { 
-    grid-template-columns: 1fr !important; 
+    grid-template-columns: minmax(0, 1fr) !important; 
     gap: 20px !important; 
     padding: 0 16px !important; 
     margin-top: 20px !important;
@@ -210,7 +210,17 @@
   .form-group.full { grid-column: auto !important; }
   
   .segmented-control { flex-wrap: wrap; }
-  .segment-item { font-size: 12px; padding: 6px 10px; }
+  .segment-item { font-size: 12px; padding: 6px 10px; white-space: normal; }
+  
+  .config-row, .config-row > div { 
+    flex-wrap: wrap; 
+  }
+  .config-row { gap: 10px !important; }
+  .config-row > input, .config-row > div > input, .config-row > div > select { 
+    flex: 1 1 100% !important; 
+    width: 100% !important; 
+  }
+  .config-row > div { width: 100% !important; }
   
   .visual-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .selection-card { padding: 12px; }

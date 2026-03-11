@@ -222,7 +222,7 @@
 
   <!-- FORM BODY -->
   <div class="post-body container"
-    style="display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 30px; align-items: start;">
+    style="display: grid; gap: 30px; align-items: start;">
 
     <div> <!-- Form Steps Container -->
 
@@ -467,11 +467,11 @@
             <h4 style="font-size:14px; font-weight:700; margin-bottom:10px;">Project Configurations (Flat types)</h4>
             <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Add multiple flat configurations like 2BHK, 3BHK with optional area and price. These are useful for builders and project listings.</p>
             <div id="configContainer" style="display:flex; flex-direction:column; gap:8px;">
-              <div class="config-row" style="display:flex; gap:8px; align-items:center;">
-                <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1">
-                <div style="display:flex; gap:4px; width:220px;">
-                  <input type="number" class="form-input config-area" placeholder="Area" style="flex:1">
-                  <select class="form-input config-area-unit" style="width:100px; font-size:12px; padding:0 5px;">
+              <div class="config-row" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1; min-width:120px;">
+                <div class="config-area-wrap" style="display:flex; gap:4px; flex:1; min-width:180px;">
+                  <input type="number" class="form-input config-area" placeholder="Area" style="flex:1; min-width:60px;">
+                  <select class="form-input config-area-unit" style="min-width:80px; font-size:12px; padding:0 5px;">
                     <option value="Square Foot">sq ft</option>
                     <option value="Square Yard (Gaj)">sq yard</option>
                     <option value="Square Meter">sq m</option>
@@ -492,7 +492,7 @@
                     <option value="Ares">Ares</option>
                   </select>
                 </div>
-                <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:140px">
+                <input type="number" class="form-input config-price" placeholder="Price (₹)" style="flex:1; min-width:100px;">
                 <button type="button" class="btn btn-outline btn-sm remove-config-btn" style="display:none">✕</button>
               </div>
             </div>
