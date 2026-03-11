@@ -756,48 +756,71 @@
     // Default contact number (shown when no property is loaded from DB)
     const DEFAULT_PHONE = '9999999999'; // Change this to your actual contact number
 
-    document.getElementById('btnCallNow').addEventListener('click', function () {
-      var phone = this.dataset.phone || DEFAULT_PHONE;
-      window.location.href = 'tel:' + phone;
-    });
+    const btnCallNow = document.getElementById('btnCallNow');
+    if (btnCallNow) {
+      btnCallNow.addEventListener('click', function () {
+        var phone = this.dataset.phone || DEFAULT_PHONE;
+        window.location.href = 'tel:' + phone;
+      });
+    }
 
-    document.getElementById('btnWhatsApp').addEventListener('click', function () {
-      var name = document.getElementById('contactName')?.value.trim() || '';
-      var phone = this.dataset.phone || DEFAULT_PHONE;
-      var msg = document.getElementById('contactMessage')?.value.trim() ||
-        'Hi, I am interested in this property. Please contact me.';
-      var text = encodeURIComponent((name ? 'Name: ' + name + '\n' : '') + msg);
-      window.open('https://wa.me/91' + phone + '?text=' + text, '_blank');
-    });
+    const btnWhatsApp = document.getElementById('btnWhatsApp');
+    if (btnWhatsApp) {
+      btnWhatsApp.addEventListener('click', function () {
+        var name = document.getElementById('contactName')?.value.trim() || '';
+        var phone = this.dataset.phone || DEFAULT_PHONE;
+        var msg = document.getElementById('contactMessage')?.value.trim() ||
+          'Hi, I am interested in this property. Please contact me.';
+        var text = encodeURIComponent((name ? 'Name: ' + name + '\n' : '') + msg);
+        window.open('https://wa.me/91' + phone + '?text=' + text, '_blank');
+      });
+    }
 
-    document.getElementById('btnSendEnquiry').addEventListener('click', async function () {
-      var name = document.getElementById('contactName')?.value.trim();
-      var phone = document.getElementById('contactPhone')?.value.trim();
-      var email = document.getElementById('contactEmail')?.value.trim();
-      var message = document.getElementById('contactMessage')?.value.trim();
-      var successMsg = document.getElementById('contactSuccess');
-      var loader = document.getElementById('contactLoader');
+    const btnSendEnquiry = document.getElementById('btnSendEnquiry');
+    if (btnSendEnquiry) {
+      btnSendEnquiry.addEventListener('click', async function () {
+        var name = document.getElementById('contactName')?.value.trim();
+        var phone = document.getElementById('contactPhone')?.value.trim();
+        var email = document.getElementById('contactEmail')?.value.trim();
+        var message = document.getElementById('contactMessage')?.value.trim();
+        var successMsg = document.getElementById('contactSuccess');
+        var loader = document.getElementById('contactLoader');
 
-      if (!name || !phone) {
-        alert('Please enter your Name and Mobile Number.');
-        return;
-      }
+        if (!name || !phone) {
+          alert('Please enter your Name and Mobile Number.');
+          return;
+        }
 
-      // If the DB-based handler has been attached (via module script below),
-      // this default handler is replaced and won't run. But if no ?id= in URL
-      // OR contactOwner mutation is unavailable, we show a friendly success.
-      this.style.display = 'none';
-      if (loader) loader.style.display = 'block';
+        // If the DB-based handler has been attached (via module script below),
+        // this default handler is replaced and won't run. But if no ?id= in URL
+        // OR contactOwner mutation is unavailable, we show a friendly success.
+        this.style.display = 'none';
+        if (loader) loader.style.display = 'block';
 
-      // Simulate small delay for UX
-      await new Promise(r => setTimeout(r, 800));
+        // Simulate small delay for UX
+        await new Promise(r => setTimeout(r, 800));
 
-      if (loader) loader.style.display = 'none';
-      if (successMsg) successMsg.style.display = 'block';
+        if (loader) loader.style.display = 'none';
+        if (successMsg) successMsg.style.display = 'block';
 
-      // Clear fields
-      document.getElementById('contactName').value = '';
-      document.getElementById('contactPhone').value = '';
+        // Clear fields
+        const nameInp = document.getElementById('contactName');
+        const phoneInp = document.getElementById('contactPhone');
+        const emailInp = document.getElementById('contactEmail');
+        const msgInp = document.getElementById('contactMessage');
+        
+        if (nameInp) nameInp.value = '';
+        if (phoneInp) phoneInp.value = '';
+        if (emailInp) emailInp.value = '';
+        if (msgInp) msgInp.value = 'Hi, I am interested in this property. Please contact me.';
+
+        var btn = this;
+        setTimeout(function () {
+          if (successMsg) successMsg.style.display = 'none';
+          btn.style.display = 'inline-block';
+        }, 5000);
+      });
+    }
       document.getElementById('contactEmail').value = '';
       document.getElementById('contactMessage').value = 'Hi, I am interested in this property. Please contact me.';
 
