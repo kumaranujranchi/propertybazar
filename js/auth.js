@@ -75,9 +75,13 @@ export async function requireAuth(redirectTo = 'login.html') {
 export async function initNavAuth() {
   const user = getCachedUser();
   
-  // Update desktop nav buttons
-  const loginBtns = document.querySelectorAll('.nav-btn-login');
-  loginBtns.forEach(btn => {
+  // 1. Update Desktop Navigation
+  // Target any link that is meant for login/account (usually .nav-btn-login)
+  const desktopLoginLinks = document.querySelectorAll('.nav-btn-login, a[href="login.html"], a[href="dashboard.html"], a[href="admin.html"]');
+  desktopLoginLinks.forEach(btn => {
+    // Only apply chip style to links NOT inside the mobile menu
+    if (btn.closest('#mobileMenu')) return;
+
     if (user) {
       const firstName = user.name.split(' ')[0];
       const initial = firstName.charAt(0).toUpperCase();
@@ -104,20 +108,27 @@ export async function initNavAuth() {
     } else {
       btn.textContent = 'Login / Register';
       btn.href = 'login.html';
+      btn.style.cssText = ''; // Reset custom styles
     }
   });
 
-  // Update mobile menu
+  // 2. Update Mobile Menu Navigation
   const mobileMenu = document.getElementById('mobileMenu');
   if (mobileMenu) {
-    const mobileLoginLink = mobileMenu.querySelector('a[href="login.html"]');
-    if (mobileLoginLink && user) {
-      const firstName = user.name.split(' ')[0];
-      mobileLoginLink.innerHTML = `<i class="fa-solid fa-user"></i> ${firstName}'s Dashboard`;
-      mobileLoginLink.href = user.isAdmin ? 'admin.html' : 'dashboard.html';
-    } else if (mobileLoginLink) {
-      mobileLoginLink.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Login`;
-      mobileLoginLink.href = 'login.html';
-    }
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      const href = link.getAttribute('href') || '';
+      // Check if this is the login/account link
+      if (href.includes('login.html') || href.includes('dashboard.html') || href.includes('admin.html')) {
+        if (user) {
+          const firstName = user.name.split(' ')[0];
+          link.innerHTML = `<i class="fa-solid fa-user"></i> ${firstName}'s Dashboard`;
+          link.href = user.isAdmin ? 'admin.html' : 'dashboard.html';
+        } else {
+          link.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Login`;
+          link.href = 'login.html';
+        }
+      }
+    });
   }
 }
