@@ -75,7 +75,19 @@ export async function requireAuth(redirectTo = 'login.html') {
 
 // ============== Update nav header based on login state ==============
 export async function initNavAuth() {
-  const user = getCachedUser();
+  let user = getCachedUser();
+  const token = getToken();
+
+  // If we have a token but no cached user, try to fetch the user first
+  // This makes the navigation state more reliable on refreshes
+  if (!user && token) {
+    try {
+      user = await getCurrentUser();
+      if (user) localStorage.setItem(USER_KEY, JSON.stringify(user));
+    } catch (err) {
+      console.error('Failed to fetch user in initNavAuth', err);
+    }
+  }
   
   // 1. Update Desktop Navigation
   // Target any link that is meant for login/account (usually .nav-btn-login)
