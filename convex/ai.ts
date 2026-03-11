@@ -20,16 +20,16 @@ export const parseSearchQuery = action({
     }
 
     try {
-      const systemPrompt = `You are "Dismil", a friendly and helpful real estate assistant for 24Dismil.com.
-Your goal is to help users find properties in India and answer their real estate questions.
+      const systemPrompt = `You are "Dismil", a smart AI real estate assistant for 24Dismil.com.
+Your goal is to analyze user requirements deeply and suggest the most relevant properties in India.
 
 WORKFLOW & BEHAVIOR:
-1. Search First: If the user mentions any search criteria (location, type, etc.), PRIORITIZE performing the search and updating the filters IMMEDIATELY.
-2. Answer Questions: If the user asks a general question, answer it naturally.
+1. Analyze Requirements: Deeply understand what the user is looking for (e.g., distinguishing "Plot" from "Apartment").
+2. Smart Selection: Instead of just saying "I've applied filters", say something like "Based on your requirements, here are some of the best options available."
 3. Language Mirroring: You MUST respond in the EXACT language the user uses (e.g., Hindi, English, Hinglish).
-4. Lead Capture: Once you have provided some value (like a search result or an answer), naturally ask for the user's name or mobile number if you don't have them yet. DO NOT let lead capture block the search.
+4. Lead Capture: Once you have suggested properties or answered a question, naturally ask for the user's name or mobile number. DO NOT let lead capture block the suggestions.
 5. Phone Number Validation: If the user provides a 10-digit number, accept it. Regex: ^[0-9]{10}$.
-6. Proactive Search: Even if you are asking for a name, if the user already specified "Patna", keep "city": "Patna" in your JSON filters so the UI can update.
+6. Proactive Suggestions: Even if you are asking for a name, always include the current search criteria in your JSON so the assistant can show live options.
 7. ALWAYS return a JSON object at the end of your response inside a block.
 
 JSON SCHEMA:
@@ -40,20 +40,20 @@ JSON SCHEMA:
   "city": string,
   "maxPrice": number,
   "amenities": string[],
-  "userName": "Extract the user's name if they provided it",
-  "userMobile": "Extract the user's 10-digit mobile number if they provided it",
-  "explanation": "Your natural language response to the user. Talk like a human, not a robot. Ask for their requirements, name, or phone number naturally here."
+  "userName": "Extract name if provided",
+  "userMobile": "Extract 10-digit number if provided",
+  "explanation": "Your natural language response. Talk like a human expert. Analyze their requirements and introduce the upcoming suggestions."
 }
 
 RULES:
-- Maintain context from the history.
-- PERSISTENT FILTERS: You MUST include the current search filters (city, type, propType, bhk, etc.) in the JSON response of EVERY turn.
+- SMART SEARCH: You are a machine-learning-powered smart assistant. Act like one.
+- PERSISTENT FILTERS: Include filters (city, type, propType, etc.) in EVERY turn.
 - DO NOT REPEAT QUESTIONS.
 - NO UNNECESSARY CONFIRMATION.
-- ACTION AWARENESS: You are directly controlling the website's filters.
+- ACTION AWARENESS: You are presenting property cards inside the chat. Say "Maine aapki requirement ke hisab se niche kuch behtareen options suggest kiye hain."
 - Current Date: ${new Date().toLocaleDateString()}
 - Use Indian numbering (1 Lac = 100,000, 1 Cr = 10,000,000).
-- Be polite, professional, and mirror the user's language.`;
+- Be polite and mirror the user's language.`;
 
 
       const messages = [
@@ -86,28 +86,56 @@ RULES:
       
       if (jsonMatch) {
         try {
-          // Clean up the match (in case of double braces or other issues)
           let jsonStr = jsonMatch[0].trim();
           filters = JSON.parse(jsonStr);
         } catch (e) {
-          console.warn("AI JSON parse failed, using raw response", e);
+          console.warn("AI JSON parse failed", e);
         }
       }
 
       // Ensure explanation exists
       if (!filters.explanation || filters.explanation.trim() === "") {
-        // If no explanation in JSON, use the part of aiResponse BEFORE the JSON match
-        // or just the whole response if JSON parsing was a mess.
         const textBeforeJson = aiResponse.split('{')[0].trim();
         filters.explanation = textBeforeJson || aiResponse.replace(/\{[\s\S]*\}/, "").trim() || aiResponse;
-        
-        // Final fallback if cleaning made it empty
         if (!filters.explanation || filters.explanation.length < 2) {
             filters.explanation = "I've processed your request based on your criteria.";
         }
       }
 
-      return { success: true, filters };
+      // --- NEW: Smart Property Suggestions ---
+      let suggestions: any[] = [];
+      if (filters.city || filters.propType || filters.type) {
+        // Fetch properties matching the criteria
+        // @ts-ignore
+        const { api } = await import("./_generated/api");
+        let properties = await ctx.runQuery(api.properties.getProperties, { 
+          transactionType: filters.type 
+        });
+
+        // Smart Filtering logic
+        suggestions = properties.filter((p: any) => {
+          // City match
+          if (filters.city && p.location?.city?.toLowerCase() !== filters.city.toLowerCase()) return false;
+          // Property Type match (flexible for Plot/Land)
+          if (filters.propType) {
+            const targetProp = filters.propType.toLowerCase();
+            const pType = p.propertyType.toLowerCase();
+            if (targetProp === 'plot' || targetProp === 'land') {
+              if (pType !== 'plot' && pType !== 'land') return false;
+            } else if (pType !== targetProp) {
+              return false;
+            }
+          }
+          // BHK match
+          if (filters.bhk && parseInt(p.details?.bhk) !== parseInt(filters.bhk)) return false;
+          // Price match
+          if (filters.maxPrice && p.pricing?.expectedPrice > filters.maxPrice) return false;
+
+          return true;
+        }).slice(0, 3); // Top 3 matches
+      }
+
+      return { success: true, filters, suggestions };
 
     } catch (error: any) {
       console.error("AI Search Error:", error);

@@ -652,6 +652,67 @@ textarea {
   box-shadow: var(--shadow-lg);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
+/* AI Property Suggestions */
+.ai-property-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.ai-prop-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+.ai-prop-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  border-color: var(--primary-light);
+}
+
+.ai-prop-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-right: 1px solid #f0f0f0;
+}
+
+.ai-prop-card .details {
+  padding: 12px;
+  flex-grow: 1;
+}
+
+.ai-prop-card .title {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--dark);
+  line-height: 1.4;
+  margin-bottom: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ai-prop-card .price {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 14px;
+}
 .search-tabs {
   display: flex;
   flex-wrap: wrap;
