@@ -120,11 +120,11 @@ RULES:
 1. Mirror the Original Language: If the input is in Hindi, respond in Hindi. If English, respond in English. If Hinglish, respond in Hinglish.
 2. Structure: Use bullet points for key features and a clean, easy-to-read format. Highlight the main selling points.
 3. Tone: Professional, persuasive, and trustworthy.
-4. Output: ONLY output the rewritten description. Do not include introductory text, headers, or meta-comments like "Here is the rewritten description:" or "Revised Description:". Start directly with the professional content.
-5. NO REASONING: DO NOT use <think> or <thought> tags. DO NOT include any internal thoughts. ONLY provide the final property description.
-6. NO MARKDOWN BLOCKS: Do not wrap your response in \`\`\` markdown blocks. Provide raw text.
-7. Format: Use plain text. Use bullet points (-) for features. Keep it structured and clean.
-8. Language: Respond in ${args.text.match(/[\u0900-\u097F]/) ? 'Hindi' : 'English/Hinglish'} based on the input.`;
+4. Output: Your response MUST contain ONLY the professional property description. 
+5. NO INTROS: Do NOT say "Sure", "Okay", or "Here is the description". Start immediately.
+6. NO TAGS: Do NOT use <think>, <thought>, or any other tags.
+7. NO MARKDOWN: Do NOT use markdown code blocks (\`\`\`).
+8. Language: Use ${args.text.match(/[\u0900-\u097F]/) ? 'Hindi' : 'English/Hinglish'}.`;
 
       const messages = [
         { role: "system", content: systemPrompt },
@@ -150,35 +150,29 @@ RULES:
       const data = await response.json();
       let aiResponse = data.choices[0]?.message?.content?.trim() || "";
       
-      console.log("AI RAW RESPONSE:", aiResponse);
+      const rawText = aiResponse;
 
-      // Post-process to remove internal reasoning/thought blocks
-      // Handles <think>...</think>, <thought>...</thought>, and unclosed tags
-      aiResponse = aiResponse.replace(/<(?:think|thought)>[\s\S]*?(?:<\/(?:think|thought)>|$)/gi, "");
-      aiResponse = aiResponse.replace(/<\/(?:think|thought)>/gi, ""); 
+      // 1. Remove ANY XML-like tags (e.g. <think>, <thought>, <reasoning>)
+      aiResponse = aiResponse.replace(/<[^>]+>[\s\S]*?<\/[^>]+>/gi, ""); 
+      aiResponse = aiResponse.replace(/<[^>]+>/gi, ""); // Remove unclosed tags
       aiResponse = aiResponse.trim();
 
-      console.log("AI PROCESSED RESPONSE:", aiResponse);
+      // 2. Strip leading/trailing markdown code blocks
+      aiResponse = aiResponse.replace(/^```[a-z]*\n?|(\n?```)$/gi, "").trim();
 
-      // Remove common introductory headers or meta-text (English and Hindi variants)
-      // This regex is now more flexible, stripping any leading "Header: " style line
-      aiResponse = aiResponse.replace(/^[\s\n]*(?:[a-z\s]+description:|rewritten:|revised:|प्रोफेशनल डिस्क्रिप्शन:|विवरण:)/i, "").trim();
+      // 3. Remove common intro headers (strictly at the beginning)
+      const introRegex = /^[\s\n]*(?:rewritten\s+description:|professional\s+description:|description:|rewritten:|विवरण:|प्रोफेशनल विवरण:)/i;
+      aiResponse = aiResponse.replace(introRegex, "").trim();
 
-      // If the AI somehow wrapped everything in a code block, strip those too
-      if (aiResponse.startsWith("```")) {
-        aiResponse = aiResponse.replace(/^```[a-z]*\n?|(\n?```)$/gi, "").trim();
-      }
-
-      // Post-process to remove markdown bolding and ensure plain text
+      // 4. Remove bolding
       aiResponse = aiResponse.replace(/\*\*/g, "");
 
       if (!aiResponse || aiResponse.length < 5) {
-        // Fallback: if cleaning stripped everything, better to return original than error out
-        // The frontend will detect result.text === text and show the "no improvement" message
-        return { success: true, text: args.text };
+        console.warn("AI output was empty after cleaning. Raw:", rawText);
+        return { success: true, text: args.text, debug: { raw: rawText, processed: aiResponse } };
       }
 
-      return { success: true, text: aiResponse };
+      return { success: true, text: aiResponse, debug: { raw: rawText, processed: aiResponse } };
 
     } catch (error: any) {
       console.error("AI Rewrite Error:", error);
