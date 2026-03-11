@@ -1545,13 +1545,17 @@
               const spPrice = sp.pricing?.expectedPrice || sp.pricing?.rent || sp.pricing?.pricePerDay || 0;
               let spPriceStr = spPrice >= 10000000 ? `₹${(spPrice/10000000).toFixed(2)} Cr` : (spPrice >= 100000 ? `₹${(spPrice/100000).toFixed(2)} Lac` : `₹${spPrice.toLocaleString('en-IN')}`);
               const spPhoto = (sp.photos?.[0]?.url || sp.photos?.[0] || 'images/property-1.webp');
+              const spLoc = `${sp.location?.locality || ''}${sp.location?.locality && sp.location?.city ? ', ' : ''}${sp.location?.city || ''}`;
+              
               return `
-                <div class="property-card" style="min-width:280px; flex-shrink:0; cursor:pointer; border:1px solid var(--border); border-radius:12px; overflow:hidden; background:#fff;" onclick="window.location.href='property-detail.html?id=${sp._id || sp.id}'">
-                  <img src="${spPhoto}" style="height:180px; object-fit:cover; width:100%">
-                  <div style="padding:16px">
-                    <div style="font-size:18px; font-weight:800; color:var(--primary); margin-bottom:4px">${spPriceStr}</div>
-                    <div style="font-size:14px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${sp.propertyType}</div>
-                    <div style="color:var(--text-muted); font-size:12px; margin-top:4px"><i class="fa-solid fa-location-dot"></i> ${sp.location?.locality || ''}, ${sp.location?.city || ''}</div>
+                <div class="property-card" onclick="window.location.href='property-detail.html?id=${sp._id || sp.id}'">
+                  <div class="prop-img-wrap">
+                    <img src="${spPhoto}" alt="${sp.propertyType}">
+                  </div>
+                  <div class="prop-body" style="padding:16px">
+                    <div class="prop-price" style="font-size:18px; font-weight:800; color:var(--primary); margin-bottom:4px">${spPriceStr}</div>
+                    <div class="prop-title" style="font-size:14px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${sp.propertyType}</div>
+                    <div class="prop-location" style="color:var(--text-muted); font-size:12px; margin-top:4px"><i class="fa-solid fa-location-dot"></i> ${spLoc}</div>
                   </div>
                 </div>`;
             }).join('');
