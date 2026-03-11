@@ -641,14 +641,14 @@
           </div>
 
           <div
-            style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;" data-show-for="villa,land">
+            style="grid-column: 1 / -1; font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;" data-show-for="villa,land">
             C. Area Details</div>
-          <div class="form-grid" data-show-for="villa,land">
+          <div class="form-grid" data-show-for="villa,land" style="grid-column: 1 / -1;">
               <div class="form-group">
                 <label class="form-label">Plot Area *</label>
                 <div style="display: flex; gap: 8px;">
                   <input type="number" id="plotAreaInput" class="form-input" placeholder="e.g. 2400" style="flex: 1;">
-                  <select id="plotAreaUnit" class="form-input area-unit-select" style="width: 140px;">
+                  <select id="plotAreaUnit" class="form-input area-unit-select" style="width: 120px;">
                     <option value="Square Foot">Square Foot</option>
                     <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
                     <option value="Square Meter">Square Meter</option>
@@ -674,7 +674,7 @@
                 <label class="form-label">Super Built-up Area</label>
                 <div style="display: flex; gap: 8px;">
                   <input type="number" id="superBuiltUpAreaInput" class="form-input" placeholder="e.g. 3000" style="flex: 1;">
-                  <select id="superBuiltUpAreaUnit" class="form-input area-unit-select" style="width: 140px;">
+                  <select id="superBuiltUpAreaUnit" class="form-input area-unit-select" style="width: 120px;">
                     <option value="Square Foot">Square Foot</option>
                     <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
                     <option value="Square Meter">Square Meter</option>
@@ -710,7 +710,7 @@
               </div>
             </div>
 
-            <div id="fgVillaConstruction" data-show-for="villa">
+            <div id="fgVillaConstruction" data-show-for="villa" style="grid-column: 1 / -1;">
               <div
                 style="font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;">
                 D. Construction Details</div>
@@ -1026,7 +1026,7 @@
             <label class="form-label" id="ratePerUnitLabel">Rate Per Square Foot (₹) *</label>
             <div style="display: flex; gap: 8px;">
               <input type="number" id="plotRateSqFtInput" class="form-input" placeholder="e.g. 1100" style="flex: 1;">
-              <select id="plotRateUnit" class="form-input area-unit-select" style="width: 140px;">
+              <select id="plotRateUnit" class="form-input area-unit-select" style="width: 120px;">
                 <option value="Square Foot">Square Foot</option>
                 <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
                 <option value="Square Meter">Square Meter</option>
