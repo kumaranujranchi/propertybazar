@@ -1288,7 +1288,7 @@
     <script src="js/properties.js"></script>
     <script src="js/main.js"></script>
     <script type="module">
-      import { requireAuth, logout, getCachedUser } from "./js/auth.js";
+      import { requireAuth, logout, getCachedUser, initNavAuth } from "./js/auth.js";
       import { convex } from "./js/convex.js";
       import { getToken } from "./js/auth.js";
 
@@ -1297,9 +1297,16 @@
           const user = await requireAuth("login.html");
           if (!user) throw new Error("Not logged in");
 
-      // Nav
-      document.getElementById("dashNavName").innerHTML =
-        `<i class="fa-solid fa-user"></i> ${user.name.split(" ")[0]}`;
+      // Sync nav items across the page
+      initNavAuth();
+
+      // Desktop Nav manual fallback (older browsers or specific layouts)
+      const dashNavName = document.getElementById("dashNavName");
+      if (dashNavName) {
+        dashNavName.innerHTML = `<i class="fa-solid fa-user"></i> ${user.name ? user.name.split(" ")[0] : 'My Account'}`;
+        dashNavName.href = user.isAdmin ? 'admin.html' : 'dashboard.html';
+      }
+
       document
         .getElementById("logoutBtn")
         ?.addEventListener("click", async (e) => {

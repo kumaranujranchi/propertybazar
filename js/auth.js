@@ -68,6 +68,8 @@ export async function requireAuth(redirectTo = 'login.html') {
     window.location.href = redirectTo;
     return null;
   }
+  // Cache user data to ensure navigation and other components stay in sync
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
   return user;
 }
 
@@ -83,7 +85,8 @@ export async function initNavAuth() {
     if (btn.closest('#mobileMenu')) return;
 
     if (user) {
-      const firstName = user.name.split(' ')[0];
+      const fullName = user.name || 'User';
+      const firstName = fullName.split(' ')[0];
       const initial = firstName.charAt(0).toUpperCase();
       btn.innerHTML = `
         <span style="
@@ -118,10 +121,12 @@ export async function initNavAuth() {
     const mobileLinks = mobileMenu.querySelectorAll('a');
     mobileLinks.forEach(link => {
       const href = link.getAttribute('href') || '';
+      const text = link.textContent.trim().toLowerCase();
       // Check if this is the login/account link
-      if (href.includes('login.html') || href.includes('dashboard.html') || href.includes('admin.html')) {
+      if (text.includes('login') || href.includes('login.html') || href.includes('dashboard.html') || href.includes('admin.html')) {
         if (user) {
-          const firstName = user.name.split(' ')[0];
+          const fullName = user.name || 'User';
+          const firstName = fullName.split(' ')[0];
           link.innerHTML = `<i class="fa-solid fa-user"></i> ${firstName}'s Dashboard`;
           link.href = user.isAdmin ? 'admin.html' : 'dashboard.html';
         } else {
