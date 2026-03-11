@@ -74,36 +74,50 @@ export async function requireAuth(redirectTo = 'login.html') {
 // ============== Update nav header based on login state ==============
 export async function initNavAuth() {
   const user = getCachedUser();
-  const loginBtn = document.querySelector('.nav-btn-login');
-  if (!loginBtn) return;
-
-  if (user) {
-    const firstName = user.name.split(' ')[0];
-    const initial = firstName.charAt(0).toUpperCase();
-    // Clean avatar chip: colored circle + name, goes to dashboard on click
-    loginBtn.innerHTML = `
-      <span style="
-        display:inline-flex; align-items:center; gap:8px;
-        background:#fff; border:1px solid #e0e3e9;
-        border-radius:99px; padding:5px 14px 5px 6px;
-        font-size:14px; font-weight:600; color:#1a2230;
-        box-shadow:0 1px 3px rgba(0,0,0,0.06); cursor:pointer;
-        transition:box-shadow 0.2s;
-      " onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.12)'"
-         onmouseout="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.06)'">
+  
+  // Update desktop nav buttons
+  const loginBtns = document.querySelectorAll('.nav-btn-login');
+  loginBtns.forEach(btn => {
+    if (user) {
+      const firstName = user.name.split(' ')[0];
+      const initial = firstName.charAt(0).toUpperCase();
+      btn.innerHTML = `
         <span style="
-          width:26px; height:26px; border-radius:50%;
-          background:#e84118; color:#fff;
-          display:flex; align-items:center; justify-content:center;
-          font-size:12px; font-weight:800; flex-shrink:0;
-        ">${initial}</span>
-        ${firstName}
-      </span>`;
-    loginBtn.style.cssText = 'border:none; background:none; padding:0;';
-    loginBtn.href = user.isAdmin ? 'admin.html' : 'dashboard.html';
-    // No logout button in nav — user logs out from inside the dashboard
-  } else {
-    loginBtn.textContent = 'Login / Register';
-    loginBtn.href = 'login.html';
+          display:inline-flex; align-items:center; gap:8px;
+          background:#fff; border:1px solid #e0e3e9;
+          border-radius:99px; padding:5px 14px 5px 6px;
+          font-size:14px; font-weight:600; color:#1a2230;
+          box-shadow:0 1px 3px rgba(0,0,0,0.06); cursor:pointer;
+          transition:box-shadow 0.2s;
+        " onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.12)'"
+           onmouseout="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.06)'">
+          <span style="
+            width:26px; height:26px; border-radius:50%;
+            background:#e84118; color:#fff;
+            display:flex; align-items:center; justify-content:center;
+            font-size:12px; font-weight:800; flex-shrink:0;
+          ">${initial}</span>
+          ${firstName}
+        </span>`;
+      btn.style.cssText = 'border:none; background:none; padding:0;';
+      btn.href = user.isAdmin ? 'admin.html' : 'dashboard.html';
+    } else {
+      btn.textContent = 'Login / Register';
+      btn.href = 'login.html';
+    }
+  });
+
+  // Update mobile menu
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (mobileMenu) {
+    const mobileLoginLink = mobileMenu.querySelector('a[href="login.html"]');
+    if (mobileLoginLink && user) {
+      const firstName = user.name.split(' ')[0];
+      mobileLoginLink.innerHTML = `<i class="fa-solid fa-user"></i> ${firstName}'s Dashboard`;
+      mobileLoginLink.href = user.isAdmin ? 'admin.html' : 'dashboard.html';
+    } else if (mobileLoginLink) {
+      mobileLoginLink.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Login`;
+      mobileLoginLink.href = 'login.html';
+    }
   }
 }
