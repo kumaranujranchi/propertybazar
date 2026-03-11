@@ -463,8 +463,8 @@
           </div>
         </div>
 
-        <div style="border-top: 1px solid var(--border); padding-top: 20px;">
-          <button class="btn-primary-large" id="btnOpenAdvModal">
+        <div style="border-top: 1px solid var(--border); padding-top: 20px; position: relative; z-index: 10;">
+          <button type="button" class="btn-primary-large" id="btnOpenAdvModal" style="position: relative; z-index: 11;">
              <i class="fa-solid fa-phone"></i> View Contact Details
           </button>
           <div style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 12px;">
@@ -855,12 +855,16 @@
     function closeAdvModal() {
       advModal.classList.remove('open');
       document.body.style.overflow = '';
-
+      // Use the potentially updated global button reference
+      const submitBtn = window.advBtnSubmit || advBtnSubmit;
       // reset form states
-      document.getElementById('advSuccessMsg').style.display = 'none';
-      advBtnSubmit.style.display = 'block';
-      advBtnSubmit.textContent = 'View Advertiser Details';
-      advBtnSubmit.disabled = false;
+      const successMsg = document.getElementById('advSuccessMsg');
+      if (successMsg) successMsg.style.display = 'none';
+      if (submitBtn) {
+        submitBtn.style.display = 'block';
+        submitBtn.textContent = 'Get Contact Details';
+        submitBtn.disabled = false;
+      }
     }
 
     if (advModalClose) advModalClose.addEventListener('click', closeAdvModal);
@@ -1116,6 +1120,7 @@
         if (advBtnSubmit) {
           const newBtn = advBtnSubmit.cloneNode(true);
           advBtnSubmit.parentNode.replaceChild(newBtn, advBtnSubmit);
+          window.advBtnSubmit = newBtn; // Update global reference for closeAdvModal()
           newBtn.addEventListener('click', async function () {
             const name = document.getElementById('advInputName').value.trim();
             const phone = document.getElementById('advInputPhone').value.trim();
