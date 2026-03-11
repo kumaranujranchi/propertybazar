@@ -30,7 +30,8 @@ function buildSpecs(p) {
   }
 
   if (area && area > 0) {
-    specs.push({ icon: '📐', label: `${area} sq.ft` });
+    const unit = p.details?.builtUpAreaUnit || 'sq.ft';
+    specs.push({ icon: '📐', label: `${area} ${unit}` });
   }
 
   specs.push({ icon: '🏠', label: type });
@@ -76,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         location: `${p.location?.locality || ''}, ${p.location?.city || ''}`,
         city: p.location?.city || '',
         area,
-        areaDisplay: area > 0 ? `${area} sq.ft` : '',
+        areaDisplay: area > 0 ? `${area} ${p.details?.builtUpAreaUnit || 'sq.ft'}` : '',
         image: p.photos && p.photos.length > 0 ? (typeof p.photos[0] === 'object' ? p.photos[0].url : p.photos[0]) : 'images/property-1.webp',
         status: p.details?.status === 'Ready to Move' ? 'ready' : 'under-construction',
         verified: p.verified || false,
@@ -93,6 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           if (pricing.pricingType === 'Per Sqft' && pricing.expectedPrice) return pricing.expectedPrice;
           return area > 0 ? Math.round(price / area) : 0;
         })(),
+        areaUnit: p.details?.builtUpAreaUnit || 'sq.ft',
         // Preserve raw Convex data for detail page
         _raw: p,
       };
@@ -170,7 +172,7 @@ function buildPropertyCardHTML(p) {
       ${p.verified ? '<div class="prop-verified" style="background: rgba(16,185,129,0.9); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600"><i class="fa-solid fa-circle-check"></i> Verified</div>' : ''}
     </div>
     <div class="prop-body">
-      <div class="prop-price">${p.priceDisplay} <span class="prop-per" style="font-size: 11px; color: var(--text-muted); font-weight: 400">· ₹${p.price_per_sqft?.toLocaleString('en-IN')}/sqft</span></div>
+      <div class="prop-price">${p.priceDisplay} <span class="prop-per" style="font-size: 11px; color: var(--text-muted); font-weight: 400">· ₹${p.price_per_sqft?.toLocaleString('en-IN')}/${p.areaUnit}</span></div>
       <div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${p.title}</div>
       <div class="prop-location" style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px"><i class="fa-solid fa-location-dot"></i> ${p.location}</div>
       <div class="prop-specs" style="display: flex; gap: 12px; margin-bottom: 16px; font-size: 12px; color: var(--text-muted)">

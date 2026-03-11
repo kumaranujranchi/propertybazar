@@ -852,7 +852,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         if (document.getElementById('builtUpAreaInput')) document.getElementById('builtUpAreaInput').value = prop.details.builtUpArea || '';
+        if (document.getElementById('builtUpAreaUnit')) document.getElementById('builtUpAreaUnit').value = prop.details.builtUpAreaUnit || 'Square Foot';
         if (document.getElementById('carpetAreaInput')) document.getElementById('carpetAreaInput').value = prop.details.carpetArea || '';
+        if (document.getElementById('carpetAreaUnit')) document.getElementById('carpetAreaUnit').value = prop.details.carpetAreaUnit || 'Square Foot';
         if (document.getElementById('floorNumberInput')) document.getElementById('floorNumberInput').value = prop.details.floorNumber !== undefined ? prop.details.floorNumber : '';
         if (document.getElementById('totalFloorsInput')) document.getElementById('totalFloorsInput').value = prop.details.totalFloors !== undefined ? prop.details.totalFloors : '';
 
@@ -895,7 +897,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         
         if (document.getElementById('floorConfigInput')) document.getElementById('floorConfigInput').value = prop.details.floorConfig || '';
         if (document.getElementById('plotAreaInput')) document.getElementById('plotAreaInput').value = prop.details.plotArea || '';
+        if (document.getElementById('plotAreaUnit')) document.getElementById('plotAreaUnit').value = prop.details.plotAreaUnit || 'Square Foot';
         if (document.getElementById('superBuiltUpAreaInput')) document.getElementById('superBuiltUpAreaInput').value = prop.details.superBuiltUpArea || '';
+        if (document.getElementById('superBuiltUpAreaUnit')) document.getElementById('superBuiltUpAreaUnit').value = prop.details.superBuiltUpAreaUnit || 'Square Foot';
         if (document.getElementById('openAreaInput')) document.getElementById('openAreaInput').value = prop.details.openArea || '';
         if (document.getElementById('frontageWidthInput')) document.getElementById('frontageWidthInput').value = prop.details.frontageWidth || '';
         if (document.getElementById('roadWidthInput')) document.getElementById('roadWidthInput').value = prop.details.roadWidth || '';
@@ -923,6 +927,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('commercialFrontage')) document.getElementById('commercialFrontage').value = prop.details.frontage || '';
         if (document.getElementById('commercialRoadWidth')) document.getElementById('commercialRoadWidth').value = prop.details.roadWidth || '';
         if (document.getElementById('commercialSuperArea')) document.getElementById('commercialSuperArea').value = prop.details.superBuiltUpArea || '';
+        if (document.getElementById('commercialSuperAreaUnit')) document.getElementById('commercialSuperAreaUnit').value = prop.details.superBuiltUpAreaUnit || 'Square Foot';
         if (document.getElementById('commercialFurnishing')) document.getElementById('commercialFurnishing').value = prop.details.furnishing || '';
         if (document.getElementById('commercialWorkstations')) document.getElementById('commercialWorkstations').value = prop.details.workstations || '';
         if (document.getElementById('commercialCabins')) document.getElementById('commercialCabins').value = prop.details.cabins || '';
@@ -1004,7 +1009,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('cbHospitalitySpa')) document.getElementById('cbHospitalitySpa').checked = prop.details.spa || false;
         if (document.getElementById('cbHospitalityGym')) document.getElementById('cbHospitalityGym').checked = prop.details.gym || false;
         if (document.getElementById('hospitalityLandArea')) document.getElementById('hospitalityLandArea').value = prop.details.hospitalityLandArea || '';
+        if (document.getElementById('hospitalityLandAreaUnit')) document.getElementById('hospitalityLandAreaUnit').value = prop.details.hospitalityLandAreaUnit || 'Square Foot';
         if (document.getElementById('hospitalityBuiltUpArea')) document.getElementById('hospitalityBuiltUpArea').value = prop.details.hospitalityBuiltUpArea || '';
+        if (document.getElementById('hospitalityBuiltUpAreaUnit')) document.getElementById('hospitalityBuiltUpAreaUnit').value = prop.details.hospitalityBuiltUpAreaUnit || 'Square Foot';
         if (document.getElementById('hospitalityParking')) document.getElementById('hospitalityParking').value = prop.details.hospitalityParkingCapacity || '';
         if (document.getElementById('cbHospitalityKitchen')) document.getElementById('cbHospitalityKitchen').checked = prop.details.kitchenSetup || false;
         if (document.getElementById('cbHospitalityLaundry')) document.getElementById('cbHospitalityLaundry').checked = prop.details.laundrySetup || false;
@@ -1028,6 +1035,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('attachedBathroomSelect')) document.getElementById('attachedBathroomSelect').value = prop.details.attachedBathroom || 'Attached';
         if (document.getElementById('bedTypeSelect')) document.getElementById('bedTypeSelect').value = prop.details.bedType || 'Single';
         if (document.getElementById('roomSizeInput')) document.getElementById('roomSizeInput').value = prop.details.roomSize || '';
+        if (document.getElementById('roomSizeUnit')) document.getElementById('roomSizeUnit').value = prop.details.roomSizeUnit || 'Square Foot';
 
         // Pre-fill Amenities (Pills)
         if (prop.amenities) {
@@ -1056,8 +1064,30 @@ document.addEventListener("DOMContentLoaded", async () => {
               row.style.cssText = 'display:flex; gap:8px; align-items:center;';
               row.innerHTML = `
                 <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1" value="${(c.name||'').replace(/"/g,'&quot;')}">
-                <input type="number" class="form-input config-area" placeholder="Area (sq.ft)" style="width:140px" value="${c.area||''}">
-                <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:160px" value="${c.price||''}">
+                <div style="display:flex; gap:4px; width:220px;">
+                  <input type="number" class="form-input config-area" placeholder="Area" style="flex:1" value="${c.area||''}">
+                  <select class="form-input config-area-unit" style="width:100px; font-size:12px; padding:0 5px;">
+                    <option value="Square Foot" ${c.areaUnit === 'Square Foot' ? 'selected' : ''}>sq ft</option>
+                    <option value="Square Yard (Gaj)" ${c.areaUnit === 'Square Yard (Gaj)' ? 'selected' : ''}>sq yard</option>
+                    <option value="Square Meter" ${c.areaUnit === 'Square Meter' ? 'selected' : ''}>sq m</option>
+                    <option value="Acre" ${c.areaUnit === 'Acre' ? 'selected' : ''}>Acre</option>
+                    <option value="Hectare" ${c.areaUnit === 'Hectare' ? 'selected' : ''}>Hectare</option>
+                    <option value="Dismil / Decimal" ${c.areaUnit === 'Dismil / Decimal' ? 'selected' : ''}>Dismil</option>
+                    <option value="Kattha" ${c.areaUnit === 'Kattha' ? 'selected' : ''}>Kattha</option>
+                    <option value="Bigha" ${c.areaUnit === 'Bigha' ? 'selected' : ''}>Bigha</option>
+                    <option value="Kanal" ${c.areaUnit === 'Kanal' ? 'selected' : ''}>Kanal</option>
+                    <option value="Marla" ${c.areaUnit === 'Marla' ? 'selected' : ''}>Marla</option>
+                    <option value="Guntha / Gunta" ${c.areaUnit === 'Guntha / Gunta' ? 'selected' : ''}>Gunta</option>
+                    <option value="Cent" ${c.areaUnit === 'Cent' ? 'selected' : ''}>Cent</option>
+                    <option value="Ground" ${c.areaUnit === 'Ground' ? 'selected' : ''}>Ground</option>
+                    <option value="Ankanam" ${c.areaUnit === 'Ankanam' ? 'selected' : ''}>Ankanam</option>
+                    <option value="Biswa" ${c.areaUnit === 'Biswa' ? 'selected' : ''}>Biswa</option>
+                    <option value="Biswansi" ${c.areaUnit === 'Biswansi' ? 'selected' : ''}>Biswansi</option>
+                    <option value="Lecha" ${c.areaUnit === 'Lecha' ? 'selected' : ''}>Lecha</option>
+                    <option value="Ares" ${c.areaUnit === 'Ares' ? 'selected' : ''}>Ares</option>
+                  </select>
+                </div>
+                <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:140px" value="${c.price||''}">
                 <button type="button" class="btn btn-outline btn-sm remove-config-btn">✕</button>
               `;
               cfgContainer.appendChild(row);
@@ -1204,8 +1234,30 @@ document.addEventListener("DOMContentLoaded", async () => {
       row.style.cssText = 'display:flex; gap:8px; align-items:center;';
       row.innerHTML = `
         <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1">
-        <input type="number" class="form-input config-area" placeholder="Area (sq.ft)" style="width:140px">
-        <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:160px">
+        <div style="display:flex; gap:4px; width:220px;">
+          <input type="number" class="form-input config-area" placeholder="Area" style="flex:1">
+          <select class="form-input config-area-unit" style="width:100px; font-size:12px; padding:0 5px;">
+            <option value="Square Foot">sq ft</option>
+            <option value="Square Yard (Gaj)">sq yard</option>
+            <option value="Square Meter">sq m</option>
+            <option value="Acre">Acre</option>
+            <option value="Hectare">Hectare</option>
+            <option value="Dismil / Decimal">Dismil</option>
+            <option value="Kattha">Kattha</option>
+            <option value="Bigha">Bigha</option>
+            <option value="Kanal">Kanal</option>
+            <option value="Marla">Marla</option>
+            <option value="Guntha / Gunta">Gunta</option>
+            <option value="Cent">Cent</option>
+            <option value="Ground">Ground</option>
+            <option value="Ankanam">Ankanam</option>
+            <option value="Biswa">Biswa</option>
+            <option value="Biswansi">Biswansi</option>
+            <option value="Lecha">Lecha</option>
+            <option value="Ares">Ares</option>
+          </select>
+        </div>
+        <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:140px">
         <button type="button" class="btn btn-outline btn-sm remove-config-btn">✕</button>
       `;
       container.appendChild(row);
@@ -1268,7 +1320,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       bhk: document.getElementById('bhkTypeSelect')?.value === 'Others' ? document.getElementById('customBhkInput')?.value : document.getElementById('bhkTypeSelect')?.value,
       status: document.getElementById('propertyStatusSelect')?.value,
       builtUpArea: parseNum('builtUpAreaInput') || 0,
+      builtUpAreaUnit: document.getElementById('builtUpAreaUnit')?.value || "Square Foot",
       carpetArea: parseNum('carpetAreaInput'),
+      carpetAreaUnit: document.getElementById('carpetAreaUnit')?.value || "Square Foot",
       floorNumber: parseNum('floorNumberInput'),
       totalFloors: parseNum('totalFloorsInput'),
       furnishing: document.getElementById('furnishingStatusSelect')?.value,
@@ -1288,7 +1342,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       basement: document.getElementById('cbBasement')?.checked || false,
       floorConfig: document.getElementById('floorConfigInput')?.value || undefined,
       plotArea: parseNum('plotAreaInput'),
+      plotAreaUnit: document.getElementById('plotAreaUnit')?.value || "Square Foot",
       superBuiltUpArea: parseNum('superBuiltUpAreaInput'),
+      superBuiltUpAreaUnit: document.getElementById('superBuiltUpAreaUnit')?.value || "Square Foot",
       openArea: parseNum('openAreaInput'),
       frontageWidth: parseNum('frontageWidthInput'),
       roadWidth: parseNum('roadWidthInput'),
@@ -1368,7 +1424,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       spa: document.getElementById('cbHospitalitySpa')?.checked || false,
       gym: document.getElementById('cbHospitalityGym')?.checked || false,
       hospitalityLandArea: parseNum('hospitalityLandArea'),
+      hospitalityLandAreaUnit: document.getElementById('hospitalityLandAreaUnit')?.value || "Square Foot",
       hospitalityBuiltUpArea: parseNum('hospitalityBuiltUpArea'),
+      hospitalityBuiltUpAreaUnit: document.getElementById('hospitalityBuiltUpAreaUnit')?.value || "Square Foot",
       hospitalityParkingCapacity: parseNum('hospitalityParking'),
       kitchenSetup: document.getElementById('cbHospitalityKitchen')?.checked || false,
       laundrySetup: document.getElementById('cbHospitalityLaundry')?.checked || false,
@@ -1416,6 +1474,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       attachedBathroom: document.getElementById('attachedBathroomSelect')?.value || undefined,
       bedType: document.getElementById('bedTypeSelect')?.value || undefined,
       roomSize: parseNum('roomSizeInput'),
+      roomSizeUnit: document.getElementById('roomSizeUnit')?.value || "Square Foot",
       // Land
       plotRatePerSqFt: parseNum('plotRateSqFtInput'),
       plotDevCharges: parseNum('plotDevChargesInput'),
@@ -1446,8 +1505,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll('#configContainer .config-row').forEach(row => {
       const name = row.querySelector('.config-name')?.value.trim();
       const area = row.querySelector('.config-area')?.value ? Number(row.querySelector('.config-area').value) : undefined;
+      const areaUnit = row.querySelector('.config-area-unit')?.value || "Square Foot";
       const price = row.querySelector('.config-price')?.value ? Number(row.querySelector('.config-price').value) : undefined;
-      if (name) configurations.push({ name, area, price });
+      if (name) configurations.push({ name, area, areaUnit, price });
     });
 
     return { posterType, transactionType, propertyType, location, details, amenities, pricing, contactDesc, externalVideos, customFAQs, configurations };
@@ -1825,4 +1885,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   checkExistingDraft();
+
+  // Update Rate Label dynamically based on unit selection
+  document.addEventListener('change', (e) => {
+    if (e.target.id === 'plotAreaUnit' || e.target.id === 'builtUpAreaUnit' || e.target.id === 'commercialSuperAreaUnit') {
+      const label = document.getElementById('ratePerUnitLabel');
+      if (label) {
+        label.textContent = `Rate Per ${e.target.value} (₹) *`;
+      }
+    }
+  });
 });

@@ -469,8 +469,30 @@
             <div id="configContainer" style="display:flex; flex-direction:column; gap:8px;">
               <div class="config-row" style="display:flex; gap:8px; align-items:center;">
                 <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1">
-                <input type="number" class="form-input config-area" placeholder="Area (sq.ft)" style="width:140px">
-                <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:160px">
+                <div style="display:flex; gap:4px; width:220px;">
+                  <input type="number" class="form-input config-area" placeholder="Area" style="flex:1">
+                  <select class="form-input config-area-unit" style="width:100px; font-size:12px; padding:0 5px;">
+                    <option value="Square Foot">sq ft</option>
+                    <option value="Square Yard (Gaj)">sq yard</option>
+                    <option value="Square Meter">sq m</option>
+                    <option value="Acre">Acre</option>
+                    <option value="Hectare">Hectare</option>
+                    <option value="Dismil / Decimal">Dismil</option>
+                    <option value="Kattha">Kattha</option>
+                    <option value="Bigha">Bigha</option>
+                    <option value="Kanal">Kanal</option>
+                    <option value="Marla">Marla</option>
+                    <option value="Guntha / Gunta">Gunta</option>
+                    <option value="Cent">Cent</option>
+                    <option value="Ground">Ground</option>
+                    <option value="Ankanam">Ankanam</option>
+                    <option value="Biswa">Biswa</option>
+                    <option value="Biswansi">Biswansi</option>
+                    <option value="Lecha">Lecha</option>
+                    <option value="Ares">Ares</option>
+                  </select>
+                </div>
+                <input type="number" class="form-input config-price" placeholder="Price (₹)" style="width:140px">
                 <button type="button" class="btn btn-outline btn-sm remove-config-btn" style="display:none">✕</button>
               </div>
             </div>
@@ -495,12 +517,56 @@
           </div>
 
           <div class="form-group" id="fgBuiltUpArea" data-show-for="apartment,villa,commercial,warehouse">
-            <label class="form-label">Built-up Area (sq.ft) *</label>
-            <input type="number" id="builtUpAreaInput" class="form-input" placeholder="e.g. 1450">
+            <label class="form-label">Built-up Area *</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="number" id="builtUpAreaInput" class="form-input" placeholder="e.g. 1450" style="flex: 1;">
+              <select id="builtUpAreaUnit" class="form-input area-unit-select" style="width: 140px;">
+                <option value="Square Foot">Square Foot</option>
+                <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
+                <option value="Square Meter">Square Meter</option>
+                <option value="Acre">Acre</option>
+                <option value="Hectare">Hectare</option>
+                <option value="Dismil / Decimal">Dismil / Decimal</option>
+                <option value="Kattha">Kattha</option>
+                <option value="Bigha">Bigha</option>
+                <option value="Kanal">Kanal</option>
+                <option value="Marla">Marla</option>
+                <option value="Guntha / Gunta">Guntha / Gunta</option>
+                <option value="Cent">Cent</option>
+                <option value="Ground">Ground</option>
+                <option value="Ankanam">Ankanam</option>
+                <option value="Biswa">Biswa</option>
+                <option value="Biswansi">Biswansi</option>
+                <option value="Lecha">Lecha</option>
+                <option value="Ares">Ares</option>
+              </select>
+            </div>
           </div>
           <div class="form-group" id="fgCarpetArea" data-show-for="apartment,villa,commercial,warehouse">
-            <label class="form-label">Carpet Area (sq.ft)</label>
-            <input type="number" id="carpetAreaInput" class="form-input" placeholder="e.g. 1100">
+            <label class="form-label">Carpet Area</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="number" id="carpetAreaInput" class="form-input" placeholder="e.g. 1100" style="flex: 1;">
+              <select id="carpetAreaUnit" class="form-input area-unit-select" style="width: 140px;">
+                <option value="Square Foot">Square Foot</option>
+                <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
+                <option value="Square Meter">Square Meter</option>
+                <option value="Acre">Acre</option>
+                <option value="Hectare">Hectare</option>
+                <option value="Dismil / Decimal">Dismil / Decimal</option>
+                <option value="Kattha">Kattha</option>
+                <option value="Bigha">Bigha</option>
+                <option value="Kanal">Kanal</option>
+                <option value="Marla">Marla</option>
+                <option value="Guntha / Gunta">Guntha / Gunta</option>
+                <option value="Cent">Cent</option>
+                <option value="Ground">Ground</option>
+                <option value="Ankanam">Ankanam</option>
+                <option value="Biswa">Biswa</option>
+                <option value="Biswansi">Biswansi</option>
+                <option value="Lecha">Lecha</option>
+                <option value="Ares">Ares</option>
+              </select>
+            </div>
           </div>
 
           <!-- Villa/House Specific Fields -->
@@ -578,12 +644,56 @@
               C. Area Details</div>
             <div class="form-grid">
               <div class="form-group">
-                <label class="form-label">Plot Area (sq.ft / sq.yard / acre)</label>
-                <input type="number" id="plotAreaInput" class="form-input" placeholder="e.g. 2400">
+                <label class="form-label">Plot Area</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="number" id="plotAreaInput" class="form-input" placeholder="e.g. 2400" style="flex: 1;">
+                  <select id="plotAreaUnit" class="form-input area-unit-select" style="width: 140px;">
+                    <option value="Square Foot">Square Foot</option>
+                    <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
+                    <option value="Square Meter">Square Meter</option>
+                    <option value="Acre">Acre</option>
+                    <option value="Hectare">Hectare</option>
+                    <option value="Dismil / Decimal">Dismil / Decimal</option>
+                    <option value="Kattha">Kattha</option>
+                    <option value="Bigha">Bigha</option>
+                    <option value="Kanal">Kanal</option>
+                    <option value="Marla">Marla</option>
+                    <option value="Guntha / Gunta">Guntha / Gunta</option>
+                    <option value="Cent">Cent</option>
+                    <option value="Ground">Ground</option>
+                    <option value="Ankanam">Ankanam</option>
+                    <option value="Biswa">Biswa</option>
+                    <option value="Biswansi">Biswansi</option>
+                    <option value="Lecha">Lecha</option>
+                    <option value="Ares">Ares</option>
+                  </select>
+                </div>
               </div>
               <div class="form-group">
-                <label class="form-label">Super Built-up Area (sq.ft)</label>
-                <input type="number" id="superBuiltUpAreaInput" class="form-input" placeholder="e.g. 3000">
+                <label class="form-label">Super Built-up Area</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="number" id="superBuiltUpAreaInput" class="form-input" placeholder="e.g. 3000" style="flex: 1;">
+                  <select id="superBuiltUpAreaUnit" class="form-input area-unit-select" style="width: 140px;">
+                    <option value="Square Foot">Square Foot</option>
+                    <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
+                    <option value="Square Meter">Square Meter</option>
+                    <option value="Acre">Acre</option>
+                    <option value="Hectare">Hectare</option>
+                    <option value="Dismil / Decimal">Dismil / Decimal</option>
+                    <option value="Kattha">Kattha</option>
+                    <option value="Bigha">Bigha</option>
+                    <option value="Kanal">Kanal</option>
+                    <option value="Marla">Marla</option>
+                    <option value="Guntha / Gunta">Guntha / Gunta</option>
+                    <option value="Cent">Cent</option>
+                    <option value="Ground">Ground</option>
+                    <option value="Ankanam">Ankanam</option>
+                    <option value="Biswa">Biswa</option>
+                    <option value="Biswansi">Biswansi</option>
+                    <option value="Lecha">Lecha</option>
+                    <option value="Ares">Ares</option>
+                  </select>
+                </div>
               </div>
               <div class="form-group">
                 <label class="form-label">Open Area %</label>
@@ -761,8 +871,30 @@
                 <input type="number" id="commercialRoadWidth" class="form-input" placeholder="e.g. 80">
               </div>
               <div class="form-group">
-                <label class="form-label">Super Built-up Area (sq.ft)</label>
-                <input type="number" id="commercialSuperArea" class="form-input" placeholder="e.g. 5000">
+                <label class="form-label">Super Built-up Area</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="number" id="commercialSuperArea" class="form-input" placeholder="e.g. 5000" style="flex: 1;">
+                  <select id="commercialSuperAreaUnit" class="form-input area-unit-select" style="width: 140px;">
+                    <option value="Square Foot">Square Foot</option>
+                    <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
+                    <option value="Square Meter">Square Meter</option>
+                    <option value="Acre">Acre</option>
+                    <option value="Hectare">Hectare</option>
+                    <option value="Dismil / Decimal">Dismil / Decimal</option>
+                    <option value="Kattha">Kattha</option>
+                    <option value="Bigha">Bigha</option>
+                    <option value="Kanal">Kanal</option>
+                    <option value="Marla">Marla</option>
+                    <option value="Guntha / Gunta">Guntha / Gunta</option>
+                    <option value="Cent">Cent</option>
+                    <option value="Ground">Ground</option>
+                    <option value="Ankanam">Ankanam</option>
+                    <option value="Biswa">Biswa</option>
+                    <option value="Biswansi">Biswansi</option>
+                    <option value="Lecha">Lecha</option>
+                    <option value="Ares">Ares</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -889,7 +1021,7 @@
 
           <!-- New Plot/Land Specific Fields -->
           <div class="form-group" id="fgRatePerSqFt" style="display:none" data-show-for="land">
-            <label class="form-label">Rate Per Sq Ft (₹) *</label>
+            <label class="form-label" id="ratePerUnitLabel">Rate Per Square Foot (₹) *</label>
             <input type="number" id="plotRateSqFtInput" class="form-input" placeholder="e.g. 1100">
           </div>
           <div class="form-group" id="fgDevCharges" style="display:none" data-show-for="land">
@@ -936,8 +1068,30 @@
           </div>
 
           <div class="form-group" id="fgRoomSize" style="display:none" data-show-for="lodge">
-            <label class="form-label">Room Size (sq.ft) (Optional)</label>
-            <input type="number" id="roomSizeInput" class="form-input" placeholder="e.g. 120">
+            <label class="form-label">Room Size</label>
+            <div style="display: flex; gap: 10px;">
+              <input type="number" id="roomSizeInput" class="form-input" placeholder="e.g. 120" style="flex: 1;">
+              <select id="roomSizeUnit" class="form-input area-unit-select" style="width: 140px;">
+                <option value="Square Foot">Square Foot</option>
+                <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
+                <option value="Square Meter">Square Meter</option>
+                <option value="Acre">Acre</option>
+                <option value="Hectare">Hectare</option>
+                <option value="Dismil / Decimal">Dismil / Decimal</option>
+                <option value="Kattha">Kattha</option>
+                <option value="Bigha">Bigha</option>
+                <option value="Kanal">Kanal</option>
+                <option value="Marla">Marla</option>
+                <option value="Guntha / Gunta">Guntha / Gunta</option>
+                <option value="Cent">Cent</option>
+                <option value="Ground">Ground</option>
+                <option value="Ankanam">Ankanam</option>
+                <option value="Biswa">Biswa</option>
+                <option value="Biswansi">Biswansi</option>
+                <option value="Lecha">Lecha</option>
+                <option value="Ares">Ares</option>
+              </select>
+            </div>
           </div>
 
           <!-- New Hospitality Details (Hotel / Resort / Guest House) -->
@@ -1025,12 +1179,56 @@
             </div>
             <div class="form-grid" style="width: 100%;">
               <div class="form-group">
-                <label class="form-label">Total Land Area (Sq.Ft / Acres)</label>
-                <input type="number" id="hospitalityLandArea" class="form-input" placeholder="e.g. 10000">
+                <label class="form-label">Total Land Area</label>
+                <div style="display: flex; gap: 10px;">
+                  <input type="number" id="hospitalityLandArea" class="form-input" placeholder="e.g. 10000" style="flex: 1;">
+                  <select id="hospitalityLandAreaUnit" class="form-input area-unit-select" style="width: 140px;">
+                    <option value="Square Foot">Square Foot</option>
+                    <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
+                    <option value="Square Meter">Square Meter</option>
+                    <option value="Acre">Acre</option>
+                    <option value="Hectare">Hectare</option>
+                    <option value="Dismil / Decimal">Dismil / Decimal</option>
+                    <option value="Kattha">Kattha</option>
+                    <option value="Bigha">Bigha</option>
+                    <option value="Kanal">Kanal</option>
+                    <option value="Marla">Marla</option>
+                    <option value="Guntha / Gunta">Guntha / Gunta</option>
+                    <option value="Cent">Cent</option>
+                    <option value="Ground">Ground</option>
+                    <option value="Ankanam">Ankanam</option>
+                    <option value="Biswa">Biswa</option>
+                    <option value="Biswansi">Biswansi</option>
+                    <option value="Lecha">Lecha</option>
+                    <option value="Ares">Ares</option>
+                  </select>
+                </div>
               </div>
               <div class="form-group">
-                <label class="form-label">Total Built-up Area (Sq.Ft)</label>
-                <input type="number" id="hospitalityBuiltUpArea" class="form-input" placeholder="e.g. 25000">
+                <label class="form-label">Total Built-up Area</label>
+                <div style="display: flex; gap: 10px;">
+                  <input type="number" id="hospitalityBuiltUpArea" class="form-input" placeholder="e.g. 25000" style="flex: 1;">
+                  <select id="hospitalityBuiltUpAreaUnit" class="form-input area-unit-select" style="width: 140px;">
+                    <option value="Square Foot">Square Foot</option>
+                    <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
+                    <option value="Square Meter">Square Meter</option>
+                    <option value="Acre">Acre</option>
+                    <option value="Hectare">Hectare</option>
+                    <option value="Dismil / Decimal">Dismil / Decimal</option>
+                    <option value="Kattha">Kattha</option>
+                    <option value="Bigha">Bigha</option>
+                    <option value="Kanal">Kanal</option>
+                    <option value="Marla">Marla</option>
+                    <option value="Guntha / Gunta">Guntha / Gunta</option>
+                    <option value="Cent">Cent</option>
+                    <option value="Ground">Ground</option>
+                    <option value="Ankanam">Ankanam</option>
+                    <option value="Biswa">Biswa</option>
+                    <option value="Biswansi">Biswansi</option>
+                    <option value="Lecha">Lecha</option>
+                    <option value="Ares">Ares</option>
+                  </select>
+                </div>
               </div>
               <div class="form-group">
                 <label class="form-label">Parking Capacity (Vehicles)</label>

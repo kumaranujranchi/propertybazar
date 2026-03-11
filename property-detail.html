@@ -1141,10 +1141,13 @@
 
           // 1. Area & Orientation
           let areaRows = '';
-          if (p.details?.plotArea) areaRows += renderRow('Plot Area', `${p.details.plotArea} sq.ft`, 'fa-ruler-combined');
-          if (area > 0) areaRows += renderRow('Built-up Area', `${area} sq.ft`, 'fa-vector-square');
-          if (p.details?.carpetArea) areaRows += renderRow('Carpet Area', `${p.details.carpetArea} sq.ft`, 'fa-border-none');
-          if (p.details?.superBuiltUpArea) areaRows += renderRow('Super Built-up Area', `${p.details.superBuiltUpArea} sq.ft`, 'fa-expand');
+          if (p.details?.plotArea) areaRows += renderRow('Plot Area', `${p.details.plotArea} ${p.details.plotAreaUnit || 'sq.ft'}`, 'fa-ruler-combined');
+          if (area > 0) areaRows += renderRow('Built-up Area', `${area} ${p.details.builtUpAreaUnit || 'sq.ft'}`, 'fa-vector-square');
+          if (p.details?.carpetArea) areaRows += renderRow('Carpet Area', `${p.details.carpetArea} ${p.details.carpetAreaUnit || 'sq.ft'}`, 'fa-border-none');
+          if (p.details?.superBuiltUpArea) areaRows += renderRow('Super Built-up Area', `${p.details.superBuiltUpArea} ${p.details.superBuiltUpAreaUnit || 'sq.ft'}`, 'fa-expand');
+          if (p.details?.hospitalityLandArea) areaRows += renderRow('Total Land Area', `${p.details.hospitalityLandArea} ${p.details.hospitalityLandAreaUnit || 'sq.ft'}`, 'fa-landmark');
+          if (p.details?.hospitalityBuiltUpArea) areaRows += renderRow('Total Built-up Area', `${p.details.hospitalityBuiltUpArea} ${p.details.hospitalityBuiltUpAreaUnit || 'sq.ft'}`, 'fa-building-shield');
+          if (p.details?.roomSize) areaRows += renderRow('Room Size', `${p.details.roomSize} ${p.details.roomSizeUnit || 'sq.ft'}`, 'fa-vector-square');
           areaRows += renderRow('Facing', p.details?.facing, 'fa-compass');
           areaRows += renderRow('Road Width', p.details?.roadWidth ? `${p.details.roadWidth} ft` : '', 'fa-road');
           areaRows += renderRow('Frontage', p.details?.frontageWidth || p.details?.frontage, 'fa-arrows-left-right');
@@ -1275,8 +1278,8 @@
             const badge = document.createElement('div');
             badge.className = 'badge badge-outline';
             badge.style.cssText = 'padding:6px 12px; font-size:12px; border:1px solid var(--border); border-radius:6px; background:#fff;';
-            let txt = `${c.bhk || ''} BHK ${c.type || ''}`;
-            if (c.size) txt += ` • ${c.size} sqft`;
+            let txt = `${c.name || ''}`;
+            if (c.area) txt += ` • ${c.area} ${c.areaUnit || 'sq.ft'}`;
             if (c.price) txt += ` • ₹${Number(c.price).toLocaleString('en-IN')}`;
             badge.textContent = txt;
             configsList.appendChild(badge);
