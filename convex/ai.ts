@@ -120,8 +120,11 @@ RULES:
 1. Mirror the Original Language: If the input is in Hindi, respond in Hindi. If English, respond in English. If Hinglish, respond in Hinglish.
 2. Structure: Use bullet points for key features and a clean, easy-to-read format. Highlight the main selling points.
 3. Tone: Professional, persuasive, and trustworthy.
-4. Output: ONLY output the rewritten description. Do not include introductory text like "Here is the rewritten description:" or "Sure, I can help with that". Do not use markdown code blocks \`\`\` around the entire response unless formatting a specific part. JUST PROVIDE THE RAW TEXT. Do NOT use markdown bolding (e.g., do not use **word**). Use plain text for headers or bullet points.
-5. NO REASONING: DO NOT include any internal thoughts, reasoning blocks, or tags like <think> in your output. Start directly with the professional description.`;
+4. Output: ONLY output the rewritten description. Do not include introductory text, headers, or meta-comments like "Here is the rewritten description:" or "Revised Description:". Start directly with the professional content.
+5. NO REASONING: DO NOT use <think> or <thought> tags. DO NOT include any internal thoughts. ONLY provide the final property description.
+6. NO MARKDOWN BLOCKS: Do not wrap your response in \`\`\` markdown blocks. Provide raw text.
+7. Format: Use plain text. Use bullet points (-) for features. Keep it structured and clean.
+8. Language: Respond in ${args.text.match(/[\u0900-\u097F]/) ? 'Hindi' : 'English/Hinglish'} based on the input.`;
 
       const messages = [
         { role: "system", content: systemPrompt },
@@ -157,14 +160,22 @@ RULES:
 
       console.log("AI PROCESSED RESPONSE:", aiResponse);
 
-      // Remove common introductory headers or meta-text
-      aiResponse = aiResponse.replace(/^[\s\n]*(?:Rewritten (?:Property )?Description:|Revised Description:|Here is the rewritten description:|Professional Description:|Cleaned Description:|Cleaned text:)/i, "").trim();
+      // Remove common introductory headers or meta-text (English and Hindi variants)
+      // This regex is now more flexible, stripping any leading "Header: " style line
+      aiResponse = aiResponse.replace(/^[\s\n]*(?:[a-z\s]+description:|rewritten:|revised:|प्रोफेशनल डिस्क्रिप्शन:|विवरण:)/i, "").trim();
+
+      // If the AI somehow wrapped everything in a code block, strip those too
+      if (aiResponse.startsWith("```")) {
+        aiResponse = aiResponse.replace(/^```[a-z]*\n?|(\n?```)$/gi, "").trim();
+      }
 
       // Post-process to remove markdown bolding and ensure plain text
       aiResponse = aiResponse.replace(/\*\*/g, "");
 
-      if (!aiResponse) {
-        return { success: false, error: "AI produced an empty response. Please try again with more details." };
+      if (!aiResponse || aiResponse.length < 5) {
+        // Fallback: if cleaning stripped everything, better to return original than error out
+        // The frontend will detect result.text === text and show the "no improvement" message
+        return { success: true, text: args.text };
       }
 
       return { success: true, text: aiResponse };
