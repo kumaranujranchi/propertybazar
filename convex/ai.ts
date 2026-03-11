@@ -149,19 +149,24 @@ RULES:
 
       const data = await response.json();
       let aiResponse = data.choices[0]?.message?.content?.trim() || "";
-      
       const rawText = aiResponse;
 
-      // 1. Remove ANY XML-like tags (e.g. <think>, <thought>, <reasoning>)
-      aiResponse = aiResponse.replace(/<[^>]+>[\s\S]*?<\/[^>]+>/gi, ""); 
-      aiResponse = aiResponse.replace(/<[^>]+>/gi, ""); // Remove unclosed tags
-      aiResponse = aiResponse.trim();
+      // 1. Handle Reasoning Blocks (<think> or <thought>)
+      // If there is significant content AFTER a closing reasoning tag, we prefer that.
+      // If the content is mostly inside or the tags are unclosed, we just strip the tags.
+      const closedTagMatch = aiResponse.match(/[\s\S]*<\/(?:think|thought)>([\s\S]*)/i);
+      if (closedTagMatch && closedTagMatch[1].trim().length > 20) {
+        aiResponse = closedTagMatch[1].trim();
+      } else {
+        // Strip only the tags themselves (e.g. <think>, </think>), keeping whatever is between them
+        aiResponse = aiResponse.replace(/<[^>]+>/gi, "").trim();
+      }
 
       // 2. Strip leading/trailing markdown code blocks
       aiResponse = aiResponse.replace(/^```[a-z]*\n?|(\n?```)$/gi, "").trim();
 
-      // 3. Remove common intro headers (strictly at the beginning)
-      const introRegex = /^[\s\n]*(?:rewritten\s+description:|professional\s+description:|description:|rewritten:|विवरण:|प्रोफेशनल विवरण:)/i;
+      // 3. Remove common intro headers (strictly at the beginning) including Hindi
+      const introRegex = /^[\s\n]*(?:rewritten\s+description:|professional\s+description:|description:|rewritten:|विवरण:|प्रोफेशनल विवरण:|your\s+rewritten\s+description:)/i;
       aiResponse = aiResponse.replace(introRegex, "").trim();
 
       // 4. Remove bolding
