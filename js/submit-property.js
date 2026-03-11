@@ -898,6 +898,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById('floorConfigInput')) document.getElementById('floorConfigInput').value = prop.details.floorConfig || '';
         if (document.getElementById('plotAreaInput')) document.getElementById('plotAreaInput').value = prop.details.plotArea || '';
         if (document.getElementById('plotAreaUnit')) document.getElementById('plotAreaUnit').value = prop.details.plotAreaUnit || 'Square Foot';
+        if (document.getElementById('plotRateUnit')) document.getElementById('plotRateUnit').value = prop.details.plotRateUnit || prop.details.plotAreaUnit || 'Square Foot';
+        if (document.getElementById('plotRateUnit')) document.getElementById('plotRateUnit').dispatchEvent(new Event('change'));
         if (document.getElementById('superBuiltUpAreaInput')) document.getElementById('superBuiltUpAreaInput').value = prop.details.superBuiltUpArea || '';
         if (document.getElementById('superBuiltUpAreaUnit')) document.getElementById('superBuiltUpAreaUnit').value = prop.details.superBuiltUpAreaUnit || 'Square Foot';
         if (document.getElementById('openAreaInput')) document.getElementById('openAreaInput').value = prop.details.openArea || '';
@@ -1343,6 +1345,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       floorConfig: document.getElementById('floorConfigInput')?.value || undefined,
       plotArea: parseNum('plotAreaInput'),
       plotAreaUnit: document.getElementById('plotAreaUnit')?.value || "Square Foot",
+      plotRateUnit: document.getElementById('plotRateUnit')?.value || "Square Foot",
       superBuiltUpArea: parseNum('superBuiltUpAreaInput'),
       superBuiltUpAreaUnit: document.getElementById('superBuiltUpAreaUnit')?.value || "Square Foot",
       openArea: parseNum('openAreaInput'),
@@ -1888,7 +1891,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Update Rate Label dynamically based on unit selection
   document.addEventListener('change', (e) => {
-    if (e.target.id === 'plotAreaUnit' || e.target.id === 'builtUpAreaUnit' || e.target.id === 'commercialSuperAreaUnit') {
+    if (e.target.id === 'plotAreaUnit' || e.target.id === 'plotRateUnit' || e.target.id === 'builtUpAreaUnit' || e.target.id === 'commercialSuperAreaUnit') {
+      // Sync Plot Area and Rate units
+      if (e.target.id === 'plotAreaUnit') {
+        const rateUnitSelect = document.getElementById('plotRateUnit');
+        if (rateUnitSelect && rateUnitSelect.value !== e.target.value) {
+           rateUnitSelect.value = e.target.value;
+        }
+      } else if (e.target.id === 'plotRateUnit') {
+        const areaUnitSelect = document.getElementById('plotAreaUnit');
+        if (areaUnitSelect && areaUnitSelect.value !== e.target.value) {
+           areaUnitSelect.value = e.target.value;
+        }
+      }
+
       const label = document.getElementById('ratePerUnitLabel');
       if (label) {
         label.textContent = `Rate Per ${e.target.value} (₹) *`;
