@@ -1201,7 +1201,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       try {
         const result = await convex.action("ai:rewriteDescription", { text });
+        console.log("AI Rewrite Result:", result);
+
         if (result && result.success) {
+          if (result.text === text) {
+            window.showToast("AI couldn't find much to improve. Try adding more specific details!", "info");
+            return;
+          }
+          
           descriptionInput.value = result.text;
           
           // Manually trigger input event so auto-save and Suggestion Box update

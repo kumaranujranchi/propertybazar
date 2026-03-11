@@ -146,21 +146,28 @@ RULES:
 
       const data = await response.json();
       let aiResponse = data.choices[0]?.message?.content?.trim() || "";
+      
+      console.log("AI RAW RESPONSE:", aiResponse);
 
-      // Post-process to remove internal reasoning/thought blocks (e.g. <think>...</think>)
-      // This regex handles both closed blocks and unclosed tags at the end of output
-      aiResponse = aiResponse.replace(/<think>[\s\S]*?(?:<\/think>|$)/gi, "");
-      aiResponse = aiResponse.replace(/<\/think>/gi, ""); // Remove any stray closing tags
+      // Post-process to remove internal reasoning/thought blocks
+      // Handles <think>...</think>, <thought>...</thought>, and unclosed tags
+      aiResponse = aiResponse.replace(/<(?:think|thought)>[\s\S]*?(?:<\/(?:think|thought)>|$)/gi, "");
+      aiResponse = aiResponse.replace(/<\/(?:think|thought)>/gi, ""); 
       aiResponse = aiResponse.trim();
 
-      // Remove common introductory headers or meta-text that AI often includes
-      // This regex handles potential leading whitespace or newlines and more header variants
+      console.log("AI PROCESSED RESPONSE:", aiResponse);
+
+      // Remove common introductory headers or meta-text
       aiResponse = aiResponse.replace(/^[\s\n]*(?:Rewritten (?:Property )?Description:|Revised Description:|Here is the rewritten description:|Professional Description:|Cleaned Description:|Cleaned text:)/i, "").trim();
 
       // Post-process to remove markdown bolding and ensure plain text
       aiResponse = aiResponse.replace(/\*\*/g, "");
 
-      return { success: true, text: aiResponse || args.text };
+      if (!aiResponse) {
+        return { success: false, error: "AI produced an empty response. Please try again with more details." };
+      }
+
+      return { success: true, text: aiResponse };
 
     } catch (error: any) {
       console.error("AI Rewrite Error:", error);
