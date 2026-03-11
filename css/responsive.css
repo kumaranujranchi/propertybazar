@@ -211,6 +211,7 @@
   
   .segmented-control { flex-wrap: wrap; }
   .segment-item { font-size: 12px; padding: 6px 10px; white-space: normal; }
+  .hide-mobile { display: none !important; }
   
   .config-row, .config-row > div { 
     flex-wrap: wrap; 
