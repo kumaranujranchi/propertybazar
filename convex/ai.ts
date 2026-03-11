@@ -24,12 +24,13 @@ export const parseSearchQuery = action({
 Your goal is to help users find properties in India and answer their real estate questions.
 
 WORKFLOW & BEHAVIOR:
-1. Parse the user's latest message for search criteria (type, property type, BHK, city, price, amenities).
-2. If the user asks a general question, answer it naturally while keeping the previous search filters if applicable.
+1. Search First: If the user mentions any search criteria (location, type, etc.), PRIORITIZE performing the search and updating the filters IMMEDIATELY.
+2. Answer Questions: If the user asks a general question, answer it naturally.
 3. Language Mirroring: You MUST respond in the EXACT language the user uses (e.g., Hindi, English, Hinglish).
-4. Lead Capture (Crucial): Badi chalaki se (cleverly and naturally), you must ask for the user's name and mobile number. For example, "Aap kis naam se jaane jaate hain, aur apka mobile number kya hai jisse hum aapko properties dikha sakein?". Do not ask abruptly; weave it into the conversation naturally.
-5. Phone Number Validation: If the user provides a string of numbers, do not count them manually. Check if the string matches the exact regular expression: ^[0-9]{10}$. If it matches this regex exactly, ACCEPT IT and thank the user. If it does NOT match, politely ask for a 10-digit number. NEVER reject a valid 10-digit Indian number like 9031400004 or 7808060888.
-6. ALWAYS return a JSON object at the end of your response inside a block.
+4. Lead Capture: Once you have provided some value (like a search result or an answer), naturally ask for the user's name or mobile number if you don't have them yet. DO NOT let lead capture block the search.
+5. Phone Number Validation: If the user provides a 10-digit number, accept it. Regex: ^[0-9]{10}$.
+6. Proactive Search: Even if you are asking for a name, if the user already specified "Patna", keep "city": "Patna" in your JSON filters so the UI can update.
+7. ALWAYS return a JSON object at the end of your response inside a block.
 
 JSON SCHEMA:
 {
@@ -45,10 +46,11 @@ JSON SCHEMA:
 }
 
 RULES:
-- Maintain context from the history. If they say "Show flats in Patna" then "What about Noida?", update city to "Noida".
-- DO NOT REPEAT QUESTIONS. If you have already asked for their name, number, or specific amenities in the previous messages (check the history!), DO NOT ask for them again. Acknowledge their response and move forward.
-- NO UNNECESSARY CONFIRMATION: Do NOT explicitly say things like "Aapka number sahi hai" or "Number mil gaya". Just seamlessly continue the conversation.
-- ACTION AWARENESS: You are directly controlling the website's filters. When the user asks for properties, you MUST say something like "Maine aapki requirement ke hisab se screen par properties dikha di hain" instead of saying "Main aapko properties bhej dunga" or "Main aapse contact karunga".
+- Maintain context from the history.
+- PERSISTENT FILTERS: You MUST include the current search filters (city, type, propType, bhk, etc.) in the JSON response of EVERY turn.
+- DO NOT REPEAT QUESTIONS.
+- NO UNNECESSARY CONFIRMATION.
+- ACTION AWARENESS: You are directly controlling the website's filters.
 - Current Date: ${new Date().toLocaleDateString()}
 - Use Indian numbering (1 Lac = 100,000, 1 Cr = 10,000,000).
 - Be polite, professional, and mirror the user's language.`;
@@ -80,16 +82,32 @@ RULES:
       const aiResponse = data.choices[0]?.message?.content;
 
       const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+      let filters: any = {};
+      
       if (jsonMatch) {
         try {
-          const filters = JSON.parse(jsonMatch[0]);
-          return { success: true, filters };
+          // Clean up the match (in case of double braces or other issues)
+          let jsonStr = jsonMatch[0].trim();
+          filters = JSON.parse(jsonStr);
         } catch (e) {
-          return { success: true, filters: { explanation: aiResponse } };
+          console.warn("AI JSON parse failed, using raw response", e);
         }
       }
 
-      return { success: true, filters: { explanation: aiResponse } };
+      // Ensure explanation exists
+      if (!filters.explanation || filters.explanation.trim() === "") {
+        // If no explanation in JSON, use the part of aiResponse BEFORE the JSON match
+        // or just the whole response if JSON parsing was a mess.
+        const textBeforeJson = aiResponse.split('{')[0].trim();
+        filters.explanation = textBeforeJson || aiResponse.replace(/\{[\s\S]*\}/, "").trim() || aiResponse;
+        
+        // Final fallback if cleaning made it empty
+        if (!filters.explanation || filters.explanation.length < 2) {
+            filters.explanation = "I've processed your request based on your criteria.";
+        }
+      }
+
+      return { success: true, filters };
 
     } catch (error: any) {
       console.error("AI Search Error:", error);

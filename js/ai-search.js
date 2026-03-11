@@ -71,7 +71,6 @@ function initAISearchAssistant() {
         history: chatHistory.slice(-6) // Keep last 3 turns
       });
       typing.remove();
-
       if (result.success && result.filters) {
         const filters = result.filters;
         const explanation = filters.explanation || "I've processed your request.";
@@ -99,7 +98,11 @@ function initAISearchAssistant() {
     const msg = document.createElement('div');
     msg.className = `ai-msg ${side}`;
     if (isTyping) msg.classList.add('typing');
-    msg.innerHTML = text;
+    // Sanitize and handle empty text
+    const displayChat = text || (side === 'bot' ? "I've processed your request." : "");
+    if (!displayChat && !isTyping) return null;
+    
+    msg.innerHTML = displayChat;
     messages.appendChild(msg);
     messages.scrollTop = messages.scrollHeight;
     return msg;
@@ -126,25 +129,34 @@ function initAISearchAssistant() {
     // Listing page update logic remains the same
     if (filters.type) {
         const tabs = document.querySelectorAll('.search-tab');
-        tabs.forEach(t => t.classList.toggle('active', t.dataset.type === filters.type));
+        const targetType = filters.type.toLowerCase();
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.type === targetType));
     }
     if (filters.propType) {
+        const targetProp = filters.propType.toLowerCase();
         document.querySelectorAll('.filter-chips[data-type="propType"] .filter-chip').forEach(c => {
-            c.classList.toggle('active', c.dataset.val === filters.propType);
+            const val = (c.dataset.val || "").toLowerCase();
+            c.classList.toggle('active', val === targetProp || (targetProp === 'plot' && val === 'land'));
         });
     }
     if (filters.bhk) {
         document.querySelectorAll('.filter-chips[data-type="bhk"] .filter-chip').forEach(c => {
-            c.classList.toggle('active', parseInt(c.dataset.val) === filters.bhk);
+            c.classList.toggle('active', parseInt(c.dataset.val) === parseInt(filters.bhk));
         });
     }
     if (filters.city) {
-        const locInput = document.getElementById('hero-location');
-        if (locInput) locInput.value = filters.city;
+        const locInputs = [document.getElementById('hero-location'), document.getElementById('hero-location-input')];
+        locInputs.forEach(inp => { if (inp) inp.value = filters.city; });
+        
         const url = new URL(window.location);
         url.searchParams.set('location', filters.city);
         window.history.pushState({}, '', url);
     }
+    
+    // Add a hint in chat that results are updated
+    setTimeout(() => {
+        addMessage(`I've found some matching properties for you. You can see them updating on the page. <div style="margin-top:8px"><button class="btn btn-sm btn-outline-primary" style="font-size:10px; padding:4px 8px" onclick="document.getElementById('ai-chat-drawer').classList.remove('open')">View Results</button></div>`, 'bot');
+    }, 1000);
 
     if (typeof window.filterProperties === 'function') {
         window.filterProperties();
