@@ -152,15 +152,16 @@ body {
 }
 .collage-main img {
   position: absolute;
-  inset: 8px;            /* 8px breathing room so full image is visible */
-  width: calc(100% - 16px) !important;
-  height: calc(100% - 16px) !important;
+  inset: 20px; /* generous inset so more of the image is visible */
+  width: calc(100% - 40px) !important;
+  height: calc(100% - 40px) !important;
   object-fit: contain !important;
   object-position: center center !important;
   display: block !important;
-  border-radius: 8px;
+  border-radius: 10px;
   margin: 0 !important;
   background: #f2f4f7;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 .collage-side {
   grid-column: 2 / 3;
@@ -180,15 +181,16 @@ body {
 }
 .gallery-item img {
   position: absolute;
-  inset: 8px;            /* 8px breathing room so full image is visible */
-  width: calc(100% - 16px) !important;
-  height: calc(100% - 16px) !important;
+  inset: 10px; /* slightly less inset for smaller side tiles */
+  width: calc(100% - 20px) !important;
+  height: calc(100% - 20px) !important;
   object-fit: contain !important;
   object-position: center center !important;
   display: block !important;
   border-radius: 8px;
   margin: 0 !important;
   background: #f2f4f7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 /* Use background-image as fallback to ensure full-bleed tiles even for small images */
 .gallery-item.has-bg {
