@@ -130,27 +130,28 @@ RULES:
           // City/Locality match
           if (filters.city) {
             const searchCity = filters.city.toLowerCase();
-            const pCity = p.location?.city?.toLowerCase() || "";
-            const pLocality = p.location?.locality?.toLowerCase() || "";
-            if (
-              pCity !== searchCity && 
-              !pLocality.includes(searchCity) && 
-              (!pLocality || !searchCity.includes(pLocality)) &&
-              (!pCity || !searchCity.includes(pCity))
-            ) {
-              return false;
-            }
+            const pCity = (p.location?.city || "").toLowerCase();
+            const pLocality = (p.location?.locality || "").toLowerCase();
+            
+            const cityMatch = pCity.includes(searchCity) || searchCity.includes(pCity);
+            const localityMatch = pLocality.includes(searchCity) || searchCity.includes(pLocality);
+            
+            if (!cityMatch && !localityMatch) return false;
           }
           
-          // Property Type match (flexible for Plot/Land)
+          // Property Type match (flexible for common synonyms)
           if (filters.propType) {
             const targetProp = filters.propType.toLowerCase();
             const pType = (p.propertyType || "").toLowerCase();
-            if (targetProp === 'plot' || targetProp === 'land') {
-              if (pType !== 'plot' && pType !== 'land') return false;
-            } else if (pType !== targetProp) {
-              return false;
-            }
+            
+            const isTargetApartment = targetProp === 'apartment' || targetProp === 'flat';
+            const isTargetPlot = targetProp === 'plot' || targetProp === 'land';
+            const isPropertyApartment = pType === 'apartment' || pType === 'flat';
+            const isPropertyPlot = pType === 'plot' || pType === 'land';
+
+            if (isTargetApartment && !isPropertyApartment) return false;
+            if (isTargetPlot && !isPropertyPlot) return false;
+            if (!isTargetApartment && !isTargetPlot && pType !== targetProp) return false;
           }
           // BHK match
           if (filters.bhk && parseInt(p.details?.bhk) !== parseInt(filters.bhk)) return false;
