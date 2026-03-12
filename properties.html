@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Properties for Sale & Rent in India | 24Dismil.com</title>
-  <meta name="description" content="Search from lakhs of properties for sale and rent across India. Filter by city, budget, BHK, and property type. Find verified listings on 24Dismil.com.">
+  <meta name="description"
+    content="Search from lakhs of properties for sale and rent across India. Filter by city, budget, BHK, and property type. Find verified listings on 24Dismil.com.">
   <link rel="canonical" href="https://24dismil.com/properties.html" />
   <meta property="og:title" content="Properties | 24Dismil.com" />
-  <meta property="og:description" content="Browse verified listings of apartments, villas, plots & commercial properties." />
+  <meta property="og:description"
+    content="Browse verified listings of apartments, villas, plots & commercial properties." />
   <meta property="og:image" content="https://24dismil.com/images/favicon.svg" />
   <meta property="og:url" content="https://24dismil.com/properties.html" />
   <meta property="og:type" content="website" />
@@ -19,744 +22,823 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 </head>
+
 <body>
 
-<!-- HEADER -->
-<header class="header" id="header">
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container">
+      <nav class="nav">
+        <div class="nav-group nav-group-left">
+          <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">24</div>
+            <span class="nav-logo-text">24Dismil.com</span>
+          </a>
+          <button class="nav-city" id="citySelectorBtn">
+            <i class="fa-solid fa-location-dot"></i> <span id="currentCityText">Select City</span> <i
+              class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
+          </button>
+        </div>
+
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="properties.html?type=buy" class="nav-link active">Buy</a>
+          <a href="properties.html?type=rent" class="nav-link">Rent</a>
+          <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+        </div>
+
+        <div class="nav-group nav-group-right">
+          <div class="nav-actions">
+            <a href="login.html" class="nav-btn-login">Login</a>
+            <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
+          </div>
+          <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+      <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+      <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
+
+      <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i>
+        Login</a>
+    </div>
+  </header>
+
+  <!-- AD BANNER (city/type-specific) -->
+  <div id="pageBanner" class="page-banner" style="display:none"></div>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-breadcrumb">
+        <a href="index.html">Home</a> › <span>Properties</span>
+      </div>
+      <h1>Properties for Sale & Rent in India</h1>
+      <p>Explore from 5,000+ verified listings across 50+ cities</p>
+    </div>
+  </div>
+
+  <!-- SEARCH BAR (inline) -->
+  <div
+    style="background:#fff;border-bottom:1px solid var(--border);padding:12px 0;position:sticky;top:64px;z-index:100;box-shadow:var(--shadow-sm)">
+    <div class="container">
+      <form class="search-form" id="searchForm" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <div class="search-tabs" style="background:transparent;border:none;flex-shrink:0;display:flex;gap:5px">
+          <div class="search-tab active" data-type="buy" style="padding:8px 16px;font-size:13px;flex:none;width:auto"><i
+              class="fa-solid fa-house"></i> Buy</div>
+          <div class="search-tab" data-type="rent" style="padding:8px 16px;font-size:13px;flex:none;width:auto"><i
+              class="fa-solid fa-key"></i> Rent</div>
+          <div class="search-tab" data-type="commercial" style="padding:8px 16px;font-size:13px;flex:none;width:auto"><i
+              class="fa-solid fa-building"></i> Commercial</div>
+        </div>
+        <input type="text" id="hero-location" placeholder="🔍 Search city, locality or project..."
+          style="flex:1;padding:8px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;min-width:200px"
+          onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+        <button type="submit" class="btn btn-primary" style="padding:9px 20px">🔍 Search</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+
+  <script>
+    // Banner configuration: map city-type to image URL
+    const cityBanners = {
+    // sample test banner using existing image file
+    // key format is city without spaces (lowercase) + '-' + type
+    'patna-buy': 'images/hero-bg.jpg',
+    // default fallback (unused unless you want always-on banner)
+    // 'default-buy': 'images/hero-bg.jpg'
+
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      let city = params.get('city') || '';
+      const type = params.get('type') || 'buy';
+      city = city.trim().toLowerCase().replace(/\s+/g, '');
+      const key = city + '-' + type.toLowerCase();
+      const img = cityBanners[key];
+      const banner = document.getElementById('pageBanner');
+      if (banner && img) {
+        banner.style.backgroundImage = `url('${img}')`;
+        banner.style.display = 'block';
+      }
+    })();
+  </script>
   <div class="container">
-    <nav class="nav">
-      <div class="nav-group nav-group-left">
-        <a href="index.html" class="nav-logo">
-          <div class="nav-logo-icon">24</div>
-          <span class="nav-logo-text">24Dismil.com</span>
-        </a>
-        <button class="nav-city" id="citySelectorBtn">
-          <i class="fa-solid fa-location-dot"></i> <span id="currentCityText">Select City</span> <i class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
-        </button>
-      </div>
+    <div class="properties-layout">
 
-      <div class="nav-links">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="properties.html?type=buy" class="nav-link active">Buy</a>
-        <a href="properties.html?type=rent" class="nav-link">Rent</a>
-        <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
-      </div>
-
-      <div class="nav-group nav-group-right">
-        <div class="nav-actions">
-          <a href="login.html" class="nav-btn-login">Login</a>
-          <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
+      <!-- FILTER SIDEBAR -->
+      <aside class="filter-sidebar">
+        <div class="filter-header">
+          <h3><i class="fa-solid fa-sliders"></i> Filters</h3>
+          <span class="filter-clear">Clear All</span>
         </div>
-        <div class="hamburger" id="hamburger">
-          <span></span><span></span><span></span>
-        </div>
-      </div>
-    </nav>
-  </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
-    <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
-    <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
-    
-    <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
-  </div>
-</header>
 
-<!-- PAGE HERO -->
-<div class="page-hero">
-  <div class="container">
-    <div class="page-breadcrumb">
-      <a href="index.html">Home</a> › <span>Properties</span>
-    </div>
-    <h1>Properties for Sale & Rent in India</h1>
-    <p>Explore from 5,000+ verified listings across 50+ cities</p>
-  </div>
-</div>
-
-<!-- SEARCH BAR (inline) -->
-<div style="background:#fff;border-bottom:1px solid var(--border);padding:12px 0;position:sticky;top:64px;z-index:100;box-shadow:var(--shadow-sm)">
-  <div class="container">
-    <form class="search-form" id="searchForm" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <div class="search-tabs" style="background:transparent;border:none;flex-shrink:0;display:flex;gap:5px">
-        <div class="search-tab active" data-type="buy" style="padding:8px 16px;font-size:13px;flex:none;width:auto"><i class="fa-solid fa-house"></i> Buy</div>
-        <div class="search-tab" data-type="rent" style="padding:8px 16px;font-size:13px;flex:none;width:auto"><i class="fa-solid fa-key"></i> Rent</div>
-        <div class="search-tab" data-type="commercial" style="padding:8px 16px;font-size:13px;flex:none;width:auto"><i class="fa-solid fa-building"></i> Commercial</div>
-      </div>
-      <input type="text" id="hero-location" placeholder="🔍 Search city, locality or project..." style="flex:1;padding:8px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;outline:none;min-width:200px" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
-      <button type="submit" class="btn btn-primary" style="padding:9px 20px">🔍 Search</button>
-    </form>
-  </div>
-</div>
-
-<!-- MAIN CONTENT -->
-<div class="container">
-  <div class="properties-layout">
-
-    <!-- FILTER SIDEBAR -->
-    <aside class="filter-sidebar">
-      <div class="filter-header">
-        <h3><i class="fa-solid fa-sliders"></i> Filters</h3>
-        <span class="filter-clear">Clear All</span>
-      </div>
-
-      <div class="filter-group">
-        <div class="filter-group-title">Property Type</div>
-        <div class="filter-chips" data-type="propType">
-          <div class="filter-chip" data-val="Apartment">Apartment</div>
-          <div class="filter-chip" data-val="Villa">Villa</div>
-          <div class="filter-chip" data-val="Plot">Plot</div>
-          <div class="filter-chip" data-val="Commercial">Commercial</div>
-          <div class="filter-chip" data-val="PG">PG</div>
-          <div class="filter-chip" data-val="Lodge">Lodge</div>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <div class="filter-group-title">BHK Type</div>
-        <div class="filter-chips" data-type="bhk">
-          <div class="filter-chip" data-val="1">1 BHK</div>
-          <div class="filter-chip" data-val="2">2 BHK</div>
-          <div class="filter-chip" data-val="3">3 BHK</div>
-          <div class="filter-chip" data-val="4">4 BHK</div>
-          <div class="filter-chip" data-val="5">5+ BHK</div>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <div class="filter-group-title">Budget</div>
-        <div class="filter-chips" data-type="budget" data-single="">
-          <div class="filter-chip" data-val="20">Under 20L</div>
-          <div class="filter-chip" data-val="50">20-50L</div>
-          <div class="filter-chip" data-val="100">50L-1Cr</div>
-          <div class="filter-chip" data-val="200">1-2 Cr</div>
-          <div class="filter-chip" data-val="500">2-5 Cr</div>
-          <div class="filter-chip" data-val="9999">5 Cr+</div>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <div class="filter-group-title">Property Status</div>
-        <div class="filter-chips" data-type="status">
-          <div class="filter-chip" data-val="ready">Ready to Move</div>
-          <div class="filter-chip" data-val="under-construction">Under Construction</div>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <div class="filter-group-title">Amenities</div>
-        <div class="filter-checkbox-list">
-          <label class="filter-checkbox"><input type="checkbox"> <span>Swimming Pool</span></label>
-          <label class="filter-checkbox"><input type="checkbox"> <span>Gym / Fitness</span></label>
-          <label class="filter-checkbox"><input type="checkbox"> <span>Parking</span></label>
-          <label class="filter-checkbox"><input type="checkbox"> <span>Lift</span></label>
-          <label class="filter-checkbox"><input type="checkbox"> <span>24x7 Security</span></label>
-          <label class="filter-checkbox"><input type="checkbox"> <span>Power Backup</span></label>
-          <label class="filter-checkbox"><input type="checkbox"> <span>Clubhouse</span></label>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <div class="filter-group-title">Posted By</div>
-        <div class="filter-checkbox-list">
-          <label class="filter-checkbox"><input type="checkbox"> <span>Owner</span></label>
-          <label class="filter-checkbox"><input type="checkbox"> <span>Builder / Developer</span></label>
-          <label class="filter-checkbox"><input type="checkbox"> <span>Agent / Broker</span></label>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <div class="filter-group-title">Verified Only</div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <input type="checkbox" id="verified-toggle" style="width:18px;height:18px;accent-color:var(--primary)">
-          <label for="verified-toggle" style="font-size:13px;font-weight:500;cursor:pointer">Show Verified Only</label>
-        </div>
-      </div>
-
-      <div style="padding:16px 20px">
-        <button class="btn btn-primary" style="width:100%" onclick="filterProperties()">Apply Filters</button>
-      </div>
-    </aside>
-
-    <!-- LISTINGS AREA -->
-    <div>
-      <div class="listings-header">
-        <div class="listings-count">
-          <h2 id="listingsCount">Searching...</h2>
-          <p>in India (All Cities)</p>
-        </div>
-        <div class="listings-sort">
-          <select class="sort-select">
-            <option value="relevance">Sort: Relevance</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="area-desc">Area: Largest First</option>
-            <option value="newest">Newest First</option>
-          </select>
-          <div class="view-toggle">
-            <button class="view-btn active" id="view-grid" title="Grid View"><i class="fa-solid fa-table-cells-large"></i></button>
-            <button class="view-btn" id="view-list" title="List View"><i class="fa-solid fa-list"></i></button>
+        <div class="filter-group">
+          <div class="filter-group-title">Property Type</div>
+          <div class="filter-chips" data-type="propType">
+            <div class="filter-chip" data-val="Apartment">Apartment</div>
+            <div class="filter-chip" data-val="Villa">Villa</div>
+            <div class="filter-chip" data-val="Plot">Plot</div>
+            <div class="filter-chip" data-val="Commercial">Commercial</div>
+            <div class="filter-chip" data-val="PG">PG</div>
+            <div class="filter-chip" data-val="Lodge">Lodge</div>
           </div>
         </div>
-      </div>
 
-      <!-- LISTINGS GRID -->
-      <div class="listings-grid" id="listingsGrid">
-
-        <div class="property-card" onclick="window.location='property-detail.html'">
-          <div class="prop-img-wrap">
-            <img src="images/property-1.webp" alt="3 BHK in Noida" loading="lazy">
-            <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
-            <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
-            <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
+        <div class="filter-group">
+          <div class="filter-group-title">BHK Type</div>
+          <div class="filter-chips" data-type="bhk">
+            <div class="filter-chip" data-val="1">1 BHK</div>
+            <div class="filter-chip" data-val="2">2 BHK</div>
+            <div class="filter-chip" data-val="3">3 BHK</div>
+            <div class="filter-chip" data-val="4">4 BHK</div>
+            <div class="filter-chip" data-val="5">5+ BHK</div>
           </div>
-          <div class="prop-body">
-            <div class="prop-price">₹85 Lakh <span class="prop-per">· ₹5,862/sqft</span></div>
-            <div class="prop-title">Luxurious 3 BHK Flat in Premium Society</div>
-            <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Sector 62, Noida</div>
-            <div class="prop-specs">
-              <div class="prop-spec"><i class="fa-solid fa-bed"></i> 3 BHK</div>
-              <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,450 sq.ft</div>
-              <div class="prop-spec">🏢 Apartment</div>
-              <div class="prop-spec">🚗 1 Parking</div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Budget</div>
+          <div class="filter-chips" data-type="budget" data-single="">
+            <div class="filter-chip" data-val="20">Under 20L</div>
+            <div class="filter-chip" data-val="50">20-50L</div>
+            <div class="filter-chip" data-val="100">50L-1Cr</div>
+            <div class="filter-chip" data-val="200">1-2 Cr</div>
+            <div class="filter-chip" data-val="500">2-5 Cr</div>
+            <div class="filter-chip" data-val="9999">5 Cr+</div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Property Status</div>
+          <div class="filter-chips" data-type="status">
+            <div class="filter-chip" data-val="ready">Ready to Move</div>
+            <div class="filter-chip" data-val="under-construction">Under Construction</div>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Amenities</div>
+          <div class="filter-checkbox-list">
+            <label class="filter-checkbox"><input type="checkbox"> <span>Swimming Pool</span></label>
+            <label class="filter-checkbox"><input type="checkbox"> <span>Gym / Fitness</span></label>
+            <label class="filter-checkbox"><input type="checkbox"> <span>Parking</span></label>
+            <label class="filter-checkbox"><input type="checkbox"> <span>Lift</span></label>
+            <label class="filter-checkbox"><input type="checkbox"> <span>24x7 Security</span></label>
+            <label class="filter-checkbox"><input type="checkbox"> <span>Power Backup</span></label>
+            <label class="filter-checkbox"><input type="checkbox"> <span>Clubhouse</span></label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Posted By</div>
+          <div class="filter-checkbox-list">
+            <label class="filter-checkbox"><input type="checkbox"> <span>Owner</span></label>
+            <label class="filter-checkbox"><input type="checkbox"> <span>Builder / Developer</span></label>
+            <label class="filter-checkbox"><input type="checkbox"> <span>Agent / Broker</span></label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-group-title">Verified Only</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <input type="checkbox" id="verified-toggle" style="width:18px;height:18px;accent-color:var(--primary)">
+            <label for="verified-toggle" style="font-size:13px;font-weight:500;cursor:pointer">Show Verified
+              Only</label>
+          </div>
+        </div>
+
+        <div style="padding:16px 20px">
+          <button class="btn btn-primary" style="width:100%" onclick="filterProperties()">Apply Filters</button>
+        </div>
+      </aside>
+
+      <!-- LISTINGS AREA -->
+      <div>
+        <div class="listings-header">
+          <div class="listings-count">
+            <h2 id="listingsCount">Searching...</h2>
+            <p>in India (All Cities)</p>
+          </div>
+          <div class="listings-sort">
+            <select class="sort-select">
+              <option value="relevance">Sort: Relevance</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="area-desc">Area: Largest First</option>
+              <option value="newest">Newest First</option>
+            </select>
+            <div class="view-toggle">
+              <button class="view-btn active" id="view-grid" title="Grid View"><i
+                  class="fa-solid fa-table-cells-large"></i></button>
+              <button class="view-btn" id="view-list" title="List View"><i class="fa-solid fa-list"></i></button>
             </div>
-            <div class="prop-footer">
-              <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
-              <div class="prop-contact-btns">
-                <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> Call</button>
+          </div>
+        </div>
+
+        <!-- LISTINGS GRID -->
+        <div class="listings-grid" id="listingsGrid">
+
+          <div class="property-card" onclick="window.location='property-detail.html'">
+            <div class="prop-img-wrap">
+              <img src="images/property-1.webp" alt="3 BHK in Noida" loading="lazy">
+              <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
+              <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
+              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
+            </div>
+            <div class="prop-body">
+              <div class="prop-price">₹85 Lakh <span class="prop-per">· ₹5,862/sqft</span></div>
+              <div class="prop-title">Luxurious 3 BHK Flat in Premium Society</div>
+              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Sector 62, Noida</div>
+              <div class="prop-specs">
+                <div class="prop-spec"><i class="fa-solid fa-bed"></i> 3 BHK</div>
+                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,450 sq.ft</div>
+                <div class="prop-spec">🏢 Apartment</div>
+                <div class="prop-spec">🚗 1 Parking</div>
+              </div>
+              <div class="prop-footer">
+                <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
+                <div class="prop-contact-btns">
+                  <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()"><i
+                      class="fa-solid fa-phone"></i> Call</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="property-card" onclick="window.location='property-detail.html'">
-          <div class="prop-img-wrap">
-            <img src="images/city-mumbai.webp" alt="3 BHK Mumbai" loading="lazy">
-            <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
-            <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
-            <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prop-body">
-            <div class="prop-price">₹1.25 Cr <span class="prop-per">· ₹6,944/sqft</span></div>
-            <div class="prop-title">Premium 3 BHK Flat in Sea View Tower</div>
-            <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Bandra West, Mumbai</div>
-            <div class="prop-specs">
-              <div class="prop-spec"><i class="fa-solid fa-bed"></i> 3 BHK</div>
-              <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,800 sq.ft</div>
-              <div class="prop-spec">🌊 Sea Facing</div>
-              <div class="prop-spec">🚗 2 Parking</div>
+          <div class="property-card" onclick="window.location='property-detail.html'">
+            <div class="prop-img-wrap">
+              <img src="images/city-mumbai.webp" alt="3 BHK Mumbai" loading="lazy">
+              <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
+              <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
+              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
             </div>
-            <div class="prop-footer">
-              <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
-              <div class="prop-contact-btns">
-                <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> Call</button>
+            <div class="prop-body">
+              <div class="prop-price">₹1.25 Cr <span class="prop-per">· ₹6,944/sqft</span></div>
+              <div class="prop-title">Premium 3 BHK Flat in Sea View Tower</div>
+              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Bandra West, Mumbai</div>
+              <div class="prop-specs">
+                <div class="prop-spec"><i class="fa-solid fa-bed"></i> 3 BHK</div>
+                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,800 sq.ft</div>
+                <div class="prop-spec">🌊 Sea Facing</div>
+                <div class="prop-spec">🚗 2 Parking</div>
+              </div>
+              <div class="prop-footer">
+                <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
+                <div class="prop-contact-btns">
+                  <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()"><i
+                      class="fa-solid fa-phone"></i> Call</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="property-card" onclick="window.location='property-detail.html'">
-          <div class="prop-img-wrap">
-            <img src="images/hero-bg.webp" alt="4 BHK Penthouse Gurgaon" loading="lazy">
-            <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
-            <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
-            <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prop-body">
-            <div class="prop-price">₹2.2 Cr <span class="prop-per">· ₹5,238/sqft</span></div>
-            <div class="prop-title">Ultra-Luxury 4 BHK Penthouse with Terrace</div>
-            <div class="prop-location"><i class="fa-solid fa-location-dot"></i> DLF Phase 5, Gurgaon</div>
-            <div class="prop-specs">
-              <div class="prop-spec">🛏️ 4 BHK</div>
-              <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 4,200 sq.ft</div>
-              <div class="prop-spec">🏙️ Penthouse</div>
-              <div class="prop-spec">🚗 3 Parking</div>
+          <div class="property-card" onclick="window.location='property-detail.html'">
+            <div class="prop-img-wrap">
+              <img src="images/hero-bg.webp" alt="4 BHK Penthouse Gurgaon" loading="lazy">
+              <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
+              <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
+              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
             </div>
-            <div class="prop-footer">
-              <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
-              <div class="prop-contact-btns">
-                <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> Call</button>
+            <div class="prop-body">
+              <div class="prop-price">₹2.2 Cr <span class="prop-per">· ₹5,238/sqft</span></div>
+              <div class="prop-title">Ultra-Luxury 4 BHK Penthouse with Terrace</div>
+              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> DLF Phase 5, Gurgaon</div>
+              <div class="prop-specs">
+                <div class="prop-spec">🛏️ 4 BHK</div>
+                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 4,200 sq.ft</div>
+                <div class="prop-spec">🏙️ Penthouse</div>
+                <div class="prop-spec">🚗 3 Parking</div>
+              </div>
+              <div class="prop-footer">
+                <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
+                <div class="prop-contact-btns">
+                  <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()"><i
+                      class="fa-solid fa-phone"></i> Call</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="property-card" onclick="window.location='property-detail.html'">
-          <div class="prop-img-wrap">
-            <img src="images/property-1.webp" alt="2 BHK Rent Bangalore" loading="lazy">
-            <div class="prop-type-badge"><span class="badge badge-warning">RENT</span></div>
-            <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
-            <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prop-body">
-            <div class="prop-price">₹32,000/mo <span class="prop-per">· ₹29/sqft</span></div>
-            <div class="prop-title">Modern 2 BHK Semi-Furnished Apartment</div>
-            <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Koramangala, Bangalore</div>
-            <div class="prop-specs">
-              <div class="prop-spec">🛏️ 2 BHK</div>
-              <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,100 sq.ft</div>
-              <div class="prop-spec">🏢 Apartment</div>
-              <div class="prop-spec">🚗 1 Parking</div>
+          <div class="property-card" onclick="window.location='property-detail.html'">
+            <div class="prop-img-wrap">
+              <img src="images/property-1.webp" alt="2 BHK Rent Bangalore" loading="lazy">
+              <div class="prop-type-badge"><span class="badge badge-warning">RENT</span></div>
+              <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
+              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
             </div>
-            <div class="prop-footer">
-              <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
-              <div class="prop-contact-btns">
-                <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> Call</button>
+            <div class="prop-body">
+              <div class="prop-price">₹32,000/mo <span class="prop-per">· ₹29/sqft</span></div>
+              <div class="prop-title">Modern 2 BHK Semi-Furnished Apartment</div>
+              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Koramangala, Bangalore</div>
+              <div class="prop-specs">
+                <div class="prop-spec">🛏️ 2 BHK</div>
+                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 1,100 sq.ft</div>
+                <div class="prop-spec">🏢 Apartment</div>
+                <div class="prop-spec">🚗 1 Parking</div>
+              </div>
+              <div class="prop-footer">
+                <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
+                <div class="prop-contact-btns">
+                  <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()"><i
+                      class="fa-solid fa-phone"></i> Call</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="property-card" onclick="window.location='property-detail.html'">
-          <div class="prop-img-wrap">
-            <img src="images/city-mumbai.webp" alt="Plot Bangalore" loading="lazy">
-            <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
-            <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
-            <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prop-body">
-            <div class="prop-price">₹45 Lakh <span class="prop-per">· ₹1,875/sqft</span></div>
-            <div class="prop-title">Prime Residential Plot in DTCP Approved Layout</div>
-            <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Sarjapur Road, Bangalore</div>
-            <div class="prop-specs">
-              <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 2,400 sq.ft</div>
-              <div class="prop-spec">🌱 Plot</div>
-              <div class="prop-spec">✅ DTCP Approved</div>
+          <div class="property-card" onclick="window.location='property-detail.html'">
+            <div class="prop-img-wrap">
+              <img src="images/city-mumbai.webp" alt="Plot Bangalore" loading="lazy">
+              <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
+              <div class="prop-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
+              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
             </div>
-            <div class="prop-footer">
-              <div class="badge badge-success">✅ Immediate</div>
-              <div class="prop-contact-btns">
-                <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> Call</button>
+            <div class="prop-body">
+              <div class="prop-price">₹45 Lakh <span class="prop-per">· ₹1,875/sqft</span></div>
+              <div class="prop-title">Prime Residential Plot in DTCP Approved Layout</div>
+              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Sarjapur Road, Bangalore</div>
+              <div class="prop-specs">
+                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 2,400 sq.ft</div>
+                <div class="prop-spec">🌱 Plot</div>
+                <div class="prop-spec">✅ DTCP Approved</div>
+              </div>
+              <div class="prop-footer">
+                <div class="badge badge-success">✅ Immediate</div>
+                <div class="prop-contact-btns">
+                  <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()"><i
+                      class="fa-solid fa-phone"></i> Call</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="property-card" onclick="window.location='property-detail.html'">
-          <div class="prop-img-wrap">
-            <img src="images/hero-bg.webp" alt="4 BHK Villa Bangalore" loading="lazy">
-            <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
-            <div class="prop-verified">✓ Verified</div>
-            <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prop-body">
-            <div class="prop-price">₹1.85 Cr <span class="prop-per">· ₹5,781/sqft</span></div>
-            <div class="prop-title">Spacious 4 BHK Independent Villa with Garden</div>
-            <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Whitefield, Bangalore</div>
-            <div class="prop-specs">
-              <div class="prop-spec">🛏️ 4 BHK</div>
-              <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 3,200 sq.ft</div>
-              <div class="prop-spec">🏡 Villa</div>
-              <div class="prop-spec">🚗 2 Parking</div>
+          <div class="property-card" onclick="window.location='property-detail.html'">
+            <div class="prop-img-wrap">
+              <img src="images/hero-bg.webp" alt="4 BHK Villa Bangalore" loading="lazy">
+              <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
+              <div class="prop-verified">✓ Verified</div>
+              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
             </div>
-            <div class="prop-footer">
-              <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
-              <div class="prop-contact-btns">
-                <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()">📞 Call</button>
-                <button class="prop-btn prop-btn-msg" onclick="event.stopPropagation()">💬 Chat</button>
+            <div class="prop-body">
+              <div class="prop-price">₹1.85 Cr <span class="prop-per">· ₹5,781/sqft</span></div>
+              <div class="prop-title">Spacious 4 BHK Independent Villa with Garden</div>
+              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Whitefield, Bangalore</div>
+              <div class="prop-specs">
+                <div class="prop-spec">🛏️ 4 BHK</div>
+                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 3,200 sq.ft</div>
+                <div class="prop-spec">🏡 Villa</div>
+                <div class="prop-spec">🚗 2 Parking</div>
+              </div>
+              <div class="prop-footer">
+                <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
+                <div class="prop-contact-btns">
+                  <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()">📞 Call</button>
+                  <button class="prop-btn prop-btn-msg" onclick="event.stopPropagation()">💬 Chat</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="property-card" onclick="window.location='property-detail.html'">
-          <div class="prop-img-wrap">
-            <img src="images/property-1.webp" alt="1 BHK Rent Mumbai" loading="lazy">
-            <div class="prop-type-badge"><span class="badge badge-warning">RENT</span></div>
-            <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prop-body">
-            <div class="prop-price">₹18,000/mo <span class="prop-per">· ₹28/sqft</span></div>
-            <div class="prop-title">Cozy 1 BHK Furnished Studio Apartment</div>
-            <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Powai, Mumbai</div>
-            <div class="prop-specs">
-              <div class="prop-spec">🛏️ 1 BHK</div>
-              <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 650 sq.ft</div>
-              <div class="prop-spec">🏢 Apartment</div>
-              <div class="prop-spec">🛋️ Furnished</div>
+          <div class="property-card" onclick="window.location='property-detail.html'">
+            <div class="prop-img-wrap">
+              <img src="images/property-1.webp" alt="1 BHK Rent Mumbai" loading="lazy">
+              <div class="prop-type-badge"><span class="badge badge-warning">RENT</span></div>
+              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
             </div>
-            <div class="prop-footer">
-              <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
-              <div class="prop-contact-btns">
-                <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()">📞 Call</button>
-                <button class="prop-btn prop-btn-msg" onclick="event.stopPropagation()">💬 Chat</button>
+            <div class="prop-body">
+              <div class="prop-price">₹18,000/mo <span class="prop-per">· ₹28/sqft</span></div>
+              <div class="prop-title">Cozy 1 BHK Furnished Studio Apartment</div>
+              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Powai, Mumbai</div>
+              <div class="prop-specs">
+                <div class="prop-spec">🛏️ 1 BHK</div>
+                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 650 sq.ft</div>
+                <div class="prop-spec">🏢 Apartment</div>
+                <div class="prop-spec">🛋️ Furnished</div>
+              </div>
+              <div class="prop-footer">
+                <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
+                <div class="prop-contact-btns">
+                  <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()">📞 Call</button>
+                  <button class="prop-btn prop-btn-msg" onclick="event.stopPropagation()">💬 Chat</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="property-card" onclick="window.location='property-detail.html'">
-          <div class="prop-img-wrap">
-            <img src="images/city-mumbai.webp" alt="2 BHK Delhi" loading="lazy">
-            <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
-            <div class="prop-verified">✓ Verified</div>
-            <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prop-body">
-            <div class="prop-price">₹58 Lakh <span class="prop-per">· ₹5,918/sqft</span></div>
-            <div class="prop-title">Affordable 2 BHK Flat Near Metro Station</div>
-            <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Dwarka Mor, Delhi NCR</div>
-            <div class="prop-specs">
-              <div class="prop-spec">🛏️ 2 BHK</div>
-              <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 980 sq.ft</div>
-              <div class="prop-spec">🏢 Apartment</div>
-              <div class="prop-spec">🚇 Metro</div>
+          <div class="property-card" onclick="window.location='property-detail.html'">
+            <div class="prop-img-wrap">
+              <img src="images/city-mumbai.webp" alt="2 BHK Delhi" loading="lazy">
+              <div class="prop-type-badge"><span class="badge badge-primary">BUY</span></div>
+              <div class="prop-verified">✓ Verified</div>
+              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
             </div>
-            <div class="prop-footer">
-              <div class="badge badge-warning">🏗️ Under Construction</div>
-              <div class="prop-contact-btns">
-                <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()">📞 Call</button>
-                <button class="prop-btn prop-btn-msg" onclick="event.stopPropagation()">💬 Chat</button>
+            <div class="prop-body">
+              <div class="prop-price">₹58 Lakh <span class="prop-per">· ₹5,918/sqft</span></div>
+              <div class="prop-title">Affordable 2 BHK Flat Near Metro Station</div>
+              <div class="prop-location"><i class="fa-solid fa-location-dot"></i> Dwarka Mor, Delhi NCR</div>
+              <div class="prop-specs">
+                <div class="prop-spec">🛏️ 2 BHK</div>
+                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 980 sq.ft</div>
+                <div class="prop-spec">🏢 Apartment</div>
+                <div class="prop-spec">🚇 Metro</div>
+              </div>
+              <div class="prop-footer">
+                <div class="badge badge-warning">🏗️ Under Construction</div>
+                <div class="prop-contact-btns">
+                  <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()">📞 Call</button>
+                  <button class="prop-btn prop-btn-msg" onclick="event.stopPropagation()">💬 Chat</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="property-card" onclick="window.location='property-detail.html'">
-          <div class="prop-img-wrap">
-            <img src="images/hero-bg.webp" alt="Villa Rent Bangalore" loading="lazy">
-            <div class="prop-type-badge"><span class="badge badge-warning">RENT</span></div>
-            <div class="prop-verified">✓ Verified</div>
-            <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
-          </div>
-          <div class="prop-body">
-            <div class="prop-price">₹65,000/mo <span class="prop-per">· ₹30/sqft</span></div>
-            <div class="prop-title">Elegant 3 BHK Furnished Villa for Rent</div>
-            <div class="prop-location">📍 HSR Layout, Bangalore</div>
-            <div class="prop-specs">
-              <div class="prop-spec"><i class="fa-solid fa-bed"></i> 3 BHK</div>
-              <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 2,200 sq.ft</div>
-              <div class="prop-spec">🏡 Villa</div>
-              <div class="prop-spec">🚗 2 Parking</div>
+          <div class="property-card" onclick="window.location='property-detail.html'">
+            <div class="prop-img-wrap">
+              <img src="images/hero-bg.webp" alt="Villa Rent Bangalore" loading="lazy">
+              <div class="prop-type-badge"><span class="badge badge-warning">RENT</span></div>
+              <div class="prop-verified">✓ Verified</div>
+              <div class="prop-wishlist"><i class="fa-regular fa-heart"></i></div>
             </div>
-            <div class="prop-footer">
-              <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
-              <div class="prop-contact-btns">
-                <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()">📞 Call</button>
-                <button class="prop-btn prop-btn-msg" onclick="event.stopPropagation()">💬 Chat</button>
+            <div class="prop-body">
+              <div class="prop-price">₹65,000/mo <span class="prop-per">· ₹30/sqft</span></div>
+              <div class="prop-title">Elegant 3 BHK Furnished Villa for Rent</div>
+              <div class="prop-location">📍 HSR Layout, Bangalore</div>
+              <div class="prop-specs">
+                <div class="prop-spec"><i class="fa-solid fa-bed"></i> 3 BHK</div>
+                <div class="prop-spec"><i class="fa-solid fa-ruler-combined"></i> 2,200 sq.ft</div>
+                <div class="prop-spec">🏡 Villa</div>
+                <div class="prop-spec">🚗 2 Parking</div>
+              </div>
+              <div class="prop-footer">
+                <div class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Ready to Move</div>
+                <div class="prop-contact-btns">
+                  <button class="prop-btn prop-btn-call" onclick="event.stopPropagation()">📞 Call</button>
+                  <button class="prop-btn prop-btn-msg" onclick="event.stopPropagation()">💬 Chat</button>
+                </div>
               </div>
             </div>
           </div>
+
         </div>
 
-      </div>
-
-      <!-- PAGINATION -->
-      <div class="pagination">
-        <div class="page-btn active">1</div>
-        <div class="page-btn">2</div>
-        <div class="page-btn">3</div>
-        <div class="page-ellipsis">...</div>
-        <div class="page-btn">24</div>
-        <div class="page-btn"><i class="fa-solid fa-chevron-right"></i></div>
+        <!-- PAGINATION -->
+        <div class="pagination">
+          <div class="page-btn active">1</div>
+          <div class="page-btn">2</div>
+          <div class="page-btn">3</div>
+          <div class="page-ellipsis">...</div>
+          <div class="page-btn">24</div>
+          <div class="page-btn"><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-grid">
-          <div class="footer-brand">
-            <div class="footer-logo">
-              <div class="nav-logo-icon">24</div>
-              24Dismil.com
-            </div>
-            <p class="footer-tagline">
-              India's most trusted real estate portal. Find your dream property
-              with verified listings, expert guidance, and market insights.
-            </p>
-            <div class="footer-socials">
-              <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
-              <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-              <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
-              <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
-              <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
-            </div>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="nav-logo-icon">24</div>
+            24Dismil.com
           </div>
-          <div class="footer-col">
-            <h4>Quick Links</h4>
-            <div class="footer-links">
-              <a href="pricing.html">Pricing</a>
-              <a href="properties.html?type=buy">Buy Properties</a>
-              <a href="properties.html?type=rent">Rent Properties</a>
-              <a href="properties.html?type=commercial">Commercial</a>
-              <a href="post-property.html">Post Free Property</a>
-              <a href="properties.html?newLaunch=true">New Projects</a>
-              <a href="about.html">About Us</a>
-              <a href="contact.html">Contact</a>
-            </div>
-          </div>
-          <div class="footer-col">
-            <h4>Resources</h4>
-            <div class="footer-links">
-              <a href="#">EMI Calculator</a>
-              <a href="#">Property Rates</a>
-              <a href="#">RERA Guide</a>
-              <a href="#">Home Loan</a>
-              <a href="#">Legal Guide</a>
-              <a href="#">Vastu Tips</a>
-              <a href="#">Blog & News</a>
-              <a href="faq.html">FAQ</a>
-            </div>
-          </div>
-          <div class="footer-col footer-col-cities">
-            <h4>Top Cities</h4>
-            <div class="footer-links footer-cities-grid">
-              <a href="properties.html?city=Mumbai">Mumbai</a>
-              <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
-              <a href="properties.html?city=Bangalore">Bangalore</a>
-              <a href="properties.html?city=Hyderabad">Hyderabad</a>
-              <a href="properties.html?city=Pune">Pune</a>
-              <a href="properties.html?city=Chennai">Chennai</a>
-              <a href="properties.html?city=Kolkata">Kolkata</a>
-              <a href="properties.html?city=Noida">Noida</a>
-              <a href="properties.html?city=Ahmedabad">Ahmedabad</a>
-              <a href="properties.html?city=Jaipur">Jaipur</a>
-              <a href="properties.html?city=Patna">Patna</a>
-              <a href="properties.html?city=Lucknow">Lucknow</a>
-            </div>
-          </div>
-          <!-- Popular localities moved to Top Cities section on the homepage -->
-          <div class="footer-col footer-download">
-            <h4>Post via Telegram</h4>
-            <p class="footer-download-text">List your property in seconds using our automated bot.</p>
-            <a href="https://t.me/DismilBot" target="_blank" class="footer-telegram-btn">
-              <i class="fa-brands fa-telegram"></i> Start Posting
-            </a>
-            <div class="footer-badges">
-              <span style="font-size: 11px; display: block; margin-bottom: 8px; color: rgba(255,255,255,0.4); font-weight: 600;">Mobile App (Coming Soon)</span>
-              <div style="display: flex; gap: 8px; opacity: 0.6;">
-                <a href="#" onclick="showToast('Our app is launching soon! Stay tuned.', 'warning'); return false;">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store" class="app-badge" style="height: 28px;">
-                </a>
-                <a href="#" onclick="showToast('Our app is launching soon! Stay tuned.', 'warning'); return false;">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" class="app-badge" style="height: 28px;">
-                </a>
-              </div>
-            </div>
+          <p class="footer-tagline">
+            India's most trusted real estate portal. Find your dream property
+            with verified listings, expert guidance, and market insights.
+          </p>
+          <div class="footer-socials">
+            <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
           </div>
         </div>
-        <div class="footer-bottom">
-          <span>© 2026 24Dismil.com. All rights reserved. | India's #1 Real Estate Portal</span>
-          <div class="footer-bottom-links">
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms of Use</a>
-            <a href="#">Sitemap</a>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <div class="footer-links">
+            <a href="pricing.html">Pricing</a>
+            <a href="properties.html?type=buy">Buy Properties</a>
+            <a href="properties.html?type=rent">Rent Properties</a>
+            <a href="properties.html?type=commercial">Commercial</a>
+            <a href="post-property.html">Post Free Property</a>
+            <a href="properties.html?newLaunch=true">New Projects</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <div class="footer-links">
+            <a href="#">EMI Calculator</a>
+            <a href="#">Property Rates</a>
+            <a href="#">RERA Guide</a>
+            <a href="#">Home Loan</a>
+            <a href="#">Legal Guide</a>
+            <a href="#">Vastu Tips</a>
+            <a href="#">Blog & News</a>
+            <a href="faq.html">FAQ</a>
+          </div>
+        </div>
+        <div class="footer-col footer-col-cities">
+          <h4>Top Cities</h4>
+          <div class="footer-links footer-cities-grid">
+            <a href="properties.html?city=Mumbai">Mumbai</a>
+            <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
+            <a href="properties.html?city=Bangalore">Bangalore</a>
+            <a href="properties.html?city=Hyderabad">Hyderabad</a>
+            <a href="properties.html?city=Pune">Pune</a>
+            <a href="properties.html?city=Chennai">Chennai</a>
+            <a href="properties.html?city=Kolkata">Kolkata</a>
+            <a href="properties.html?city=Noida">Noida</a>
+            <a href="properties.html?city=Ahmedabad">Ahmedabad</a>
+            <a href="properties.html?city=Jaipur">Jaipur</a>
+            <a href="properties.html?city=Patna">Patna</a>
+            <a href="properties.html?city=Lucknow">Lucknow</a>
+          </div>
+        </div>
+        <!-- Popular localities moved to Top Cities section on the homepage -->
+        <div class="footer-col footer-download">
+          <h4>Post via Telegram</h4>
+          <p class="footer-download-text">List your property in seconds using our automated bot.</p>
+          <a href="https://t.me/DismilBot" target="_blank" class="footer-telegram-btn">
+            <i class="fa-brands fa-telegram"></i> Start Posting
+          </a>
+          <div class="footer-badges">
+            <span
+              style="font-size: 11px; display: block; margin-bottom: 8px; color: rgba(255,255,255,0.4); font-weight: 600;">Mobile
+              App (Coming Soon)</span>
+            <div style="display: flex; gap: 8px; opacity: 0.6;">
+              <a href="#" onclick="showToast('Our app is launching soon! Stay tuned.', 'warning'); return false;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
+                  alt="Download on the App Store" class="app-badge" style="height: 28px;">
+              </a>
+              <a href="#" onclick="showToast('Our app is launching soon! Stay tuned.', 'warning'); return false;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                  alt="Get it on Google Play" class="app-badge" style="height: 28px;">
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </footer>
+      <div class="footer-bottom">
+        <span>© 2026 24Dismil.com. All rights reserved. | India's #1 Real Estate Portal</span>
+        <div class="footer-bottom-links">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Use</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-<!-- DISCLAIMER MODAL (For Buyers Only) -->
-<div class="disclaimer-overlay" id="disclaimerModal">
-  <div class="disclaimer-box">
-    <div class="disclaimer-header">
-      <i class="fa-solid fa-circle-info"></i> Disclaimer
-    </div>
-    <div class="disclaimer-body">
-      <p><i class="fa-solid fa-magnifying-glass"></i> The information on 24Dismil.com is provided for <strong>informational purposes only</strong>. We make no representations or warranties regarding its accuracy or completeness.</p>
-      <p><i class="fa-solid fa-indian-rupee-sign"></i> Do not base your <strong>investment decisions</strong> solely on the information provided on this platform.</p>
-      <p><i class="fa-solid fa-scale-balanced"></i> Nothing contained herein constitutes <strong>legal advice, a solicitation, or an invitation</strong> by any developer, builder, or other entity to acquire property.</p>
-      <p><i class="fa-solid fa-building-columns"></i> We strongly advise you to verify all project details directly with the builder or advertiser and check the <strong>official RERA website</strong> before making any financial commitments.</p>
-      <p style="font-size:11px;color:var(--text-muted);margin-top:10px;padding-left:0;"><i style="display:none"></i>If you notice any fraudulent activity or have feedback, please write to us at support@24Dismil.com. All trademarks belong to their respective owners.</p>
-    </div>
-    <div class="disclaimer-footer">
-      <label class="disclaimer-confirm" style="display:flex;align-items:center;gap:10px;margin-bottom:15px;cursor:pointer;font-size:14px;color:var(--text)">
-        <input type="checkbox" id="chkConfirmDisclaimer" style="width:18px;height:18px;cursor:pointer">
-        <span>I confirm that I have read and understood the disclaimer</span>
-      </label>
-      <button class="btn btn-primary" id="btnAcceptDisclaimer" style="width:100%;border-radius:6px;padding:12px;" disabled>Agree & Continue</button>
+  <!-- DISCLAIMER MODAL (For Buyers Only) -->
+  <div class="disclaimer-overlay" id="disclaimerModal">
+    <div class="disclaimer-box">
+      <div class="disclaimer-header">
+        <i class="fa-solid fa-circle-info"></i> Disclaimer
+      </div>
+      <div class="disclaimer-body">
+        <p><i class="fa-solid fa-magnifying-glass"></i> The information on 24Dismil.com is provided for
+          <strong>informational purposes only</strong>. We make no representations or warranties regarding its accuracy
+          or completeness.</p>
+        <p><i class="fa-solid fa-indian-rupee-sign"></i> Do not base your <strong>investment decisions</strong> solely
+          on the information provided on this platform.</p>
+        <p><i class="fa-solid fa-scale-balanced"></i> Nothing contained herein constitutes <strong>legal advice, a
+            solicitation, or an invitation</strong> by any developer, builder, or other entity to acquire property.</p>
+        <p><i class="fa-solid fa-building-columns"></i> We strongly advise you to verify all project details directly
+          with the builder or advertiser and check the <strong>official RERA website</strong> before making any
+          financial commitments.</p>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:10px;padding-left:0;"><i style="display:none"></i>If
+          you notice any fraudulent activity or have feedback, please write to us at support@24Dismil.com. All
+          trademarks belong to their respective owners.</p>
+      </div>
+      <div class="disclaimer-footer">
+        <label class="disclaimer-confirm"
+          style="display:flex;align-items:center;gap:10px;margin-bottom:15px;cursor:pointer;font-size:14px;color:var(--text)">
+          <input type="checkbox" id="chkConfirmDisclaimer" style="width:18px;height:18px;cursor:pointer">
+          <span>I confirm that I have read and understood the disclaimer</span>
+        </label>
+        <button class="btn btn-primary" id="btnAcceptDisclaimer" style="width:100%;border-radius:6px;padding:12px;"
+          disabled>Agree & Continue</button>
+      </div>
     </div>
   </div>
-</div>
 
-<style>
-  .disclaimer-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-  }
-  .disclaimer-overlay.open {
-    opacity: 1;
-    visibility: visible;
-  }
-  .disclaimer-box {
-    background: #fff;
-    width: 100%;
-    max-width: 800px;
-    border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    overflow: hidden;
-    transform: translateY(20px);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  .disclaimer-overlay.open .disclaimer-box {
-    transform: translateY(0);
-  }
-  .disclaimer-header {
-    background: #f8fafc;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-    font-weight: 700;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--dark);
-  }
-  .disclaimer-body {
-    padding: 20px;
-    max-height: 60vh;
-    overflow-y: auto;
-  }
-  .disclaimer-body p {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text);
-    margin-bottom: 16px;
-    position: relative;
-    padding-left: 28px;
-  }
-  .disclaimer-body p i {
-    position: absolute;
-    left: 0;
-    top: 3px;
-    font-size: 16px;
-    color: var(--primary);
-  }
-  .disclaimer-footer {
-    padding: 16px 20px;
-    background: #f8fafc;
-    border-top: 1px solid var(--border);
-  }
-</style>
+  <style>
+    .disclaimer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('disclaimerModal');
-    const btn = document.getElementById('btnAcceptDisclaimer');
-    const chk = document.getElementById('chkConfirmDisclaimer');
-    let targetUrl = '';
+    .disclaimer-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
 
-    window.showDisclaimer = (url) => {
-      targetUrl = url;
-      chk.checked = false;
-      btn.disabled = true;
-      modal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    };
+    .disclaimer-box {
+      background: #fff;
+      width: 100%;
+      max-width: 800px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      transform: translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
 
-    chk.addEventListener('change', () => {
-      btn.disabled = !chk.checked;
+    .disclaimer-overlay.open .disclaimer-box {
+      transform: translateY(0);
+    }
+
+    .disclaimer-header {
+      background: #f8fafc;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--dark);
+    }
+
+    .disclaimer-body {
+      padding: 20px;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .disclaimer-body p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 16px;
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .disclaimer-body p i {
+      position: absolute;
+      left: 0;
+      top: 3px;
+      font-size: 16px;
+      color: var(--primary);
+    }
+
+    .disclaimer-footer {
+      padding: 16px 20px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('disclaimerModal');
+      const btn = document.getElementById('btnAcceptDisclaimer');
+      const chk = document.getElementById('chkConfirmDisclaimer');
+      let targetUrl = '';
+
+      window.showDisclaimer = (url) => {
+        targetUrl = url;
+        chk.checked = false;
+        btn.disabled = true;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      };
+
+      chk.addEventListener('change', () => {
+        btn.disabled = !chk.checked;
+      });
+
+      btn.addEventListener('click', () => {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+        sessionStorage.setItem('pb_agreed_disclaimer', 'true');
+        if (targetUrl) window.location.href = targetUrl;
+      });
     });
+  </script>
 
-    btn.addEventListener('click', () => {
-      modal.classList.remove('open');
-      document.body.style.overflow = '';
-      sessionStorage.setItem('pb_agreed_disclaimer', 'true');
-      if (targetUrl) window.location.href = targetUrl;
-    });
-  });
-</script>
+  <script src="js/properties.js"></script>
+  <!-- CITY SELECTION MODAL -->
+  <div class="city-modal-overlay" id="cityModal">
+    <div class="city-modal">
+      <div class="city-modal-header">
+        <h3>Select your preferred City</h3>
+        <button class="city-modal-close" id="closeCityModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
 
-<script src="js/properties.js"></script>
-    <!-- CITY SELECTION MODAL -->
-    <div class="city-modal-overlay" id="cityModal">
-      <div class="city-modal">
-        <div class="city-modal-header">
-          <h3>Select your preferred City</h3>
-          <button class="city-modal-close" id="closeCityModal"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        
-        <div class="city-modal-search">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" id="citySearchInput" placeholder="Search your city...">
-        </div>
+      <div class="city-modal-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="citySearchInput" placeholder="Search your city...">
+      </div>
 
-        <div class="city-popular-section">
-          <div class="city-popular-grid">
-            <div class="city-popular-item" data-city="Ahmedabad">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/taj-mahal.png" alt="Ahmedabad"></div>
-              <span>Ahmedabad</span>
+      <div class="city-popular-section">
+        <div class="city-popular-grid">
+          <div class="city-popular-item" data-city="Ahmedabad">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/taj-mahal.png" alt="Ahmedabad">
             </div>
-            <div class="city-popular-item" data-city="Bangalore">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/parliament.png" alt="Bangalore"></div>
-              <span>Bangalore</span>
+            <span>Ahmedabad</span>
+          </div>
+          <div class="city-popular-item" data-city="Bangalore">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/parliament.png"
+                alt="Bangalore"></div>
+            <span>Bangalore</span>
+          </div>
+          <div class="city-popular-item" data-city="Bhubaneswar">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/pagoda.png" alt="Bhubaneswar">
             </div>
-            <div class="city-popular-item" data-city="Bhubaneswar">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/pagoda.png" alt="Bhubaneswar"></div>
-              <span>Bhubaneswar</span>
+            <span>Bhubaneswar</span>
+          </div>
+          <div class="city-popular-item" data-city="Chennai">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/train-station.png"
+                alt="Chennai"></div>
+            <span>Chennai</span>
+          </div>
+          <div class="city-popular-item" data-city="Gurgaon">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/skyscrapers.png" alt="Gurgaon">
             </div>
-            <div class="city-popular-item" data-city="Chennai">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/train-station.png" alt="Chennai"></div>
-              <span>Chennai</span>
+            <span>Gurgaon</span>
+          </div>
+          <div class="city-popular-item" data-city="Hyderabad">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/mosque.png" alt="Hyderabad">
             </div>
-            <div class="city-popular-item" data-city="Gurgaon">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/skyscrapers.png" alt="Gurgaon"></div>
-              <span>Gurgaon</span>
+            <span>Hyderabad</span>
+          </div>
+          <div class="city-popular-item" data-city="Jaipur">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/castle.png" alt="Jaipur"></div>
+            <span>Jaipur</span>
+          </div>
+          <div class="city-popular-item" data-city="Kolkata">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/bridge.png" alt="Kolkata">
             </div>
-            <div class="city-popular-item" data-city="Hyderabad">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/mosque.png" alt="Hyderabad"></div>
-              <span>Hyderabad</span>
+            <span>Kolkata</span>
+          </div>
+          <div class="city-popular-item" data-city="Lucknow">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/palace.png" alt="Lucknow">
             </div>
-            <div class="city-popular-item" data-city="Jaipur">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/castle.png" alt="Jaipur"></div>
-              <span>Jaipur</span>
+            <span>Lucknow</span>
+          </div>
+          <div class="city-popular-item" data-city="Mumbai">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/gateway-of-india.png"
+                alt="Mumbai"></div>
+            <span>Mumbai</span>
+          </div>
+          <div class="city-popular-item" data-city="New Delhi">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/triumphal-arch.png"
+                alt="New Delhi"></div>
+            <span>New Delhi</span>
+          </div>
+          <div class="city-popular-item" data-city="Noida">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/building.png" alt="Noida">
             </div>
-            <div class="city-popular-item" data-city="Kolkata">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/bridge.png" alt="Kolkata"></div>
-              <span>Kolkata</span>
-            </div>
-            <div class="city-popular-item" data-city="Lucknow">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/palace.png" alt="Lucknow"></div>
-              <span>Lucknow</span>
-            </div>
-            <div class="city-popular-item" data-city="Mumbai">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/gateway-of-india.png" alt="Mumbai"></div>
-              <span>Mumbai</span>
-            </div>
-            <div class="city-popular-item" data-city="New Delhi">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/triumphal-arch.png" alt="New Delhi"></div>
-              <span>New Delhi</span>
-            </div>
-            <div class="city-popular-item" data-city="Noida">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/building.png" alt="Noida"></div>
-              <span>Noida</span>
-            </div>
-            <div class="city-popular-item" data-city="Patna">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/museum.png" alt="Patna"></div>
-              <span>Patna</span>
-            </div>
-            <div class="city-popular-item" data-city="Pune">
-              <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/temple.png" alt="Pune"></div>
-              <span>Pune</span>
-            </div>
+            <span>Noida</span>
+          </div>
+          <div class="city-popular-item" data-city="Patna">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/museum.png" alt="Patna"></div>
+            <span>Patna</span>
+          </div>
+          <div class="city-popular-item" data-city="Pune">
+            <div class="city-icon"><img src="https://img.icons8.com/ios-filled/50/737373/temple.png" alt="Pune"></div>
+            <span>Pune</span>
           </div>
         </div>
+      </div>
 
-        <div class="city-more-info">
-          <span>More Cities</span> <i class="fa-solid fa-chevron-down"></i>
-        </div>
+      <div class="city-more-info">
+        <span>More Cities</span> <i class="fa-solid fa-chevron-down"></i>
+      </div>
 
-        <div class="city-list-grid" id="allCitiesList">
-          <!-- Dynamically populated -->
-        </div>
+      <div class="city-list-grid" id="allCitiesList">
+        <!-- Dynamically populated -->
       </div>
     </div>
-<script src="js/main.js"></script>
-<script type="module" src="js/load-properties.js"></script>
-<script type="module" src="js/city-selector.js"></script>
-<script type="module" src="js/ai-search.js?v=2"></script>
+  </div>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/load-properties.js"></script>
+  <script type="module" src="js/city-selector.js"></script>
+  <script type="module" src="js/ai-search.js?v=2"></script>
 
 </body>
-</html>
 
+</html>
