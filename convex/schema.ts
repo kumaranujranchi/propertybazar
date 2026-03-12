@@ -17,6 +17,7 @@ export default defineSchema({
     contactDesc: v.any(),
     posterType: v.optional(v.string()),
     customFAQs: v.optional(v.array(v.any())),
+    brochure: v.optional(v.any()),
     isFeatured: v.optional(v.boolean()),
     approvalStatus: v.optional(v.string()), // 'pending', 'approved', 'rejected'
     lastActivatedAt: v.optional(v.number()),
