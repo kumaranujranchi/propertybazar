@@ -58,7 +58,7 @@ export const parseSearchQuery = action({
     const bhkMatch = userText.match(/(\d)\s*bhk/i);
     if (bhkMatch) scannedFilters.bhk = bhkMatch[1];
 
-    const systemPrompt = `You are Dismil, a professional real estate assistant for 24Dismil.com.
+    const systemPrompt = `You are 24Dismil Ai Assitance, a professional real estate assistant for 24Dismil.com.
 Your job is to extract search criteria from the user's query and return a valid JSON object.
 
 SEARCH CRITERIA TO EXTRACT:
@@ -133,7 +133,7 @@ RULES:
     
     if (!aiExplanation || aiExplanation.trim() === "" || aiExplanation.includes("analyzed your search criteria")) {
         if (isGreeting) {
-            filters.explanation = "Namaste! I'm Dismil, your property assistant. Aap kaise hain? How can I help you find a property today?";
+            filters.explanation = "Namaste! I'm 24Dismil Ai Assitance, your property assistant. Aap kaise hain? How can I help you find a property today?";
         } else if (filters.city || filters.propType) {
             const city = filters.city || "this city";
             const propType = filters.propType || "property";
