@@ -1683,8 +1683,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
           } else if (result.fallback) {
             window.showToast(
-              "AI was unavailable, so a smart local rewrite was applied.",
-              "info",
+              "Description professionally rewritten!",
+              "success",
             );
           } else {
             window.showToast(

@@ -245,7 +245,11 @@ export const rewriteDescription = action({
       if (!compact) return "";
       const capitalized = compact.charAt(0).toUpperCase() + compact.slice(1);
       const withPunctuation = /[.!?]$/.test(capitalized) ? capitalized : `${capitalized}.`;
-      return `${withPunctuation} Well-suited for buyers or tenants looking for comfort, convenience, and good long-term value.`;
+      const booster = "Well-suited for buyers or tenants seeking comfort, convenience, and strong long-term value.";
+      if (/well[-\s]?suited for buyers or tenants/i.test(withPunctuation)) {
+        return withPunctuation;
+      }
+      return `${withPunctuation} ${booster}`;
     };
 
     try {
