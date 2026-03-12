@@ -99,17 +99,28 @@ RULES:
         }
       }
 
-      // Ensure explanation exists
-      const isGreeting = /^(hi|hello|hey|namaste|morning|evening|hola)$/i.test(args.query.trim());
+      // Ensure explanation exists - SMART HUMANIZATION FALLBACK
+      const userText = args.query.toLowerCase().trim();
+      const isGreeting = /^(hi|hello|hey|hei|namaste|morning|evening|morning|heya|yo|hlo|hii|hiii)$/i.test(userText);
+      const isStatus = /^(ok|okay|nice|good|fine|waht|what|ji|thik|theek)$/i.test(userText);
       
-      if (!filters.explanation || filters.explanation.trim() === "") {
+      if (!filters.explanation || filters.explanation.trim() === "" || filters.explanation.includes("analyzed your search criteria")) {
         const textBeforeJson = aiResponse.split('{')[0].trim();
         filters.explanation = textBeforeJson || aiResponse.replace(/\{[\s\S]*\}/, "").trim() || aiResponse;
         
-        if (!filters.explanation || filters.explanation.length < 2) {
-            filters.explanation = isGreeting 
-              ? "Namaste! I'm Dismil, your AI property assistant. How can I help you find your dream home today?"
-              : "I've analyzed your search criteria and I'm ready to help you find the best options.";
+        if (!filters.explanation || filters.explanation.length < 5 || filters.explanation.includes("analyzed your search criteria")) {
+            if (isGreeting) {
+                filters.explanation = "Namaste! I'm Dismil, your property assistant. Aap kaise hain? How can I help you find a property today?";
+            } else if (filters.city || filters.propType) {
+                const city = filters.city || "this city";
+                const type = filters.propType || "property";
+                const price = filters.maxPrice ? ` under ₹${(filters.maxPrice/100000).toFixed(1)}L` : "";
+                filters.explanation = `Acha! I'm looking for ${type} in ${city}${price} for you. Let me check the latest listings.`;
+            } else if (isStatus) {
+                filters.explanation = "Great! Any other specific requirements like BHK, budget or locality you have in mind?";
+            } else {
+                filters.explanation = "I understand. To help you better, could you tell me which city and what type of property (Flat, Villa, or Plot) you are looking for?";
+            }
         }
       }
 
@@ -127,14 +138,15 @@ RULES:
 
         // Smart Filtering logic
         suggestions = properties.filter((p: any) => {
-          // City/Locality match
+          // City/Locality match (Advanced: check for partial matches and substrings)
           if (filters.city) {
             const searchCity = filters.city.toLowerCase();
             const pCity = (p.location?.city || "").toLowerCase();
             const pLocality = (p.location?.locality || "").toLowerCase();
             
-            const cityMatch = pCity.includes(searchCity) || searchCity.includes(pCity);
-            const localityMatch = pLocality.includes(searchCity) || searchCity.includes(pLocality);
+            // Check if property city/locality matches any part of the search query
+            const cityMatch = pCity && (userText.includes(pCity) || pCity.includes(searchCity));
+            const localityMatch = pLocality && (userText.includes(pLocality) || pLocality.includes(searchCity));
             
             if (!cityMatch && !localityMatch) return false;
           }
