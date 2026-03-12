@@ -421,20 +421,34 @@ function initSearchTabs() {
 }
 
 // ========== CITY AUTOCOMPLETE ==========
-function initCityAutocomplete() {
-  const cityList = ['Mumbai','Delhi NCR','Bangalore','Hyderabad','Chennai','Pune','Kolkata','Noida','Gurgaon','Ahmedabad','Jaipur','Lucknow','Patna','Chandigarh','Bhopal'];
+async function initCityAutocomplete() {
   const input = document.getElementById('hero-location');
   if (!input) return;
+
+  // Start with a sensible default list, then upgrade with dynamic cities from DB
+  let cityList = ['Mumbai','Delhi NCR','Bangalore','Hyderabad','Chennai','Pune','Kolkata',
+    'Noida','Gurgaon','Ahmedabad','Jaipur','Lucknow','Patna','Chandigarh','Bhopal',
+    'Ranchi','Bhubaneswar','Indore','Surat','Vadodara','Nagpur','Visakhapatnam'];
+
+  // Fetch dynamic cities (includes any city a seller ever used)
+  try {
+    const { convex } = await import('./convex.js');
+    const dynamic = await convex.query('properties:getUniqueCities');
+    if (dynamic && dynamic.length > 0) cityList = dynamic;
+  } catch (e) {
+    console.warn('Could not fetch dynamic cities for autocomplete', e);
+  }
+
   const dropdown = document.createElement('div');
   dropdown.className = 'autocomplete-dropdown';
-  dropdown.style.cssText = 'position:absolute;background:#fff;border:1px solid #E5E7EB;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);width:100%;z-index:100;top:calc(100% + 4px);left:0;overflow:hidden;display:none;';
+  dropdown.style.cssText = 'position:absolute;background:#fff;border:1px solid #E5E7EB;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.12);width:100%;z-index:100;top:calc(100% + 4px);left:0;overflow:hidden;display:none;max-height:240px;overflow-y:auto;';
   input.parentElement.style.position = 'relative';
   input.parentElement.appendChild(dropdown);
 
   input.addEventListener('input', () => {
-    const val = input.value.toLowerCase();
+    const val = input.value.toLowerCase().trim();
     if (!val) { dropdown.style.display = 'none'; return; }
-    const matches = cityList.filter(c => c.toLowerCase().includes(val));
+    const matches = cityList.filter(c => c.toLowerCase().includes(val)).slice(0, 8);
     dropdown.innerHTML = matches.map(c =>
       `<div style="padding:10px 16px;cursor:pointer;font-size:14px;color:#2D2D2D;transition:background 0.2s;" onmouseover="this.style.background='#F7F8FA'" onmouseout="this.style.background='#fff'" onclick="document.getElementById('hero-location').value='${c}';this.parentElement.style.display='none'">📍 ${c}</div>`
     ).join('');
