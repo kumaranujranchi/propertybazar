@@ -503,9 +503,22 @@
   <!-- TOP SECTION: Gallery & Summary Card -->
   <div class="container">
     <div class="property-top-wrapper">
-      <!-- MAIN PHOTO BOX -->
-      <div class="gallery-primary-box gallery-skeleton" id="galleryItem0">
-        <img src="" alt="Main Property View" id="img0">
+      <!-- GALLERY: Collage layout (main + two thumbnails + +N overlay) -->
+      <div class="gallery-collage">
+        <div class="collage-main gallery-skeleton" id="galleryItem0">
+          <img src="" alt="Main Property View" id="img0">
+        </div>
+        <div class="collage-side">
+          <div class="gallery-item gallery-skeleton" id="galleryItem1">
+            <img src="" alt="Photo 2" id="img1">
+          </div>
+          <div class="gallery-item gallery-skeleton" id="galleryItem2" style="position:relative;">
+            <img src="" alt="Photo 3" id="img2">
+            <div id="galleryMoreOverlay"
+              style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; background:rgba(0,0,0,0.45); color:#fff; font-weight:700; font-size:16px; border-radius:8px; cursor:pointer;">
+              +0 Photos</div>
+          </div>
+        </div>
       </div>
 
       <!-- PRICE & SUMMARY CARD -->
