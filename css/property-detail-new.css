@@ -9,19 +9,10 @@ img:not(.property-card img) {
   height: auto !important;
 }
 
-/* Gallery images must fill their tile and never be cropped; override general img rules */
+/* Gallery tile wrappers — layout is controlled by collage-main / gallery-item blocks below */
 .gallery-item,
 .collage-main {
   display: block;
-}
-.collage-main img,
-.gallery-item img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  object-position: center center !important;
-  display: block !important;
-  background: #f2f4f8 !important;
 }
 
 /* Ensure selected text is always visible on detail page */
@@ -155,21 +146,21 @@ body {
   grid-column: 1 / 2;
   border-radius: var(--radius);
   overflow: hidden;
-  background: #1a1a1a;
+  background: #f2f4f7;
   position: relative;
   height: 100%;
 }
 .collage-main img {
   position: absolute;
-  inset: 0;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
+  inset: 8px;            /* 8px breathing room so full image is visible */
+  width: calc(100% - 16px) !important;
+  height: calc(100% - 16px) !important;
+  object-fit: contain !important;
   object-position: center center !important;
   display: block !important;
-  border-radius: 0;
+  border-radius: 8px;
   margin: 0 !important;
-  background: #1a1a1a;
+  background: #f2f4f7;
 }
 .collage-side {
   grid-column: 2 / 3;
@@ -182,22 +173,22 @@ body {
 .gallery-item {
   border-radius: 10px;
   overflow: hidden;
-  background: #1a1a1a;
+  background: #f2f4f7;
   position: relative;
   flex: 1; /* equal share of side column height */
   min-height: 0; /* prevent flex blowout */
 }
 .gallery-item img {
   position: absolute;
-  inset: 0;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
+  inset: 8px;            /* 8px breathing room so full image is visible */
+  width: calc(100% - 16px) !important;
+  height: calc(100% - 16px) !important;
+  object-fit: contain !important;
   object-position: center center !important;
   display: block !important;
-  border-radius: 0;
+  border-radius: 8px;
   margin: 0 !important;
-  background: #1a1a1a;
+  background: #f2f4f7;
 }
 /* Use background-image as fallback to ensure full-bleed tiles even for small images */
 .gallery-item.has-bg {
