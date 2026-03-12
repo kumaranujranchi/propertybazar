@@ -117,6 +117,7 @@ body {
   display: flex;
   gap: 24px;
   margin-top: 24px;
+  align-items: stretch;
 }
 
 .gallery-primary-box {
@@ -144,7 +145,7 @@ body {
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-template-rows: auto auto;
-  gap: 16px;
+  gap: 12px;
   align-items: stretch;
   flex: 2;
 }
@@ -155,7 +156,7 @@ body {
   overflow: hidden;
   background: #f8faff;
   position: relative;
-  min-height: 300px; /* reduced so side cards align better */
+  min-height: 260px;
 }
 .collage-main img {
   width: calc(100% - 12px) !important;
@@ -172,7 +173,7 @@ body {
   grid-row: 1 / span 2;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 .gallery-item {
   border-radius: 10px;
@@ -222,7 +223,7 @@ body {
   .collage-main {
     grid-row: 1;
     grid-column: 1;
-    min-height: 260px;
+    min-height: 220px;
   }
   .collage-side {
     grid-row: 2;
@@ -241,12 +242,12 @@ body {
   flex: 1;
   background: var(--card-bg);
   border-radius: var(--radius);
-  padding: 24px;
+  padding: 20px;
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 18px;
+  gap: 14px;
   border: 1px solid var(--border);
   min-width: 0; /* Prevents flex items from overflowing */
 }
@@ -270,14 +271,14 @@ body {
   font-size: 14px;
   font-weight: 700;
   color: var(--primary);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .summary-title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 800;
   line-height: 1.2;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .summary-location {
@@ -286,21 +287,21 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .summary-quick-details {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 6px;
+  gap: 8px;
+  margin-bottom: 2px;
 }
 
 .summary-quick-item {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  padding: 10px;
+  padding: 8px;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: #fbfcfe;
