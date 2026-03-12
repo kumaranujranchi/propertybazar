@@ -257,6 +257,7 @@ export const rewriteDescription = action({
       });
 
       const data = await response.json();
+      console.log('Sarvam AI Response Data:', JSON.stringify(data));
       // Defensive: API may return different shapes; guard against missing choices
       let aiResponse = "";
       try {
@@ -274,9 +275,47 @@ export const rewriteDescription = action({
         }
       } catch (e) {
         console.error('Error parsing AI response:', e, data);
-        return { success: false, error: 'Failed to parse AI response' };
+        // don't return error here; fallthrough to retry/fallback logic
       }
+
       aiResponse = (aiResponse || "").replace(/<[^>]+>/gi, "").replace(/```[\s\S]*?```/g, "").trim();
+
+      // If AI returned an empty response, try one quick retry before failing gracefully
+      if (!aiResponse) {
+        try {
+          console.warn('AI returned empty response; retrying once');
+          const retryResp = await fetch("https://api.sarvam.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "api-subscription-key": apiKey
+            },
+            body: JSON.stringify({ model: "sarvam-m", messages: messages, temperature: 0.2 })
+          });
+          if (retryResp.ok) {
+            const retryData = await retryResp.json();
+            console.log('Sarvam AI Retry Data:', JSON.stringify(retryData));
+            if (Array.isArray(retryData?.choices) && retryData.choices.length > 0) {
+              aiResponse = retryData.choices[0]?.message?.content || retryData.choices[0]?.text || "";
+            } else if (typeof retryData?.message?.content === 'string') {
+              aiResponse = retryData.message.content;
+            } else if (typeof retryData?.output_text === 'string') {
+              aiResponse = retryData.output_text;
+            } else if (typeof retryData?.text === 'string') {
+              aiResponse = retryData.text;
+            }
+            aiResponse = (aiResponse || "").replace(/<[^>]+>/gi, "").replace(/```[\s\S]*?```/g, "").trim();
+          }
+        } catch (e) {
+          console.warn('AI retry failed', e);
+        }
+      }
+
+      // If still empty after retry, gracefully fall back to original text instead of returning an error
+      if (!aiResponse) {
+        console.warn('AI returned no usable content; returning original text as fallback');
+        return { success: true, text: args.text };
+      }
 
       return { success: true, text: aiResponse };
     } catch (e: any) {
