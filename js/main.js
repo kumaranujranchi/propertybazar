@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
   import('./auth.js').then(({ initNavAuth }) => {
     initNavAuth();
   }).catch(() => {}); // Silently fail if not applicable
-
   initNav();
   initSearchTabs();
   initCityAutocomplete();
+  initGeoCity();
   initSliders();
   initTestimonialsSlider();
   initAnimations();
@@ -25,6 +25,18 @@ function initNav() {
   const hamburger = document.querySelector('.hamburger');
   const mobileMenu = document.querySelector('.mobile-menu');
   const navLinks = document.querySelectorAll('.nav-links .nav-link');
+
+  // Ensure header nav links include selected city when available
+  const selCity = localStorage.getItem('selectedCity');
+  if (selCity && selCity !== 'Select City') {
+    navLinks.forEach(link => {
+      try {
+        const u = new URL(link.href, window.location.origin);
+        u.searchParams.set('city', selCity);
+        link.href = u.toString();
+      } catch (e) { /* ignore */ }
+    });
+  }
 
   if (header) {
     window.addEventListener('scroll', () => {
@@ -44,6 +56,9 @@ function initNav() {
         // Update URL without reload
         const newUrl = new URL(window.location.href);
         newUrl.searchParams.set('type', type);
+        // Preserve selected city in header when navigating via menu
+        const selCity = localStorage.getItem('selectedCity');
+        if (selCity && selCity !== 'Select City') newUrl.searchParams.set('city', selCity);
         window.history.pushState({}, '', newUrl);
 
         // Update search tabs
@@ -87,6 +102,70 @@ function initNav() {
   }
 }
 
+// ========= GEOLOCATION / CITY ==========
+function initGeoCity() {
+  // ask for location on load and set city if possible
+  if (!('geolocation' in navigator)) return;
+
+  // Delay slightly to avoid prompt on page load blocking other scripts
+  setTimeout(() => {
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      try {
+        const { latitude, longitude } = pos.coords;
+        // Use Nominatim reverse geocoding (open, low-rate). If you have a paid
+        // geocoding service (Google, Mapbox) replace this endpoint.
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
+        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) return;
+        const data = await res.json();
+        const addr = data.address || {};
+        const city = addr.city || addr.town || addr.village || addr.hamlet || addr.county || addr.state;
+        if (city) {
+          setCity(city);
+        }
+      } catch (e) {
+        console.warn('Reverse geocode failed', e);
+      }
+    }, (err) => {
+      // User denied or unavailable — silently ignore
+      console.info('Geolocation not granted or failed', err && err.message);
+    }, { maximumAge: 60 * 60 * 1000, timeout: 8000 });
+  }, 900);
+}
+
+function setCity(city) {
+  if (!city) return;
+  try {
+    localStorage.setItem('selectedCity', city);
+    const currentCityText = document.getElementById('currentCityText');
+    if (currentCityText) currentCityText.textContent = city;
+
+    // Notify other components
+    window.dispatchEvent(new CustomEvent('cityChanged', { detail: { city } }));
+
+    // If on properties page, update URL and re-render
+    if (window.location.pathname.includes('properties.html')) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('city', city);
+      window.history.pushState({}, '', url);
+      if (typeof window.renderFilteredProperties === 'function') window.renderFilteredProperties();
+    }
+  } catch (e) { console.warn('setCity failed', e); }
+}
+
+// Update header nav links when city changes
+window.addEventListener('cityChanged', (e) => {
+  const city = e.detail?.city || localStorage.getItem('selectedCity');
+  if (!city) return;
+  document.querySelectorAll('.nav-links .nav-link').forEach(link => {
+    try {
+      const u = new URL(link.href, window.location.origin);
+      u.searchParams.set('city', city);
+      link.href = u.toString();
+    } catch (err) { }
+  });
+});
+
 // ========== SEARCH TABS ==========
 function initSearchTabs() {
   const tabs = document.querySelectorAll('.search-tab');
@@ -128,6 +207,8 @@ function initSearchTabs() {
       if (window.location.pathname.includes('properties.html')) {
         const newUrl = new URL(window.location.href);
         newUrl.searchParams.set('type', type);
+        const selCity = localStorage.getItem('selectedCity');
+        if (selCity && selCity !== 'Select City') newUrl.searchParams.set('city', selCity);
         window.history.pushState({}, '', newUrl);
         if (typeof window.renderFilteredProperties === 'function') {
           window.renderFilteredProperties();
