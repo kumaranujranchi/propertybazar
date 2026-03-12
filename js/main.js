@@ -722,6 +722,10 @@ function initPostSteps() {
 
     // SCROLL TO TOP - App-style feel
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Ensure property-type specific UX runs after step change (hides plot-only fields)
+    try {
+      if (window.applyPropertyTypeUX) setTimeout(window.applyPropertyTypeUX, 30);
+    } catch (e) { /* ignore */ }
   }
 
   function validateStep(index) {
