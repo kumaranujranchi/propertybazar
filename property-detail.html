@@ -1223,14 +1223,28 @@
           heroBadges.innerHTML = badgesHtml;
         }
 
-        // ---- Update New Gallery Grid ----
+        // ---- Update New Gallery Grid (use background-image for full-bleed tiles) ----
         photos.forEach((src, i) => {
           if (i > 2) return;
           const img = document.getElementById(`img${i}`);
           const wrap = document.getElementById(`galleryItem${i}`);
-          if (img) {
+          if (wrap) {
+            // Use background-image to ensure tiles look full regardless of image aspect
+            wrap.style.backgroundImage = `url('${src}')`;
+            wrap.classList.add('has-bg');
+            // remove skeleton once background loads (create a temporary image to detect load)
+            const tmp = new Image();
+            tmp.onload = () => wrap.classList.remove('gallery-skeleton');
+            tmp.src = src;
+            // make the <img> a fallback but hide it to avoid layout issues
+            if (img) img.style.display = 'none';
+            // click anywhere on wrapper to open lightbox
+            wrap.style.cursor = 'pointer';
+            wrap.addEventListener('click', (e) => { e.stopPropagation(); lbOpen(i); });
+          } else if (img) {
+            // fallback: set image src
             img.src = src;
-            img.onload = () => wrap && wrap.classList.remove('gallery-skeleton');
+            img.onload = () => img.classList.remove('gallery-skeleton');
             img.addEventListener('click', () => lbOpen(i));
           }
         });
