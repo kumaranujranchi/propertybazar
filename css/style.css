@@ -1530,6 +1530,23 @@ textarea {
   .cities-grid { grid-template-columns: 1fr; }
   .cities-next { display: none; }
 }
+
+/* ========== FAQ STYLES ========== */
+.faq-section { padding: 48px 0; background: #f8fafb; }
+.faq-search { width: 100%; max-width: 560px; border: 1px solid #e6e9ee; padding: 10px 12px; border-radius: 8px; font-size: 14px; margin-bottom: 18px; }
+.faq-list { display: grid; gap: 12px; margin-top: 8px; }
+.faq-item { background: #fff; border: 1px solid #eef0f3; border-radius: 12px; box-shadow: 0 6px 18px rgba(16,24,40,0.03); overflow: hidden; }
+.faq-q { width: 100%; text-align: left; padding: 16px 18px; background: transparent; border: none; display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 15px; color: var(--dark); cursor: pointer; }
+.faq-q:focus { outline: 3px solid rgba(245,166,35,0.18); }
+.faq-q-icon { font-size: 14px; color: var(--primary); transform: rotate(0deg); transition: transform 220ms ease; }
+.faq-item.open .faq-q-icon { transform: rotate(180deg); }
+.faq-a { padding: 12px 18px 20px; color: var(--text); font-size: 14px; line-height: 1.6; max-height: 0; overflow: hidden; transition: max-height 280ms ease, padding 220ms ease; }
+.faq-item.open .faq-a { max-height: 400px; }
+
+@media (min-width: 900px) {
+  .faq-list { max-width: 960px; margin: 0 auto; }
+}
+
 .app-banner-text h2 {
   font-size: 32px;
   font-weight: 800;

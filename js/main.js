@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTopCitiesTabs();
   initSliders();
   initTestimonialsSlider();
+  initFAQAccordion();
   initAnimations();
   initEMICalc();
   initWishlist();
@@ -99,6 +100,42 @@ function initNav() {
         hamburger.classList.remove('active');
         hamburger.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
       }
+    });
+  }
+}
+
+// ========== FAQ ACCORDION & SEARCH ==========
+function initFAQAccordion() {
+  const list = document.getElementById('faqList');
+  if (!list) return;
+
+  // Toggle behaviour: allow only one open at a time
+  list.addEventListener('click', (e) => {
+    const btn = e.target.closest('.faq-q');
+    if (!btn) return;
+    const item = btn.closest('.faq-item');
+    const open = item.classList.contains('open');
+    // close all
+    list.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!open) item.classList.add('open');
+  });
+
+  // Keyboard accessibility
+  list.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
+    });
+  });
+
+  // Search
+  const search = document.getElementById('faqSearch');
+  if (search) {
+    search.addEventListener('input', () => {
+      const q = search.value.trim().toLowerCase();
+      list.querySelectorAll('.faq-item').forEach(item => {
+        const text = (item.querySelector('.faq-q').textContent + ' ' + item.querySelector('.faq-a').textContent).toLowerCase();
+        item.style.display = q && !text.includes(q) ? 'none' : '';
+      });
     });
   }
 }

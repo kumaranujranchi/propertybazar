@@ -46,60 +46,64 @@
     </header>
 
     <main>
-      <section class="section">
+      <section class="section faq-section">
         <div class="container">
           <div class="section-header">
-            <span class="section-label" style="background: rgba(245, 166, 35, 0.15); color: var(--secondary);">FAQ</span>
+            <span class="section-label" style="background: rgba(245, 166, 35, 0.12); color: var(--secondary);">FAQ</span>
             <h2>Frequently Asked Questions</h2>
-            <p>Answers to common questions about listing, searching and transacting on 24Dismil.com.</p>
+            <p class="muted">Answers to common questions about listing, searching and transacting on 24Dismil.com.</p>
             <div class="section-title-line"></div>
           </div>
 
-          <div class="faq-list" style="margin-top:20px;">
-            <details>
-              <summary>How do I post a property on 24Dismil?</summary>
-              <p>Click on <strong>Post Property</strong> in the header, sign in or register, and follow the step-by-step form to add property details, photos and contact information. Posting basic listings is free.</p>
-            </details>
+          <div class="faq-controls">
+            <input id="faqSearch" class="faq-search" placeholder="Search FAQs (e.g., post, verify, fee)" />
+          </div>
 
-            <details>
-              <summary>Are listings verified?</summary>
-              <p>We perform basic verification checks on listings. For certain properties a verified badge is applied after additional checks. Always arrange in-person visits before finalising any transaction.</p>
-            </details>
+          <div class="faq-list" id="faqList">
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">How do I post a property on 24Dismil? <span class="faq-q-icon">▾</span></button>
+              <div class="faq-a">Click <strong>Post Property</strong> in the header, sign in or register, and follow the step-by-step form to add property details, photos and contact information. Posting basic listings is free.</div>
+            </div>
 
-            <details>
-              <summary>Is there any fee to list my property?</summary>
-              <p>Basic listings are free. We offer paid promotional packages for higher visibility. See the <a href="pricing.html">Pricing</a> page for current plans.</p>
-            </details>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">Are listings verified? <span class="faq-q-icon">▾</span></button>
+              <div class="faq-a">We perform basic verification checks on listings. For certain properties a verified badge is applied after additional checks. Always arrange in-person visits before finalising any transaction.</div>
+            </div>
 
-            <details>
-              <summary>How do I edit or remove my listing?</summary>
-              <p>Log in, go to <strong>My Listings</strong>, select the listing and choose Edit or Delete. If you cannot access your listing, contact support via the <a href="contact.html">Contact</a> page.</p>
-            </details>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">Is there any fee to list my property? <span class="faq-q-icon">▾</span></button>
+              <div class="faq-a">Basic listings are free. We offer paid promotional packages for higher visibility. See the <a href="pricing.html">Pricing</a> page for current plans.</div>
+            </div>
 
-            <details>
-              <summary>How can I contact a seller or agent?</summary>
-              <p>Each listing shows contact details or a contact form. Use the contact button on the property page to message the seller or post a query.</p>
-            </details>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">How do I edit or remove my listing? <span class="faq-q-icon">▾</span></button>
+              <div class="faq-a">Log in, go to <strong>My Listings</strong>, select the listing and choose Edit or Delete. If you cannot access your listing, contact support via the <a href="contact.html">Contact</a> page.</div>
+            </div>
 
-            <details>
-              <summary>How does the verified badge work?</summary>
-              <p>The verified badge indicates additional checks were performed on the listing or the owner. It helps buyers trust the authenticity, but is not a substitute for due diligence.</p>
-            </details>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">How can I contact a seller or agent? <span class="faq-q-icon">▾</span></button>
+              <div class="faq-a">Each listing shows contact details or a contact form. Use the contact button on the property page to message the seller or post a query.</div>
+            </div>
 
-            <details>
-              <summary>What should I watch out for when buying/renting?</summary>
-              <p>Always verify ownership documents, visit the property in person, check local RERA registration (where applicable), and avoid advance payments without proper verification.</p>
-            </details>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">How does the verified badge work? <span class="faq-q-icon">▾</span></button>
+              <div class="faq-a">The verified badge indicates additional checks were performed on the listing or the owner. It helps buyers trust the authenticity, but is not a substitute for due diligence.</div>
+            </div>
 
-            <details>
-              <summary>How do I report a listing or user?</summary>
-              <p>Use the Report button on any listing or reach out via the <a href="contact.html">Contact</a> page with details; our team will review and take action.</p>
-            </details>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">What should I watch out for when buying/renting? <span class="faq-q-icon">▾</span></button>
+              <div class="faq-a">Always verify ownership documents, visit the property in person, check local RERA registration (where applicable), and avoid advance payments without proper verification.</div>
+            </div>
 
-            <details>
-              <summary>How can I advertise or promote my property?</summary>
-              <p>Visit the <a href="pricing.html">Pricing</a> page to explore promotional packages and contact our sales team for customised plans.</p>
-            </details>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">How do I report a listing or user? <span class="faq-q-icon">▾</span></button>
+              <div class="faq-a">Use the Report button on any listing or reach out via the <a href="contact.html">Contact</a> page with details; our team will review and take action.</div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">How can I advertise or promote my property? <span class="faq-q-icon">▾</span></button>
+              <div class="faq-a">Visit the <a href="pricing.html">Pricing</a> page to explore promotional packages and contact our sales team for customised plans.</div>
+            </div>
 
           </div>
         </div>
