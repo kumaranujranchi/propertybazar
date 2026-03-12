@@ -84,7 +84,15 @@
 
     <!-- HERO -->
     <section class="hero">
-      <div class="hero-bg"></div>
+      <!-- Preload the optimized hero image to improve LCP -->
+      <link rel="preload" href="images/hero-optimized.webp" as="image" type="image/webp">
+      <div class="hero-bg">
+        <picture>
+          <source srcset="images/hero-optimized.webp" type="image/webp">
+          <source srcset="images/hero-bg.webp" type="image/webp">
+          <img class="hero-bg-img" src="images/hero-bg.jpg" alt="City skyline" decoding="async" fetchpriority="high">
+        </picture>
+      </div>
       <div class="hero-overlay"></div>
       <div class="container">
         <div class="hero-content">
