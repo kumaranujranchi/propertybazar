@@ -197,9 +197,10 @@
       display: flex;
       flex-direction: column;
     }
+
     .info-col:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
     }
 
     .info-col h3 {
@@ -213,6 +214,7 @@
       align-items: center;
       gap: 10px;
     }
+
     .info-col h3::after {
       content: "";
       flex: 1;
@@ -228,6 +230,7 @@
       border-bottom: 1px dashed #e2e8f0;
       font-size: 14px;
     }
+
     .info-row-flex:last-child {
       border-bottom: none;
     }
@@ -239,6 +242,7 @@
       align-items: center;
       gap: 12px;
     }
+
     .info-row-flex label i {
       width: 20px;
       color: var(--primary);
@@ -336,8 +340,10 @@
             </div>
 
             <!-- WhatsApp OTP Section -->
-            <div id="advOtpSection" style="display:none; margin-top:20px; padding:15px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;">
-              <label class="adv-label" style="color: #166534;"><i class="fa-brands fa-whatsapp"></i> WhatsApp OTP sent!</label>
+            <div id="advOtpSection"
+              style="display:none; margin-top:20px; padding:15px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;">
+              <label class="adv-label" style="color: #166534;"><i class="fa-brands fa-whatsapp"></i> WhatsApp OTP
+                sent!</label>
               <div class="adv-input-wrap" style="margin-top:8px;">
                 <i class="fa-solid fa-key adv-input-icon"></i>
                 <input type="text" id="advInputOtp" class="adv-input-text" placeholder="Enter OTP (any value works)">
@@ -378,7 +384,8 @@
 
             <button class="adv-submit-btn" id="advBtnSubmit">Get Contact Details</button>
             <div id="advSuccessMsg" class="adv-success-box" style="display:none;">
-              <i class="fa-solid fa-circle-check"></i> Your details have been successfully captured. The property owner will contact you shortly.
+              <i class="fa-solid fa-circle-check"></i> Your details have been successfully captured. The property owner
+              will contact you shortly.
             </div>
           </div>
 
@@ -401,17 +408,22 @@
         <button class="adv-close" id="brochureModalClose"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="adv-body">
-        <div style="margin-bottom:12px; font-size:13px; color:var(--text-muted)">Please share your details to download the brochure.</div>
+        <div style="margin-bottom:12px; font-size:13px; color:var(--text-muted)">Please share your details to download
+          the brochure.</div>
         <div style="display:flex; gap:8px; margin-bottom:10px;">
-          <input id="brochureName" placeholder="Full name" style="flex:1; padding:10px; border-radius:6px; border:1px solid var(--border)" />
+          <input id="brochureName" placeholder="Full name"
+            style="flex:1; padding:10px; border-radius:6px; border:1px solid var(--border)" />
         </div>
         <div style="display:flex; gap:8px; margin-bottom:10px;">
-          <input id="brochureEmail" placeholder="Email (optional)" style="flex:1; padding:10px; border-radius:6px; border:1px solid var(--border)" />
+          <input id="brochureEmail" placeholder="Email (optional)"
+            style="flex:1; padding:10px; border-radius:6px; border:1px solid var(--border)" />
         </div>
         <div style="display:flex; gap:8px; margin-bottom:10px;">
-          <input id="brochurePhone" placeholder="Mobile number" style="flex:1; padding:10px; border-radius:6px; border:1px solid var(--border)" />
+          <input id="brochurePhone" placeholder="Mobile number"
+            style="flex:1; padding:10px; border-radius:6px; border:1px solid var(--border)" />
         </div>
-        <div style="margin-top:6px; margin-bottom:12px;"><label style="font-size:13px"><input type="checkbox" id="brochureTerms" /> I agree to the Terms & Conditions</label></div>
+        <div style="margin-top:6px; margin-bottom:12px;"><label style="font-size:13px"><input type="checkbox"
+              id="brochureTerms" /> I agree to the Terms & Conditions</label></div>
         <div style="display:flex; gap:8px;">
           <button class="btn-primary-large" id="brochureSubmit">Download Brochure</button>
           <button class="btn-outline" id="brochureCancel">Cancel</button>
@@ -483,7 +495,8 @@
     <div class="mobile-menu" id="mobileMenu">
       <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
       <a href="properties.html"><i class="fa-solid fa-magnifying-glass"></i> Properties</a>
-      <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+      <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i>
+        Login</a>
     </div>
   </header>
 
@@ -508,7 +521,7 @@
 
         <div style="border-top: 1px solid var(--border); padding-top: 20px; position: relative; z-index: 10;">
           <button type="button" class="btn-primary-large" id="btnOpenAdvModal" style="position: relative; z-index: 11;">
-             <i class="fa-solid fa-phone"></i> View Contact Details
+            <i class="fa-solid fa-phone"></i> View Contact Details
           </button>
           <div style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 12px;">
             <i class="fa-solid fa-shield-halved"></i> 100% Verified Listings
@@ -537,14 +550,14 @@
 
       <!-- LEFT COLUMN -->
       <div class="detail-content-main">
-        
+
         <!-- OVERVIEW / HIGHLIGHTS -->
         <div id="overview" class="detail-section-card">
           <h2 class="section-h2"><i class="fa-solid fa-compass"></i> Property Overview</h2>
           <div class="houssed-specs" id="mainSpecsGrid">
-             <!-- Dynamic Specs: Area, BHK, Facing, Floor, etc. -->
+            <!-- Dynamic Specs: Area, BHK, Facing, Floor, etc. -->
           </div>
-          
+
           <div style="margin-top: 32px; border-top: 1px solid var(--border); padding-top: 24px;">
             <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Property Description</h3>
             <p id="dynamicDescription" class="property-description">
@@ -587,7 +600,7 @@
         <div class="detail-section-card">
           <h2 class="section-h2"><i class="fa-solid fa-circle-info"></i> Project Details</h2>
           <div id="advancedDetailsContainer" class="info-grid-3col">
-              <!-- Categorized tables -->
+            <!-- Categorized tables -->
           </div>
         </div>
 
@@ -620,13 +633,19 @@
 
         <div id="location" class="detail-section-card">
           <h2 class="section-h2"><i class="fa-solid fa-map-location-dot"></i> Geographic Location</h2>
-          <div id="mapContainer" style="background:var(--bg); border-radius:12px; height:320px; overflow:hidden; border:1px solid var(--border); position:relative;">
-            <div id="mapPlaceholder" style="height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px">
+          <div id="mapContainer"
+            style="background:var(--bg); border-radius:12px; height:320px; overflow:hidden; border:1px solid var(--border); position:relative;">
+            <div id="mapPlaceholder"
+              style="height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px">
               <div style="font-size:48px; color:var(--primary)"><i class="fa-solid fa-location-arrow"></i></div>
-              <p id="fullAddressText" style="font-size:15px; color:var(--text-muted); text-align:center; padding:0 32px">Loading address...</p>
-              <a href="#" target="_blank" id="googleMapsBtn" class="btn btn-primary" style="padding: 10px 24px;">View on Google Maps</a>
+              <p id="fullAddressText"
+                style="font-size:15px; color:var(--text-muted); text-align:center; padding:0 32px">Loading address...
+              </p>
+              <a href="#" target="_blank" id="googleMapsBtn" class="btn btn-primary" style="padding: 10px 24px;">View on
+                Google Maps</a>
             </div>
-            <iframe id="googleMapIframe" width="100%" height="100%" style="border:0; display:none;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe id="googleMapIframe" width="100%" height="100%" style="border:0; display:none;" allowfullscreen=""
+              loading="lazy"></iframe>
           </div>
         </div>
 
@@ -635,16 +654,22 @@
           <h2 class="section-h2"><i class="fa-solid fa-circle-question"></i> FAQs about this Property</h2>
           <div class="faq-wrap" id="faqAccordion">
             <div class="faq-item">
-              <button class="faq-trigger">Is this property ready for immediate possession? <i class="fa-solid fa-chevron-down"></i></button>
-              <div class="faq-content">Yes, this property is currently in "Ready to Move" status according to the listings updated by the owner.</div>
+              <button class="faq-trigger">Is this property ready for immediate possession? <i
+                  class="fa-solid fa-chevron-down"></i></button>
+              <div class="faq-content">Yes, this property is currently in "Ready to Move" status according to the
+                listings updated by the owner.</div>
             </div>
             <div class="faq-item">
-              <button class="faq-trigger">What is the total built-up area? <i class="fa-solid fa-chevron-down"></i></button>
-              <div class="faq-content">The total built-up area for this configuration is mentioned in the overview section. Please check the "Area" spec for exact figures.</div>
+              <button class="faq-trigger">What is the total built-up area? <i
+                  class="fa-solid fa-chevron-down"></i></button>
+              <div class="faq-content">The total built-up area for this configuration is mentioned in the overview
+                section. Please check the "Area" spec for exact figures.</div>
             </div>
             <div class="faq-item">
-              <button class="faq-trigger">Are there any hidden brokerage charges? <i class="fa-solid fa-chevron-down"></i></button>
-              <div class="faq-content">No, if the property is listed by the "Owner", you can contact them directly without paying any brokerage.</div>
+              <button class="faq-trigger">Are there any hidden brokerage charges? <i
+                  class="fa-solid fa-chevron-down"></i></button>
+              <div class="faq-content">No, if the property is listed by the "Owner", you can contact them directly
+                without paying any brokerage.</div>
             </div>
           </div>
         </div>
@@ -657,20 +682,26 @@
         <div class="detail-section-card" style="margin-top:0">
           <h3 style="font-size:15px; font-weight:700; margin-bottom:20px; color:var(--text-muted)">LISTED BY</h3>
           <div class="posted-by-card" style="display: flex; gap: 16px; align-items: center;">
-            <div id="ownerAvatar" style="width: 56px; height: 56px; border-radius: 12px; background: var(--primary); color: #fff; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center;">24</div>
+            <div id="ownerAvatar"
+              style="width: 56px; height: 56px; border-radius: 12px; background: var(--primary); color: #fff; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center;">
+              24</div>
             <div>
-               <div id="posterBadge" style="font-size: 11px; font-weight: 700; color: var(--primary);">INDIVIDUAL</div>
-               <h4 id="ownerName" style="font-size: 16px; font-weight: 700; margin: 2px 0;">Advertiser</h4>
-               <p id="ownerJoinDate" style="font-size: 12px; color: var(--text-muted);">Member since 2024</p>
+              <div id="posterBadge" style="font-size: 11px; font-weight: 700; color: var(--primary);">INDIVIDUAL</div>
+              <h4 id="ownerName" style="font-size: 16px; font-weight: 700; margin: 2px 0;">Advertiser</h4>
+              <p id="ownerJoinDate" style="font-size: 12px; color: var(--text-muted);">Member since 2024</p>
             </div>
           </div>
-          <div style="margin-top: 16px; padding: 12px; background: #f8faff; border-radius: 8px; font-size: 12px; color: var(--text-muted); border-left: 3px solid var(--primary);">
+          <div
+            style="margin-top: 16px; padding: 12px; background: #f8faff; border-radius: 8px; font-size: 12px; color: var(--text-muted); border-left: 3px solid var(--primary);">
             Listed by verified owner. 0% Brokerage apply.
           </div>
 
           <!-- Public Contact Info -->
-          <div id="publicContactInfo" style="display:none; margin-top:16px; border-top:1px solid #eee; padding-top:12px;">
-            <div style="font-size:11px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; font-weight:700">Call Directly</div>
+          <div id="publicContactInfo"
+            style="display:none; margin-top:16px; border-top:1px solid #eee; padding-top:12px;">
+            <div
+              style="font-size:11px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; font-weight:700">
+              Call Directly</div>
             <div style="display:flex; flex-direction:column; gap:8px;">
               <div id="publicNameRow" style="display:flex; align-items:center; gap:10px;">
                 <i class="fa-solid fa-user" style="color:var(--primary); width:16px"></i>
@@ -686,10 +717,13 @@
 
         <!-- EMI CALCULATOR CARD -->
         <div class="detail-section-card" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: #fff;">
-          <h3 style="font-size:14px; font-weight:600; margin-bottom:12px; color: rgba(255,255,255,0.6)">EMI ESTIMATOR</h3>
+          <h3 style="font-size:14px; font-weight:600; margin-bottom:12px; color: rgba(255,255,255,0.6)">EMI ESTIMATOR
+          </h3>
           <div id="emi-result-sidebar" style="font-size:28px; font-weight:800; color:#fff; margin-bottom:4px">₹0</div>
           <div style="font-size:12px; color:rgba(255,255,255,0.5)">Est. monthly EMI @ 8.5% interest</div>
-          <button style="width:100%; margin-top:16px; padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.05); color:#fff; font-size:13px; font-weight:600; cursor:pointer;" onclick="location.href='#faq'">Get Assistance</button>
+          <button
+            style="width:100%; margin-top:16px; padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.05); color:#fff; font-size:13px; font-weight:600; cursor:pointer;"
+            onclick="location.href='#faq'">Get Assistance</button>
         </div>
       </div>
 
@@ -703,7 +737,8 @@
         <h2 style="font-size:22px; font-weight:700;">Similar Properties You May Like</h2>
       </div>
       <div class="cards-slider-wrap">
-        <div class="cards-slider" id="similarPropertiesSlider" style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px;">
+        <div class="cards-slider" id="similarPropertiesSlider"
+          style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px;">
           <!-- Dynamic Similar Properties -->
         </div>
       </div>
@@ -746,14 +781,14 @@
         <div class="footer-col">
           <h4>Resources</h4>
           <div class="footer-links">
-              <a href="#">EMI Calculator</a>
-              <a href="#">Property Rates</a>
-              <a href="#">RERA Guide</a>
-              <a href="#">Home Loan</a>
-              <a href="#">Legal Guide</a>
-              <a href="#">Vastu Tips</a>
-              <a href="#">Blog & News</a>
-              <a href="faq.html">FAQ</a>
+            <a href="#">EMI Calculator</a>
+            <a href="#">Property Rates</a>
+            <a href="#">RERA Guide</a>
+            <a href="#">Home Loan</a>
+            <a href="#">Legal Guide</a>
+            <a href="#">Vastu Tips</a>
+            <a href="#">Blog & News</a>
+            <a href="faq.html">FAQ</a>
           </div>
         </div>
         <div class="footer-col footer-col-cities">
@@ -773,7 +808,7 @@
             <a href="properties.html?city=Lucknow">Lucknow</a>
           </div>
         </div>
-          <!-- Popular localities moved to Top Cities section on the homepage -->
+        <!-- Popular localities moved to Top Cities section on the homepage -->
         <div class="footer-col footer-download">
           <h4>Post via Telegram</h4>
           <p class="footer-download-text">List your property in seconds using our automated bot.</p>
@@ -781,13 +816,17 @@
             <i class="fa-brands fa-telegram"></i> Start Posting
           </a>
           <div class="footer-badges">
-            <span style="font-size: 11px; display: block; margin-bottom: 8px; color: rgba(255,255,255,0.4); font-weight: 600;">Mobile App (Coming Soon)</span>
+            <span
+              style="font-size: 11px; display: block; margin-bottom: 8px; color: rgba(255,255,255,0.4); font-weight: 600;">Mobile
+              App (Coming Soon)</span>
             <div style="display: flex; gap: 8px; opacity: 0.6;">
               <a href="#" onclick="showToast('Our app is launching soon! Stay tuned.', 'warning'); return false;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store" class="app-badge" style="height: 28px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
+                  alt="Download on the App Store" class="app-badge" style="height: 28px;">
               </a>
               <a href="#" onclick="showToast('Our app is launching soon! Stay tuned.', 'warning'); return false;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" class="app-badge" style="height: 28px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                  alt="Get it on Google Play" class="app-badge" style="height: 28px;">
               </a>
             </div>
           </div>
@@ -860,7 +899,7 @@
         const phoneInp = document.getElementById('contactPhone');
         const emailInp = document.getElementById('contactEmail');
         const msgInp = document.getElementById('contactMessage');
-        
+
         if (nameInp) nameInp.value = '';
         if (phoneInp) phoneInp.value = '';
         if (emailInp) emailInp.value = '';
@@ -903,7 +942,7 @@
       btnOpenAdvModal.addEventListener('click', () => {
         advModal.classList.add('open');
         document.body.style.overflow = 'hidden';
-        
+
         // Use window.REAL_OWNER_PHONE if set by the module script below
         const phone = window.REAL_OWNER_PHONE || REAL_OWNER_PHONE;
         advHeaderPhone.textContent = maskPhone(phone);
@@ -1018,7 +1057,7 @@
 
         // ---- Resolve photo URLs (Robust version) ----
         let photosData = p.photos || [];
-        
+
         // Find if any photo is marked as cover
         const coverIdx = photosData.findIndex(item => item.isCover === true);
         if (coverIdx > 0) {
@@ -1042,14 +1081,14 @@
         const isCommercial = /commercial|shop|office|warehouse/i.test(p.propertyType || '');
         const bhkRaw = p.details?.bhk || '';
         const bhk = bhkRaw.toString().replace(/bhk/i, '').trim();
-        
+
         // Comprehensive price fallback
         let price = p.pricing?.expectedPrice || p.pricing?.rent || p.pricing?.pricePerDay || 0;
         const area = p.details?.builtUpArea || 0;
         const isPor = p.pricing?.isPriceOnRequest === true || p.pricing?.priceType === 'Price on request';
-        
+
         let priceStr = isPor ? 'Price on Request' : (price > 0 ? '₹' + price.toLocaleString('en-IN') : 'Price on Request');
-        
+
         // Add pricing unit
         if (!isPor && price > 0) {
           if (p.pricing?.pricingType === 'Per Sqft') {
@@ -1072,7 +1111,7 @@
 
         // ---- Update page title / breadcrumb ----
         document.title = `${title} in ${p.location?.locality || p.location?.city} | 24Dismil.com`;
-        
+
         const bcrumbSpan = document.querySelector('.page-breadcrumb span');
         if (bcrumbSpan) bcrumbSpan.textContent = title;
 
@@ -1142,7 +1181,8 @@
 
         if (heroCover && photos[0]) heroCover.src = photos[0];
         if (heroTitle) {
-          const projectName = p.details?.projectName;
+          // Use details.projectName if available, otherwise fallback to location.society (form saves society there)
+          const projectName = p.details?.projectName || p.location?.society || '';
           if (projectName) {
             heroTitle.textContent = projectName.toUpperCase();
             // Add subtitle below project name
@@ -1224,7 +1264,7 @@
           const newBtn = advBtnSubmit.cloneNode(true);
           advBtnSubmit.parentNode.replaceChild(newBtn, advBtnSubmit);
           window.advBtnSubmit = newBtn; // Update global reference for closeAdvModal()
-          
+
           let isOtpSent = false;
           let isVerified = false;
 
@@ -1283,10 +1323,10 @@
         const publicContactInfo = document.getElementById('publicContactInfo');
         const publicName = document.getElementById('publicName');
         const publicPhone = document.getElementById('publicPhone');
-        
+
         const hasPublicName = p.contactDesc?.name && p.contactDesc.name.trim();
         const hasPublicPhone = p.contactDesc?.mobile && p.contactDesc.mobile.trim();
-        
+
         if (publicContactInfo && (hasPublicName || hasPublicPhone)) {
           publicContactInfo.style.display = 'block';
           if (hasPublicName) {
@@ -1295,7 +1335,7 @@
           } else {
             document.getElementById('publicNameRow').style.display = 'none';
           }
-          
+
           if (hasPublicPhone) {
             publicPhone.textContent = '+91 ' + p.contactDesc.mobile;
             publicPhone.href = 'tel:+91' + p.contactDesc.mobile;
@@ -1398,7 +1438,7 @@
           configRows += renderRow('Furnishing', p.details?.furnishing, 'fa-couch');
           configRows += renderRow('Floor', p.details?.floorNumber !== undefined ? `${p.details.floorNumber} of ${p.details.totalFloors || 'N/A'}` : '', 'fa-building');
           configRows += renderRow('Parking', p.details?.parking, 'fa-car');
-          
+
           // Commercial/Warehouse specific config
           configRows += renderRow('Workstations', p.details?.workstations, 'fa-desktop');
           configRows += renderRow('Cabins', p.details?.cabins, 'fa-door-closed');
@@ -1406,7 +1446,7 @@
           configRows += renderRow('Washrooms', p.details?.washrooms, 'fa-restroom');
           configRows += renderRow('AC Type', p.details?.acType, 'fa-snowflake');
           configRows += renderRow('Power Backup', p.details?.powerBackupCapacity, 'fa-plug');
-          
+
           if (configRows) tablesHtml += `<div class="info-col"><h3>CONFIGURATION</h3>${configRows}</div>`;
 
           // 3. Construction & Legal
@@ -1417,7 +1457,7 @@
           constructRows += renderRow('Approval Authority', p.details?.approvalAuthority, 'fa-stamp');
           constructRows += renderRow('Occupancy Cert', p.details?.occupancyCertificate, 'fa-file-circle-check');
           constructRows += renderRow('Completion Cert', p.details?.completionCertificate, 'fa-file-circle-check');
-          
+
           if (constructRows) tablesHtml += `<div class="info-col"><h3>LEGAL & STATUS</h3>${constructRows}</div>`;
 
           // 4. Specialized Details (Warehouse / Hospitality)
@@ -1531,14 +1571,14 @@
         const extVideoContainer = document.getElementById('projectExternalVideos');
         const uploadedVideos = p.videos || [];
         const externalVideos = p.externalVideos || [];
-        
+
         if (projectVideoSection && ((uploadedVideos.length > 0) || (externalVideos.length > 0))) {
           if (videoGrid && uploadedVideos.length > 0) {
             videoGrid.innerHTML = '';
             uploadedVideos.forEach(v => {
               const url = typeof v === 'string' ? v : v.url || '';
               const wrap = document.createElement('div');
-            wrap.style.cssText = 'width:300px; max-width:85vw; flex-shrink:0; border-radius:8px; overflow:hidden; background:#000;';
+              wrap.style.cssText = 'width:300px; max-width:85vw; flex-shrink:0; border-radius:8px; overflow:hidden; background:#000;';
               wrap.innerHTML = `<video controls src="${url}" style="width:100%; height:200px; object-fit:cover"></video>`;
               videoGrid.appendChild(wrap);
             });
@@ -1610,37 +1650,37 @@
         // ---- Location Details ----
         const fullAddressText = document.getElementById('fullAddressText');
         const addressStr = `${p.location?.society ? p.location.society + ', ' : ''}${p.location?.locality || ''}, ${p.location?.city || ''}, ${p.location?.state || ''}${p.location?.pinCode ? ' - ' + p.location.pinCode : ''}`;
-        
+
         if (fullAddressText) {
           fullAddressText.textContent = addressStr;
         }
-        
+
         const mapsBtn = document.getElementById('googleMapsBtn');
         const mapIframe = document.getElementById('googleMapIframe');
         const mapPlaceholder = document.getElementById('mapPlaceholder');
-        
+
         if (mapsBtn) {
           const encodedAddr = encodeURIComponent(addressStr);
           mapsBtn.href = `https://maps.google.com?q=${encodedAddr}`;
-          
+
           // Try to show a real map via embed
           if (mapIframe && mapPlaceholder) {
             let embedUrl = "";
             if (p.location?.googleMapsLink && p.location.googleMapsLink.includes('pb=')) {
-                // If it looks like an embed URL already, use it
-                embedUrl = p.location.googleMapsLink;
+              // If it looks like an embed URL already, use it
+              embedUrl = p.location.googleMapsLink;
             } else {
-                // Otherwise use the free search API (needs to be configured, but we can try building a search embed)
-                // Using standard Google Maps Embed API for Search (no key required for some basic views sometimes, or just redirect)
-                // Actually, for a real map without key, we can use the place API search embed style if possible
-                // Fallback: Use the address to pinpoint
-                embedUrl = `https://maps.google.com/maps?q=${encodedAddr}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+              // Otherwise use the free search API (needs to be configured, but we can try building a search embed)
+              // Using standard Google Maps Embed API for Search (no key required for some basic views sometimes, or just redirect)
+              // Actually, for a real map without key, we can use the place API search embed style if possible
+              // Fallback: Use the address to pinpoint
+              embedUrl = `https://maps.google.com/maps?q=${encodedAddr}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
             }
-            
+
             if (embedUrl) {
-                mapIframe.src = embedUrl;
-                mapIframe.style.display = 'block';
-                mapPlaceholder.style.display = 'none';
+              mapIframe.src = embedUrl;
+              mapIframe.style.display = 'block';
+              mapPlaceholder.style.display = 'none';
             }
           }
         }
@@ -1692,8 +1732,8 @@
         // ---- Sidebar EMI ----
         const emiResultSidebar = document.getElementById('emi-result-sidebar');
         if (emiResultSidebar && price > 500000) {
-           const emi = Math.round((price * 0.8) * 0.008678);
-           emiResultSidebar.textContent = `₹${emi.toLocaleString('en-IN')}`;
+          const emi = Math.round((price * 0.8) * 0.008678);
+          emiResultSidebar.textContent = `₹${emi.toLocaleString('en-IN')}`;
         }
 
         // ---- Listed By (Owner/Company Info) ----
@@ -1703,7 +1743,7 @@
           const ownerJoinDate = document.getElementById('ownerJoinDate');
           const posterBadge = document.getElementById('posterBadge');
           const isCompany = !!(p.ownerInfo?.companyName && p.ownerInfo.companyName.trim());
-          
+
           if (ownerName) {
             ownerName.textContent = isCompany ? p.ownerInfo.companyName : (p.ownerInfo?.name || "Advertiser");
           }
@@ -1780,10 +1820,10 @@
           if (slider && similar.length > 0) {
             slider.innerHTML = similar.map(sp => {
               const spPrice = sp.pricing?.expectedPrice || sp.pricing?.rent || sp.pricing?.pricePerDay || 0;
-              let spPriceStr = spPrice >= 10000000 ? `₹${(spPrice/10000000).toFixed(2)} Cr` : (spPrice >= 100000 ? `₹${(spPrice/100000).toFixed(2)} Lac` : `₹${spPrice.toLocaleString('en-IN')}`);
+              let spPriceStr = spPrice >= 10000000 ? `₹${(spPrice / 10000000).toFixed(2)} Cr` : (spPrice >= 100000 ? `₹${(spPrice / 100000).toFixed(2)} Lac` : `₹${spPrice.toLocaleString('en-IN')}`);
               const spPhoto = (sp.photos?.[0]?.url || sp.photos?.[0] || 'images/property-1.webp');
               const spLoc = `${sp.location?.locality || ''}${sp.location?.locality && sp.location?.city ? ', ' : ''}${sp.location?.city || ''}`;
-              
+
               return `
                 <div class="property-card" onclick="window.location.href='property-detail.html?id=${sp._id || sp.id}'">
                   <div class="prop-img-wrap">
@@ -1821,7 +1861,7 @@
       }
     })();
   </script>
-<script type="module" src="js/city-selector.js"></script>
+  <script type="module" src="js/city-selector.js"></script>
 
 </body>
 

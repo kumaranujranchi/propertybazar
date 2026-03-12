@@ -1,9 +1,9 @@
-import { convex } from './convex.js';
+import { convex } from "./convex.js";
 
 // Helper: build property-type-aware title
 function buildTitle(p) {
-  const loc = p.location?.locality || p.location?.city || '';
-  const type = p.propertyType || '';
+  const loc = p.location?.locality || p.location?.city || "";
+  const type = p.propertyType || "";
   const isLand = /plot|land/i.test(type);
   const isCommercial = /commercial|shop|office|warehouse/i.test(type);
   const bhkRaw = String(p.details?.bhk || "");
@@ -11,13 +11,14 @@ function buildTitle(p) {
 
   if (isLand) return `${type} in ${loc}`;
   if (isCommercial) return `${type} in ${loc}`;
-  if (bhk && bhk !== '0' && bhk !== 'N/A') return `${bhk} BHK ${type} in ${loc}`;
+  if (bhk && bhk !== "0" && bhk !== "N/A")
+    return `${bhk} BHK ${type} in ${loc}`;
   return `${type} in ${loc}`;
 }
 
 // Helper: specs chips for card
 function buildSpecs(p) {
-  const type = p.propertyType || '';
+  const type = p.propertyType || "";
   const isLand = /plot|land/i.test(type);
   const isCommercial = /commercial|shop|office|warehouse/i.test(type);
   const bhk = p.details?.bhk;
@@ -25,77 +26,103 @@ function buildSpecs(p) {
 
   const specs = [];
 
-  if (!isLand && !isCommercial && bhk && bhk !== '0' && bhk !== 'N/A') {
-    specs.push({ icon: '🛏️', label: `${bhk} BHK` });
+  if (!isLand && !isCommercial && bhk && bhk !== "0" && bhk !== "N/A") {
+    specs.push({ icon: "🛏️", label: `${bhk} BHK` });
   }
 
   if (area && area > 0) {
-    const unit = p.details?.builtUpAreaUnit || 'sq.ft';
-    specs.push({ icon: '📐', label: `${area} ${unit}` });
+    const unit = p.details?.builtUpAreaUnit || "sq.ft";
+    specs.push({ icon: "📐", label: `${area} ${unit}` });
   }
 
-  specs.push({ icon: '🏠', label: type });
+  specs.push({ icon: "🏠", label: type });
   return specs;
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
   try {
     const convexProps = await convex.query("properties:getProperties", {});
-    const formatted = convexProps.map(p => {
+    const formatted = convexProps.map((p) => {
       const title = buildTitle(p);
       const specs = buildSpecs(p);
       const area = p.details?.builtUpArea || 0;
       const pricing = p.pricing || {};
-      const price = pricing.expectedPrice || pricing.rent || pricing.pricePerDay || pricing.plotRatePerSqFt || 0;
+      const price =
+        pricing.expectedPrice ||
+        pricing.rent ||
+        pricing.pricePerDay ||
+        pricing.plotRatePerSqFt ||
+        0;
       const score = calculateQualityScore(p);
 
       return {
         id: p._id,
         convexId: p._id,
         qualityScore: score,
-        type: (/commercial|shop|office|warehouse/i.test(p.propertyType || '')) ? 'commercial' : ((p.transactionType || '').toLowerCase().includes('rent') || (p.transactionType || '').toLowerCase().includes('pg') ? 'rent' : 'buy'),
+        type: /commercial|shop|office|warehouse/i.test(p.propertyType || "")
+          ? "commercial"
+          : (p.transactionType || "").toLowerCase().includes("rent") ||
+              (p.transactionType || "").toLowerCase().includes("pg")
+            ? "rent"
+            : "buy",
         propType: p.propertyType,
         bhk: parseInt(p.details?.bhk) || 0,
         price,
         priceDisplay: (() => {
-          const isPor = pricing.isPriceOnRequest === true || pricing.priceType === 'Price on request';
-          if (isPor) return 'Price on Request';
-          
+          const isPor =
+            pricing.isPriceOnRequest === true ||
+            pricing.priceType === "Price on request";
+          if (isPor) return "Price on Request";
+
           if (price > 0) {
-            const tt = (p.transactionType || '').toLowerCase();
-            const pt = (p.propertyType || '').toLowerCase();
-            let suffix = '';
-            if (tt.includes('rent') || tt.includes('pg')) suffix = '/mo';
-            else if (/lodge|hotel|resort/i.test(pt)) suffix = '/day';
-            else if (pricing.plotRatePerSqFt && !pricing.expectedPrice) suffix = '/sq.ft';
-            return '₹' + price.toLocaleString('en-IN') + suffix;
+            const tt = (p.transactionType || "").toLowerCase();
+            const pt = (p.propertyType || "").toLowerCase();
+            let suffix = "";
+            if (tt.includes("rent") || tt.includes("pg")) suffix = "/mo";
+            else if (/lodge|hotel|resort/i.test(pt)) suffix = "/day";
+            else if (pricing.plotRatePerSqFt && !pricing.expectedPrice)
+              suffix = "/sq.ft";
+            return "₹" + price.toLocaleString("en-IN") + suffix;
           }
-          return 'Price on Request';
+          return "Price on Request";
         })(),
         title,
-        specs,   // property-type-aware specs
-        location: `${p.location?.locality || ''}, ${p.location?.city || ''}`,
-        city: p.location?.city || '',
+        specs, // property-type-aware specs
+        location: `${p.location?.locality || ""}, ${p.location?.city || ""}`,
+        city: p.location?.city || "",
         area,
-        areaDisplay: area > 0 ? `${area} ${p.details?.builtUpAreaUnit || 'sq.ft'}` : '',
-        image: p.photos && p.photos.length > 0 ? (typeof p.photos[0] === 'object' ? p.photos[0].url : p.photos[0]) : 'images/property-1.webp',
-        status: p.details?.status === 'Ready to Move' ? 'ready' : 'under-construction',
+        areaDisplay:
+          area > 0 ? `${area} ${p.details?.builtUpAreaUnit || "sq.ft"}` : "",
+        image:
+          p.photos && p.photos.length > 0
+            ? typeof p.photos[0] === "object"
+              ? p.photos[0].url
+              : p.photos[0]
+            : "images/property-1.webp",
+        status:
+          p.details?.status === "Ready to Move"
+            ? "ready"
+            : "under-construction",
         verified: p.verified || false,
         featured: p.featured || false,
-        newLaunch: p.details?.status === 'New Launch',
+        newLaunch: p.details?.status === "New Launch",
         rera: p.contactDesc?.rera || null,
         amenities: p.amenities || [],
-        possession: p.details?.status || '',
-        floor: p.details?.floorNumber ? `${p.details.floorNumber}th of ${p.details?.totalFloors || ''}` : '',
-        facing: p.details?.facing || '',
-        parking: p.details?.parking && p.details.parking !== 'None' ? 1 : 0,
-        description: p.details?.description || '',
+        possession: p.details?.status || "",
+        floor: p.details?.floorNumber
+          ? `${p.details.floorNumber}th of ${p.details?.totalFloors || ""}`
+          : "",
+        facing: p.details?.facing || "",
+        parking: p.details?.parking && p.details.parking !== "None" ? 1 : 0,
+        description: p.details?.description || "",
         price_per_sqft: (() => {
-          if (pricing.pricingType === 'Per Sqft' && pricing.expectedPrice) return pricing.expectedPrice;
+          if (pricing.pricingType === "Per Sqft" && pricing.expectedPrice)
+            return pricing.expectedPrice;
           return area > 0 ? Math.round(price / area) : 0;
         })(),
-        areaUnit: p.details?.builtUpAreaUnit || 'sq.ft',
-        projectName: p.details?.projectName || '',
+        areaUnit: p.details?.builtUpAreaUnit || "sq.ft",
+        // Prefer explicit projectName in details, otherwise fallback to society (form stores it there)
+        projectName: p.details?.projectName || p.location?.society || "",
         // Preserve raw Convex data for detail page
         _raw: p,
       };
@@ -103,37 +130,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     window.properties = [...formatted, ...(window.properties || [])];
 
-    if (typeof window.renderFilteredProperties === 'function') {
+    if (typeof window.renderFilteredProperties === "function") {
       window.renderFilteredProperties();
     }
 
     // Homepage sliders
     renderHomepageSliders(formatted);
-  } catch(err) {
+  } catch (err) {
     console.error("Error fetching convex properties:", err);
   }
 });
 
 function renderHomepageSliders(props) {
-  const featuredSlider = document.getElementById('featuredSlider');
-  const newLaunchSlider = document.getElementById('newLaunchSlider');
+  const featuredSlider = document.getElementById("featuredSlider");
+  const newLaunchSlider = document.getElementById("newLaunchSlider");
 
   if (featuredSlider) {
     // Take first 5 for featured
     const featured = props.slice(0, 5);
-    featuredSlider.innerHTML = featured.map(p => buildPropertyCardHTML(p)).join('');
+    featuredSlider.innerHTML = featured
+      .map((p) => buildPropertyCardHTML(p))
+      .join("");
   }
 
   if (newLaunchSlider) {
-    const newLaunches = props.filter(p => p.newLaunch).slice(0, 5);
+    const newLaunches = props.filter((p) => p.newLaunch).slice(0, 5);
     if (newLaunches.length > 0) {
-      newLaunchSlider.innerHTML = newLaunches.map(p => {
-        const detailUrl = `property-detail.html?id=${p.id}`;
-        return `
+      newLaunchSlider.innerHTML = newLaunches
+        .map((p) => {
+          const detailUrl = `property-detail.html?id=${p.id}`;
+          return `
           <div class="project-card" style="min-width: 300px; flex-shrink: 0; cursor: pointer" onclick="window.location.href='${detailUrl}'">
             <div class="project-img">
               <img src="${p.image}" alt="${p.title}" loading="lazy" />
-              ${p.rera ? `<div class="project-rera">RERA Registered</div>` : ''}
+              ${p.rera ? `<div class="project-rera">RERA Registered</div>` : ""}
               <div class="project-tag">
                 <span class="badge badge-primary">NEW LAUNCH</span>
               </div>
@@ -148,16 +178,17 @@ function renderHomepageSliders(props) {
             </div>
           </div>
         `;
-      }).join('');
+        })
+        .join("");
     } else {
-        // If no new launches, maybe show some recent ones or hide
-        newLaunchSlider.closest('section')?.style.setProperty('display', 'none');
+      // If no new launches, maybe show some recent ones or hide
+      newLaunchSlider.closest("section")?.style.setProperty("display", "none");
     }
   }
 
   // Re-init sliders/animations if needed
-  if (typeof window.initSliders === 'function') window.initSliders();
-  if (typeof window.initAnimations === 'function') window.initAnimations();
+  if (typeof window.initSliders === "function") window.initSliders();
+  if (typeof window.initAnimations === "function") window.initAnimations();
 }
 
 function buildPropertyCardHTML(p) {
@@ -168,23 +199,24 @@ function buildPropertyCardHTML(p) {
     <div class="prop-img-wrap">
       <img src="${p.image}" alt="${p.title}" loading="lazy">
       <div class="prop-type-badge">
-        <span class="badge ${p.type === 'rent' ? 'badge-warning' : 'badge-primary'}" style="background: var(--primary); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700">${p.type === 'rent' ? 'RENT' : 'BUY'}</span>
+        <span class="badge ${p.type === "rent" ? "badge-warning" : "badge-primary"}" style="background: var(--primary); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700">${p.type === "rent" ? "RENT" : "BUY"}</span>
       </div>
-      ${p.verified ? '<div class="prop-verified" style="background: rgba(16,185,129,0.9); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600"><i class="fa-solid fa-circle-check"></i> Verified</div>' : ''}
+      ${p.verified ? '<div class="prop-verified" style="background: rgba(16,185,129,0.9); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600"><i class="fa-solid fa-circle-check"></i> Verified</div>' : ""}
     </div>
     <div class="prop-body">
-      <div class="prop-price">${p.priceDisplay} <span class="prop-per" style="font-size: 11px; color: var(--text-muted); font-weight: 400">· ₹${p.price_per_sqft?.toLocaleString('en-IN')}/${p.areaUnit}</span></div>
-      ${p.projectName 
-        ? `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;">${p.projectName}</div>
+      <div class="prop-price">${p.priceDisplay} <span class="prop-per" style="font-size: 11px; color: var(--text-muted); font-weight: 400">· ₹${p.price_per_sqft?.toLocaleString("en-IN")}/${p.areaUnit}</span></div>
+      ${
+        p.projectName
+          ? `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;">${p.projectName}</div>
            <div class="prop-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">${p.title}</div>`
-        : `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${p.title}</div>`
+          : `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${p.title}</div>`
       }
       <div class="prop-location" style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px"><i class="fa-solid fa-location-dot"></i> ${p.location}</div>
       <div class="prop-specs" style="display: flex; gap: 12px; margin-bottom: 16px; font-size: 12px; color: var(--text-muted)">
-        ${p.specs.map(s => `<div class="prop-spec">${s.icon} ${s.label}</div>`).join('')}
+        ${p.specs.map((s) => `<div class="prop-spec">${s.icon} ${s.label}</div>`).join("")}
       </div>
       <div class="prop-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 12px">
-        <div class="badge ${p.status === 'ready' ? 'badge-success' : 'badge-warning'}" style="font-size: 10px">${p.status === 'ready' ? '✅ Ready' : '🏗️ Under Const.'}</div>
+        <div class="badge ${p.status === "ready" ? "badge-success" : "badge-warning"}" style="font-size: 10px">${p.status === "ready" ? "✅ Ready" : "🏗️ Under Const."}</div>
         <div class="prop-contact-btns">
           <button class="prop-btn prop-btn-call" onclick="event.stopPropagation(); window.location.href='${callUrl}'" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: #f8fafc; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px"><i class="fa-solid fa-phone"></i> Call</button>
         </div>
@@ -195,7 +227,7 @@ function buildPropertyCardHTML(p) {
 
 /**
  * Calculates a property's quality score for ranking/sorting.
- * Factors: 
+ * Factors:
  * - Verification (+30)
  * - Paid Plans: Gold (+50), Silver (+30), Basic (+15)
  * - RERA Compliance (+20)
@@ -205,45 +237,47 @@ function buildPropertyCardHTML(p) {
  * - PENALTY: Placeholder Images (-50)
  */
 function calculateQualityScore(p) {
-    let score = 0;
-    
-    // 1. Paid Plan Weightage (New)
-    const plan = (p.plan || 'none').toLowerCase();
-    if (plan === 'gold') score += 50;
-    else if (plan === 'silver') score += 30;
-    else if (plan === 'basic') score += 15;
-    else if (p.featured) score += 25; // Fallback for legacy featured flag
-    
-    // 2. Verification (Highest Trust)
-    if (p.verified) score += 30;
-    
-    // 3. Legal Compliance: RERA
-    if (p.details?.rera) score += 20;
-    
-    // 4. Visual Completeness & Placeholder Penalty (Updated)
-    if (p.photos && p.photos.length > 0) {
-        const hasPlaceholder = p.photos.some(item => {
-            const url = typeof item === 'object' ? item.url : item;
-            return /property-1\.jpg|city-mumbai\.jpg|hero-bg\.jpg|placeholder/i.test(url || '');
-        });
-        
-        if (hasPlaceholder) {
-            score -= 50; // Heavy penalty for generic placeholders
-        } else {
-            score += Math.min(p.photos.length * 5, 25);
-        }
+  let score = 0;
+
+  // 1. Paid Plan Weightage (New)
+  const plan = (p.plan || "none").toLowerCase();
+  if (plan === "gold") score += 50;
+  else if (plan === "silver") score += 30;
+  else if (plan === "basic") score += 15;
+  else if (p.featured) score += 25; // Fallback for legacy featured flag
+
+  // 2. Verification (Highest Trust)
+  if (p.verified) score += 30;
+
+  // 3. Legal Compliance: RERA
+  if (p.details?.rera) score += 20;
+
+  // 4. Visual Completeness & Placeholder Penalty (Updated)
+  if (p.photos && p.photos.length > 0) {
+    const hasPlaceholder = p.photos.some((item) => {
+      const url = typeof item === "object" ? item.url : item;
+      return /property-1\.jpg|city-mumbai\.jpg|hero-bg\.jpg|placeholder/i.test(
+        url || "",
+      );
+    });
+
+    if (hasPlaceholder) {
+      score -= 50; // Heavy penalty for generic placeholders
     } else {
-        score -= 20; // Penalty for no photos at all
+      score += Math.min(p.photos.length * 5, 25);
     }
-    
-    // 5. Contextual Completeness: Description (Max 15)
-    const desc = p.details?.description || "";
-    if (desc.length > 300) score += 15;
-    else if (desc.length > 100) score += 10;
-    else if (desc.length > 0) score += 5;
-    
-    // 6. Direct Connect: Owner Listings
-    if (p.contactDesc?.role === 'Owner') score += 10;
-    
-    return score;
+  } else {
+    score -= 20; // Penalty for no photos at all
+  }
+
+  // 5. Contextual Completeness: Description (Max 15)
+  const desc = p.details?.description || "";
+  if (desc.length > 300) score += 15;
+  else if (desc.length > 100) score += 10;
+  else if (desc.length > 0) score += 5;
+
+  // 6. Direct Connect: Owner Listings
+  if (p.contactDesc?.role === "Owner") score += 10;
+
+  return score;
 }
