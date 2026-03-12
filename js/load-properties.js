@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           return area > 0 ? Math.round(price / area) : 0;
         })(),
         areaUnit: p.details?.builtUpAreaUnit || 'sq.ft',
+        projectName: p.details?.projectName || '',
         // Preserve raw Convex data for detail page
         _raw: p,
       };
@@ -173,7 +174,11 @@ function buildPropertyCardHTML(p) {
     </div>
     <div class="prop-body">
       <div class="prop-price">${p.priceDisplay} <span class="prop-per" style="font-size: 11px; color: var(--text-muted); font-weight: 400">· ₹${p.price_per_sqft?.toLocaleString('en-IN')}/${p.areaUnit}</span></div>
-      <div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${p.title}</div>
+      ${p.projectName 
+        ? `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;">${p.projectName}</div>
+           <div class="prop-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">${p.title}</div>`
+        : `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${p.title}</div>`
+      }
       <div class="prop-location" style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px"><i class="fa-solid fa-location-dot"></i> ${p.location}</div>
       <div class="prop-specs" style="display: flex; gap: 12px; margin-bottom: 16px; font-size: 12px; color: var(--text-muted)">
         ${p.specs.map(s => `<div class="prop-spec">${s.icon} ${s.label}</div>`).join('')}

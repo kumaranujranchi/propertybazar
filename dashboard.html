@@ -1377,11 +1377,21 @@
         <div class="dash-prop-info">
           <div class="dash-prop-title">
             ${(() => {
+              const pName = p.details?.projectName;
               const bhk = String(p.details?.bhk || "");
-              if (!bhk || bhk === "0" || bhk === "N/A") return p.propertyType || "";
-              const bhkClean = bhk.replace(/bhk/gi, "").trim();
-              return `${bhkClean} BHK ${p.propertyType || ""}`;
-            })()} in ${p.location?.locality || p.location?.city || "Unknown Location"}
+              let bhkStr = "";
+              if (bhk && bhk !== "0" && bhk !== "N/A") {
+                const bhkClean = bhk.replace(/bhk/gi, "").trim();
+                bhkStr = `${bhkClean} BHK `;
+              }
+              const typeStr = p.propertyType || "";
+              
+              if (pName) {
+                return `<div style="text-transform: uppercase;">${pName}</div><div style="font-size: 13px; color: var(--text-muted); font-weight: normal; margin-top: 2px;">${bhkStr}${typeStr}</div>`;
+              } else {
+                return `${bhkStr}${typeStr}`;
+              }
+            })()}
           </div>
           <div class="dash-prop-loc"><i class="fa-solid fa-location-dot"></i> ${p.location?.city || ""}${p.location?.city && p.location?.state ? ", " : ""}${p.location?.state || ""}</div>
           
@@ -1565,11 +1575,27 @@
       </div>`;
         } else {
           const d = draft.data;
-          const title = `${d.details?.bhk ? d.details.bhk + " BHK " : ""}${d.propertyType || "Property"} in ${d.location?.locality || d.location?.city || "Incomplete Location"}`;
+          const pName = d.details?.projectName;
+          const bhk = String(d.details?.bhk || "");
+          let bhkStr = "";
+          if (bhk && bhk !== "0" && bhk !== "N/A") {
+            const bhkClean = bhk.replace(/bhk/gi, "").trim();
+            bhkStr = `${bhkClean} BHK `;
+          }
+          const typeStr = d.propertyType || "Property";
+          const locStr = ` in ${d.location?.locality || d.location?.city || "Incomplete Location"}`;
+          
+          let titleHtml = "";
+          if (pName) {
+            titleHtml = `<div style="text-transform: uppercase;">${pName}</div><div style="font-size: 13px; color: var(--text-muted); font-weight: normal; margin-top: 2px;">${bhkStr}${typeStr}${locStr}</div>`;
+          } else {
+            titleHtml = `${bhkStr}${typeStr}${locStr}`;
+          }
+          
           draftsList.innerHTML = `
         <div class="dash-prop-card">
           <div class="dash-prop-info">
-            <div class="dash-prop-title">${title}</div>
+            <div class="dash-prop-title">${titleHtml}</div>
             <div class="dash-prop-loc"><i class="fa-solid fa-clock-rotate-left"></i> Last updated: ${new Date(draft.lastUpdated).toLocaleString("en-IN")}</div>
             <div class="dash-prop-actions">
               <a href="post-property.html?resume=true" class="dash-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px;">

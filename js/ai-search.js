@@ -123,9 +123,17 @@ function initAISearchAssistant() {
       card.innerHTML = `
         <img src="${photoUrl}" alt="${prop.propertyType}">
         <div class="details">
-          <div class="title">
-            ${prop.details?.bhk ? prop.details.bhk + ' BHK ' : ''}${prop.propertyType} in ${prop.location?.locality || prop.location?.city}
-          </div>
+          ${prop.details?.projectName 
+            ? `<div class="title" style="text-transform: uppercase;">
+                 ${prop.details.projectName}
+               </div>
+               <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">
+                 ${prop.details?.bhk ? prop.details.bhk + ' BHK ' : ''}${prop.propertyType} in ${prop.location?.locality || prop.location?.city}
+               </div>`
+            : `<div class="title">
+                 ${prop.details?.bhk ? prop.details.bhk + ' BHK ' : ''}${prop.propertyType} in ${prop.location?.locality || prop.location?.city}
+               </div>`
+          }
           <div class="price">
             ₹${formatPrice(prop.pricing?.expectedPrice)}
           </div>
