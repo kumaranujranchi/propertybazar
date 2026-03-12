@@ -58,8 +58,17 @@ export const parseSearchQuery = action({
     const bhkMatch = userText.match(/(\d)\s*bhk/i);
     if (bhkMatch) scannedFilters.bhk = bhkMatch[1];
 
-    const systemPrompt = `You are 24Dismil Ai Assitance, a professional real estate assistant for 24Dismil.com.
-Your job is to extract search criteria from the user's query and return a valid JSON object.
+    // 4. Extract Rent/Sale Intent
+    if (/\b(rent|rental|kiraya|lp|lease|kiraye)\b/i.test(userText)) scannedFilters.type = "Rent";
+    else if (/\b(buy|purchase|sale|sell|bechna|kharidna|bechana)\b/i.test(userText)) scannedFilters.type = "Sale";
+
+    const systemPrompt = `You are 24Dismil Ai Assitance, a smart real estate buddy for 24Dismil.com.
+Your job is to help users find properties and engage in friendly conversation.
+
+HOW TO RESPOND:
+1. Search Intent: If the user is looking for property, extract criteria into JSON.
+2. General Chat: If the user asks general questions, says thanks, or just chats (e.g., "how are you?"), respond warmly in the "explanation" field and keep filters empty.
+3. Language: Always mirror the user's language (Hindi/English/Hinglish).
 
 SEARCH CRITERIA TO EXTRACT:
 - "city": string (e.g. "Patna", "Delhi")
@@ -67,14 +76,12 @@ SEARCH CRITERIA TO EXTRACT:
 - "propType": "Apartment", "Villa", "Plot", "Commercial", "PG"
 - "bhk": string (e.g. "2", "3")
 - "maxPrice": number (total budget in Rupees)
-- "explanation": A warm, human, conversational message in Hinglish/English.
+- "explanation": A warm, human, conversational message.
 
 RULES:
-- DO NOT INVENT PROPERTY DETAILS.
-- ALREADY EXTRACTED: ${JSON.stringify(scannedFilters)}. Priority is given to these.
-- For vague greetings (hi, hello): simply set "explanation" to a warm greeting and keep other filters empty.
-- If you have City and Property Type, DO NOT ask for them again.
-- NO internal reasoning, NO thinking out loud. ONLY return JSON.`;
+- ALREADY EXTRACTED: ${JSON.stringify(scannedFilters)}. Prioritize these.
+- If the user is closing the conversation (e.g., "ok thanks", "nice"), simply respond politely and do NOT ask search questions.
+- NO internal reasoning. ONLY return JSON.`;
 
     const messages = [
       { role: "system", content: systemPrompt },
