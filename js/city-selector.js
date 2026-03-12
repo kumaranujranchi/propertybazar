@@ -92,6 +92,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function selectCity(city) {
         localStorage.setItem('selectedCity', city);
+        // Mark that the user manually selected a city so automatic geolocation
+        // doesn't override their choice.
+        localStorage.setItem('cityManuallySelected', '1');
         if (currentCityText) currentCityText.textContent = city;
         cityModal.classList.remove('open');
         document.body.style.overflow = '';

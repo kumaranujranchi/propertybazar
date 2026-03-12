@@ -107,6 +107,11 @@ function initGeoCity() {
   // ask for location on load and set city if possible
   if (!('geolocation' in navigator)) return;
 
+  // Do not override a manual city selection.
+  const manual = localStorage.getItem('cityManuallySelected');
+  const saved = localStorage.getItem('selectedCity');
+  if (manual || (saved && saved !== 'Select City')) return;
+
   // Delay slightly to avoid prompt on page load blocking other scripts
   setTimeout(() => {
     navigator.geolocation.getCurrentPosition(async (pos) => {
@@ -121,6 +126,7 @@ function initGeoCity() {
         const addr = data.address || {};
         const city = addr.city || addr.town || addr.village || addr.hamlet || addr.county || addr.state;
         if (city) {
+          // Only set the city automatically; do NOT mark it as manually selected.
           setCity(city);
         }
       } catch (e) {
