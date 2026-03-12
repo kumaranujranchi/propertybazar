@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSearchTabs();
   initCityAutocomplete();
   initGeoCity();
+  initTopCitiesTabs();
   initSliders();
   initTestimonialsSlider();
   initAnimations();
@@ -100,6 +101,145 @@ function initNav() {
       }
     });
   }
+}
+
+// ========== TOP CITIES TABS & RENDER ==========
+function initTopCitiesTabs() {
+  const tabs = document.querySelectorAll('.city-tab');
+  const grid = document.querySelector('.cities-grid');
+  if (!tabs || !grid) return;
+
+  const CITY_DATA = {
+    'Bangalore': {
+      cols: [
+        { title: 'Flats in Bangalore', items: ['Whitefield','Sarjapur Road','Electronic City','Koramangala','HSR Layout','Marathahalli','Hebbal','Kanakapura Road','Bellandur','Varthur'] },
+        { title: 'House for Sale in Bangalore', items: ['Whitefield','HSR Layout','JP Nagar','Koramangala','Sarjapur Road','Hebbal','Yelahanka','Electronic City','Marathahalli','Bellandur'] },
+        { title: 'Property in Bangalore', items: ['Whitefield','Sarjapur Road','Electronic City','Yelahanka','HSR Layout','Koramangala','Marathahalli','Hebbal','JP Nagar','Bellandur'] },
+        { title: 'Plots in Bangalore', items: ['Whitefield','Sarjapur Road','Yelahanka','Electronic City','HSR Layout','Kanakapura Road','Marathahalli','JP Nagar','Sarjapur','Bellandur'] }
+      ]
+    },
+    'Mumbai': {
+      cols: [
+        { title: 'Flats in Mumbai', items: ['Bandra','Andheri','Powai','Juhu','Lower Parel','Dadar','Breach Candy','Kurla','Goregaon','Malad'] },
+        { title: 'House for Sale in Mumbai', items: ['Bandra','Juhu','Powai','Breach Candy','Dadar','Andheri','Kurla','Goregaon','Malad','Borivali'] },
+        { title: 'Property in Mumbai', items: ['Bandra','Andheri','Powai','Lower Parel','Dadar','Kurla','Chembur','Vikhroli','Goregaon','Malad'] },
+        { title: 'Plots in Mumbai', items: ['Vasai','Navi Mumbai (Panvel)','Kalyan','Dombivli','Kharghar','Kopar Khairane','Ghansoli','Uran','Ulwe','Taloja'] }
+      ]
+    },
+    'Hyderabad': {
+      cols: [
+        { title: 'Flats in Hyderabad', items: ['Gachibowli','Hitech City','Kondapur','Madhapur','Kukatpally','Miyapur','Banjara Hills','Jubilee Hills','Secunderabad','LB Nagar'] },
+        { title: 'House for Sale in Hyderabad', items: ['Banjara Hills','Jubilee Hills','Gachibowli','Kondapur','Madhapur','Kukatpally','Miyapur','Kismatpur','Narsingi','Manikonda'] },
+        { title: 'Property in Hyderabad', items: ['Gachibowli','Hitech City','Kondapur','Madhapur','Kukatpally','Banjara Hills','Jubilee Hills','Secunderabad','Kompally','Narayanguda'] },
+        { title: 'Plots in Hyderabad', items: ['Narsingi','Moinabad','Kukatpally','Shamshabad','Patancheru','Medchal','Ghatkesar','Keesara','Balanagar','Uppal'] }
+      ]
+    },
+    'Thane': {
+      cols: [
+        { title: 'Flats in Thane', items: ['Ghodbunder Road','Wagle Estate','Majiwada','Vartak Nagar','Thane West','Kalwa','Kopri','Naupada','Manpada','Balkum'] },
+        { title: 'House for Sale in Thane', items: ['Ghodbunder Road','Majiwada','Thane West','Kalwa','Balkum','Wagle Estate','Manpada','Kolshet','Vartak Nagar','Dhokali'] },
+        { title: 'Property in Thane', items: ['Ghodbunder Road','Majiwada','Thane West','Wagle Estate','Vartak Nagar','Kalwa','Kopri','Manpada','Balkum','Kolshet'] },
+        { title: 'Plots in Thane', items: ['Ghodbunder Road','Kolshet','Mumbra','Dombivli','Rabale','Turbhe','Kalwa','Badlapur','Ambernath','Ulhasnagar'] }
+      ]
+    },
+    'Pune': {
+      cols: [
+        { title: 'Flats in Pune', items: ['Kothrud','Baner','Viman Nagar','Wakad','Hinjewadi','Kalyani Nagar','Hingne','Sadashiv Peth','Shivaji Nagar','Kharadi'] },
+        { title: 'House for Sale in Pune', items: ['Kothrud','Baner','Viman Nagar','Kalyani Nagar','Kharadi','Wakad','Hinjewadi','Hadapsar','Aundh','Bibvewadi'] },
+        { title: 'Property in Pune', items: ['Kothrud','Baner','Viman Nagar','Wakad','Kalyani Nagar','Kharadi','Hinjewadi','Hadapsar','Pimpri','Chinchwad'] },
+        { title: 'Plots in Pune', items: ['Wakad','Hinjewadi','Talegaon','Lonavala','Paud Road','NIBM','Pashan','Katraj','Wagholi','Shirur'] }
+      ]
+    },
+    'New Delhi': {
+      cols: [
+        { title: 'Flats in Delhi', items: ['Connaught Place','South Extension','Karol Bagh','Saket','Rohini','Dwarka','Vasant Kunj','Janakpuri','Laxmi Nagar','Patel Nagar'] },
+        { title: 'House for Sale in Delhi', items: ['South Delhi (Saket)','Vasant Kunj','Rohini','Dwarka','Chanakyapuri','Model Town','Karol Bagh','Narela','Najafgarh','Pitampura'] },
+        { title: 'Property in Delhi', items: ['Connaught Place','Saket','Vasant Kunj','Karol Bagh','Janakpuri','Dwarka','Rohini','Laxmi Nagar','Patel Nagar','Mayur Vihar'] },
+        { title: 'Plots in Delhi', items: ['Narela','Mundka','Bawana','Najafgarh','Badli','Faridabad outskirts','Gurugram outskirts','Kapashera','Ghitorni','Uttam Nagar'] }
+      ]
+    },
+    'Chennai': {
+      cols: [
+        { title: 'Flats in Chennai', items: ['Velachery','OMR','Anna Nagar','Adyar','T Nagar','Tambaram','Porur','Nungambakkam','Besant Nagar','Chromepet'] },
+        { title: 'House for Sale in Chennai', items: ['Velachery','Adyar','Anna Nagar','Tambaram','Nungambakkam','Porur','Besant Nagar','Sholinganallur','Medavakkam','OMR'] },
+        { title: 'Property in Chennai', items: ['Velachery','OMR','Anna Nagar','Adyar','T Nagar','Porur','Tambaram','Nungambakkam','Besant Nagar','Chromepet'] },
+        { title: 'Plots in Chennai', items: ['OMR outskirts','Thiruporur','Siruseri','Poonamallee','Kovilambakkam','Mahabalipuram road','Guduvanchery','Perungalathur','Ponmar','Vadapalani outskirts'] }
+      ]
+    },
+    'Ahmedabad': {
+      cols: [
+        { title: 'Flats in Ahmedabad', items: ['SG Highway','Satellite','Thaltej','Bopal','Bodakdev','Maninagar','Naranpura','Ambawadi','Gota','Vastral'] },
+        { title: 'House for Sale in Ahmedabad', items: ['Bodakdev','Bopal','SG Highway','Satellite','Thaltej','Maninagar','Naranpura','Ambawadi','Gota','Vastral'] },
+        { title: 'Property in Ahmedabad', items: ['SG Highway','Satellite','Bopal','Thaltej','Bodakdev','Maninagar','Naranpura','Ambawadi','Vastral','Gota'] },
+        { title: 'Plots in Ahmedabad', items: ['Gandhinagar outskirts','Dholka','Sanand','Kalol','Bavla','Kadi','Narol','Ambli','Ognaj','Jhala'] }
+      ]
+    },
+    'Kolkata': {
+      cols: [
+        { title: 'Flats in Kolkata', items: ['Salt Lake','Park Street','New Town','Behala','Garia','Dumdum','Rajarhat','Ballygunge','Tollygunge','Alipore'] },
+        { title: 'House for Sale in Kolkata', items: ['Alipore','Ballygunge','Salt Lake','New Town','Park Street','Rajarhat','Tollygunge','Garia','Kankurgachi','Howrah'] },
+        { title: 'Property in Kolkata', items: ['Salt Lake','New Town','Park Street','Ballygunge','Behala','Garia','Dumdum','Rajarhat','Tollygunge','Alipore'] },
+        { title: 'Plots in Kolkata', items: ['New Town outskirts','Howrah outskirts','Barasat','Basirhat','Bidhannagar periphery','Joka outskirts','Raigunj','Barrackpore','Palta','Uluberia'] }
+      ]
+    },
+    'Gurgaon': {
+      cols: [
+        { title: 'Flats in Gurgaon', items: ['Sector 52','MG Road','Sohna Road','DLF Phase 1','Golf Course Road','Udyog Vihar','Sushant Lok','Sector 14','Palam Vihar','Sector 56'] },
+        { title: 'House for Sale in Gurgaon', items: ['DLF Phases','Sohna Road','MG Road','Sector 14','Palam Vihar','Galleria','Udyog Vihar','Sushant Lok','Golf Course Road','Sector 47'] },
+        { title: 'Property in Gurgaon', items: ['MG Road','Sohna Road','DLF Phases','Udyog Vihar','Sector 52','Galleria','Sushant Lok','Palam Vihar','Sector 56','Sector 14'] },
+        { title: 'Plots in Gurgaon', items: ['Sohna outskirts','Pataudi Road','Manesar','Wazirabad','Gurgaon-Faridabad border','Daultabad','Rai','Panchgaon','Sector 83 area','Matanhail'] }
+      ]
+    },
+    'Noida': {
+      cols: [
+        { title: 'Flats in Noida', items: ['Sector 18','Sector 62','Sector 50','Sector 76','Sector 78','Sector 137','Sector 93','Sector 121','Sector 44','Sector 150'] },
+        { title: 'House for Sale in Noida', items: ['Sector 50','Sector 44','Sector 18','Sector 62','Sector 137','Sector 93','Sector 121','Sector 78','Sector 150','Greater Noida'] },
+        { title: 'Property in Noida', items: ['Sector 18','Sector 62','Noida Expressway','Sector 50','Sector 44','Sector 137','Sector 78','Sector 121','Sector 150','Greater Noida'] },
+        { title: 'Plots in Noida', items: ['Greater Noida','Dadri','Gautam Budh Nagar periphery','Yamuna Expressway area','Jaroda','Noida Extension','Dadri outskirts','Dankaur','Bisrakh','Bhangel'] }
+      ]
+    },
+    'Navi Mumbai': {
+      cols: [
+        { title: 'Flats in Navi Mumbai', items: ['Vashi','Nerul','Belapur','Kharghar','Panvel','CBD Belapur','Airoli','Seawoods','Kamothe','Turbhe'] },
+        { title: 'House for Sale in Navi Mumbai', items: ['Vashi','Kharghar','Panvel','Nerul','CBD Belapur','Airoli','Seawoods','Kamothe','Turbhe','Gaimukh'] },
+        { title: 'Property in Navi Mumbai', items: ['Vashi','Nerul','Belapur','Kharghar','Panvel','Airoli','Seawoods','Kamothe','Turbhe','CBD Belapur'] },
+        { title: 'Plots in Navi Mumbai', items: ['Panvel outskirts','Kharghar outskirts','Taloja','Kalamboli','Uran','Ulve','Gavan','Kharkopar','Nerul periphery','Seawoods periphery'] }
+      ]
+    }
+  };
+
+  function encodeLocality(s) { return encodeURIComponent(s); }
+
+  function renderCityGrid(city) {
+    const data = CITY_DATA[city] || CITY_DATA['Bangalore'];
+    const html = data.cols.map(col => {
+      const items = col.items.map(it => `<li><a href="properties.html?city=${encodeLocality(city)}&locality=${encodeLocality(it)}">${col.title.includes(city) ? it : it}</a></li>`).join('\n');
+      return `
+        <div class="city-column">
+          <h5>${col.title}</h5>
+          <ul>
+            ${items}
+          </ul>
+        </div>`;
+    }).join('\n');
+    grid.innerHTML = html;
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const city = tab.dataset.city || tab.textContent.trim();
+      renderCityGrid(city);
+    });
+    tab.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tab.click(); }
+    });
+  });
+
+  // Ensure default city is rendered
+  const active = document.querySelector('.city-tab.active');
+  if (active) renderCityGrid(active.dataset.city || active.textContent.trim());
 }
 
 // ========= GEOLOCATION / CITY ==========
