@@ -732,37 +732,73 @@ function initPostSteps() {
     const formGroups = stepEl.querySelectorAll('.form-group');
     let isValid = true;
     let firstInvalid = null;
+    const invalidList = [];
+
+    // Helper: apply visual error on an input
+    function markInputError(input, reason) {
+      try {
+        input.style.borderColor = '#ef4444'; // Red border
+        input.style.backgroundColor = '#fef2f2';
+        input.setAttribute('data-error', reason || 'Required');
+        // Remove error styling on input change
+        const removeError = () => {
+          input.style.borderColor = '';
+          input.style.backgroundColor = '';
+          input.removeAttribute('data-error');
+          input.removeEventListener('input', removeError);
+        };
+        input.addEventListener('input', removeError);
+      } catch (e) { /* ignore styling errors */ }
+    }
 
     formGroups.forEach(group => {
       // Only validate if the group is visible (handles dynamic plot/flat fields)
       if (group.style.display === 'none') return;
-      
+
       const label = group.querySelector('.form-label');
       if (label && label.innerText.includes('*')) {
         const input = group.querySelector('input, select, textarea');
         if (input) {
-          if (!input.value.trim()) {
+          const val = (input.value || '').toString().trim();
+          // Empty check
+          if (!val) {
             isValid = false;
-            input.style.borderColor = '#ef4444'; // Red border
-            input.style.backgroundColor = '#fef2f2';
-            
-            // Remove error styling on input
-            input.addEventListener('input', function removeError() {
-               input.style.borderColor = '';
-               input.style.backgroundColor = '';
-               input.removeEventListener('input', removeError);
-            });
+            markInputError(input, 'Required');
+            invalidList.push({ label: label.innerText.replace('*','').trim(), reason: 'Required', el: input });
+            if (!firstInvalid) firstInvalid = input;
+            return;
+          }
 
+          // Minimum length heuristics for common fields
+          const id = input.id || '';
+          let minLen = 1;
+          if (id === 'descriptionInput' || (label && /Description/i.test(label.innerText))) minLen = 20;
+          else if (/pin|pincode|pin code/i.test(label.innerText) || /pin/i.test(id)) minLen = 6;
+          else if (/name/i.test(label.innerText) || /name/i.test(id)) minLen = 2;
+
+          if (val.length < minLen) {
+            isValid = false;
+            const reason = val.length === 0 ? 'Required' : `Too short (min ${minLen})`;
+            markInputError(input, reason);
+            invalidList.push({ label: label.innerText.replace('*','').trim(), reason, el: input });
             if (!firstInvalid) firstInvalid = input;
           }
         }
       }
     });
 
-    if (!isValid && firstInvalid) {
-      firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // If invalid, show a concise summary at top of the step
+    const existingSummary = stepEl.querySelector('.step-validation-summary');
+    if (existingSummary) existingSummary.remove();
+    if (!isValid && invalidList.length) {
+      const summary = document.createElement('div');
+      summary.className = 'step-validation-summary';
+      summary.style = 'background:#fff7f6; border:1px solid #ffdddd; color:#b91c1c; padding:10px 12px; border-radius:8px; margin-bottom:12px; font-size:13px;';
+      summary.innerHTML = `<strong>Fix these required fields:</strong><ul style="margin:8px 0 0 18px; padding:0; font-size:13px;">${invalidList.map(it => `<li>${it.label} — <span style=\"font-weight:700\">${it.reason}</span></li>`).join('')}</ul>`;
+      stepEl.insertBefore(summary, stepEl.firstChild);
+      if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-    
+
     return isValid;
   }
 

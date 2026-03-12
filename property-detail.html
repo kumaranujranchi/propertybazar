@@ -387,6 +387,39 @@
     </div>
   </div>
 
+  <!-- BROCHURE LEAD-CAPTURE MODAL -->
+  <div class="adv-modal-overlay" id="brochureModal" style="display:none;">
+    <div class="adv-modal-content">
+      <div class="adv-header">
+        <div class="adv-owner-profile">
+          <div class="adv-avatar"><i class="fa-solid fa-file-pdf"></i></div>
+          <div class="adv-owner-details">
+            <div class="adv-owner-name">Get Brochure</div>
+            <div class="adv-owner-role">Download Brochure</div>
+          </div>
+        </div>
+        <button class="adv-close" id="brochureModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="adv-body">
+        <div style="margin-bottom:12px; font-size:13px; color:var(--text-muted)">Please share your details to download the brochure.</div>
+        <div style="display:flex; gap:8px; margin-bottom:10px;">
+          <input id="brochureName" placeholder="Full name" style="flex:1; padding:10px; border-radius:6px; border:1px solid var(--border)" />
+        </div>
+        <div style="display:flex; gap:8px; margin-bottom:10px;">
+          <input id="brochureEmail" placeholder="Email (optional)" style="flex:1; padding:10px; border-radius:6px; border:1px solid var(--border)" />
+        </div>
+        <div style="display:flex; gap:8px; margin-bottom:10px;">
+          <input id="brochurePhone" placeholder="Mobile number" style="flex:1; padding:10px; border-radius:6px; border:1px solid var(--border)" />
+        </div>
+        <div style="margin-top:6px; margin-bottom:12px;"><label style="font-size:13px"><input type="checkbox" id="brochureTerms" /> I agree to the Terms & Conditions</label></div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-primary-large" id="brochureSubmit">Download Brochure</button>
+          <button class="btn-outline" id="brochureCancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Simple script to handle chip selection clicks securely without breaking scope
     document.addEventListener("DOMContentLoaded", () => {
@@ -1255,6 +1288,67 @@
             document.getElementById('publicPhoneRow').style.display = 'none';
           }
         }
+        // ---- Brochure Download Button & Lead Capture ----
+        try {
+          const brochureContainer = document.createElement('div');
+          brochureContainer.style.marginTop = '12px';
+          if (p.brochure) {
+            const btn = document.createElement('button');
+            btn.className = 'btn-outline';
+            btn.textContent = 'Download Brochure';
+            btn.id = 'downloadBrochureBtn';
+            btn.style.width = '100%';
+            brochureContainer.appendChild(btn);
+            const sidebarCard = document.querySelector('.sticky-sidebar .detail-section-card');
+            if (sidebarCard) sidebarCard.appendChild(brochureContainer);
+
+            // Modal open
+            btn.addEventListener('click', () => {
+              const bm = document.getElementById('brochureModal');
+              if (bm) { bm.style.display = 'block'; bm.classList.add('open'); document.body.style.overflow = 'hidden'; }
+              // prefill phone if available
+              const ph = document.getElementById('brochurePhone');
+              if (ph && p.contactDesc && p.contactDesc.mobile) ph.value = p.contactDesc.mobile;
+            });
+
+            // Modal handlers
+            const brochureModal = document.getElementById('brochureModal');
+            const brochureClose = document.getElementById('brochureModalClose');
+            const brochureCancel = document.getElementById('brochureCancel');
+            const brochureSubmit = document.getElementById('brochureSubmit');
+            function closeBrochureModal() { const bm = document.getElementById('brochureModal'); if (bm) { bm.style.display = 'none'; bm.classList.remove('open'); document.body.style.overflow = ''; } }
+            if (brochureClose) brochureClose.addEventListener('click', closeBrochureModal);
+            if (brochureCancel) brochureCancel.addEventListener('click', closeBrochureModal);
+
+            if (brochureSubmit) brochureSubmit.addEventListener('click', async function () {
+              const nameEl = document.getElementById('brochureName');
+              const phoneEl = document.getElementById('brochurePhone');
+              const emailEl = document.getElementById('brochureEmail');
+              const termsEl = document.getElementById('brochureTerms');
+              const name = nameEl ? nameEl.value.trim() : '';
+              const phone = phoneEl ? phoneEl.value.trim() : '';
+              const email = emailEl ? emailEl.value.trim() : '';
+              const terms = termsEl ? termsEl.checked : false;
+              if (!name || !phone) { alert('Please enter Name and Mobile'); return; }
+              if (!terms) { alert('Please agree to the Terms & Conditions'); return; }
+              this.disabled = true; this.textContent = 'Submitting...';
+              try {
+                await convex.mutation('properties:contactOwner', { propertyId: id, name, phone, email, message: 'Brochure Download' });
+                // After saving lead, open brochure URL
+                let url = null;
+                if (typeof p.brochure === 'string') url = p.brochure;
+                else if (p.brochure && p.brochure.url) url = p.brochure.url;
+                else if (p.brochure && p.brochure.storageId) url = await convex.query('properties:getPhotoUrl', { storageId: p.brochure.storageId });
+                closeBrochureModal();
+                if (url) window.open(url, '_blank');
+                else alert('Brochure is not available for download.');
+              } catch (err) {
+                alert('Failed to submit: ' + (err.message || err));
+                this.disabled = false; this.textContent = 'Download Brochure';
+              }
+            });
+          }
+        } catch (e) { console.error('Brochure button init failed', e); }
         // ---- Advanced Details (Categorized - Houssed Style) ----
         const advancedContainer = document.getElementById('advancedDetailsContainer');
         if (advancedContainer) {

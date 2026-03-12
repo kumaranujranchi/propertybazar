@@ -104,6 +104,16 @@ export const getProperty = query({
         })
       );
     }
+    // Resolve brochure URL (if any)
+    let resolvedBrochure = null;
+    if (p.brochure) {
+      try {
+        const sid = typeof p.brochure === 'string' ? p.brochure : p.brochure.storageId;
+        const url = await ctx.storage.getUrl(sid as any);
+        resolvedBrochure = typeof p.brochure === 'string' ? url : { ...p.brochure, url: url ?? null };
+      } catch { resolvedBrochure = null; }
+    }
+
     const owner = p.userId ? await ctx.db.get(p.userId) : null;
     const ownerInfo = owner ? {
       name: owner.name,
@@ -114,7 +124,7 @@ export const getProperty = query({
       subscriptionTier: owner.subscriptionTier
     } : null;
 
-    return { ...p, photos: resolvedPhotos.filter(Boolean), videos: resolvedVideos.filter(Boolean), configurations: resolvedConfigurations, ownerInfo };
+    return { ...p, photos: resolvedPhotos.filter(Boolean), videos: resolvedVideos.filter(Boolean), configurations: resolvedConfigurations, brochure: resolvedBrochure, ownerInfo };
   },
 });
 
@@ -146,6 +156,7 @@ export const createProperty = mutation({
     contactDesc: v.any(),
     posterType: v.optional(v.string()),
     customFAQs: v.optional(v.array(v.any())),
+    brochure: v.optional(v.any()),
   },
   handler: async (ctx: any, args: any) => {
     let resolvedUserId = args.userId;
@@ -207,6 +218,7 @@ export const createProperty = mutation({
       contactDesc: args.contactDesc,
       posterType: args.posterType || "Owner",
       customFAQs: args.customFAQs || [],
+      brochure: args.brochure || null,
       isFeatured: isFeatured,
       approvalStatus: "pending",
       lastActivatedAt: Date.now(),
@@ -264,6 +276,7 @@ export const updateProperty = mutation({
     amenities: v.array(v.string()),
     photos: v.array(v.any()),
     videos: v.optional(v.array(v.any())),
+    brochure: v.optional(v.any()),
     configurations: v.optional(v.array(v.any())),
     externalVideos: v.optional(v.array(v.string())),
     pricing: v.any(),
@@ -289,6 +302,7 @@ export const updateProperty = mutation({
       details: args.details,
       amenities: args.amenities,
       photos: args.photos,
+      brochure: args.brochure,
       videos: args.videos,
       configurations: args.configurations,
       externalVideos: args.externalVideos,
