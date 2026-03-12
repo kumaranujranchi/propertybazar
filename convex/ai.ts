@@ -49,7 +49,8 @@ RULES:
 - DO NOT INVENT PROPERTY DETAILS.
 - If search criteria are insufficient (e.g. just "hi"), set filters and explanation but the system will wait for more details before showing cards.
 - Current Date: ${new Date().toLocaleDateString()}
-- Use Indian numbering (1 Lac = 100,000, 1 Cr = 10,000,000).`;
+- Use Indian numbering (1 Lac = 100,000, 1 Cr = 10,000,000).
+- NO internal reasoning, NO thinking out loud, and NO <think> tags. ONLY return the JSON.`;
 
       const messages = [
         { role: "system", content: systemPrompt },
@@ -74,7 +75,16 @@ RULES:
       }
 
       const data = await response.json();
-      const aiResponse = data.choices[0]?.message?.content;
+      let aiResponse = data.choices[0]?.message?.content || "";
+
+      // 1. Handle Reasoning Blocks (<think> or <thought>)
+      const closedTagMatch = aiResponse.match(/[\s\S]*<\/(?:think|thought)>([\s\S]*)/i);
+      if (closedTagMatch && closedTagMatch[1].trim().length > 10) {
+        aiResponse = closedTagMatch[1].trim();
+      } else {
+        // Strip only the tags themselves, keeping whatever is outside or combined
+        aiResponse = aiResponse.replace(/<(think|thought)>[\s\S]*?<\/\1>/gi, "").replace(/<(?:think|thought)>[\s\S]*/gi, "").trim();
+      }
 
       const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
       let filters: any = {};
