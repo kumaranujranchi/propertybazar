@@ -76,6 +76,51 @@ document.addEventListener('DOMContentLoaded', async () => {
                 selectCity(city);
             });
         });
+
+            // Use my current location button
+            const useLocationBtn = document.getElementById('useLocationBtn');
+            if (useLocationBtn) {
+                useLocationBtn.addEventListener('click', async () => {
+                    useLocationBtn.disabled = true;
+                    useLocationBtn.textContent = 'Detecting...';
+                    try {
+                        if (!('geolocation' in navigator)) throw new Error('Geolocation not supported');
+                        navigator.geolocation.getCurrentPosition(async (pos) => {
+                            try {
+                                const { latitude, longitude } = pos.coords;
+                                const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
+                                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                                if (!res.ok) throw new Error('Reverse geocode failed');
+                                const data = await res.json();
+                                const addr = data.address || {};
+                                const city = addr.city || addr.town || addr.village || addr.hamlet || addr.county || addr.state;
+                                if (city) {
+                                    // selectCity will mark manual selection and close modal
+                                    selectCity(city);
+                                } else {
+                                    alert('Could not detect city from your location.');
+                                }
+                            } catch (e) {
+                                console.error(e);
+                                alert('Failed to detect location. Please try again.');
+                            } finally {
+                                useLocationBtn.disabled = false;
+                                useLocationBtn.textContent = 'Use my current location';
+                            }
+                        }, (err) => {
+                            console.warn('Geolocation error', err);
+                            alert('Location permission denied or unavailable.');
+                            useLocationBtn.disabled = false;
+                            useLocationBtn.textContent = 'Use my current location';
+                        }, { timeout: 10000 });
+                    } catch (err) {
+                        console.warn(err);
+                        alert('Geolocation not supported in your browser.');
+                        useLocationBtn.disabled = false;
+                        useLocationBtn.textContent = 'Use my current location';
+                    }
+                });
+            }
     }
 
     function populateAllCities(citiesToRender) {
