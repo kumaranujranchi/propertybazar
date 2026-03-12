@@ -25,37 +25,31 @@ Your goal is to analyze user requirements deeply and suggest the most relevant p
 
 WORKFLOW & BEHAVIOR:
 1. Analyze Requirements: Deeply understand what the user is looking for (e.g., distinguishing "Plot" from "Apartment").
-2. Smart Selection: Instead of just saying "I've applied filters", say something like "Based on your requirements, here are some of the best options available."
-3. Language Mirroring: You MUST respond in the EXACT language the user uses (e.g., Hindi, English, Hinglish).
-4. Lead Capture: Once you have suggested properties or answered a question, naturally ask for the user's name or mobile number. DO NOT let lead capture block the suggestions.
-5. Phone Number Validation: If the user provides a 10-digit number, accept it. Regex: ^[0-9]{10}$.
-6. Proactive Suggestions: Even if you are asking for a name, always include the current search criteria in your JSON so the assistant can show live options.
-7. CRITICAL: You MUST ALWAYS return a SINGLE JSON object. Never return just a string or number. Do not forget the curly braces { }.
+2. Conversational Greeting: For vague queries like "hi", "hello", "good morning", simply greet the user politely and ask how you can help find a property. Do NOT suggest properties or ask for mobile numbers immediately.
+3. Smart Suggestion: Suggest properties ONLY when you have at least a City and one other detail (Type, BHK, or Price). 
+4. Language Mirroring: You MUST respond in the EXACT language the user uses (e.g., Hindi, English, Hinglish).
+5. Lead Capture: Ask for user's name or mobile number ONLY after a meaningful interaction where you've provided value or are about to provide highly specific results.
+6. Phone Number Validation: If the user provides a 10-digit number, accept it. Regex: ^[0-9]{10}$.
+7. JSON SCHEMA: You MUST ALWAYS return a SINGLE JSON object containing "explanation" and structured filters.
 
 JSON SCHEMA:
 {
   "type": "buy" | "rent",
   "propType": "Apartment" | "Villa" | "Plot" | "Commercial" | "PG" | "Lodge",
   "bhk": number,
-  "city": "Extract ONLY the exact city or locality name (e.g. 'Patna', 'Patut'). Do NOT include state or district details in parenthesis.",
+  "city": "Extract ONLY the exact city or locality name (e.g. 'Patna').",
   "maxPrice": number,
   "amenities": string[],
   "userName": "Extract name if provided",
   "userMobile": "Extract 10-digit number if provided",
-  "explanation": "You MUST provide a conversational, polite response here acting as the agent. Do not leave this blank. (e.g. 'Got it, looking for plots in Patut.')"
+  "explanation": "Provide a conversational, polite response mirroring user language."
 }
 
 RULES:
-- SMART SEARCH: You are a machine-learning-powered smart assistant. Act like one.
-- PERSISTENT FILTERS: Include filters (city, type, propType, etc.) in EVERY turn.
-- DO NOT REPEAT QUESTIONS.
-- NO UNNECESSARY CONFIRMATION.
-- ACTION AWARENESS: You are presenting property cards inside the chat. Say "Maine aapki requirement ke hisab se niche kuch behtareen options suggest kiye hain."
-- CRITICAL: DO NOT INVENT OR LIST PROPERTY DETAILS IN YOUR TEXT. The system will automatically display real property cards below your message.
+- DO NOT INVENT PROPERTY DETAILS.
+- If search criteria are insufficient (e.g. just "hi"), set filters and explanation but the system will wait for more details before showing cards.
 - Current Date: ${new Date().toLocaleDateString()}
-- Use Indian numbering (1 Lac = 100,000, 1 Cr = 10,000,000).
-- Be polite and mirror the user's language.`;
-
+- Use Indian numbering (1 Lac = 100,000, 1 Cr = 10,000,000).`;
 
       const messages = [
         { role: "system", content: systemPrompt },
@@ -105,7 +99,9 @@ RULES:
 
       // --- NEW: Smart Property Suggestions ---
       let suggestions: any[] = [];
-      if (filters.city || filters.propType || filters.type) {
+      const hasMinimumCriteria = filters.city && (filters.propType || filters.bhk || filters.maxPrice || filters.type);
+      
+      if (hasMinimumCriteria) {
         // Fetch properties matching the criteria
         // @ts-ignore
         const { api } = await import("./_generated/api");
@@ -133,7 +129,7 @@ RULES:
           // Property Type match (flexible for Plot/Land)
           if (filters.propType) {
             const targetProp = filters.propType.toLowerCase();
-            const pType = p.propertyType.toLowerCase();
+            const pType = (p.propertyType || "").toLowerCase();
             if (targetProp === 'plot' || targetProp === 'land') {
               if (pType !== 'plot' && pType !== 'land') return false;
             } else if (pType !== targetProp) {
@@ -147,6 +143,12 @@ RULES:
 
           return true;
         }).slice(0, 3); // Top 3 matches
+
+        // Flatten photos to URL strings for frontend
+        suggestions = suggestions.map(p => ({
+          ...p,
+          photos: (p.photos || []).map((ph: any) => typeof ph === 'string' ? ph : ph.url).filter(Boolean)
+        }));
       }
 
       return { success: true, filters, suggestions };

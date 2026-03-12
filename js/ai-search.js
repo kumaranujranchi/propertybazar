@@ -77,18 +77,7 @@ function initAISearchAssistant() {
         addMessage(explanation, 'bot');
         
         // --- NEW: Property Suggestions Rendering ---
-        // Fallback for verification if Convex hasn't fully synced the return value logic
         let suggestions = result.suggestions;
-        if ((!suggestions || suggestions.length === 0) && filters.city?.toLowerCase() === 'patna') {
-            console.log("Using hard-coded fallback for Patna suggestion verification");
-            suggestions = [{ 
-                _id: "verify-id", 
-                propertyType: "Plot", 
-                location: { city: "Patna", locality: "Boring Road" }, 
-                pricing: { expectedPrice: 4500000 },
-                photos: ["img/default-property.jpg"]
-            }];
-        }
 
         if (suggestions && suggestions.length > 0) {
           renderPropertySuggestions(suggestions);
@@ -120,8 +109,16 @@ function initAISearchAssistant() {
       const card = document.createElement('div');
       card.className = 'ai-prop-card';
       card.dataset.id = prop._id;
+      
+      // Get the first photo URL or use a valid local placeholder
+      let photoUrl = 'images/property-1.jpg'; // Better default than img/placeholder.jpg
+      if (prop.photos && prop.photos.length > 0) {
+        // Backend now flattens photos to URLs, but we check just in case
+        photoUrl = typeof prop.photos[0] === 'string' ? prop.photos[0] : (prop.photos[0].url || photoUrl);
+      }
+
       card.innerHTML = `
-        <img src="${prop.photos?.[0] || 'img/placeholder.jpg'}" alt="${prop.propertyType}">
+        <img src="${photoUrl}" alt="${prop.propertyType}">
         <div class="details">
           <div class="title">
             ${prop.details?.bhk ? prop.details.bhk + ' BHK ' : ''}${prop.propertyType} in ${prop.location?.locality || prop.location?.city}
