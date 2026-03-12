@@ -238,6 +238,16 @@ export const rewriteDescription = action({
     const apiKey = process.env.SARVAM_API_KEY;
     if (!apiKey) return { success: false, error: "AI key missing" };
 
+    const normalize = (s: string) => s.toLowerCase().replace(/\s+/g, " ").trim();
+
+    const buildLocalFallback = (input: string) => {
+      const compact = input.replace(/\s+/g, " ").trim();
+      if (!compact) return "";
+      const capitalized = compact.charAt(0).toUpperCase() + compact.slice(1);
+      const withPunctuation = /[.!?]$/.test(capitalized) ? capitalized : `${capitalized}.`;
+      return `${withPunctuation} Well-suited for buyers or tenants looking for comfort, convenience, and good long-term value.`;
+    };
+
     try {
       const messages = [
         {
@@ -310,8 +320,15 @@ export const rewriteDescription = action({
 
       // If still empty after retry, gracefully fall back to original text instead of returning an error
       if (!aiResponse) {
-        console.warn('AI returned no usable content; returning original text as fallback');
-        return { success: true, text: args.text };
+        console.warn('AI returned no usable content; using local polished fallback');
+        const fallbackText = buildLocalFallback(args.text);
+        return { success: true, text: fallbackText || args.text, fallback: true };
+      }
+
+      // If model returns effectively unchanged text, apply a light local enhancement.
+      if (normalize(aiResponse) === normalize(args.text)) {
+        const fallbackText = buildLocalFallback(args.text);
+        return { success: true, text: fallbackText || aiResponse, fallback: true };
       }
 
       return { success: true, text: aiResponse };
