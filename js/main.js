@@ -755,9 +755,25 @@ function initPostSteps() {
       } catch (e) { /* ignore styling errors */ }
     }
 
+    // Helper: determine if an element is visible on the page (accounts for parent visibility)
+    function isElementVisible(el) {
+      if (!el) return false;
+      if (el.getClientRects().length === 0) return false;
+      const style = window.getComputedStyle(el);
+      if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') return false;
+      // Walk up to ensure no ancestor hides it via display:none
+      let p = el.parentElement;
+      while (p) {
+        const ps = window.getComputedStyle(p);
+        if (ps.display === 'none' || ps.visibility === 'hidden') return false;
+        p = p.parentElement;
+      }
+      return true;
+    }
+
     formGroups.forEach(group => {
-      // Only validate if the group is visible (handles dynamic plot/flat fields)
-      if (group.style.display === 'none') return;
+      // Only validate if the group is visible (handles dynamic plot/flat fields and parent-hidden grids)
+      if (!isElementVisible(group)) return;
 
       const label = group.querySelector('.form-label');
       if (label && label.innerText.includes('*')) {
