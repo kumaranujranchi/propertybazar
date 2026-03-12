@@ -47,10 +47,11 @@ JSON SCHEMA:
 
 RULES:
 - DO NOT INVENT PROPERTY DETAILS.
-- If search criteria are insufficient (e.g. just "hi"), set filters and explanation but the system will wait for more details before showing cards.
+- For vague greetings (hi, hello): simply set "explanation" to a warm greeting in the user's language and keep other filters empty.
+- If search criteria are insufficient: set "explanation" to ask for missing details (City, Type, Price).
 - Current Date: ${new Date().toLocaleDateString()}
 - Use Indian numbering (1 Lac = 100,000, 1 Cr = 10,000,000).
-- NO internal reasoning, NO thinking out loud, and NO <think> tags. ONLY return the JSON.`;
+- NO internal reasoning, NO thinking out loud, and NO <think> tags. ONLY return the JSON. Your friendly message MUST be inside the "explanation" field.`;
 
       const messages = [
         { role: "system", content: systemPrompt },
@@ -99,11 +100,16 @@ RULES:
       }
 
       // Ensure explanation exists
+      const isGreeting = /^(hi|hello|hey|namaste|morning|evening|hola)$/i.test(args.query.trim());
+      
       if (!filters.explanation || filters.explanation.trim() === "") {
         const textBeforeJson = aiResponse.split('{')[0].trim();
         filters.explanation = textBeforeJson || aiResponse.replace(/\{[\s\S]*\}/, "").trim() || aiResponse;
+        
         if (!filters.explanation || filters.explanation.length < 2) {
-            filters.explanation = "I've processed your request based on your criteria.";
+            filters.explanation = isGreeting 
+              ? "Namaste! I'm Dismil, your AI property assistant. How can I help you find your dream home today?"
+              : "I've analyzed your search criteria and I'm ready to help you find the best options.";
         }
       }
 
