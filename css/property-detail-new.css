@@ -140,59 +140,64 @@ body {
   transform: scale(1.02);
 }
 
-/* Collage layout for detail page gallery */
+/* Collage layout for detail page gallery — FIXED size, never grows with image */
 .gallery-collage {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  grid-template-rows: auto auto;
+  grid-template-rows: 1fr; /* single row, side stacks internally */
   gap: 12px;
-  align-items: stretch;
   flex: 2;
+  height: 420px; /* fixed height — images crop to fill, grid never resizes */
+  max-height: 420px;
 }
 .collage-main {
-  grid-row: 1 / span 2;
+  grid-row: 1;
   grid-column: 1 / 2;
   border-radius: var(--radius);
   overflow: hidden;
-  background: #f8faff;
+  background: #1a1a1a;
   position: relative;
-  min-height: 260px;
+  height: 100%;
 }
 .collage-main img {
-  width: calc(100% - 12px) !important;
-  height: calc(100% - 12px) !important;
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover !important;
   object-position: center center !important;
   display: block !important;
-  margin: 6px auto !important;
-  border-radius: 8px;
-  background: #f2f4f8;
+  border-radius: 0;
+  margin: 0 !important;
+  background: #1a1a1a;
 }
 .collage-side {
   grid-column: 2 / 3;
-  grid-row: 1 / span 2;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 100%;
 }
 .gallery-item {
   border-radius: 10px;
   overflow: hidden;
-  background: #f2f4f8;
+  background: #1a1a1a;
   position: relative;
-  display: block;
-  flex: 1;
-  min-height: 0;
+  flex: 1; /* equal share of side column height */
+  min-height: 0; /* prevent flex blowout */
 }
 .gallery-item img {
-  width: calc(100% - 12px) !important;
-  height: calc(100% - 12px) !important;
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover !important;
   object-position: center center !important;
   display: block !important;
-  margin: 6px auto !important;
-  border-radius: 8px;
-  background: #f2f4f8;
+  border-radius: 0;
+  margin: 0 !important;
+  background: #1a1a1a;
 }
 /* Use background-image as fallback to ensure full-bleed tiles even for small images */
 .gallery-item.has-bg {
@@ -220,10 +225,14 @@ body {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
   }
+  .gallery-collage {
+    height: 260px;
+    max-height: 260px;
+  }
   .collage-main {
     grid-row: 1;
     grid-column: 1;
-    min-height: 220px;
+    height: 100%;
   }
   .collage-side {
     grid-row: 2;
