@@ -13,6 +13,21 @@ export const parseSearchQuery = action({
     history: v.optional(v.array(v.object({ role: v.string(), content: v.string() }))),
   },
   handler: async (ctx, args) => {
+    const fuzzyMatch = (str: string, target: string) => {
+      const s = str.toLowerCase();
+      const t = target.toLowerCase();
+      if (s.includes(t) || t.includes(s)) return true;
+      
+      // Simple Levenshtein-ish check for small typos
+      let distance = 0;
+      const len = Math.min(s.length, t.length);
+      for (let i = 0; i < len; i++) {
+        if (s[i] !== t[i]) distance++;
+      }
+      distance += Math.abs(s.length - t.length);
+      return distance <= 2; // Allow 2 characters difference
+    };
+
     const apiKey = process.env.SARVAM_API_KEY;
     if (!apiKey) {
       console.error("SARVAM_API_KEY is not set in environment variables");
@@ -99,9 +114,29 @@ RULES:
         }
       }
 
+      // --- HYBRID LOGIC: Correction & Synonym Mapping ---
+      if (filters.city) {
+        // Fetch all cities to fuzzy match
+        // @ts-ignore
+        const { api } = await import("./_generated/api");
+        const allCities = await ctx.runQuery(api.properties.getUniqueCities);
+        const bestMatch = allCities.find((c: string) => fuzzyMatch(filters.city, c));
+        if (bestMatch) filters.city = bestMatch;
+      }
+
+      // Standardize Property Types
+      if (filters.propType) {
+        const pt = filters.propType.toLowerCase();
+        if (pt === "flat" || pt === "apartment" || pt === "bhk") filters.propType = "Apartment";
+        else if (pt === "plot" || pt === "land") filters.propType = "Plot";
+        else if (pt === "villa" || pt === "bungalow" || pt === "house") filters.propType = "Villa";
+        else if (pt === "shop" || pt === "office" || pt === "retail" || pt === "commercial") filters.propType = "Commercial";
+        else if (pt === "pg" || pt === "hostel" || pt === "lodge") filters.propType = "PG";
+      }
+
       // Ensure explanation exists - SMART HUMANIZATION FALLBACK
       const userText = args.query.toLowerCase().trim();
-      const isGreeting = /^(hi|hello|hey|hei|namaste|morning|evening|morning|heya|yo|hlo|hii|hiii)$/i.test(userText);
+      const isGreeting = /^(hi|hello|hey|hei|namaste|morning|evening|heya|yo|hlo|hii|hiii)$/i.test(userText);
       const isStatus = /^(ok|okay|nice|good|fine|waht|what|ji|thik|theek)$/i.test(userText);
       
       if (!filters.explanation || filters.explanation.trim() === "" || filters.explanation.includes("analyzed your search criteria")) {
@@ -115,7 +150,7 @@ RULES:
                 const city = filters.city || "this city";
                 const type = filters.propType || "property";
                 const price = filters.maxPrice ? ` under ₹${(filters.maxPrice/100000).toFixed(1)}L` : "";
-                filters.explanation = `Acha! I'm looking for ${type} in ${city}${price} for you. Let me check the latest listings.`;
+                filters.explanation = `Theek hai Anuj, main aapke liye ${city} mein ${type}${price} dhund raha hoon. Ek minute rukiye...`;
             } else if (isStatus) {
                 filters.explanation = "Great! Any other specific requirements like BHK, budget or locality you have in mind?";
             } else {
@@ -124,7 +159,7 @@ RULES:
         }
       }
 
-      // --- NEW: Smart Property Suggestions ---
+      // --- Smart Property Suggestions ---
       let suggestions: any[] = [];
       const hasMinimumCriteria = filters.city && (filters.propType || filters.bhk || filters.maxPrice || filters.type);
       
@@ -145,8 +180,8 @@ RULES:
             const pLocality = (p.location?.locality || "").toLowerCase();
             
             // Check if property city/locality matches any part of the search query
-            const cityMatch = pCity && (userText.includes(pCity) || pCity.includes(searchCity));
-            const localityMatch = pLocality && (userText.includes(pLocality) || pLocality.includes(searchCity));
+            const cityMatch = pCity && (userText.includes(pCity) || pCity.includes(searchCity) || fuzzyMatch(pCity, searchCity));
+            const localityMatch = pLocality && (userText.includes(pLocality) || pLocality.includes(searchCity) || fuzzyMatch(pLocality, searchCity));
             
             if (!cityMatch && !localityMatch) return false;
           }
