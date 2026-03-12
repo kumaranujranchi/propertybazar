@@ -5,6 +5,7 @@ const client = new ConvexHttpClient("https://veracious-caribou-870.convex.cloud"
 const cases = [
   { input: 'hi', expectCity: false },
   { input: 'hello', expectCity: false },
+  { input: 'thanks', expectCity: false },
   { input: 'Gandhinagar', expectCity: true, expectedCity: 'Gandhinagar' },
   { input: 'Gandhinagar mein 2bhk flat chahiye', expectCity: true, expectedCity: 'Gandhinagar' },
   { input: 'Patna mein 2bhk flat for rent', expectCity: true, expectedCity: 'Patna' },

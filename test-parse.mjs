@@ -6,6 +6,7 @@ const tests = [
   "hi",
   "Hi",
   "hello",
+  "Thanks",
   "Gandhinagar",
   "Looking for 2bhk flat in Patna",
   "Gandhinagar mein 2bhk flat chahiye",

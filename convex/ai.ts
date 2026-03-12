@@ -46,6 +46,11 @@ export const parseSearchQuery = action({
     // --- TRUE HYBRID: KEYWORD SCANNER (Runs BEFORE AI) ---
     const userText = args.query.toLowerCase().trim();
     const scannedFilters: any = {};
+
+    // Early detection of pure greetings/closing words so we don't accidentally
+    // treat them as cities or other filters (e.g., "thanks" matching "Thane").
+    const isGreeting = /^(hi|hello|hey|hei|namaste|morning|evening|heya|yo|hlo|hii|hiii)$/i.test(userText);
+    const isStatus = /^(ok|okay|nice|good|fine|waht|what|ji|thik|theek|perfect|great|done|over|thanks|thank you|ty|shukriya|dhanyawad)$/i.test(userText);
     
     // 1. Extract Property Type via strict keywords
     if (/\b(flat|apartment|2bhk|3bhk|1bhk|bhk)\b/i.test(userText)) scannedFilters.propType = "Apartment";
@@ -60,11 +65,14 @@ export const parseSearchQuery = action({
     const commonCities = ["Patna", "Delhi", "Ranchi", "Mumbai", "Bangalore", "Kolkata", "Chennai", "Lucknow", "Jaipur", "Ahmedabad", "Gurgaon", "Noida"];
     const citiesToSearch = Array.from(new Set([...allCities, ...commonCities]));
 
-    for (const city of citiesToSearch) {
+    // Only run city detection if the input is not a pure greeting/closing word.
+    if (!isGreeting && !isStatus) {
+      for (const city of citiesToSearch) {
         if (userText.includes(city.toLowerCase()) || fuzzyMatch(userText, city)) {
-            scannedFilters.city = city;
-            break;
+          scannedFilters.city = city;
+          break;
         }
+      }
     }
 
     // 3. Extract BHK
