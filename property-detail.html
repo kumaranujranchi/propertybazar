@@ -533,7 +533,8 @@
           <div class="summary-quick-details" id="heroQuickDetails"></div>
         </div>
 
-        <div class="summary-cta-area" style="border-top: 1px solid var(--border); padding-top: 20px; position: relative; z-index: 10;">
+        <div class="summary-cta-area"
+          style="border-top: 1px solid var(--border); padding-top: 20px; position: relative; z-index: 10;">
           <button type="button" class="btn-primary-large" id="btnOpenAdvModal" style="position: relative; z-index: 11;">
             <i class="fa-solid fa-phone"></i> View Contact Details
           </button>
@@ -600,13 +601,13 @@
         </div>
 
         <!-- PROJECT VIDEOS -->
-        <div id="projectVideos" class="detail-section-card" style="display:none">
+        <div id="videos" class="detail-section-card" style="display:none">
           <h2 class="section-h2"><i class="fa-solid fa-video"></i> Project Videos</h2>
-          <div id="projectVideoGrid" style="display:flex; gap:12px; flex-wrap:wrap;">
+          <div id="projectVideoGrid" style="display:flex; gap:16px; flex-wrap:wrap;">
             <!-- Uploaded videos will render here -->
           </div>
-          <div id="projectExternalVideos" style="margin-top:12px; display:flex; gap:8px; flex-direction:column">
-            <!-- External video links (YouTube/Vimeo) -->
+          <div id="projectExternalVideos" style="margin-top:16px; display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;">
+            <!-- External video embeds (YouTube/Vimeo) -->
           </div>
         </div>
 
@@ -1662,11 +1663,32 @@
         }
 
         // ---- Project Videos (separate section) ----
-        const projectVideoSection = document.getElementById('projectVideos');
+        const projectVideoSection = document.getElementById('videos');
         const videoGrid = document.getElementById('projectVideoGrid');
         const extVideoContainer = document.getElementById('projectExternalVideos');
         const uploadedVideos = p.videos || [];
         const externalVideos = p.externalVideos || [];
+
+        // Convert a YouTube / Vimeo URL to an embed src
+        function getVideoEmbedUrl(url) {
+          try {
+            const u = new URL(url);
+            // YouTube long: youtube.com/watch?v=ID
+            if (u.hostname.includes('youtube.com') && u.searchParams.get('v')) {
+              return `https://www.youtube.com/embed/${u.searchParams.get('v')}?rel=0`;
+            }
+            // YouTube short: youtu.be/ID
+            if (u.hostname === 'youtu.be') {
+              return `https://www.youtube.com/embed${u.pathname}?rel=0`;
+            }
+            // Vimeo
+            if (u.hostname.includes('vimeo.com')) {
+              const id = u.pathname.split('/').filter(Boolean).pop();
+              return `https://player.vimeo.com/video/${id}`;
+            }
+          } catch (_) {}
+          return null;
+        }
 
         if (projectVideoSection && ((uploadedVideos.length > 0) || (externalVideos.length > 0))) {
           if (videoGrid && uploadedVideos.length > 0) {
@@ -1682,14 +1704,32 @@
           if (extVideoContainer && externalVideos.length > 0) {
             extVideoContainer.innerHTML = '';
             externalVideos.forEach(link => {
-              const a = document.createElement('a');
-              a.href = link; a.target = '_blank'; a.rel = 'noopener';
-              a.style.cssText = 'color:var(--primary); font-weight:700; display:block; margin-bottom:8px;';
-              a.textContent = link;
-              extVideoContainer.appendChild(a);
+              const embedSrc = getVideoEmbedUrl(link);
+              const wrap = document.createElement('div');
+              wrap.style.cssText = 'position:relative; padding-top:56.25%; border-radius:10px; overflow:hidden; background:#000; box-shadow:0 4px 16px rgba(0,0,0,0.12);';
+              if (embedSrc) {
+                wrap.innerHTML = `<iframe src="${embedSrc}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe>`;
+              } else {
+                // fallback: plain link
+                wrap.style.background = 'var(--bg)';
+                wrap.innerHTML = `<a href="${link}" target="_blank" rel="noopener" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--primary);font-weight:700;"><i class='fa-brands fa-youtube' style='font-size:32px'></i>${link}</a>`;
+              }
+              extVideoContainer.appendChild(wrap);
             });
           }
           projectVideoSection.style.display = 'block';
+
+          // Inject 'Videos' link into sticky sub-nav dynamically
+          const subnavLinks = document.querySelector('.subnav-links');
+          if (subnavLinks && !subnavLinks.querySelector('a[href="#videos"]')) {
+            const faqLink = subnavLinks.querySelector('a[href="#faq"]');
+            const vidLink = document.createElement('a');
+            vidLink.href = '#videos';
+            vidLink.className = 'subnav-link';
+            vidLink.textContent = 'Videos';
+            if (faqLink) subnavLinks.insertBefore(vidLink, faqLink);
+            else subnavLinks.appendChild(vidLink);
+          }
         }
 
         // ---- JSON-LD Rich Snippet (dynamic) ----
