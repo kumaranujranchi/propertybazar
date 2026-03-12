@@ -242,11 +242,11 @@ export const rewriteDescription = action({
       const messages = [
         {
           role: "system",
-          content: "You are a professional real estate copywriter. Your ONLY job is to rewrite the user's property description in clear, compelling English. Output ONLY the rewritten description text. Do NOT add any heading, title, preamble, explanation, or markdown formatting."
+          content: "You are a helpful real estate assistant. When asked to improve a property description, respond ONLY with the improved description text. No preamble, no heading, no explanation — just the description itself."
         },
         {
           role: "user",
-          content: `Rewrite this property description professionally:\n\n${args.text}`
+          content: `Improve this property listing description to make it more professional and attractive for potential buyers or renters. Write 3-5 clear, compelling sentences. Here is the description:\n\n"${args.text}"`
         }
       ];
 
@@ -261,7 +261,7 @@ export const rewriteDescription = action({
             model: "sarvam-m",
             messages,
             temperature,
-            max_tokens: 600
+            max_tokens: 500
           })
         });
 
@@ -275,7 +275,7 @@ export const rewriteDescription = action({
         return "";
       };
 
-      const response = await makeRequest(0.7);
+      const response = await makeRequest(0.1);
       const data = await response.json();
       console.log('Sarvam AI Response Data:', JSON.stringify(data));
 
@@ -296,7 +296,7 @@ export const rewriteDescription = action({
       if (!aiResponse) {
         try {
           console.warn('AI returned empty response; retrying once');
-          const retryResp = await makeRequest(0.9);
+          const retryResp = await makeRequest(0.3);
           if (retryResp.ok) {
             const retryData = await retryResp.json();
             console.log('Sarvam AI Retry Data:', JSON.stringify(retryData));
