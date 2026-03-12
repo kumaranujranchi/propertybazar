@@ -144,18 +144,8 @@ RULES:
       }
     } catch (e) {
       console.warn("AI call failed.", e);
-    }
-
-    // --- MERGE SCANNED FILTERS WITH AI FILTERS ---
-    filters = { ...filters, ...scannedFilters };
-
-    // Ensure explanation exists - HUMANIZATION ENGINE
     const isGreeting = /^(hi|hello|hey|hei|namaste|morning|evening|heya|yo|hlo|hii|hiii)$/i.test(userText);
     const isStatus = /^(ok|okay|nice|good|fine|waht|what|ji|thik|theek|perfect|great|done|over|thanks|thank you|ty|shukriya|dhanyawad)$/i.test(userText);
-    
-    if (!aiExplanation || aiExplanation.trim() === "" || aiExplanation.includes("analyzed your search criteria")) {
-        if (isGreeting) {
-            filters.explanation = "Namaste! I'm 24Dismil Ai Assitance, your property assistant. Aap kaise hain? How can I help you find a property today?";
         } else if (filters.city) {
             const city = filters.city;
             const propType = filters.propType || "property";
@@ -267,8 +257,26 @@ export const rewriteDescription = action({
       });
 
       const data = await response.json();
-      let aiResponse = data.choices[0]?.message?.content || "";
-      aiResponse = aiResponse.replace(/<[^>]+>/gi, "").replace(/```[\s\S]*?```/g, "").trim();
+      // Defensive: API may return different shapes; guard against missing choices
+      let aiResponse = "";
+      try {
+        if (Array.isArray(data?.choices) && data.choices.length > 0) {
+          aiResponse = data.choices[0]?.message?.content || data.choices[0]?.text || "";
+        } else if (typeof data?.message?.content === 'string') {
+          aiResponse = data.message.content;
+        } else if (typeof data?.output_text === 'string') {
+          aiResponse = data.output_text;
+        } else if (typeof data?.text === 'string') {
+          aiResponse = data.text;
+        } else {
+          console.warn('Unexpected AI response shape:', Object.keys(data || {}));
+          return { success: false, error: 'AI returned unexpected response format' };
+        }
+      } catch (e) {
+        console.error('Error parsing AI response:', e, data);
+        return { success: false, error: 'Failed to parse AI response' };
+      }
+      aiResponse = (aiResponse || "").replace(/<[^>]+>/gi, "").replace(/```[\s\S]*?```/g, "").trim();
 
       return { success: true, text: aiResponse };
     } catch (e: any) {
