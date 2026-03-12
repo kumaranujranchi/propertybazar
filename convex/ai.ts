@@ -5,7 +5,7 @@ declare const process: any;
 
 /**
  * Parses natural language property search queries into structured JSON.
- * Uses Sarvam AI's sarvam-m model.
+ * Uses Sarvam AI's sarvam-1 model.
  */
 export const parseSearchQuery = action({
   args: {
@@ -18,72 +18,83 @@ export const parseSearchQuery = action({
       const t = target.toLowerCase();
       if (s.includes(t) || t.includes(s)) return true;
       
-      // Simple Levenshtein-ish check for small typos
       let distance = 0;
       const len = Math.min(s.length, t.length);
       for (let i = 0; i < len; i++) {
         if (s[i] !== t[i]) distance++;
       }
       distance += Math.abs(s.length - t.length);
-      return distance <= 2; // Allow 2 characters difference
+      return distance <= 2;
     };
 
     const apiKey = process.env.SARVAM_API_KEY;
     if (!apiKey) {
-      console.error("SARVAM_API_KEY is not set in environment variables");
-      return { success: false, error: "AI search is currently unavailable. Please check backend config.", filters: {} };
+      console.error("SARVAM_API_KEY is not set");
+      return { success: false, error: "AI search is currently unavailable.", filters: {} };
     }
 
-    try {
-      const systemPrompt = `You are "Dismil", a smart AI real estate assistant for 24Dismil.com.
-Your goal is to analyze user requirements deeply and suggest the most relevant properties in India.
+    // --- TRUE HYBRID: KEYWORD SCANNER (Runs BEFORE AI) ---
+    const userText = args.query.toLowerCase().trim();
+    const scannedFilters: any = {};
+    
+    // 1. Extract Property Type via strict keywords
+    if (/\b(flat|apartment|2bhk|3bhk|1bhk|bhk)\b/i.test(userText)) scannedFilters.propType = "Apartment";
+    else if (/\b(plot|land|zamin|bhukhand)\b/i.test(userText)) scannedFilters.propType = "Plot";
+    else if (/\b(villa|bungalow|house|makan|kothi)\b/i.test(userText)) scannedFilters.propType = "Villa";
+    else if (/\b(shop|office|retail|commercial|dukan)\b/i.test(userText)) scannedFilters.propType = "Commercial";
 
-WORKFLOW & BEHAVIOR:
-1. Analyze Requirements: Deeply understand what the user is looking for (e.g., distinguishing "Plot" from "Apartment").
-2. Conversational Greeting: For vague queries like "hi", "hello", "good morning", simply greet the user politely and ask how you can help find a property. Do NOT suggest properties or ask for mobile numbers immediately.
-3. Smart Suggestion: Suggest properties ONLY when you have at least a City and one other detail (Type, BHK, or Price). 
-4. Language Mirroring: You MUST respond in the EXACT language the user uses (e.g., Hindi, English, Hinglish).
-5. Lead Capture: Ask for user's name or mobile number ONLY after a meaningful interaction where you've provided value or are about to provide highly specific results.
-6. Phone Number Validation: If the user provides a 10-digit number, accept it. Regex: ^[0-9]{10}$.
-7. JSON SCHEMA: You MUST ALWAYS return a SINGLE JSON object containing "explanation" and structured filters.
+    // 2. Extract City via Database Lookup + Fuzzy Matching
+    // @ts-ignore
+    const { api } = await import("./_generated/api");
+    const allCities = await ctx.runQuery(api.properties.getUniqueCities);
+    for (const city of allCities) {
+        if (userText.includes(city.toLowerCase()) || fuzzyMatch(userText, city)) {
+            scannedFilters.city = city;
+            break;
+        }
+    }
 
-JSON SCHEMA:
-{
-  "type": "buy" | "rent",
-  "propType": "Apartment" | "Villa" | "Plot" | "Commercial" | "PG" | "Lodge",
-  "bhk": number,
-  "city": "Extract ONLY the exact city or locality name (e.g. 'Patna').",
-  "maxPrice": number,
-  "amenities": string[],
-  "userName": "Extract name if provided",
-  "userMobile": "Extract 10-digit number if provided",
-  "explanation": "Provide a conversational, polite response mirroring user language."
-}
+    // 3. Extract BHK
+    const bhkMatch = userText.match(/(\d)\s*bhk/i);
+    if (bhkMatch) scannedFilters.bhk = bhkMatch[1];
+
+    const systemPrompt = `You are Dismil, a professional real estate assistant for 24Dismil.com.
+Your job is to extract search criteria from the user's query and return a valid JSON object.
+
+SEARCH CRITERIA TO EXTRACT:
+- "city": string (e.g. "Patna", "Delhi")
+- "type": "Rent" or "Sale"
+- "propType": "Apartment", "Villa", "Plot", "Commercial", "PG"
+- "bhk": string (e.g. "2", "3")
+- "maxPrice": number (total budget in Rupees)
+- "explanation": A warm, human, conversational message in Hinglish/English.
 
 RULES:
 - DO NOT INVENT PROPERTY DETAILS.
-- For vague greetings (hi, hello): simply set "explanation" to a warm greeting in the user's language and keep other filters empty.
-- If search criteria are insufficient: set "explanation" to ask for missing details (City, Type, Price).
-- Current Date: ${new Date().toLocaleDateString()}
-- Use Indian numbering (1 Lac = 100,000, 1 Cr = 10,000,000).
-- NO internal reasoning, NO thinking out loud, and NO <think> tags. ONLY return the JSON. Your friendly message MUST be inside the "explanation" field.`;
+- ALREADY EXTRACTED: ${JSON.stringify(scannedFilters)}. Priority is given to these.
+- For vague greetings (hi, hello): simply set "explanation" to a warm greeting and keep other filters empty.
+- If you have City and Property Type, DO NOT ask for them again.
+- NO internal reasoning, NO thinking out loud. ONLY return JSON.`;
 
-      const messages = [
-        { role: "system", content: systemPrompt },
-        ...(args.history || []),
-        { role: "user", content: args.query }
-      ];
+    const messages = [
+      { role: "system", content: systemPrompt },
+      ...(args.history || []),
+      { role: "user", content: args.query }
+    ];
 
-      const response = await fetch("https://api.sarvam.ai/v1/chat/completions", {
+    try {
+      const response = await fetch("https://api.sarvam.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "api-subscription-key": apiKey,
+          "api-subscription-key": apiKey
         },
         body: JSON.stringify({
-          model: "sarvam-m",
+          model: "sarvam-1",
           messages: messages,
-        }),
+          temperature: 0.1,
+          max_tokens: 500
+        })
       });
 
       if (!response.ok) {
@@ -93,69 +104,39 @@ RULES:
       const data = await response.json();
       let aiResponse = data.choices[0]?.message?.content || "";
 
-      // 1. Handle Reasoning Blocks (<think> or <thought>)
-      const closedTagMatch = aiResponse.match(/[\s\S]*<\/(?:think|thought)>([\s\S]*)/i);
-      if (closedTagMatch && closedTagMatch[1].trim().length > 10) {
-        aiResponse = closedTagMatch[1].trim();
-      } else {
-        // Strip only the tags themselves, keeping whatever is outside or combined
-        aiResponse = aiResponse.replace(/<(think|thought)>[\s\S]*?<\/\1>/gi, "").replace(/<(?:think|thought)>[\s\S]*/gi, "").trim();
-      }
+      // Handle Reasoning Blocks
+      aiResponse = aiResponse.replace(/<(think|thought)>[\s\S]*?<\/\1>/gi, "").replace(/<(?:think|thought)>[\s\S]*/gi, "").trim();
 
       const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
       let filters: any = {};
       
       if (jsonMatch) {
         try {
-          let jsonStr = jsonMatch[0].trim();
-          filters = JSON.parse(jsonStr);
+          filters = JSON.parse(jsonMatch[0].trim());
         } catch (e) {
           console.warn("AI JSON parse failed", e);
         }
       }
 
-      // --- HYBRID LOGIC: Correction & Synonym Mapping ---
-      if (filters.city) {
-        // Fetch all cities to fuzzy match
-        // @ts-ignore
-        const { api } = await import("./_generated/api");
-        const allCities = await ctx.runQuery(api.properties.getUniqueCities);
-        const bestMatch = allCities.find((c: string) => fuzzyMatch(filters.city, c));
-        if (bestMatch) filters.city = bestMatch;
-      }
+      // --- MERGE SCANNED FILTERS WITH AI FILTERS ---
+      filters = { ...filters, ...scannedFilters };
 
-      // Standardize Property Types
-      if (filters.propType) {
-        const pt = filters.propType.toLowerCase();
-        if (pt === "flat" || pt === "apartment" || pt === "bhk") filters.propType = "Apartment";
-        else if (pt === "plot" || pt === "land") filters.propType = "Plot";
-        else if (pt === "villa" || pt === "bungalow" || pt === "house") filters.propType = "Villa";
-        else if (pt === "shop" || pt === "office" || pt === "retail" || pt === "commercial") filters.propType = "Commercial";
-        else if (pt === "pg" || pt === "hostel" || pt === "lodge") filters.propType = "PG";
-      }
-
-      // Ensure explanation exists - SMART HUMANIZATION FALLBACK
-      const userText = args.query.toLowerCase().trim();
+      // Ensure explanation exists - HUMANIZATION ENGINE
       const isGreeting = /^(hi|hello|hey|hei|namaste|morning|evening|heya|yo|hlo|hii|hiii)$/i.test(userText);
       const isStatus = /^(ok|okay|nice|good|fine|waht|what|ji|thik|theek)$/i.test(userText);
       
       if (!filters.explanation || filters.explanation.trim() === "" || filters.explanation.includes("analyzed your search criteria")) {
-        const textBeforeJson = aiResponse.split('{')[0].trim();
-        filters.explanation = textBeforeJson || aiResponse.replace(/\{[\s\S]*\}/, "").trim() || aiResponse;
-        
-        if (!filters.explanation || filters.explanation.length < 5 || filters.explanation.includes("analyzed your search criteria")) {
-            if (isGreeting) {
-                filters.explanation = "Namaste! I'm Dismil, your property assistant. Aap kaise hain? How can I help you find a property today?";
-            } else if (filters.city || filters.propType) {
-                const city = filters.city || "this city";
-                const type = filters.propType || "property";
-                const price = filters.maxPrice ? ` under ₹${(filters.maxPrice/100000).toFixed(1)}L` : "";
-                filters.explanation = `Theek hai Anuj, main aapke liye ${city} mein ${type}${price} dhund raha hoon. Ek minute rukiye...`;
-            } else if (isStatus) {
-                filters.explanation = "Great! Any other specific requirements like BHK, budget or locality you have in mind?";
-            } else {
-                filters.explanation = "I understand. To help you better, could you tell me which city and what type of property (Flat, Villa, or Plot) you are looking for?";
-            }
+        if (isGreeting) {
+            filters.explanation = "Namaste! I'm Dismil, your property assistant. Aap kaise hain? How can I help you find a property today?";
+        } else if (filters.city || filters.propType) {
+            const city = filters.city || "this city";
+            const type = filters.propType || "property";
+            const bhk = filters.bhk ? `${filters.bhk} BHK ` : "";
+            filters.explanation = `Bilkul! Main aapke liye ${city} mein ${bhk}${type} dhoondh raha hoon. Search shuru karein?`;
+        } else if (isStatus) {
+            filters.explanation = "Great! Any other specific requirements like budget or locality you have in mind?";
+        } else {
+            filters.explanation = "I understand. To help you better, could you tell me which city and what type of property (Flat, Villa, or Plot) you are looking for?";
         }
       }
 
@@ -165,32 +146,26 @@ RULES:
       
       if (hasMinimumCriteria) {
         // Fetch properties matching the criteria
-        // @ts-ignore
-        const { api } = await import("./_generated/api");
         let properties = await ctx.runQuery(api.properties.getProperties, { 
           transactionType: filters.type 
         });
 
         // Smart Filtering logic
         suggestions = properties.filter((p: any) => {
-          // City/Locality match (Advanced: check for partial matches and substrings)
+          // City/Locality match
           if (filters.city) {
             const searchCity = filters.city.toLowerCase();
             const pCity = (p.location?.city || "").toLowerCase();
             const pLocality = (p.location?.locality || "").toLowerCase();
-            
-            // Check if property city/locality matches any part of the search query
             const cityMatch = pCity && (userText.includes(pCity) || pCity.includes(searchCity) || fuzzyMatch(pCity, searchCity));
             const localityMatch = pLocality && (userText.includes(pLocality) || pLocality.includes(searchCity) || fuzzyMatch(pLocality, searchCity));
-            
             if (!cityMatch && !localityMatch) return false;
           }
           
-          // Property Type match (flexible for common synonyms)
+          // Property Type match
           if (filters.propType) {
             const targetProp = filters.propType.toLowerCase();
             const pType = (p.propertyType || "").toLowerCase();
-            
             const isTargetApartment = targetProp === 'apartment' || targetProp === 'flat';
             const isTargetPlot = targetProp === 'plot' || targetProp === 'land';
             const isPropertyApartment = pType === 'apartment' || pType === 'flat';
@@ -206,23 +181,20 @@ RULES:
           if (filters.maxPrice && p.pricing?.expectedPrice > filters.maxPrice) return false;
 
           return true;
-        }).slice(0, 3); // Top 3 matches
+        }).slice(0, 3);
 
-        // Flatten photos to URL strings for frontend
+        // Flatten photos
         suggestions = suggestions.map(p => ({
           ...p,
           photos: (p.photos || []).map((ph: any) => typeof ph === 'string' ? ph : ph.url).filter(Boolean)
         }));
 
-        // HONESTY CHECK: If a search was performed but NO results found
+        // Honesty Check
         if (suggestions.length === 0) {
-            const city = filters.city || "this area";
-            const price = filters.maxPrice ? ` under ₹${(filters.maxPrice/100000).toFixed(1)}L` : "";
-            const bhk = filters.bhk ? ` ${filters.bhk} BHK` : "";
+            const city = filters.city || "this city";
             const prop = filters.propType || "properties";
-            
-            // Override prompt-generated explanation with a factual one
-            filters.explanation = `I'm sorry Anuj, I couldn't find any${bhk} ${prop} in ${city}${price}. You might want to try a different location or budget.`;
+            filters.explanation = `I'm sorry, I couldn't find any ${prop} in ${city} matching your criteria. Aap apni location ya budget change karke dekh sakte hain?`;
+            // Keep filters so user knows we tried
         }
       }
 
@@ -230,7 +202,7 @@ RULES:
 
     } catch (error: any) {
       console.error("AI Search Error:", error);
-      return { success: false, error: error.message || "Internal AI error" };
+      return { success: false, error: error.message };
     }
   },
 });
@@ -244,81 +216,33 @@ export const rewriteDescription = action({
   },
   handler: async (ctx, args) => {
     const apiKey = process.env.SARVAM_API_KEY;
-    if (!apiKey) {
-      console.error("SARVAM_API_KEY is not set in environment variables");
-      return { success: false, error: "AI is currently unavailable. Please check backend config." };
-    }
+    if (!apiKey) return { success: false, error: "AI key missing" };
 
     try {
-      const systemPrompt = `You are an expert real estate copywriter in India.
-Your task is to take a raw, potentially broken or short property description and rewrite it into a highly professional, engaging, and grammatically correct description.
-
-RULES:
-1. Mirror the Original Language: If the input is in Hindi, respond in Hindi. If English, respond in English. If Hinglish, respond in Hinglish.
-2. Structure: Use bullet points for key features and a clean, easy-to-read format. Highlight the main selling points.
-3. Tone: Professional, persuasive, and trustworthy.
-4. Output: Your response MUST contain ONLY the professional property description. 
-5. NO INTROS: Do NOT say "Sure", "Okay", or "Here is the description". Start immediately.
-6. NO TAGS: Do NOT use <think>, <thought>, or any other tags.
-7. NO MARKDOWN: Do NOT use markdown code blocks (\`\`\`).
-8. Language: Use ${args.text.match(/[\u0900-\u097F]/) ? 'Hindi' : 'English/Hinglish'}.`;
-
       const messages = [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: `Please rewrite this property description: "${args.text}"` }
+        { role: "system", content: "You are a real estate copywriter. Rewrite descriptions professionally. No intros, no markdown code blocks, ONLY the description." },
+        { role: "user", content: args.text }
       ];
 
-      const response = await fetch("https://api.sarvam.ai/v1/chat/completions", {
+      const response = await fetch("https://api.sarvam.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "api-subscription-key": apiKey,
+          "api-subscription-key": apiKey
         },
         body: JSON.stringify({
-          model: "sarvam-m",
-          messages: messages,
-        }),
+          model: "sarvam-1",
+          messages: messages
+        })
       });
 
-      if (!response.ok) {
-        throw new Error(`Sarvam AI API Error: ${response.statusText}`);
-      }
-
       const data = await response.json();
-      let aiResponse = data.choices[0]?.message?.content?.trim() || "";
-      const rawText = aiResponse;
+      let aiResponse = data.choices[0]?.message?.content || "";
+      aiResponse = aiResponse.replace(/<[^>]+>/gi, "").replace(/```[\s\S]*?```/g, "").trim();
 
-      // 1. Handle Reasoning Blocks (<think> or <thought>)
-      // If there is significant content AFTER a closing reasoning tag, we prefer that.
-      // If the content is mostly inside or the tags are unclosed, we just strip the tags.
-      const closedTagMatch = aiResponse.match(/[\s\S]*<\/(?:think|thought)>([\s\S]*)/i);
-      if (closedTagMatch && closedTagMatch[1].trim().length > 20) {
-        aiResponse = closedTagMatch[1].trim();
-      } else {
-        // Strip only the tags themselves (e.g. <think>, </think>), keeping whatever is between them
-        aiResponse = aiResponse.replace(/<[^>]+>/gi, "").trim();
-      }
-
-      // 2. Strip leading/trailing markdown code blocks
-      aiResponse = aiResponse.replace(/^```[a-z]*\n?|(\n?```)$/gi, "").trim();
-
-      // 3. Remove common intro headers (strictly at the beginning) including Hindi
-      const introRegex = /^[\s\n]*(?:rewritten\s+description:|professional\s+description:|description:|rewritten:|विवरण:|प्रोफेशनल विवरण:|your\s+rewritten\s+description:)/i;
-      aiResponse = aiResponse.replace(introRegex, "").trim();
-
-      // 4. Remove bolding
-      aiResponse = aiResponse.replace(/\*\*/g, "");
-
-      if (!aiResponse || aiResponse.length < 5) {
-        console.warn("AI output was empty after cleaning. Raw:", rawText);
-        return { success: true, text: args.text, debug: { raw: rawText, processed: aiResponse } };
-      }
-
-      return { success: true, text: aiResponse, debug: { raw: rawText, processed: aiResponse } };
-
-    } catch (error: any) {
-      console.error("AI Rewrite Error:", error);
-      return { success: false, error: error.message || "Internal AI error during rewrite" };
+      return { success: true, text: aiResponse };
+    } catch (e: any) {
+      return { success: false, error: e.message };
     }
   }
 });
