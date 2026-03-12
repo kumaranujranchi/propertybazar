@@ -109,25 +109,47 @@
   <script>
     // Banner configuration: map city-type to image URL
     const cityBanners = {
-    // sample test banner using existing image file
-    // key format is city without spaces (lowercase) + '-' + type
-    'patna-buy': 'images/hero-bg.jpg',
-    // default fallback (unused unless you want always-on banner)
-    // 'default-buy': 'images/hero-bg.jpg'
+      // sample test banner using existing image file
+      // key format is city without spaces (lowercase) + '-' + type
+      'patna-buy': 'images/hero-bg.jpg',
+      // default fallback for buy if no city-specific
+      // 'default-buy': 'images/hero-bg.jpg'
+    };
 
     (function () {
       const params = new URLSearchParams(window.location.search);
       let city = params.get('city') || '';
       const type = params.get('type') || 'buy';
+      if (!city) {
+        const txt = document.getElementById('currentCityText');
+        if (txt) city = txt.textContent || '';
+      }
       city = city.trim().toLowerCase().replace(/\s+/g, '');
       const key = city + '-' + type.toLowerCase();
-      const img = cityBanners[key];
+      let img = cityBanners[key];
+      if (!img && cityBanners['default-' + type.toLowerCase()]) {
+        img = cityBanners['default-' + type.toLowerCase()];
+        console.debug('using default banner for', type);
+      }
+      console.debug('banner lookup', key, img);
       const banner = document.getElementById('pageBanner');
       if (banner && img) {
         banner.style.backgroundImage = `url('${img}')`;
         banner.style.display = 'block';
       }
     })();
+    const params = new URLSearchParams(window.location.search);
+    let city = params.get('city') || '';
+    const type = params.get('type') || 'buy';
+    city = city.trim().toLowerCase().replace(/\s+/g, '');
+    const key = city + '-' + type.toLowerCase();
+    const img = cityBanners[key];
+    const banner = document.getElementById('pageBanner');
+    if (banner && img) {
+      banner.style.backgroundImage = `url('${img}')`;
+      banner.style.display = 'block';
+    }
+      }) ();
   </script>
   <div class="container">
     <div class="properties-layout">
@@ -607,7 +629,8 @@
       <div class="disclaimer-body">
         <p><i class="fa-solid fa-magnifying-glass"></i> The information on 24Dismil.com is provided for
           <strong>informational purposes only</strong>. We make no representations or warranties regarding its accuracy
-          or completeness.</p>
+          or completeness.
+        </p>
         <p><i class="fa-solid fa-indian-rupee-sign"></i> Do not base your <strong>investment decisions</strong> solely
           on the information provided on this platform.</p>
         <p><i class="fa-solid fa-scale-balanced"></i> Nothing contained herein constitutes <strong>legal advice, a
