@@ -132,22 +132,48 @@ RULES:
 
       if (response.ok) {
         const data = await response.json();
-        let aiResponse = data.choices[0]?.message?.content || "";
-        aiResponse = aiResponse.replace(/<(think|thought)>[\s\S]*?<\/\1>/gi, "").replace(/<(?:think|thought)>[\s\S]*/gi, "").trim();
-        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-          try {
-            filters = JSON.parse(jsonMatch[0].trim());
-            aiExplanation = filters.explanation || "";
-          } catch (e) { console.warn("AI JSON parse failed", e); }
+        let aiResponseContent = "";
+        
+        // Robust response shape detection (similar to rewriteDescription)
+        if (Array.isArray(data?.choices) && data.choices.length > 0) {
+          aiResponseContent = data.choices[0]?.message?.content || data.choices[0]?.text || "";
+        } else if (typeof data?.message?.content === 'string') {
+          aiResponseContent = data.message.content;
+        } else if (typeof data?.output_text === 'string') {
+          aiResponseContent = data.output_text;
+        }
+
+        if (aiResponseContent) {
+          aiResponseContent = aiResponseContent.replace(/<(think|thought)>[\s\S]*?<\/\1>/gi, "").replace(/<(?:think|thought)>[\s\S]*/gi, "").trim();
+          const jsonMatch = aiResponseContent.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            try {
+              const aiFilters = JSON.parse(jsonMatch[0].trim());
+              // Merge AI filters but IGNORE empty/null values that might overwrite scanned results
+              for (const key in aiFilters) {
+                if (aiFilters[key] !== null && aiFilters[key] !== "" && aiFilters[key] !== undefined) {
+                  filters[key] = aiFilters[key];
+                }
+              }
+              aiExplanation = filters.explanation || "";
+            } catch (e) { console.warn("AI JSON parse failed", e); }
+          }
         }
       }
     } catch (e) {
       console.warn("AI call failed.", e);
     }
 
-    // Set a helpful explanation if AI didn't provide one
-    if (aiExplanation) {
+    // --- SMART MERGE: Ensure scanned filters are preserved ---
+    filters = { ...scannedFilters, ...filters };
+
+    // Set a helpful explanation if AI didn't provide one OR if it's very generic
+    const isGenericAiExplanation = !aiExplanation || 
+                                   aiExplanation.toLowerCase().includes("analyzed your search") || 
+                                   aiExplanation.toLowerCase().includes("matching properties") ||
+                                   aiExplanation.length < 5;
+
+    if (!isGenericAiExplanation) {
         filters.explanation = aiExplanation;
     } else if (filters.city) {
         const city = filters.city;
@@ -162,7 +188,7 @@ RULES:
         filters.explanation = "I understand. To help you better, could you tell me which city and what type of property (Flat, Villa, or Plot) you are looking for?";
     }
 
-    // Final cleanup: strip any stray HTML/debug tags like <think> that may remain
+    // Final cleanup: strip any stray HTML/debug tags
     if (filters && typeof filters.explanation === 'string') {
       filters.explanation = filters.explanation.replace(/<[^>]+>/gi, '').trim();
     }

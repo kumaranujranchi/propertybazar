@@ -2,7 +2,9 @@ import { convex } from "./convex.js";
 
 // AI Search Assistant Logic
 document.addEventListener('DOMContentLoaded', () => {
-  if (!document.getElementById('ai-assistant-root')) {
+  // Prevent creating multiple AI assistant instances if this script
+  // is loaded more than once. Check for the bubble or drawer IDs.
+  if (!document.getElementById('ai-bubble') && !document.getElementById('ai-chat-drawer')) {
     initAISearchAssistant();
   }
 });

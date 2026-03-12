@@ -80,6 +80,8 @@ const photoUploadArea = document.getElementById("photoUploadArea");
 const photoPreviewGrid = document.getElementById("photoPreviewGrid");
 const selectedFiles = [];
 const selectedVideos = []; // Added for video gallery
+let selectedBrochureFile = null;
+let existingBrochure = null;
 
 if (photoFileInput) {
   const cameraFileInput = document.getElementById("cameraFileInput");
@@ -137,6 +139,46 @@ if (photoFileInput) {
     videoFileInput.addEventListener("change", () => {
       handleFiles([...videoFileInput.files], "video");
       videoFileInput.value = "";
+    });
+  }
+
+  // Brochure file handlers
+  const brochureFileInput = document.getElementById('brochureFileInput');
+  const brochureUploadArea = document.getElementById('brochureUploadArea');
+  const brochurePreview = document.getElementById('brochurePreview');
+  const brochureUploadText = document.getElementById('brochureUploadText');
+  const removeBrochureBtn = document.getElementById('removeBrochureBtn');
+
+  if (brochureFileInput) {
+    brochureFileInput.addEventListener('change', () => {
+      const f = brochureFileInput.files[0];
+      if (!f) return;
+      if (f.type !== 'application/pdf') {
+        window.showToast('Only PDF brochures are allowed.', 'error');
+        brochureFileInput.value = '';
+        return;
+      }
+      if (f.size > 10 * 1024 * 1024) {
+        window.showToast('Brochure size exceeds 10MB limit.', 'error');
+        brochureFileInput.value = '';
+        return;
+      }
+      selectedBrochureFile = f;
+      brochureUploadText.textContent = f.name;
+      brochurePreview.style.display = 'block';
+      brochurePreview.textContent = `${(f.size/1024/1024).toFixed(2)} MB · ${f.name}`;
+      if (removeBrochureBtn) removeBrochureBtn.style.display = 'inline-block';
+    });
+  }
+
+  if (removeBrochureBtn) {
+    removeBrochureBtn.addEventListener('click', () => {
+      selectedBrochureFile = null;
+      existingBrochure = null;
+      brochureFileInput.value = '';
+      brochureUploadText.textContent = 'No brochure uploaded';
+      brochurePreview.style.display = 'none';
+      removeBrochureBtn.style.display = 'none';
     });
   }
 }
@@ -2436,7 +2478,24 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
         }
       }
-
+      
+      // 3. Upload brochure (if any)
+      let brochureData = null;
+      if (existingBrochure) {
+        brochureData = existingBrochure; // already has storageId
+      } else if (selectedBrochureFile) {
+        submitBtn.innerText = '⏳ Uploading brochure...';
+        const uploadUrl = await convex.mutation("files:generateUploadUrl", {});
+        const resp = await fetch(uploadUrl, {
+          method: "POST",
+          headers: { "Content-Type": selectedBrochureFile.type },
+          body: selectedBrochureFile,
+        });
+        if (!resp.ok) throw new Error('Brochure upload failed');
+        const { storageId } = await resp.json();
+        brochureData = { storageId, fileName: selectedBrochureFile.name, mimeType: selectedBrochureFile.type };
+      }
+      
       if (photoData.length === 0) {
         window.showToast("Please upload at least 1 photo.", "error");
         submitBtn.innerText = prevText;
@@ -2457,6 +2516,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           ...formState,
           photos: photoData,
           videos: videoData,
+          brochure: brochureData,
         });
         window.showToast("Property updated successfully!", "success");
       } else {
@@ -2464,6 +2524,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           ...formState,
           photos: photoData,
           videos: videoData,
+          brochure: brochureData,
           userId: user._id,
           token: getToken() || undefined,
         });
