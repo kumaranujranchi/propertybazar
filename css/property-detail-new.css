@@ -137,6 +137,12 @@ body {
   min-width: 0; /* Prevents flex items from overflowing */
 }
 
+/* Ensure summary card always uses site text color (fixes accidental white text) */
+.summary-card-top,
+.summary-card-top * {
+  color: var(--text) !important;
+}
+
 .summary-price {
   font-size: 14px;
   font-weight: 700;
