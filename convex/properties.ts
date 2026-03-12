@@ -436,9 +436,13 @@ export const getMyLeads = query({
     const leadsWithPropertyInfo = await Promise.all(
       leads.map(async (lead: any) => {
         const prop = await ctx.db.get(lead.propertyId);
+        const pName = prop?.details?.projectName;
+        const bhk = prop ? (prop.details.bhk !== 'N/A' && prop.details.bhk ? prop.details.bhk + ' BHK ' : '') : '';
+        const baseTitle = prop ? `${bhk}${prop.propertyType} in ${prop.location.locality}` : "Deleted Property";
+        
         return {
           ...lead,
-          propertyTitle: prop ? `${prop.details.bhk !== 'N/A' && prop.details.bhk ? prop.details.bhk + ' BHK ' : ''}${prop.propertyType} in ${prop.location.locality}` : "Deleted Property",
+          propertyTitle: pName ? `${pName.toUpperCase()} (${baseTitle})` : baseTitle,
           propertyType: prop?.propertyType || ''
         };
       })
