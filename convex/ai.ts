@@ -144,22 +144,22 @@ RULES:
       }
     } catch (e) {
       console.warn("AI call failed.", e);
-    const isGreeting = /^(hi|hello|hey|hei|namaste|morning|evening|heya|yo|hlo|hii|hiii)$/i.test(userText);
-    const isStatus = /^(ok|okay|nice|good|fine|waht|what|ji|thik|theek|perfect|great|done|over|thanks|thank you|ty|shukriya|dhanyawad)$/i.test(userText);
-        } else if (filters.city) {
-            const city = filters.city;
-            const propType = filters.propType || "property";
-            const bhk = filters.bhk ? `${filters.bhk} BHK ` : "";
-            filters.explanation = `Ji, main aapke liye ${city} mein ${bhk}${propType} check kar raha hoon...`;
-        } else if (filters.propType) {
-            filters.explanation = `Bilkul! Aap ${filters.propType} kaunse city mein dhoondh rahe hain?`;
-        } else if (isStatus) {
-            filters.explanation = "Ji bilkul! Iske alawa agar koi aur specific requirement ho to zaroor batayein. I'm here to help!";
-        } else {
-            filters.explanation = "I understand. To help you better, could you tell me which city and what type of property (Flat, Villa, or Plot) you are looking for?";
-        }
-    } else {
+    }
+
+    // Set a helpful explanation if AI didn't provide one
+    if (aiExplanation) {
         filters.explanation = aiExplanation;
+    } else if (filters.city) {
+        const city = filters.city;
+        const propType = filters.propType || "property";
+        const bhk = filters.bhk ? `${filters.bhk} BHK ` : "";
+        filters.explanation = `Ji, main aapke liye ${city} mein ${bhk}${propType} check kar raha hoon...`;
+    } else if (filters.propType) {
+        filters.explanation = `Bilkul! Aap ${filters.propType} kaunse city mein dhoondh rahe hain?`;
+    } else if (isStatus) {
+        filters.explanation = "Ji bilkul! Iske alawa agar koi aur specific requirement ho to zaroor batayein. I'm here to help!";
+    } else {
+        filters.explanation = "I understand. To help you better, could you tell me which city and what type of property (Flat, Villa, or Plot) you are looking for?";
     }
 
     // Final cleanup: strip any stray HTML/debug tags like <think> that may remain
