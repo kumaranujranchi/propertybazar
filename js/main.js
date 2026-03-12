@@ -640,7 +640,11 @@ function buildPropertyCardHTML(p) {
     </div>
     <div class="prop-body">
       <div class="prop-price">${p.priceDisplay} <span class="prop-per">· ₹${p.price_per_sqft?.toLocaleString('en-IN')}/sqft</span></div>
-      <div class="prop-title">${p.title}</div>
+      ${p.projectName
+        ? `<div class="prop-title" style="text-transform:uppercase;">${p.projectName}</div>
+           <div class="prop-subtitle" style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">${p.title}</div>`
+        : `<div class="prop-title">${p.title}</div>`
+      }
       <div class="prop-location">📍 ${p.location}</div>
       <div class="prop-specs">
         ${p.specs

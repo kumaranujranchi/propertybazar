@@ -1141,7 +1141,23 @@
         const heroBadges = document.getElementById('heroBadges');
 
         if (heroCover && photos[0]) heroCover.src = photos[0];
-        if (heroTitle) heroTitle.textContent = title;
+        if (heroTitle) {
+          const projectName = p.details?.projectName;
+          if (projectName) {
+            heroTitle.textContent = projectName.toUpperCase();
+            // Add subtitle below project name
+            let subtitle = heroTitle.nextElementSibling;
+            if (!subtitle || !subtitle.classList.contains('hero-subtitle')) {
+              subtitle = document.createElement('div');
+              subtitle.className = 'hero-subtitle';
+              subtitle.style.cssText = 'font-size:14px; color:rgba(255,255,255,0.75); font-weight:500; margin-top:4px;';
+              heroTitle.parentNode.insertBefore(subtitle, heroTitle.nextSibling);
+            }
+            subtitle.textContent = title;
+          } else {
+            heroTitle.textContent = title;
+          }
+        }
         if (heroPrice) heroPrice.innerHTML = priceStr;
         if (heroLocation) heroLocation.querySelector('span').textContent = `${p.location?.locality || ''}, ${p.location?.city || ''}`;
 
