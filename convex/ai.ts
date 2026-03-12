@@ -138,7 +138,7 @@ RULES:
             const city = filters.city || "this city";
             const propType = filters.propType || "property";
             const bhk = filters.bhk ? `${filters.bhk} BHK ` : "";
-            filters.explanation = `Bilkul! Main aapke liye ${city} mein ${bhk}${propType} dhoondh raha hoon. Search shuru karein?`;
+            filters.explanation = `Ji, main aapke liye ${city} mein ${bhk}${propType} check kar raha hoon...`;
         } else if (isStatus) {
             filters.explanation = "Great! Any other specific requirements like budget or locality you have in mind?";
         } else {
@@ -199,9 +199,10 @@ RULES:
 
         // Honesty Check
         if (suggestions.length === 0) {
-            const city = filters.city || "this city";
-            const prop = filters.propType || "properties";
-            filters.explanation = `I'm sorry, I couldn't find any ${prop} in ${city} matching your criteria. Aap apni location ya budget change karke dekh sakte hain?`;
+            const city = filters.city || "is area";
+            const prop = (filters.propType || "property").toLowerCase();
+            const bhk = filters.bhk ? `${filters.bhk} BHK ` : "";
+            filters.explanation = `Maaf kijiyega, mujhe ${city} mein aapke search ke regarding koi ${bhk}${prop} nahi mili. Aap criteria thoda change karke dekh sakte hain?`;
             // Keep filters so user knows we tried
         }
       }
@@ -239,7 +240,7 @@ export const rewriteDescription = action({
           "api-subscription-key": apiKey
         },
         body: JSON.stringify({
-          model: "sarvam-1",
+          model: "sarvam-m", // Fixed back to sarvam-m
           messages: messages
         })
       });
