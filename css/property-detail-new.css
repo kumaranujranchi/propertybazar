@@ -131,15 +131,32 @@ body {
   transform: scale(1.02);
 }
 
-/* Collage layout for detail page gallery — FIXED size, never grows with image */
+/* Collage layout for detail page gallery — fixed size, variants for count */
 .gallery-collage {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr; /* single row, side stacks internally */
   gap: 12px;
   flex: 2;
-  height: 420px; /* fixed height — images crop to fill, grid never resizes */
+  height: 420px;
   max-height: 420px;
+}
+.gallery-collage.one {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+.gallery-collage.one .collage-side {
+  display: none; /* remove empty side column */
+}
+.gallery-collage.two {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+.gallery-collage.two .collage-side {
+  /* ensure side column stacks vertically but only first child shown */
+  flex-direction: column;
+}
+.gallery-collage.three {
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr;
 }
 .collage-main {
   grid-row: 1;
