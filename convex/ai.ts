@@ -129,7 +129,7 @@ RULES:
 
     // Ensure explanation exists - HUMANIZATION ENGINE (Resilient to AI failure)
     const isGreeting = /^(hi|hello|hey|hei|namaste|morning|evening|heya|yo|hlo|hii|hiii)$/i.test(userText);
-    const isStatus = /^(ok|okay|nice|good|fine|waht|what|ji|thik|theek)$/i.test(userText);
+    const isStatus = /^(ok|okay|nice|good|fine|waht|what|ji|thik|theek|perfect|great|done|over|thanks|thank you|ty|shukriya|dhanyawad)$/i.test(userText);
     
     if (!aiExplanation || aiExplanation.trim() === "" || aiExplanation.includes("analyzed your search criteria")) {
         if (isGreeting) {
@@ -140,7 +140,7 @@ RULES:
             const bhk = filters.bhk ? `${filters.bhk} BHK ` : "";
             filters.explanation = `Ji, main aapke liye ${city} mein ${bhk}${propType} check kar raha hoon...`;
         } else if (isStatus) {
-            filters.explanation = "Great! Any other specific requirements like budget or locality you have in mind?";
+            filters.explanation = "Ji bilkul! Iske alawa agar koi aur specific requirement ho (jaise budget ya locality), to zaroor batayein. I'm here to help!";
         } else {
             filters.explanation = "I understand. To help you better, could you tell me which city and what type of property (Flat, Villa, or Plot) you are looking for?";
         }
