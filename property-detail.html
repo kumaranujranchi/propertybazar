@@ -523,16 +523,17 @@
 
       <!-- PRICE & SUMMARY CARD -->
       <div class="summary-card-top">
-        <div>
+        <div class="summary-top-content">
           <div id="heroBadges" style="margin-bottom: 12px; display: flex; gap: 8px;"></div>
           <h1 class="summary-title" id="heroTitle">Loading Property Details...</h1>
           <div class="summary-price" id="heroPrice">₹--</div>
           <div class="summary-location" id="heroLocation">
             <i class="fa-solid fa-location-dot"></i> <span>Locality, City</span>
           </div>
+          <div class="summary-quick-details" id="heroQuickDetails"></div>
         </div>
 
-        <div style="border-top: 1px solid var(--border); padding-top: 20px; position: relative; z-index: 10;">
+        <div class="summary-cta-area" style="border-top: 1px solid var(--border); padding-top: 20px; position: relative; z-index: 10;">
           <button type="button" class="btn-primary-large" id="btnOpenAdvModal" style="position: relative; z-index: 11;">
             <i class="fa-solid fa-phone"></i> View Contact Details
           </button>
@@ -1191,6 +1192,7 @@
         const heroPrice = document.getElementById('heroPrice');
         const heroLocation = document.getElementById('heroLocation');
         const heroBadges = document.getElementById('heroBadges');
+        const heroQuickDetails = document.getElementById('heroQuickDetails');
 
         if (heroCover && photos[0]) heroCover.src = photos[0];
         if (heroTitle) {
@@ -1221,6 +1223,31 @@
           if (p.verified) badgesHtml += buildTag('fa-circle-check', 'Verified', 'verified');
           if (p.details?.status === 'Ready to Move' || p.status === 'ready') badgesHtml += buildTag('fa-check', 'Ready to Move', 'success');
           heroBadges.innerHTML = badgesHtml;
+        }
+
+        if (heroQuickDetails) {
+          const quick = [];
+          if (p.propertyType) quick.push({ icon: 'fa-layer-group', label: 'Type', value: p.propertyType });
+          if (area > 0) quick.push({ icon: 'fa-ruler-combined', label: 'Area', value: `${area} sq.ft` });
+          if (p.details?.status) quick.push({ icon: 'fa-clock', label: 'Status', value: p.details.status });
+          if (p.details?.facing) quick.push({ icon: 'fa-compass', label: 'Facing', value: p.details.facing });
+          if (!isLand && p.details?.furnishing) quick.push({ icon: 'fa-couch', label: 'Furnishing', value: p.details.furnishing });
+          if (!isLand && p.details?.parking && p.details.parking !== 'None') quick.push({ icon: 'fa-car', label: 'Parking', value: p.details.parking });
+          if (p.details?.ownershipType) quick.push({ icon: 'fa-key', label: 'Ownership', value: p.details.ownershipType });
+          if (p.details?.constructionYear) quick.push({ icon: 'fa-calendar-days', label: 'Built Year', value: String(p.details.constructionYear) });
+
+          const quickHtml = quick.slice(0, 6).map((item) => `
+            <div class="summary-quick-item">
+              <i class="fa-solid ${item.icon}"></i>
+              <div>
+                <div class="summary-quick-label">${item.label}</div>
+                <div class="summary-quick-value">${item.value}</div>
+              </div>
+            </div>
+          `).join('');
+
+          heroQuickDetails.innerHTML = quickHtml;
+          heroQuickDetails.style.display = quickHtml ? 'grid' : 'none';
         }
 
         // ---- Gallery Grid: show only 3 tiles and pick best-fit photos by aspect ratio ----

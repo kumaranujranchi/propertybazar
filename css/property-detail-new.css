@@ -239,9 +239,19 @@ body {
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 18px;
   border: 1px solid var(--border);
   min-width: 0; /* Prevents flex items from overflowing */
+}
+
+.summary-top-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-cta-area {
+  margin-top: auto;
 }
 
 /* Ensure summary card always uses site text color (fixes accidental white text) */
@@ -270,7 +280,50 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+}
+
+.summary-quick-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.summary-quick-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fbfcfe;
+}
+
+.summary-quick-item i {
+  color: var(--primary) !important;
+  margin-top: 2px;
+  font-size: 13px;
+}
+
+.summary-quick-label {
+  font-size: 11px;
+  color: var(--text-muted) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  line-height: 1.2;
+}
+
+.summary-quick-value {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+@media (max-width: 1024px) {
+  .summary-quick-details {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---- Sticky Sub-Nav ---- */
