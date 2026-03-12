@@ -240,42 +240,54 @@ export const rewriteDescription = action({
 
     try {
       const messages = [
-        { role: "system", content: "You are a real estate copywriter. Rewrite descriptions professionally. No intros, no markdown code blocks, ONLY the description." },
-        { role: "user", content: args.text }
+        {
+          role: "system",
+          content: "You are a professional real estate copywriter. Your ONLY job is to rewrite the user's property description in clear, compelling English. Output ONLY the rewritten description text. Do NOT add any heading, title, preamble, explanation, or markdown formatting."
+        },
+        {
+          role: "user",
+          content: `Rewrite this property description professionally:\n\n${args.text}`
+        }
       ];
 
-      const response = await fetch("https://api.sarvam.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "api-subscription-key": apiKey
-        },
-        body: JSON.stringify({
-          model: "sarvam-m", // Fixed back to sarvam-m
-          messages: messages
-        })
-      });
+      const makeRequest = async (temperature: number) =>
+        fetch("https://api.sarvam.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "api-subscription-key": apiKey
+          },
+          body: JSON.stringify({
+            model: "sarvam-m",
+            messages,
+            temperature,
+            max_tokens: 600
+          })
+        });
 
+      const extractContent = (data: any): string => {
+        if (Array.isArray(data?.choices) && data.choices.length > 0) {
+          return data.choices[0]?.message?.content || data.choices[0]?.text || "";
+        }
+        if (typeof data?.message?.content === 'string') return data.message.content;
+        if (typeof data?.output_text === 'string') return data.output_text;
+        if (typeof data?.text === 'string') return data.text;
+        return "";
+      };
+
+      const response = await makeRequest(0.7);
       const data = await response.json();
       console.log('Sarvam AI Response Data:', JSON.stringify(data));
+
       // Defensive: API may return different shapes; guard against missing choices
       let aiResponse = "";
       try {
-        if (Array.isArray(data?.choices) && data.choices.length > 0) {
-          aiResponse = data.choices[0]?.message?.content || data.choices[0]?.text || "";
-        } else if (typeof data?.message?.content === 'string') {
-          aiResponse = data.message.content;
-        } else if (typeof data?.output_text === 'string') {
-          aiResponse = data.output_text;
-        } else if (typeof data?.text === 'string') {
-          aiResponse = data.text;
-        } else {
-          console.warn('Unexpected AI response shape:', Object.keys(data || {}));
-          return { success: false, error: 'AI returned unexpected response format' };
+        aiResponse = extractContent(data);
+        if (!aiResponse) {
+          console.warn('Unexpected AI response shape keys:', Object.keys(data || {}));
         }
       } catch (e) {
         console.error('Error parsing AI response:', e, data);
-        // don't return error here; fallthrough to retry/fallback logic
       }
 
       aiResponse = (aiResponse || "").replace(/<[^>]+>/gi, "").replace(/```[\s\S]*?```/g, "").trim();
@@ -284,26 +296,11 @@ export const rewriteDescription = action({
       if (!aiResponse) {
         try {
           console.warn('AI returned empty response; retrying once');
-          const retryResp = await fetch("https://api.sarvam.ai/api/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "api-subscription-key": apiKey
-            },
-            body: JSON.stringify({ model: "sarvam-m", messages: messages, temperature: 0.2 })
-          });
+          const retryResp = await makeRequest(0.9);
           if (retryResp.ok) {
             const retryData = await retryResp.json();
             console.log('Sarvam AI Retry Data:', JSON.stringify(retryData));
-            if (Array.isArray(retryData?.choices) && retryData.choices.length > 0) {
-              aiResponse = retryData.choices[0]?.message?.content || retryData.choices[0]?.text || "";
-            } else if (typeof retryData?.message?.content === 'string') {
-              aiResponse = retryData.message.content;
-            } else if (typeof retryData?.output_text === 'string') {
-              aiResponse = retryData.output_text;
-            } else if (typeof retryData?.text === 'string') {
-              aiResponse = retryData.text;
-            }
+            aiResponse = extractContent(retryData);
             aiResponse = (aiResponse || "").replace(/<[^>]+>/gi, "").replace(/```[\s\S]*?```/g, "").trim();
           }
         } catch (e) {
