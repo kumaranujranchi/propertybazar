@@ -9,6 +9,16 @@ img:not(.property-card img) {
   height: auto !important;
 }
 
+/* Ensure selected text is always visible on detail page */
+::selection {
+  background: var(--primary);
+  color: #fff;
+}
+::-moz-selection {
+  background: var(--primary);
+  color: #fff;
+}
+
 .property-card img {
   max-width: 100%;
 }
