@@ -83,6 +83,10 @@ RULES:
     ];
 
     try {
+    let filters: any = {};
+    let aiExplanation = "";
+
+    try {
       const response = await fetch("https://api.sarvam.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -90,55 +94,59 @@ RULES:
           "api-subscription-key": apiKey
         },
         body: JSON.stringify({
-          model: "sarvam-1",
+          model: "sarvam-m", // Fixed back to sarvam-m
           messages: messages,
           temperature: 0.1,
           max_tokens: 500
         })
       });
 
-      if (!response.ok) {
-        throw new Error(`Sarvam AI API Error: ${response.statusText}`);
-      }
+      if (response.ok) {
+        const data = await response.json();
+        let aiResponse = data.choices[0]?.message?.content || "";
 
-      const data = await response.json();
-      let aiResponse = data.choices[0]?.message?.content || "";
+        // Handle Reasoning Blocks
+        aiResponse = aiResponse.replace(/<(think|thought)>[\s\S]*?<\/\1>/gi, "").replace(/<(?:think|thought)>[\s\S]*/gi, "").trim();
 
-      // Handle Reasoning Blocks
-      aiResponse = aiResponse.replace(/<(think|thought)>[\s\S]*?<\/\1>/gi, "").replace(/<(?:think|thought)>[\s\S]*/gi, "").trim();
-
-      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-      let filters: any = {};
-      
-      if (jsonMatch) {
-        try {
-          filters = JSON.parse(jsonMatch[0].trim());
-        } catch (e) {
-          console.warn("AI JSON parse failed", e);
+        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+            try {
+                filters = JSON.parse(jsonMatch[0].trim());
+                aiExplanation = filters.explanation || "";
+            } catch (e) {
+                console.warn("AI JSON parse failed", e);
+            }
         }
+      } else {
+        console.warn(`AI API error: ${response.status}. Falling back to Keyword Scanner.`);
       }
+    } catch (e) {
+      console.warn("AI AI call failed. Falling back to Keyword Scanner.", e);
+    }
 
-      // --- MERGE SCANNED FILTERS WITH AI FILTERS ---
-      filters = { ...filters, ...scannedFilters };
+    // --- MERGE SCANNED FILTERS WITH AI FILTERS ---
+    filters = { ...filters, ...scannedFilters };
 
-      // Ensure explanation exists - HUMANIZATION ENGINE
-      const isGreeting = /^(hi|hello|hey|hei|namaste|morning|evening|heya|yo|hlo|hii|hiii)$/i.test(userText);
-      const isStatus = /^(ok|okay|nice|good|fine|waht|what|ji|thik|theek)$/i.test(userText);
-      
-      if (!filters.explanation || filters.explanation.trim() === "" || filters.explanation.includes("analyzed your search criteria")) {
+    // Ensure explanation exists - HUMANIZATION ENGINE (Resilient to AI failure)
+    const isGreeting = /^(hi|hello|hey|hei|namaste|morning|evening|heya|yo|hlo|hii|hiii)$/i.test(userText);
+    const isStatus = /^(ok|okay|nice|good|fine|waht|what|ji|thik|theek)$/i.test(userText);
+    
+    if (!aiExplanation || aiExplanation.trim() === "" || aiExplanation.includes("analyzed your search criteria")) {
         if (isGreeting) {
             filters.explanation = "Namaste! I'm Dismil, your property assistant. Aap kaise hain? How can I help you find a property today?";
         } else if (filters.city || filters.propType) {
             const city = filters.city || "this city";
-            const type = filters.propType || "property";
+            const propType = filters.propType || "property";
             const bhk = filters.bhk ? `${filters.bhk} BHK ` : "";
-            filters.explanation = `Bilkul! Main aapke liye ${city} mein ${bhk}${type} dhoondh raha hoon. Search shuru karein?`;
+            filters.explanation = `Bilkul! Main aapke liye ${city} mein ${bhk}${propType} dhoondh raha hoon. Search shuru karein?`;
         } else if (isStatus) {
             filters.explanation = "Great! Any other specific requirements like budget or locality you have in mind?";
         } else {
             filters.explanation = "I understand. To help you better, could you tell me which city and what type of property (Flat, Villa, or Plot) you are looking for?";
         }
-      }
+    } else {
+        filters.explanation = aiExplanation;
+    }
 
       // --- Smart Property Suggestions ---
       let suggestions: any[] = [];
