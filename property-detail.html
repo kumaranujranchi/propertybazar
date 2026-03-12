@@ -606,7 +606,8 @@
           <div id="projectVideoGrid" style="display:flex; gap:16px; flex-wrap:wrap;">
             <!-- Uploaded videos will render here -->
           </div>
-          <div id="projectExternalVideos" style="margin-top:16px; display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;">
+          <div id="projectExternalVideos"
+            style="margin-top:16px; display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;">
             <!-- External video embeds (YouTube/Vimeo) -->
           </div>
         </div>
@@ -1251,42 +1252,48 @@
           heroQuickDetails.style.display = quickHtml ? 'grid' : 'none';
         }
 
-        // ---- Gallery Grid: show only 3 tiles and pick best-fit photos by aspect ratio ----
-        const maxVisible = 3;
-        const visibleCount = Math.min(maxVisible, photos.length);
-        const targetRatios = [1.6, 1.6, 1.6]; // main + two side tiles are landscape friendly
-
-        const readImageRatio = (src) => new Promise((resolve) => {
-          const im = new Image();
-          im.onload = () => {
-            const w = im.naturalWidth || 1;
-            const h = im.naturalHeight || 1;
-            resolve(w / h);
-          };
-          im.onerror = () => resolve(1);
-          im.src = src;
-        });
-
-        const ratios = await Promise.all(photos.map((src) => readImageRatio(src)));
-        const available = photos.map((_, idx) => idx);
-        const selectedIndexes = [];
-
-        for (let slot = 0; slot < visibleCount; slot++) {
-          const target = targetRatios[slot] || 1.6;
-          let bestPos = 0;
-          let bestScore = Number.POSITIVE_INFINITY;
-          for (let pos = 0; pos < available.length; pos++) {
-            const idx = available[pos];
-            const ratio = ratios[idx] || 1;
-            const score = Math.abs(Math.log(ratio / target));
-            if (score < bestScore) {
-              bestScore = score;
-              bestPos = pos;
+        // ---- Gallery Grid: select layout based on available photos ----
+        const galleryEl = document.querySelector('.gallery-collage');
+        let selectedIndexes = [];
+        const numPhotos = photos.length;
+        if (numPhotos === 1) {
+          selectedIndexes = [0];
+        } else if (numPhotos === 2) {
+          selectedIndexes = [0, 1];
+        } else {
+          // pick 3 best-fit images by aspect ratio
+          const maxVisible = 3;
+          const targetRatios = [1.6, 1.6, 1.6];
+          const readImageRatio = (src) => new Promise((resolve) => {
+            const im = new Image();
+            im.onload = () => {
+              const w = im.naturalWidth || 1;
+              const h = im.naturalHeight || 1;
+              resolve(w / h);
+            };
+            im.onerror = () => resolve(1);
+            im.src = src;
+          });
+          const ratios = await Promise.all(photos.map((src) => readImageRatio(src)));
+          const available = photos.map((_, idx) => idx);
+          for (let slot = 0; slot < maxVisible; slot++) {
+            const target = targetRatios[slot] || 1.6;
+            let bestPos = 0;
+            let bestScore = Number.POSITIVE_INFINITY;
+            for (let pos = 0; pos < available.length; pos++) {
+              const idx = available[pos];
+              const ratio = ratios[idx] || 1;
+              const score = Math.abs(Math.log(ratio / target));
+              if (score < bestScore) {
+                bestScore = score;
+                bestPos = pos;
+              }
             }
+            selectedIndexes.push(available.splice(bestPos, 1)[0]);
           }
-          selectedIndexes.push(available.splice(bestPos, 1)[0]);
         }
 
+        const maxVisible = 3;
         for (let i = 0; i < maxVisible; i++) {
           const img = document.getElementById(`img${i}`);
           const wrap = document.getElementById(`galleryItem${i}`);
@@ -1305,6 +1312,23 @@
           img.onload = () => wrap.classList.remove('gallery-skeleton');
           wrap.style.cursor = 'pointer';
           wrap.onclick = (e) => { e.stopPropagation(); lbOpen(photoIndex); };
+        }
+        // adjust gallery class / side visibility after selection
+        if (galleryEl) {
+          galleryEl.classList.remove('one', 'two', 'three');
+          if (selectedIndexes.length === 1) {
+            galleryEl.classList.add('one');
+            const side = galleryEl.querySelector('.collage-side');
+            if (side) side.style.display = 'none';
+          } else if (selectedIndexes.length === 2) {
+            galleryEl.classList.add('two');
+            const side = galleryEl.querySelector('.collage-side');
+            if (side) side.style.display = '';
+          } else {
+            galleryEl.classList.add('three');
+            const side = galleryEl.querySelector('.collage-side');
+            if (side) side.style.display = '';
+          }
         }
 
         // Show +N overlay on third tile if there are hidden photos
@@ -1686,7 +1710,7 @@
               const id = u.pathname.split('/').filter(Boolean).pop();
               return `https://player.vimeo.com/video/${id}`;
             }
-          } catch (_) {}
+          } catch (_) { }
           return null;
         }
 
