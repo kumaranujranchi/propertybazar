@@ -6,7 +6,8 @@
     "serve": "python3 -m http.server 8080",
     "convex-dev": "npx convex dev",
     "dev": "npm run serve & npm run convex-dev",
-    "build": "echo 'No build step needed. Deploying static site...'"
+    "build": "echo 'No build step needed. Deploying static site...'",
+    "test:ai": "node tests/parse.test.mjs"
   },
   "keywords": [],
   "author": "",

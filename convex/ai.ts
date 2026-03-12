@@ -14,10 +14,20 @@ export const parseSearchQuery = action({
   },
   handler: async (ctx, args) => {
     const fuzzyMatch = (str: string, target: string) => {
-      const s = str.toLowerCase();
+      const s = str.toLowerCase().trim();
       const t = target.toLowerCase();
-      if (s.includes(t) || t.includes(s)) return true;
-      
+      // Guard: don't match extremely short user inputs (eg. "hi", "ok") against city substrings
+      if (s.length === 0) return false;
+      if (s === t) return true;
+      // If the user input is at least 3 chars, allow substring matches both ways.
+      if (s.length >= 3 && (s.includes(t) || t.includes(s))) return true;
+      // For short inputs (<3), require a stricter check (word boundary exact match)
+      if (s.length < 3) {
+        const re = new RegExp(`\\b${s.replace(/[-\\/\\^$*+?.()|[\\]{}]/g, "\\$&")}\\b`, 'i');
+        if (re.test(t)) return true;
+      }
+
+      // Fallback: simple character-difference heuristic (small edit distance)
       let distance = 0;
       const len = Math.min(s.length, t.length);
       for (let i = 0; i < len; i++) {
@@ -118,10 +128,10 @@ RULES:
         aiResponse = aiResponse.replace(/<(think|thought)>[\s\S]*?<\/\1>/gi, "").replace(/<(?:think|thought)>[\s\S]*/gi, "").trim();
         const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
-            try {
-                filters = JSON.parse(jsonMatch[0].trim());
-                aiExplanation = filters.explanation || "";
-            } catch (e) { console.warn("AI JSON parse failed", e); }
+          try {
+            filters = JSON.parse(jsonMatch[0].trim());
+            aiExplanation = filters.explanation || "";
+          } catch (e) { console.warn("AI JSON parse failed", e); }
         }
       }
     } catch (e) {
@@ -152,6 +162,11 @@ RULES:
         }
     } else {
         filters.explanation = aiExplanation;
+    }
+
+    // Final cleanup: strip any stray HTML/debug tags like <think> that may remain
+    if (filters && typeof filters.explanation === 'string') {
+      filters.explanation = filters.explanation.replace(/<[^>]+>/gi, '').trim();
     }
 
       // --- Smart Property Suggestions ---
