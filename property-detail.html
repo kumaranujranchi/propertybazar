@@ -512,14 +512,8 @@
           <div class="gallery-item gallery-skeleton" id="galleryItem1">
             <img src="" alt="Photo 2" id="img1">
           </div>
-          <div class="gallery-item gallery-skeleton" id="galleryItem2">
+          <div class="gallery-item gallery-skeleton" id="galleryItem2" style="position:relative;">
             <img src="" alt="Photo 3" id="img2">
-          </div>
-          <div class="gallery-item gallery-skeleton" id="galleryItem3">
-            <img src="" alt="Photo 4" id="img3">
-          </div>
-          <div class="gallery-item gallery-skeleton" id="galleryItem4" style="position:relative;">
-            <img src="" alt="Photo 5" id="img4">
             <div id="galleryMoreOverlay"
               style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; background:rgba(0,0,0,0.45); color:#fff; font-weight:700; font-size:16px; border-radius:8px; cursor:pointer;">
               +0 Photos</div>
@@ -1229,34 +1223,75 @@
           heroBadges.innerHTML = badgesHtml;
         }
 
-        // ---- Update Gallery Grid: render up to 5 tiles (main + 4 thumbs)
-        const maxVisible = 5; // main + up to 4 thumbnails
+        // ---- Gallery Grid: show only 3 tiles and pick best-fit photos by aspect ratio ----
+        const maxVisible = 3;
         const visibleCount = Math.min(maxVisible, photos.length);
-        for (let i = 0; i < visibleCount; i++) {
-          const src = photos[i];
-          const img = document.getElementById(`img${i}`);
-          const wrap = document.getElementById(`galleryItem${i}`);
-          if (img && wrap) {
-            // Show image element and use object-fit: contain so image is never cropped
-            img.style.display = 'block';
-            img.style.objectFit = 'contain';
-            img.style.objectPosition = 'center center';
-            img.src = src;
-            img.onload = () => wrap && wrap.classList.remove('gallery-skeleton');
-            // clicking wrapper opens lightbox at correct index
-            wrap.style.cursor = 'pointer';
-            wrap.addEventListener('click', (e) => { e.stopPropagation(); lbOpen(i); });
+        const targetRatios = [1.6, 1.6, 1.6]; // main + two side tiles are landscape friendly
+
+        const readImageRatio = (src) => new Promise((resolve) => {
+          const im = new Image();
+          im.onload = () => {
+            const w = im.naturalWidth || 1;
+            const h = im.naturalHeight || 1;
+            resolve(w / h);
+          };
+          im.onerror = () => resolve(1);
+          im.src = src;
+        });
+
+        const ratios = await Promise.all(photos.map((src) => readImageRatio(src)));
+        const available = photos.map((_, idx) => idx);
+        const selectedIndexes = [];
+
+        for (let slot = 0; slot < visibleCount; slot++) {
+          const target = targetRatios[slot] || 1.6;
+          let bestPos = 0;
+          let bestScore = Number.POSITIVE_INFINITY;
+          for (let pos = 0; pos < available.length; pos++) {
+            const idx = available[pos];
+            const ratio = ratios[idx] || 1;
+            const score = Math.abs(Math.log(ratio / target));
+            if (score < bestScore) {
+              bestScore = score;
+              bestPos = pos;
+            }
           }
+          selectedIndexes.push(available.splice(bestPos, 1)[0]);
         }
 
-        // If there are more photos than visibleCount, show +N overlay on the last visible tile
+        for (let i = 0; i < maxVisible; i++) {
+          const img = document.getElementById(`img${i}`);
+          const wrap = document.getElementById(`galleryItem${i}`);
+          if (!img || !wrap) continue;
+
+          const photoIndex = selectedIndexes[i];
+          if (photoIndex === undefined) {
+            wrap.style.display = 'none';
+            continue;
+          }
+
+          wrap.style.display = '';
+          img.style.display = 'block';
+          img.loading = i === 0 ? 'eager' : 'lazy';
+          img.src = photos[photoIndex];
+          img.onload = () => wrap.classList.remove('gallery-skeleton');
+          wrap.style.cursor = 'pointer';
+          wrap.onclick = (e) => { e.stopPropagation(); lbOpen(photoIndex); };
+        }
+
+        // Show +N overlay on third tile if there are hidden photos
+        const hiddenIndexes = photos
+          .map((_, idx) => idx)
+          .filter((idx) => !selectedIndexes.includes(idx));
         const galleryMoreOverlay = document.getElementById('galleryMoreOverlay');
         if (galleryMoreOverlay) {
-          if (photos.length > visibleCount) {
-            galleryMoreOverlay.textContent = `+${photos.length - visibleCount} Photos`;
+          if (hiddenIndexes.length > 0) {
+            galleryMoreOverlay.textContent = `+${hiddenIndexes.length} Photos`;
             galleryMoreOverlay.style.display = 'flex';
-            // open lightbox at the first hidden image index
-            galleryMoreOverlay.addEventListener('click', () => lbOpen(visibleCount));
+            galleryMoreOverlay.onclick = (e) => {
+              e.stopPropagation();
+              lbOpen(hiddenIndexes[0]);
+            };
           } else {
             galleryMoreOverlay.style.display = 'none';
           }

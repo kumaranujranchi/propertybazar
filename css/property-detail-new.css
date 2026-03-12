@@ -12,20 +12,16 @@ img:not(.property-card img) {
 /* Gallery images must fill their tile and never be cropped; override general img rules */
 .gallery-item,
 .collage-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
 }
 .collage-main img,
 .gallery-item img {
-  max-width: 100% !important;
-  max-height: 100% !important;
-  width: auto !important;
+  width: 100% !important;
   height: 100% !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
   object-position: center center !important;
   display: block !important;
-  background: transparent !important;
+  background: #f2f4f8 !important;
 }
 
 /* Ensure selected text is always visible on detail page */
@@ -164,32 +160,32 @@ body {
 .collage-main img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
-  background: #f8faff;
+  background: #f2f4f8;
 }
 .collage-side {
   grid-column: 2 / 3;
   grid-row: 1 / span 2;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 .gallery-item {
   border-radius: 10px;
   overflow: hidden;
-  background: #f8faff;
+  background: #f2f4f8;
   position: relative;
   display: block;
-  min-height: 160px;
+  flex: 1;
+  min-height: 0;
 }
 .gallery-item img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
-  background: #f8faff;
+  background: #f2f4f8;
 }
 /* Use background-image as fallback to ensure full-bleed tiles even for small images */
 .gallery-item.has-bg {
