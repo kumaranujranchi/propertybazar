@@ -149,6 +149,17 @@ RULES:
           ...p,
           photos: (p.photos || []).map((ph: any) => typeof ph === 'string' ? ph : ph.url).filter(Boolean)
         }));
+
+        // HONESTY CHECK: If a search was performed but NO results found
+        if (suggestions.length === 0) {
+            const city = filters.city || "this area";
+            const price = filters.maxPrice ? ` under ₹${(filters.maxPrice/100000).toFixed(1)}L` : "";
+            const bhk = filters.bhk ? ` ${filters.bhk} BHK` : "";
+            const prop = filters.propType || "properties";
+            
+            // Override prompt-generated explanation with a factual one
+            filters.explanation = `I'm sorry Anuj, I couldn't find any${bhk} ${prop} in ${city}${price}. You might want to try a different location or budget.`;
+        }
       }
 
       return { success: true, filters, suggestions };

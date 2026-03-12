@@ -36,6 +36,7 @@ function initAISearchAssistant() {
       <div class="ai-msg bot">
         Namaste! I can help you find your dream property. Aap kis bhasha mein baat karna pasand karenge? (Hindi / English / Hinglish)
         <div style="font-size:11px; margin-top:8px; opacity:0.7">Examples:<br>• "Patna mein 2bhk flat chahiye"<br>• "Commercial shop in Delhi under 1 Cr"</div>
+        <a href="properties.html" class="btn btn-sm" style="margin-top:10px; opacity:0.8; font-size:10px; border:1px solid var(--border)">Use Manual Search instead</a>
       </div>
     </div>
     <div class="ai-chat-input-wrap">
@@ -164,17 +165,22 @@ function initAISearchAssistant() {
     const isListingPage = !!document.querySelector('.listings-grid');
     
     if (!isListingPage) {
-        // Remove automatic redirection. Provide a "See all results" link instead.
+        // Redirection logic with deduplication
         const params = new URLSearchParams();
         if (filters.type) params.set('type', filters.type);
         if (filters.city) params.set('location', filters.city);
         if (filters.propType) params.set('propType', filters.propType);
         if (filters.bhk) params.set('bhk', filters.bhk);
         
+        const searchUrl = `properties.html?${params.toString()}`;
+        
+        // Remove previous "See All Results" links to avoid frustration
+        messages.querySelectorAll('.ai-msg.bot.redirect-msg').forEach(m => m.remove());
+
         setTimeout(() => {
           const linkMsg = document.createElement('div');
-          linkMsg.className = 'ai-msg bot';
-          linkMsg.innerHTML = `You can see all matching properties here: <a href="properties.html?${params.toString()}" class="btn btn-sm btn-primary" style="margin-top:8px; display:inline-block">See All Results</a>`;
+          linkMsg.className = 'ai-msg bot redirect-msg';
+          linkMsg.innerHTML = `You can see matching properties here: <a href="${searchUrl}" class="btn btn-sm btn-primary" style="margin-top:8px; display:inline-block">See All Results</a>`;
           messages.appendChild(linkMsg);
           messages.scrollTop = messages.scrollHeight;
         }, 1000);
