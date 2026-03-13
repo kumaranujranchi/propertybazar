@@ -735,6 +735,59 @@ body {
     aspect-ratio: 4 / 3;
   }
 
+  /* Mobile: make collage images fill tiles and adjust side thumbnails for better appearance */
+  .gallery-collage {
+    height: auto !important;
+    max-height: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .collage-main {
+    aspect-ratio: 4/3 !important;
+    height: auto !important;
+    min-height: 160px !important;
+  }
+  .collage-side {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+  }
+  .gallery-item {
+    flex: 1 1 0 !important;
+    height: 88px !important;
+    min-width: 0 !important;
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: 8px !important;
+  }
+  .gallery-item img,
+  .collage-main img {
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Make the quick summary cards compact and horizontal on small devices only */
+  .summary-quick-details {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    padding-bottom: 6px !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .summary-quick-details .summary-quick-item {
+    min-width: 120px !important;
+    flex: 0 0 auto !important;
+    padding: 8px !important;
+    gap: 8px !important;
+    border-radius: 8px !important;
+  }
+  .summary-quick-item .summary-quick-label { font-size: 11px !important; }
+  .summary-quick-item .summary-quick-value { font-size: 13px !important; }
+
   .spec-item-box {
     padding: 12px;
     gap: 10px;
