@@ -103,6 +103,29 @@ if (photoFileInput) {
       cameraFileInput.value = "";
     });
   }
+
+  // Toggle custom input visibility when 'Custom' is selected for bhk
+  document.addEventListener('change', (e) => {
+    if (!e.target) return;
+    if (e.target.classList && e.target.classList.contains('config-bhk')) {
+      const sel = e.target;
+      const row = sel.closest('.config-row');
+      if (!row) return;
+      const custom = row.querySelector('.config-custom');
+      if (sel.value === 'Custom') custom.style.display = 'block';
+      else custom.style.display = 'none';
+    }
+  });
+
+  // Upload button for floorplans (delegated)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest && e.target.closest('.btn-upload-floorplan');
+    if (!btn) return;
+    const row = btn.closest('.config-row');
+    if (!row) return;
+    const input = row.querySelector('input.config-floorplan');
+    if (input) input.click();
+  });
   photoUploadArea.addEventListener("dragover", (e) => {
     e.preventDefault();
     photoUploadArea.style.borderColor = "var(--primary)";
@@ -1769,10 +1792,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       row.style.cssText =
         "display:flex; gap:8px; align-items:center; flex-wrap:wrap;";
       row.innerHTML = `
-        <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1; min-width:120px">
+        <select class="form-input config-bhk" style="min-width:120px;">
+          <option value="1BHK">1 BHK</option>
+          <option value="2BHK" selected>2 BHK</option>
+          <option value="3BHK">3 BHK</option>
+          <option value="4BHK">4 BHK</option>
+          <option value="5BHK">5 BHK</option>
+          <option value="6BHK">6 BHK</option>
+          <option value="Custom">Custom</option>
+        </select>
+        <input type="text" class="form-input config-custom" placeholder="Custom config (e.g. Studio)" style="flex:1; min-width:120px; display:none">
         <div style="display:flex; gap:4px; flex:1.6; min-width:220px;">
-          <input type="number" class="form-input config-area" placeholder="Area" style="flex:1; min-width:100px">
-          <select class="form-input config-area-unit" style="min-width:90px; font-size:12px; padding:0 5px;">
+          <input type="number" class="form-input config-builtup" placeholder="Built-up Area" style="flex:1; min-width:100px">
+          <select class="form-input config-builtup-unit" style="min-width:90px; font-size:12px; padding:0 5px;">
             <option value="Square Foot">sq ft</option>
             <option value="Square Yard (Gaj)">sq yard</option>
             <option value="Square Meter">sq m</option>
@@ -1793,7 +1825,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             <option value="Ares">Ares</option>
           </select>
         </div>
-        <input type="number" class="form-input config-price" placeholder="Price (₹)" style="flex:0.9; min-width:80px">
+        <input type="number" class="form-input config-carpet" placeholder="Carpet (optional)" style="flex:0.9; min-width:80px">
+        <select class="form-input config-carpet-unit" style="min-width:90px; font-size:12px; padding:0 5px;">
+          <option value="Square Foot">sq ft</option>
+          <option value="Square Meter">sq m</option>
+        </select>
+        <input type="number" class="form-input config-price" placeholder="Price (₹) (optional)" style="flex:0.9; min-width:80px">
+        <input type="file" accept="image/*" class="config-floorplan" multiple data-max="2" style="display:none">
         <button type="button" class="btn btn-outline btn-sm remove-config-btn">✕</button>
       `;
       container.appendChild(row);
@@ -2135,16 +2173,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Collect Configurations (flat types)
     const configurations = [];
     document.querySelectorAll("#configContainer .config-row").forEach((row) => {
-      const name = row.querySelector(".config-name")?.value.trim();
-      const area = row.querySelector(".config-area")?.value
-        ? Number(row.querySelector(".config-area").value)
+      const bhk = row.querySelector('.config-bhk')?.value || undefined;
+      const custom = row.querySelector('.config-custom')?.value.trim();
+      const name = custom ? custom : (bhk || row.querySelector('.config-name')?.value.trim());
+      const builtup = row.querySelector('.config-builtup')?.value
+        ? Number(row.querySelector('.config-builtup').value)
         : undefined;
-      const areaUnit =
-        row.querySelector(".config-area-unit")?.value || "Square Foot";
-      const price = row.querySelector(".config-price")?.value
-        ? Number(row.querySelector(".config-price").value)
+      const builtupUnit = row.querySelector('.config-builtup-unit')?.value || 'Square Foot';
+      const carpet = row.querySelector('.config-carpet')?.value
+        ? Number(row.querySelector('.config-carpet').value)
         : undefined;
-      if (name) configurations.push({ name, area, areaUnit, price });
+      const carpetUnit = row.querySelector('.config-carpet-unit')?.value || undefined;
+      const price = row.querySelector('.config-price')?.value
+        ? Number(row.querySelector('.config-price').value)
+        : undefined;
+      const configObj = { name, bhk: bhk === 'Custom' ? undefined : bhk, custom: custom || undefined, builtup, builtupUnit, carpet, carpetUnit, price, photos: [] };
+      if (name) configurations.push(configObj);
     });
 
     return {
@@ -2504,6 +2548,35 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       const formState = getFormState();
+
+      // Upload floorplan images for each configuration (up to 2 per config)
+      try {
+        const configRows = document.querySelectorAll('#configContainer .config-row');
+        for (let ci = 0; ci < configRows.length; ci++) {
+          const row = configRows[ci];
+          const finput = row.querySelector('input.config-floorplan');
+          if (!finput || !finput.files || finput.files.length === 0) continue;
+          const max = Number(finput.getAttribute('data-max') || 2);
+          for (let k = 0; k < Math.min(finput.files.length, max); k++) {
+            const file = finput.files[k];
+            if (!file) continue;
+            submitBtn.innerText = '⏳ Uploading floor plans...';
+            const uploadUrl = await convex.mutation('files:generateUploadUrl', {});
+            const resp = await fetch(uploadUrl, { method: 'POST', headers: { 'Content-Type': file.type }, body: file });
+            if (!resp.ok) throw new Error('Floorplan upload failed');
+            const { storageId } = await resp.json();
+            if (!formState.configurations[ci]) formState.configurations[ci] = { photos: [] };
+            if (!formState.configurations[ci].photos) formState.configurations[ci].photos = [];
+            formState.configurations[ci].photos.push({ storageId, category: 'floorplan' });
+          }
+        }
+      } catch (err) {
+        console.error('Floorplan upload failed', err);
+        window.showToast('Failed to upload floor plans: ' + (err.message || err), 'error');
+        submitBtn.innerText = prevText;
+        submitBtn.disabled = false;
+        return;
+      }
 
       submitBtn.innerText = editId
         ? "⏳ Updating property..."

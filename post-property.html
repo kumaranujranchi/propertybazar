@@ -446,7 +446,7 @@
         <p class="form-card-subtitle">More details = more inquiries. Fill as much as possible.</p>
 
         <div class="form-grid">
-          <div class="form-group full" id="fgBhk" data-show-for="apartment,villa">
+          <div class="form-group full" id="fgBhk" data-show-for="apartment">
             <label class="form-label">How many BHK? *</label>
             <div class="segmented-control" id="bhkSelector">
               <div class="segment-item hide-mobile" data-value="1RK">1 RK</div>
@@ -463,15 +463,24 @@
           </div>
 
           <!-- Project Configurations (Multiple flat types) -->
-          <div style="grid-column:1 / -1; margin-top:12px;" id="fgProjectConfigs" data-show-for="apartment,villa">
+          <div style="grid-column:1 / -1; margin-top:12px;" id="fgProjectConfigs" data-show-for="apartment">
             <h4 style="font-size:14px; font-weight:700; margin-bottom:10px;">Project Configurations (Flat types)</h4>
             <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Add multiple flat configurations like 2BHK, 3BHK with optional area and price. These are useful for builders and project listings.</p>
             <div id="configContainer" style="display:flex; flex-direction:column; gap:8px;">
               <div class="config-row" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1; min-width:120px;">
+                <select class="form-input config-bhk" style="min-width:120px;">
+                  <option value="1BHK">1 BHK</option>
+                  <option value="2BHK" selected>2 BHK</option>
+                  <option value="3BHK">3 BHK</option>
+                  <option value="4BHK">4 BHK</option>
+                  <option value="5BHK">5 BHK</option>
+                  <option value="6BHK">6 BHK</option>
+                  <option value="Custom">Custom</option>
+                </select>
+                <input type="text" class="form-input config-custom" placeholder="Custom config (e.g. Studio)" style="flex:1; min-width:120px; display:none">
                 <div class="config-area-wrap" style="display:flex; gap:4px; flex:1.6; min-width:220px;">
-                  <input type="number" class="form-input config-area" placeholder="Area" style="flex:1; min-width:100px;">
-                  <select class="form-input config-area-unit" style="min-width:90px; font-size:12px; padding:0 5px;">
+                  <input type="number" class="form-input config-builtup" placeholder="Built-up Area" style="flex:1; min-width:100px">
+                  <select class="form-input config-builtup-unit" style="min-width:90px; font-size:12px; padding:0 5px;">
                     <option value="Square Foot">sq ft</option>
                     <option value="Square Yard (Gaj)">sq yard</option>
                     <option value="Square Meter">sq m</option>
@@ -492,7 +501,16 @@
                     <option value="Ares">Ares</option>
                   </select>
                 </div>
-                <input type="number" class="form-input config-price" placeholder="Price (₹)" style="flex:0.9; min-width:80px;">
+                <input type="number" class="form-input config-carpet" placeholder="Carpet (optional)" style="flex:0.9; min-width:80px;">
+                <select class="form-input config-carpet-unit" style="min-width:90px; font-size:12px; padding:0 5px;">
+                  <option value="Square Foot">sq ft</option>
+                  <option value="Square Meter">sq m</option>
+                </select>
+                <input type="number" class="form-input config-price" placeholder="Price (₹) (optional)" style="flex:0.9; min-width:80px;">
+                <div style="display:flex; gap:6px; align-items:center;">
+                  <input type="file" accept="image/*" class="config-floorplan" multiple data-max="2" style="display:none">
+                  <button type="button" class="btn btn-outline btn-sm btn-upload-floorplan">Upload Floor Plans</button>
+                </div>
                 <button type="button" class="btn btn-outline btn-sm remove-config-btn" style="display:none">✕</button>
               </div>
             </div>
@@ -501,7 +519,7 @@
             </div>
           </div>
 
-          <div class="form-group full" id="fgCustomBhk" style="display:none" data-show-for="apartment,villa">
+          <div class="form-group full" id="fgCustomBhk" style="display:none" data-show-for="villa">
             <label class="form-label">Enter Custom Configuration</label>
             <input type="text" class="form-input" id="customBhkInput" placeholder="e.g. 7 BHK, Duplex">
           </div>
@@ -516,7 +534,7 @@
             <input type="hidden" id="propertyStatusSelect" value="Ready to Move">
           </div>
 
-          <div class="form-group" id="fgBuiltUpArea" data-show-for="apartment,villa,commercial,warehouse">
+          <div class="form-group" id="fgBuiltUpArea" data-show-for="villa,commercial,warehouse">
             <label class="form-label">Built-up Area *</label>
             <div style="display: flex; gap: 8px;">
               <input type="number" id="builtUpAreaInput" class="form-input" placeholder="e.g. 1450" style="flex: 1;">
