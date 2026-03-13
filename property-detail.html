@@ -1493,14 +1493,6 @@
         const hasPublicName = p.contactDesc?.name && p.contactDesc.name.trim();
         const hasPublicPhone = p.contactDesc?.mobile && p.contactDesc.mobile.trim();
 
-        function revealPublicContact() {
-          if (!hasPublicPhone) return;
-          publicPhone.textContent = '+91 ' + p.contactDesc.mobile;
-          publicPhone.href = 'tel:+91' + p.contactDesc.mobile;
-          publicPhone.style.cursor = 'pointer';
-          publicPhone.title = '';
-        }
-
         function maskPublicContact() {
           if (!hasPublicPhone) return;
           // Encourage user to click; show masked number as tooltip
