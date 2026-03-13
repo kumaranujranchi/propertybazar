@@ -478,3 +478,78 @@ export const getUniqueCities = query({
     return Array.from(cities).sort();
   },
 });
+
+export const getPropertyBySlug = query({
+  args: { slug: v.string() },
+  handler: async (ctx: any, args: any) => {
+    // Normalize incoming slug
+    const slug = (args.slug || '').toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+    // Fetch a reasonable number of properties to search (small sites expected)
+    const properties = await ctx.db.query('properties').order('desc').collect();
+
+    // Try to match on an explicit stored slug, projectName, or derived slug from projectName/location
+    const match = properties.find((p: any) => {
+      const projectName = (p.details && p.details.projectName) ? String(p.details.projectName).toLowerCase() : '';
+      const locationName = (p.location && (p.location.society || p.location.locality)) ? String(p.location.society || p.location.locality).toLowerCase() : '';
+      const tryNames = [projectName, locationName].filter(Boolean);
+      // if property has explicit slug field
+      if (p.slug && String(p.slug).toLowerCase() === slug) return true;
+      for (const name of tryNames) {
+        const derived = name.replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        if (derived === slug) return true;
+      }
+      return false;
+    });
+
+    if (!match) return null;
+
+    // Reuse getProperty resolution logic: resolve photos, videos, configurations and owner info
+    const p = match;
+    const resolvedPhotos = await Promise.all(
+      (p.photos || []).map(async (photo: any) => {
+        try {
+          const sid = typeof photo === 'string' ? photo : photo.storageId;
+          const url = await ctx.storage.getUrl(sid as any);
+          return typeof photo === 'string' ? url : { ...photo, url: url ?? null };
+        } catch { return null; }
+      })
+    );
+
+    const resolvedVideos = await Promise.all(
+      (p.videos || []).map(async (video: any) => {
+        try { const sid = typeof video === 'string' ? video : video.storageId; const url = await ctx.storage.getUrl(sid as any); return typeof video === 'string' ? url : { ...video, url: url ?? null }; } catch { return null; }
+      })
+    );
+
+    let resolvedConfigurations = p.configurations || [];
+    if (Array.isArray(p.configurations)) {
+      resolvedConfigurations = await Promise.all(
+        p.configurations.map(async (cfg: any) => {
+          if (!cfg || !Array.isArray(cfg.photos)) return cfg;
+          const photos = await Promise.all(cfg.photos.map(async (ph: any) => {
+            try { const sid = typeof ph === 'string' ? ph : ph.storageId; const url = await ctx.storage.getUrl(sid as any); return typeof ph === 'string' ? url : { ...ph, url: url ?? null }; } catch { return null; }
+          }));
+          return { ...cfg, photos: photos.filter(Boolean) };
+        })
+      );
+    }
+
+    let resolvedBrochure = null;
+    if (p.brochure) {
+      try { const sid = typeof p.brochure === 'string' ? p.brochure : p.brochure.storageId; const url = await ctx.storage.getUrl(sid as any); resolvedBrochure = typeof p.brochure === 'string' ? url : { ...p.brochure, url: url ?? null }; } catch { resolvedBrochure = null; }
+    }
+
+    const owner = p.userId ? await ctx.db.get(p.userId) : null;
+    const ownerInfo = owner ? {
+      name: owner.name,
+      joinedYear: new Date(owner._creationTime).getFullYear(),
+      profilePictureUrl: owner.profilePictureUrl,
+      companyName: owner.companyName,
+      officeAddress: owner.officeAddress,
+      subscriptionTier: owner.subscriptionTier
+    } : null;
+
+    return { ...p, photos: resolvedPhotos.filter(Boolean), videos: resolvedVideos.filter(Boolean), configurations: resolvedConfigurations, brochure: resolvedBrochure, ownerInfo };
+  }
+});

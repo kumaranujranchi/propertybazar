@@ -538,6 +538,9 @@
           <button type="button" class="btn-primary-large" id="btnOpenAdvModal" style="position: relative; z-index: 11;">
             <i class="fa-solid fa-phone"></i> View Contact Details
           </button>
+            <button type="button" id="shareBtn" title="Share this listing" style="position: absolute; right: 18px; top: 20px; background: transparent; border: none; color: var(--primary); font-size: 18px; cursor: pointer;">
+              <i class="fa-solid fa-share-nodes"></i>
+            </button>
           <div style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 12px;">
             <i class="fa-solid fa-shield-halved"></i> 100% Verified Listings
           </div>
@@ -1065,10 +1068,28 @@
     (async () => {
       const params = new URLSearchParams(window.location.search);
       const id = params.get('id');
-      if (!id) return; // no ID = show default hardcoded page
+      const slug = params.get('slug');
 
+      // If id provided use it; otherwise try slug -> backend query
+      let p = null;
       try {
-        const p = await convex.query('properties:getProperty', { id });
+        if (id) {
+          p = await convex.query('properties:getProperty', { id });
+        } else if (slug) {
+          p = await convex.query('properties:getPropertyBySlug', { slug });
+        } else {
+          // No id or slug — attempt to read last path segment as slug when URLs like /property-detail/slug are used
+          try {
+            const pathSeg = window.location.pathname.split('/').filter(Boolean).pop() || '';
+            if (pathSeg && pathSeg.endsWith('.html')) {
+              // remove .html
+              const base = pathSeg.replace(/\.html$/, '');
+              if (base) p = await convex.query('properties:getPropertyBySlug', { slug: base });
+            } else if (pathSeg) {
+              p = await convex.query('properties:getPropertyBySlug', { slug: pathSeg });
+            }
+          } catch (e) { /* ignore */ }
+        }
         if (!p) return;
 
         // ---- Resolve photo URLs (Robust version) ----
@@ -1597,6 +1618,32 @@
           if (specialRows) tablesHtml += `<div class="info-col"><h3>SPECIFICATIONS</h3>${specialRows}</div>`;
 
           advancedContainer.innerHTML = tablesHtml;
+        }
+
+        // ---- Share button handler ----
+        const shareBtn = document.getElementById('shareBtn');
+        if (shareBtn) {
+          shareBtn.addEventListener('click', async () => {
+            const pageUrl = window.location.href;
+            const shareData = {
+              title: p.details?.projectName || document.title,
+              text: p.details?.projectName ? `${p.details.projectName} — ${p.location?.locality || ''}, ${p.location?.city || ''}` : 'Check out this property',
+              url: pageUrl
+            };
+
+            if (navigator.share) {
+              try { await navigator.share(shareData); } catch (err) { /* user cancelled */ }
+            } else {
+              // fallback: copy link to clipboard and notify
+              try {
+                await navigator.clipboard.writeText(pageUrl);
+                window.showToast && window.showToast('Link copied to clipboard');
+              } catch (err) {
+                // fallback prompt
+                prompt('Copy this link', pageUrl);
+              }
+            }
+          });
         }
 
         // ---- Connectivity ----
