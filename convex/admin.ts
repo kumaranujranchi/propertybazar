@@ -129,7 +129,7 @@ export const deleteProperty = mutation({
 export const seedAdminUser = mutation({
   args: {},
   handler: async (ctx) => {
-    const email = "admin@24dismil.com";
+    const email = "support@24dismil.com";
     const existing = await ctx.db
       .query("users")
       .withIndex("by_email", (q) => q.eq("email", email))
