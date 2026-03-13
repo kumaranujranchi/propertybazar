@@ -1242,24 +1242,24 @@
 
         // Update meta tags for sharing (helps some platforms / social previews)
         const canonicalLink = document.querySelector('link[rel=canonical]');
-+        const ogImageMeta = document.querySelector('meta[property="og:image"]');
-+        const twitterImageMeta = document.querySelector('meta[name="twitter:image"]');
-+        const ogTitleMeta = document.querySelector('meta[property="og:title"]');
-+        const ogDescMeta = document.querySelector('meta[property="og:description"]');
-+        const ogUrlMeta = document.querySelector('meta[property="og:url"]');
-+
-+        const finalUrl = window.location.origin + window.location.pathname + window.location.search;
-+        if (canonicalLink) canonicalLink.href = finalUrl;
-+        if (ogUrlMeta) ogUrlMeta.content = finalUrl;
-+        if (ogTitleMeta) ogTitleMeta.content = heroTitle.textContent || document.title;
-+        if (ogDescMeta) ogDescMeta.content = p.details?.description || document.querySelector('meta[name="description"]')?.content || '';
-+
-+        const previewImage = photos[0] || 'https://24dismil.com/images/favicon.svg';
-+        if (ogImageMeta) ogImageMeta.content = previewImage;
-+        if (twitterImageMeta) twitterImageMeta.content = previewImage;
-+
-+        // Update browser title for better sharing
-+        document.title = heroTitle.textContent ? `${heroTitle.textContent} | 24Dismil.com` : document.title;
+        const ogImageMeta = document.querySelector('meta[property="og:image"]');
+        const twitterImageMeta = document.querySelector('meta[name="twitter:image"]');
+        const ogTitleMeta = document.querySelector('meta[property="og:title"]');
+        const ogDescMeta = document.querySelector('meta[property="og:description"]');
+        const ogUrlMeta = document.querySelector('meta[property="og:url"]');
+
+        const finalUrl = window.location.origin + window.location.pathname + window.location.search;
+        if (canonicalLink) canonicalLink.href = finalUrl;
+        if (ogUrlMeta) ogUrlMeta.content = finalUrl;
+        if (ogTitleMeta) ogTitleMeta.content = heroTitle.textContent || document.title;
+        if (ogDescMeta) ogDescMeta.content = p.details?.description || document.querySelector('meta[name="description"]')?.content || '';
+
+        const previewImage = photos[0] || 'https://24dismil.com/images/favicon.svg';
+        if (ogImageMeta) ogImageMeta.content = previewImage;
+        if (twitterImageMeta) twitterImageMeta.content = previewImage;
+
+        // Update browser title for better sharing
+        document.title = heroTitle.textContent ? `${heroTitle.textContent} | 24Dismil.com` : document.title;
 
         // Populate Hero Badges
         if (heroBadges) {
