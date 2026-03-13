@@ -1475,6 +1475,8 @@
               document.getElementById('advSuccessMsg').style.display = 'block';
               if (advPhoneDisplay) advPhoneDisplay.textContent = '+91 ' + window.REAL_OWNER_PHONE;
               if (advNameDisplay) advNameDisplay.textContent = window.REAL_OWNER_NAME;
+              // Also reveal the number in the sidebar contact card
+              if (typeof revealPublicContact === 'function') revealPublicContact();
             } catch (err) {
               alert('Failed: ' + err.message);
               this.disabled = false;
@@ -1491,6 +1493,29 @@
         const hasPublicName = p.contactDesc?.name && p.contactDesc.name.trim();
         const hasPublicPhone = p.contactDesc?.mobile && p.contactDesc.mobile.trim();
 
+        function revealPublicContact() {
+          if (!hasPublicPhone) return;
+          publicPhone.textContent = '+91 ' + p.contactDesc.mobile;
+          publicPhone.href = 'tel:+91' + p.contactDesc.mobile;
+          publicPhone.style.cursor = 'pointer';
+        }
+
+        function maskPublicContact() {
+          if (!hasPublicPhone) return;
+          publicPhone.textContent = maskPhone(p.contactDesc.mobile);
+          publicPhone.href = 'javascript:void(0)';
+          publicPhone.style.cursor = 'pointer';
+        }
+
+        function openAdvModalFromPublic() {
+          if (!advModal) return;
+          advModal.classList.add('open');
+          document.body.style.overflow = 'hidden';
+          const phone = window.REAL_OWNER_PHONE || REAL_OWNER_PHONE;
+          advHeaderPhone.textContent = maskPhone(phone);
+          advHeaderName.textContent = 'Name Hidden';
+        }
+
         if (publicContactInfo && (hasPublicName || hasPublicPhone)) {
           publicContactInfo.style.display = 'block';
           if (hasPublicName) {
@@ -1501,9 +1526,9 @@
           }
 
           if (hasPublicPhone) {
-            publicPhone.textContent = '+91 ' + p.contactDesc.mobile;
-            publicPhone.href = 'tel:+91' + p.contactDesc.mobile;
+            maskPublicContact();
             document.getElementById('publicPhoneRow').style.display = 'flex';
+            publicPhone.addEventListener('click', openAdvModalFromPublic);
           } else {
             document.getElementById('publicPhoneRow').style.display = 'none';
           }
