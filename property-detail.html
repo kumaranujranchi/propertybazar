@@ -1498,13 +1498,25 @@
           publicPhone.textContent = '+91 ' + p.contactDesc.mobile;
           publicPhone.href = 'tel:+91' + p.contactDesc.mobile;
           publicPhone.style.cursor = 'pointer';
+          publicPhone.title = '';
         }
 
         function maskPublicContact() {
           if (!hasPublicPhone) return;
-          publicPhone.textContent = maskPhone(p.contactDesc.mobile);
+          // Encourage user to click; show masked number as tooltip
+          publicPhone.textContent = 'Click to view number';
+          publicPhone.title = 'Click to reveal the owner\'s contact number';
+          publicPhone.dataset.masked = maskPhone(p.contactDesc.mobile);
           publicPhone.href = 'javascript:void(0)';
           publicPhone.style.cursor = 'pointer';
+        }
+
+        function revealPublicContact() {
+          if (!hasPublicPhone) return;
+          publicPhone.textContent = '+91 ' + p.contactDesc.mobile;
+          publicPhone.href = 'tel:+91' + p.contactDesc.mobile;
+          publicPhone.style.cursor = 'pointer';
+          publicPhone.title = '';
         }
 
         function openAdvModalFromPublic() {
