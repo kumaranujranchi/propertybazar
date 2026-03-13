@@ -1770,9 +1770,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         "display:flex; gap:8px; align-items:center; flex-wrap:wrap;";
       row.innerHTML = `
         <input type="text" class="form-input config-name" placeholder="Configuration (e.g. 2BHK)" style="flex:1; min-width:120px">
-        <div style="display:flex; gap:4px; flex:1; min-width:180px;">
-          <input type="number" class="form-input config-area" placeholder="Area" style="flex:1; min-width:60px">
-          <select class="form-input config-area-unit" style="min-width:80px; font-size:12px; padding:0 5px;">
+        <div style="display:flex; gap:4px; flex:1.6; min-width:220px;">
+          <input type="number" class="form-input config-area" placeholder="Area" style="flex:1; min-width:100px">
+          <select class="form-input config-area-unit" style="min-width:90px; font-size:12px; padding:0 5px;">
             <option value="Square Foot">sq ft</option>
             <option value="Square Yard (Gaj)">sq yard</option>
             <option value="Square Meter">sq m</option>
@@ -1793,7 +1793,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <option value="Ares">Ares</option>
           </select>
         </div>
-        <input type="number" class="form-input config-price" placeholder="Price (₹)" style="flex:1; min-width:100px">
+        <input type="number" class="form-input config-price" placeholder="Price (₹)" style="flex:0.9; min-width:80px">
         <button type="button" class="btn btn-outline btn-sm remove-config-btn">✕</button>
       `;
       container.appendChild(row);
