@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 4. Set up filters
   document.getElementById('filterPropStatus').addEventListener('change', renderPropertiesTable);
   document.getElementById('propSearch').addEventListener('input', renderPropertiesTable);
+  document.getElementById('activeSearch')?.addEventListener('input', renderActiveListings);
   document.getElementById('userSearch').addEventListener('input', renderUsersTable);
   
   // Logout
@@ -117,6 +118,8 @@ async function loadDashboardData() {
     allProperties = await convex.query("admin:getAllProperties", { token });
     renderPropertiesTable();
     renderRecentProperties(allProperties.filter(p => p.approvalStatus === 'pending' || !p.approvalStatus).slice(0, 5));
+    // 4. Active Listings
+    renderActiveListings();
 
     // 3. Users
     allUsers = await convex.query("admin:getAllUsers", { token });
@@ -126,6 +129,58 @@ async function loadDashboardData() {
     console.error("Failed to load dashboard data", err);
     if(window.showToast) window.showToast("Failed to load data. See console.", "error");
   }
+}
+
+function renderActiveListings() {
+  const tbody = document.getElementById('activeListingsTable');
+  if (!tbody) return;
+  const searchStr = (document.getElementById('activeSearch')?.value || '').toLowerCase();
+
+  const active = allProperties.filter(p => (p.approvalStatus || '').toLowerCase() === 'active');
+  const filtered = active.filter(p => {
+    if (!searchStr) return true;
+    const titleStr = `${p.details?.bhk || ''} ${p.propertyType}`.toLowerCase();
+    const locStr = `${p.location?.locality || ''} ${p.location?.city || ''}`.toLowerCase();
+    return titleStr.includes(searchStr) || locStr.includes(searchStr) || (p._id || '').toLowerCase().includes(searchStr);
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px;">No active listings found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(p => {
+    const photoSrc = (() => {
+      if (!p.photos || p.photos.length === 0) return 'images/property-1.webp';
+      const first = p.photos[0];
+      const url = typeof first === 'object' ? first.url : first;
+      if (!url || (typeof url === 'string' && !url.startsWith('http') && !url.startsWith('/'))) return 'images/property-1.webp';
+      return url;
+    })();
+
+    return `
+    <tr>
+      <td class="td-prop">
+        <img src="${photoSrc}" alt="Property" onerror="this.src='images/placeholder.jpg'" style="width:56px;height:44px;border-radius:6px;object-fit:cover;">
+        <div>
+          <div class="td-prop-title">${p.details?.bhk || ''} ${p.propertyType}</div>
+          <div class="td-prop-loc">${p.location?.locality || ''}, ${p.location?.city || ''}</div>
+        </div>
+      </td>
+      <td>
+        <div style="font-size:14px;font-weight:600;">${p.contactDesc?.name || 'Unknown'}</div>
+        <div style="font-size:12px;color:#6b7280;font-family:monospace;">${p.contactDesc?.mobile || ''}</div>
+      </td>
+      <td style="font-weight: 600;">₹${p.pricing?.expectedPrice?.toLocaleString('en-IN') || 'N/A'}</td>
+      <td style="font-size:13px;color:#6b7280;">${new Date(p._creationTime).toLocaleDateString()}</td>
+      <td>
+        <div class="action-btns">
+          <button class="act-btn" title="Deactivate Listing" onclick="updatePropertyStatus('${p._id}', 'rejected')"><i class="fa-solid fa-ban"></i></button>
+          <button class="act-btn view" title="View on Site" onclick="window.open('property-detail.html?id=${p._id}', '_blank')"><i class="fa-solid fa-eye"></i></button>
+        </div>
+      </td>
+    </tr>
+  `}).join('');
 }
 
 function renderRecentProperties(recentProps) {

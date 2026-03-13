@@ -338,6 +338,10 @@
           <span class="nav-icon"><i class="fa-solid fa-house-flag"></i></span>
           <span class="nav-label">Properties</span>
         </button>
+        <button class="admin-nav-item" data-target="active-listings" data-label="Active Listings">
+          <span class="nav-icon"><i class="fa-solid fa-list"></i></span>
+          <span class="nav-label">Active Listings</span>
+        </button>
         <button class="admin-nav-item" data-target="users" data-label="Registered Users">
           <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
           <span class="nav-label">Users</span>
@@ -431,6 +435,26 @@
                   <th>Property Info</th><th>Owner</th><th>Price</th><th>Status</th><th>Date</th><th>Actions</th>
                 </tr></thead>
                 <tbody id="allPropertiesTable"><tr><td colspan="6" class="empty-state">Loading...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ACTIVE LISTINGS -->
+        <section id="section-active-listings" class="admin-section">
+          <div class="panel-card panel-full">
+            <div class="panel-header">
+              <h3>Active Listings</h3>
+            </div>
+            <div class="filter-bar">
+              <input type="text" id="activeSearch" placeholder="Search active listings by title, city or id...">
+            </div>
+            <div class="table-wrap">
+              <table class="admin-table">
+                <thead><tr>
+                  <th>Property Info</th><th>Owner</th><th>Price</th><th>Date</th><th>Actions</th>
+                </tr></thead>
+                <tbody id="activeListingsTable"><tr><td colspan="5" class="empty-state">Loading...</td></tr></tbody>
               </table>
             </div>
           </div>
