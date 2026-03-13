@@ -1239,9 +1239,9 @@
         }
         if (heroPrice) heroPrice.innerHTML = priceStr;
         if (heroLocation) heroLocation.querySelector('span').textContent = `${p.location?.locality || ''}, ${p.location?.city || ''}`;
-+
-+        // Update meta tags for sharing (helps some platforms / social previews)
-+        const canonicalLink = document.querySelector('link[rel=canonical]');
+
+        // Update meta tags for sharing (helps some platforms / social previews)
+        const canonicalLink = document.querySelector('link[rel=canonical]');
 +        const ogImageMeta = document.querySelector('meta[property="og:image"]');
 +        const twitterImageMeta = document.querySelector('meta[name="twitter:image"]');
 +        const ogTitleMeta = document.querySelector('meta[property="og:title"]');
