@@ -1779,8 +1779,24 @@
             if (c.price) txt += ` • ₹${Number(c.price).toLocaleString('en-IN')}`;
             badge.textContent = txt;
             configsList.appendChild(badge);
+
+            // Add per-config floor plan photos to the carousel
+            if (Array.isArray(c.photos) && c.photos.length > 0) {
+              c.photos.forEach(ph => {
+                const url = typeof ph === 'string' ? ph : ph.url || '';
+                if (!url) return;
+                const card = document.createElement('div');
+                card.style.cssText = 'width:280px; max-width:85vw; border-radius:8px; overflow:hidden; background:#fff; border:1px solid var(--border); flex-shrink:0; cursor:pointer; display:flex; flex-direction:column;';
+                card.innerHTML = `
+                  <img src="${url}" style="width:100%; height:180px; object-fit:cover; display:block;" onerror="this.parentElement.style.display='none'">
+                  <div style="padding:6px 10px; font-size:11px; font-weight:600; color:var(--text-muted); background:#f9fafb;">${c.name || ''}</div>
+                `;
+                card.addEventListener('click', () => window.open(url, '_blank'));
+                floorCarousel.appendChild(card);
+              });
+            }
           });
-          // Ensure floor plan section visible when configs exist
+          // Ensure floor plan section is visible when configs exist
           if (floorPlanSection) floorPlanSection.style.display = 'block';
         }
 
