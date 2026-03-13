@@ -126,6 +126,31 @@ if (photoFileInput) {
     const input = row.querySelector('input.config-floorplan');
     if (input) input.click();
   });
+
+  // Floorplan image preview (delegated change on file inputs)
+  document.addEventListener('change', (e) => {
+    if (!e.target.classList.contains('config-floorplan')) return;
+    const input = e.target;
+    const row = input.closest('.config-row');
+    if (!row) return;
+    const previews = row.querySelector('.config-floorplan-previews');
+    if (!previews) return;
+    const max = Number(input.getAttribute('data-max') || 2);
+    const files = Array.from(input.files).slice(0, max);
+    previews.innerHTML = '';
+    files.forEach((file, idx) => {
+      const url = URL.createObjectURL(file);
+      const thumb = document.createElement('div');
+      thumb.className = 'fp-thumb';
+      thumb.innerHTML = `<img src="${url}" alt="Floor plan ${idx + 1}"><button type="button" class="fp-remove" title="Remove">✕</button>`;
+      thumb.querySelector('.fp-remove').addEventListener('click', () => {
+        thumb.remove();
+        // Clear the file input so the removed image won't be uploaded
+        input.value = '';
+      });
+      previews.appendChild(thumb);
+    });
+  });
   photoUploadArea.addEventListener("dragover", (e) => {
     e.preventDefault();
     photoUploadArea.style.borderColor = "var(--primary)";
@@ -1789,50 +1814,69 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!container) return;
       const row = document.createElement("div");
       row.className = "config-row";
-      row.style.cssText =
-        "display:flex; gap:8px; align-items:center; flex-wrap:wrap;";
       row.innerHTML = `
-        <select class="form-input config-bhk" style="min-width:120px;">
-          <option value="1BHK">1 BHK</option>
-          <option value="2BHK" selected>2 BHK</option>
-          <option value="3BHK">3 BHK</option>
-          <option value="4BHK">4 BHK</option>
-          <option value="5BHK">5 BHK</option>
-          <option value="6BHK">6 BHK</option>
-          <option value="Custom">Custom</option>
-        </select>
-        <input type="text" class="form-input config-custom" placeholder="Custom config (e.g. Studio)" style="flex:1; min-width:120px; display:none">
-        <div style="display:flex; gap:4px; flex:1.6; min-width:220px;">
-          <input type="number" class="form-input config-builtup" placeholder="Built-up Area" style="flex:1; min-width:100px">
-          <select class="form-input config-builtup-unit" style="min-width:90px; font-size:12px; padding:0 5px;">
-            <option value="Square Foot">sq ft</option>
-            <option value="Square Yard (Gaj)">sq yard</option>
-            <option value="Square Meter">sq m</option>
-            <option value="Acre">Acre</option>
-            <option value="Hectare">Hectare</option>
-            <option value="Dismil / Decimal">Dismil</option>
-            <option value="Kattha">Kattha</option>
-            <option value="Bigha">Bigha</option>
-            <option value="Kanal">Kanal</option>
-            <option value="Marla">Marla</option>
-            <option value="Guntha / Gunta">Gunta</option>
-            <option value="Cent">Cent</option>
-            <option value="Ground">Ground</option>
-            <option value="Ankanam">Ankanam</option>
-            <option value="Biswa">Biswa</option>
-            <option value="Biswansi">Biswansi</option>
-            <option value="Lecha">Lecha</option>
-            <option value="Ares">Ares</option>
+        <div class="config-row-header">
+          <select class="form-input config-bhk">
+            <option value="1BHK">1 BHK</option>
+            <option value="2BHK" selected>2 BHK</option>
+            <option value="3BHK">3 BHK</option>
+            <option value="4BHK">4 BHK</option>
+            <option value="5BHK">5 BHK</option>
+            <option value="6BHK">6 BHK</option>
+            <option value="Custom">Custom</option>
           </select>
+          <input type="text" class="form-input config-custom" placeholder="e.g. Studio, 7.5 BHK, Penthouse" style="display:none; flex:1;">
+          <button type="button" class="btn btn-outline btn-sm remove-config-btn" style="margin-left:auto;">✕ Remove</button>
         </div>
-        <input type="number" class="form-input config-carpet" placeholder="Carpet (optional)" style="flex:0.9; min-width:80px">
-        <select class="form-input config-carpet-unit" style="min-width:90px; font-size:12px; padding:0 5px;">
-          <option value="Square Foot">sq ft</option>
-          <option value="Square Meter">sq m</option>
-        </select>
-        <input type="number" class="form-input config-price" placeholder="Price (₹) (optional)" style="flex:0.9; min-width:80px">
-        <input type="file" accept="image/*" class="config-floorplan" multiple data-max="2" style="display:none">
-        <button type="button" class="btn btn-outline btn-sm remove-config-btn">✕</button>
+        <div class="config-row-fields">
+          <div class="config-field">
+            <span class="config-field-label">Built-up Area *</span>
+            <div class="config-area-group">
+              <input type="number" class="form-input config-builtup" placeholder="e.g. 1200">
+              <select class="form-input config-builtup-unit">
+                <option value="Square Foot">sq ft</option>
+                <option value="Square Yard (Gaj)">sq yard</option>
+                <option value="Square Meter">sq m</option>
+                <option value="Acre">Acre</option>
+                <option value="Hectare">Hectare</option>
+                <option value="Dismil / Decimal">Dismil</option>
+                <option value="Kattha">Kattha</option>
+                <option value="Bigha">Bigha</option>
+                <option value="Kanal">Kanal</option>
+                <option value="Marla">Marla</option>
+                <option value="Guntha / Gunta">Gunta</option>
+                <option value="Cent">Cent</option>
+                <option value="Ground">Ground</option>
+                <option value="Ankanam">Ankanam</option>
+                <option value="Biswa">Biswa</option>
+                <option value="Biswansi">Biswansi</option>
+                <option value="Lecha">Lecha</option>
+                <option value="Ares">Ares</option>
+              </select>
+            </div>
+          </div>
+          <div class="config-field">
+            <span class="config-field-label">Carpet Area (optional)</span>
+            <div class="config-area-group">
+              <input type="number" class="form-input config-carpet" placeholder="e.g. 980">
+              <select class="form-input config-carpet-unit">
+                <option value="Square Foot">sq ft</option>
+                <option value="Square Meter">sq m</option>
+              </select>
+            </div>
+          </div>
+          <div class="config-field">
+            <span class="config-field-label">Price (optional)</span>
+            <input type="number" class="form-input config-price" placeholder="e.g. 45,00,000">
+          </div>
+        </div>
+        <div class="config-floorplan-row">
+          <input type="file" accept="image/*" class="config-floorplan" multiple data-max="2" style="display:none">
+          <button type="button" class="btn btn-outline btn-sm btn-upload-floorplan">
+            <i class="fa-solid fa-image"></i> Upload Floor Plans (max 2)
+          </button>
+          <div class="config-floorplan-previews"></div>
+        </div>
       `;
       container.appendChild(row);
       updateConfigRemoveButtons();
