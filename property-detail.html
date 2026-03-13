@@ -699,37 +699,41 @@
       <!-- RIGHT COLUMN — SIDEBAR -->
       <div class="sticky-sidebar">
         <!-- LISTED BY CARD -->
-        <div class="detail-section-card" style="margin-top:0">
-          <h3 style="font-size:15px; font-weight:700; margin-bottom:20px; color:var(--text-muted)">LISTED BY</h3>
-          <div class="posted-by-card" style="display: flex; gap: 16px; align-items: center;">
+        <div class="detail-section-card" style="margin-top:0; padding:20px;">
+          <h3 style="font-size:11px; font-weight:700; letter-spacing:1px; color:var(--text-muted); margin-bottom:16px; text-transform:uppercase;">Listed By</h3>
+          <div style="display:flex; gap:14px; align-items:center;">
             <div id="ownerAvatar"
-              style="width: 56px; height: 56px; border-radius: 12px; background: var(--primary); color: #fff; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center;">
+              style="width:52px; height:52px; border-radius:50%; background:var(--primary); color:#fff; font-size:20px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden;">
               24</div>
-            <div>
-              <div id="posterBadge" style="font-size: 11px; font-weight: 700; color: var(--primary);">INDIVIDUAL</div>
-              <h4 id="ownerName" style="font-size: 16px; font-weight: 700; margin: 2px 0;">Advertiser</h4>
-              <p id="ownerJoinDate" style="font-size: 12px; color: var(--text-muted);">Member since 2024</p>
+            <div style="min-width:0;">
+              <h4 id="ownerName" style="font-size:15px; font-weight:700; margin:0 0 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Advertiser</h4>
+              <p id="ownerJoinDate" style="font-size:12px; color:var(--text-muted); margin:0;">Member since 2024</p>
             </div>
           </div>
-          <div
-            style="margin-top: 16px; padding: 12px; background: #f8faff; border-radius: 8px; font-size: 12px; color: var(--text-muted); border-left: 3px solid var(--primary);">
-            Listed by verified owner. 0% Brokerage apply.
+
+          <div style="margin-top:14px; display:flex; align-items:center; gap:8px; padding:10px 12px; background:#f0fdf4; border-radius:8px; font-size:12px; color:#16a34a; font-weight:600;">
+            <i class="fa-solid fa-circle-check" style="font-size:14px;"></i>
+            Verified listing &nbsp;·&nbsp; 0% Brokerage
           </div>
 
           <!-- Public Contact Info -->
           <div id="publicContactInfo"
-            style="display:none; margin-top:16px; border-top:1px solid #eee; padding-top:12px;">
+            style="display:none; margin-top:14px; border-top:1px solid #f0f0f0; padding-top:14px;">
             <div
-              style="font-size:11px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; font-weight:700">
-              Call Directly</div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
+              style="font-size:11px; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; font-weight:700; letter-spacing:0.5px;">
+              Contact Directly</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
               <div id="publicNameRow" style="display:flex; align-items:center; gap:10px;">
-                <i class="fa-solid fa-user" style="color:var(--primary); width:16px"></i>
-                <span id="publicName" style="font-weight:600; font-size:14px"></span>
+                <div style="width:30px; height:30px; border-radius:8px; background:#f3f4f6; display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-solid fa-user" style="color:var(--primary); font-size:12px;"></i>
+                </div>
+                <span id="publicName" style="font-weight:600; font-size:14px;"></span>
               </div>
               <div id="publicPhoneRow" style="display:flex; align-items:center; gap:10px;">
-                <i class="fa-solid fa-phone" style="color:var(--primary); width:16px"></i>
-                <a id="publicPhone" href="" style="font-weight:700; font-size:15px; color:var(--text)"></a>
+                <div style="width:30px; height:30px; border-radius:8px; background:#f3f4f6; display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-solid fa-phone" style="color:var(--primary); font-size:12px;"></i>
+                </div>
+                <a id="publicPhone" href="" style="font-weight:700; font-size:15px; color:var(--text); text-decoration:none;"></a>
               </div>
             </div>
           </div>
@@ -2034,7 +2038,7 @@
 
           if (ownerAvatar) {
             if (p.ownerInfo.profilePictureUrl) {
-              ownerAvatar.innerHTML = `<img src="${p.ownerInfo.profilePictureUrl}" style="width:100%;height:100%;border-radius:12px;object-fit:cover;">`;
+              ownerAvatar.innerHTML = `<img src="${p.ownerInfo.profilePictureUrl}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
               ownerAvatar.style.background = 'transparent';
             } else {
               ownerAvatar.textContent = (isCompany ? p.ownerInfo.companyName : p.ownerInfo.name || 'U')[0].toUpperCase();
