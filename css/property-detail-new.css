@@ -150,37 +150,21 @@ body {
   flex: 2 1 60%;
   border-radius: var(--radius);
   overflow: hidden;
-  background: #000;
+  background: #f2f4f7;
   position: relative;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .collage-main img {
   position: absolute;
   inset: 0;
   width: 100% !important;
   height: 100% !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
   object-position: center center !important;
   display: block !important;
   border-radius: 0;
   margin: 0 !important;
   z-index: 2;
-}
-
-/* Pseudo-element for blurred backdrop to fill empty space */
-.collage-main::before,
-.gallery-item::before {
-  content: "";
-  position: absolute;
-  inset: -20px;
-  background-image: inherit;
-  background-size: cover;
-  background-position: center;
-  filter: blur(15px) brightness(0.8);
-  z-index: 1;
 }
 
 .collage-side {
@@ -193,20 +177,17 @@ body {
 .gallery-item {
   border-radius: 10px;
   overflow: hidden;
-  background: #000;
+  background: #f2f4f7;
   position: relative;
   flex: 1; /* equal share of side column height */
   min-height: 0; /* prevent flex blowout */
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .gallery-item img {
   position: absolute;
   inset: 0;
   width: 100% !important;
   height: 100% !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
   object-position: center center !important;
   display: block !important;
   border-radius: 0;
