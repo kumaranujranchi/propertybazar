@@ -618,9 +618,14 @@ textarea {
   .header .container {
     padding: 0 12px;
   }
-  .nav-city,
   .nav-group-right .nav-btn-post {
     display: none !important;
+  }
+  .nav-city {
+    display: flex !important;
+    font-size: 11px;
+    gap: 6px;
+    padding: 6px 8px;
   }
   .nav-logo {
     font-size: 18px;
