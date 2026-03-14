@@ -47,7 +47,11 @@
   width: 100%;
   height: 100%;
   position: relative;
-  background: #f1f5f9; /* Soft grey background for viewport */
+  background-color: #f1f5f9;
+  background-image: 
+    linear-gradient(rgba(203, 213, 225, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(203, 213, 225, 0.3) 1px, transparent 1px);
+  background-size: 30px 30px;
   /* Will be transformed via JS */
 }
 
@@ -55,9 +59,9 @@
   position: absolute;
   top: 0;
   left: 0;
-  /* Ensure transform origin is top left for easier JS math */
   transform-origin: 0 0;
   display: inline-block;
+  transition: opacity 0.5s ease;
 }
 
 .tree {
@@ -66,6 +70,12 @@
   list-style-type: none;
   display: flex;
   align-items: center;
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 .tree ul {
@@ -76,6 +86,7 @@
   gap: 16px;
   margin: 0;
   list-style-type: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tree li {
@@ -94,6 +105,7 @@
   height: 2px;
   border-top: 1.5px dashed #4b6584;
   transform: translateY(-50%);
+  opacity: 0.7;
 }
 
 /* Vertical line connecting siblings */
@@ -104,6 +116,7 @@
   bottom: 0;
   left: 0;
   border-left: 1.5px dashed #4b6584;
+  opacity: 0.7;
 }
 
 /* Hide entering line for the root node */
@@ -125,11 +138,12 @@
   font-weight: 600;
   font-family: "Poppins", sans-serif;
   letter-spacing: 0.3px;
-  box-shadow: 0 8px 20px rgba(47, 54, 64, 0.2);
+  box-shadow: 0 4px 12px rgba(47, 54, 64, 0.15);
   white-space: nowrap;
   position: relative;
   z-index: 2;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 .node:not(.leaf-node)::after {
@@ -141,6 +155,7 @@
   border-top: 1.5px dashed #4b6584;
   transform: translateY(-50%);
   z-index: 1;
+  opacity: 0.7;
 }
 
 /* Hide half of the vertical line for the first child */
@@ -151,7 +166,7 @@
   left: -50px;
   width: 1.5px;
   height: 50%;
-  background: #f8fafc; /* match background to hide the dash */
+  background: #f1f5f9; /* match background grid color */
 }
 
 /* Hide half of the vertical line for the last child */
@@ -162,7 +177,7 @@
   left: -50px;
   width: 1.5px;
   height: 50%;
-  background: #f8fafc;
+  background: #f1f5f9;
 }
 
 /* Clear pseudo elements if it's both first and last (only child) */
@@ -173,51 +188,65 @@
 /* Dynamic Interaction Styles */
 .node.expandable {
   cursor: pointer;
-  padding-right: 40px; /* Space for the +/- icon */
+  padding-right: 42px;
 }
 
 .node.expandable::before {
-  content: '\f068'; /* FontAwesome minus icon by default */
+  content: '\f068';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
   position: absolute;
-  right: 15px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 12px;
+  font-size: 10px;
+  width: 18px;
+  height: 18px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.3s ease;
 }
 
 .li-collapsed .node.expandable::before {
-  content: '\f067'; /* FontAwesome plus icon */
+  content: '\f067';
+  background: var(--primary);
+  box-shadow: 0 0 10px rgba(232, 65, 24, 0.4);
 }
 
 .li-collapsed > ul {
   display: none;
+  opacity: 0;
+  transform: scale(0.95);
 }
 
-/* Hide the outgoing dashed line from a collapsed node */
 .li-collapsed > .node::after {
   display: none;
 }
 
-/* Smooth transition for node hover */
 .node:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(232, 65, 24, 0.3);
-  background: var(--dark);
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.node.expandable:hover::before {
+  background: var(--primary);
+  transform: translateY(-50%) rotate(90deg);
 }
 
 .root-node {
-  background: #192a56; /* Rich navy for root */
+  background: linear-gradient(135deg, #192a56 0%, #273c75 100%);
   font-size: 16px;
-  padding: 16px 32px;
-  border: 2px solid rgba(255,255,255,0.1);
+  padding: 16px 36px;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 10px 25px rgba(25, 42, 86, 0.3);
 }
 
-/* Adjust root expandable padding if needed */
 .root-node.expandable {
-  padding-right: 48px;
+  padding-right: 52px;
 }
 
 .branch-node {
@@ -225,18 +254,17 @@
 }
 
 .leaf-node {
-  background: #273c38; /* Slight green tint like original */
+  background: #273c38;
   font-weight: 500;
-  font-size: 13.5px;
+  font-size: 13px;
   padding: 10px 20px;
 }
 
-/* Tweak horizontal line originating from node */
 .node::after {
   content: '';
   position: absolute;
   top: 50%;
-  right: -50px; /* Use the full 50px defined in the grid */
+  right: -50px; 
   width: 50px;
   height: 1.5px;
   background: transparent;
@@ -245,7 +273,6 @@
   z-index: 1;
 }
 
-/* Leaf nodes don't have outgoing lines */
 .leaf-node::after {
   display: none;
 }

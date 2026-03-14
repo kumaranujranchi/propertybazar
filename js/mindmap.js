@@ -15,25 +15,45 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Expand/Collapse Logic
   const allNodes = document.querySelectorAll('.node');
-  allNodes.forEach(node => {
+  allNodes.forEach((node, index) => {
     // Check if node has a sibling UL (children)
     const childrenUl = node.nextElementSibling;
     if (childrenUl && childrenUl.tagName === 'UL') {
       node.classList.add('expandable');
       
+      // Auto-collapse logic: Collapse everything except the root's direct children
+      const isRoot = node.classList.contains('root-node');
+      const li = node.parentElement;
+      
+      // We start with branches collapsed to show it is dynamic
+      if (!isRoot) {
+        li.classList.add('li-collapsed');
+      }
+
       node.addEventListener('click', (e) => {
         // Prevent click if we were dragging (small threshold)
         // Note: For simplicity, a direct click works best
-        const li = node.parentElement;
         li.classList.toggle('li-collapsed');
+        
+        // Add a "pop" animation feedback
+        node.animate([
+          { transform: 'scale(1)' },
+          { transform: 'scale(1.15)' },
+          { transform: 'scale(1)' }
+        ], { duration: 200, easing: 'ease-out' });
       });
     }
   });
 
   function updateTransform() {
     // Pure pixel-based transform for better reliability
+    container.style.opacity = '1';
     container.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
   }
+
+  // Set initial opacity to 0 for fade-in effect
+  container.style.opacity = '0';
+  setTimeout(updateTransform, 100);
 
   // Initial calculation
   updateTransform();
