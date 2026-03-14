@@ -1,0 +1,211 @@
+/* Mind Map Layout */
+.mindmap-wrapper {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 140px);
+  background: #f8fafc;
+  overflow: hidden; /* Hide anything outside viewport */
+  cursor: grab;
+  border-bottom: 1px solid var(--border);
+}
+.mindmap-wrapper:active {
+  cursor: grabbing;
+}
+
+.mindmap-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+.mindmap-controls button {
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dark);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mindmap-controls button:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.mindmap-viewport {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  /* Will be transformed via JS */
+}
+
+.mindmap-container {
+  position: absolute;
+  top: 50%;
+  left: 100px;
+  /* Ensure transform origin is top left for easier JS math or center */
+  transform-origin: 0 50%;
+  display: inline-block;
+}
+
+.tree {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+}
+
+.tree ul {
+  padding-left: 50px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  list-style-type: none;
+}
+
+.tree li {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Horizontal line entering the node */
+.tree li::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -50px;
+  width: 50px;
+  height: 2px;
+  border-top: 1.5px dashed #4b6584;
+  transform: translateY(-50%);
+}
+
+/* Vertical line connecting siblings */
+.tree ul::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-left: 1.5px dashed #4b6584;
+}
+
+/* Hide entering line for the root node */
+.tree > li::before {
+  display: none;
+}
+/* Hide the vertical line for the root ul */
+.tree > ul::before {
+  display: none;
+}
+
+/* The horizontal line exiting the node towards its children */
+.node {
+  background: #2f3640; 
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  letter-spacing: 0.3px;
+  box-shadow: 0 8px 20px rgba(47, 54, 64, 0.2);
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.node:not(.leaf-node)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -50px; 
+  width: 50px;
+  border-top: 1.5px dashed #4b6584;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+/* Hide half of the vertical line for the first child */
+.tree li:first-child::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50px;
+  width: 1.5px;
+  height: 50%;
+  background: #f8fafc; /* match background to hide the dash */
+}
+
+/* Hide half of the vertical line for the last child */
+.tree li:last-child::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -50px;
+  width: 1.5px;
+  height: 50%;
+  background: #f8fafc;
+}
+
+/* Clear pseudo elements if it's both first and last (only child) */
+.tree li:first-child:last-child::after {
+  display: none;
+}
+
+.node:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(232, 65, 24, 0.3);
+  background: var(--dark);
+}
+
+.root-node {
+  background: #192a56; /* Rich navy for root */
+  font-size: 16px;
+  padding: 16px 32px;
+  border: 2px solid rgba(255,255,255,0.1);
+}
+
+.branch-node {
+  background: #353b48;
+}
+
+.leaf-node {
+  background: #273c38; /* Slight green tint like original */
+  font-weight: 500;
+  font-size: 13.5px;
+  padding: 10px 20px;
+}
+
+/* Tweak horizontal line originating from node */
+.node::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -20px; /* Attach to next UL margin */
+  width: 20px;
+  height: 1.5px;
+  background: #4b6584; /* Solid or dashed */
+  z-index: 1;
+}
+
+/* Leaf nodes don't have outgoing lines */
+.leaf-node::after {
+  display: none;
+}
