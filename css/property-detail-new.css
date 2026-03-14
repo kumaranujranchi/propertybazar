@@ -253,7 +253,8 @@ body {
 }
 
 /* Tablet Object-Fit Fix (Landscape & Portrait) */
-@media (min-width: 577px) and (max-width: 1024px) {
+@media (min-width: 577px) and (max-width: 1200px),
+       (min-width: 577px) and (max-width: 1400px) and (pointer: coarse) {
   .collage-main img,
   .gallery-item img {
     object-fit: cover !important;
