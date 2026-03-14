@@ -45,7 +45,7 @@ export const saveBanner = mutation({
     city: v.string(),
     type: v.string(),
     storageId: v.id("_storage"),
-    bgPosition: v.optional(v.number()), // 0-100: % of image height from top where crop starts
+    bgPosition: v.optional(v.union(v.string(), v.number())), // 0-100: % of image height from top where crop starts
   },
   handler: async (ctx, args) => {
     // Check if a banner already exists for this city and type

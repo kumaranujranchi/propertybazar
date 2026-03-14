@@ -90,7 +90,7 @@ export default defineSchema({
     city: v.string(),
     type: v.string(), // buy, rent, commercial
     storageId: v.id("_storage"),
-    bgPosition: v.optional(v.number()), // 0-100, % of image height from top where crop starts
+    bgPosition: v.optional(v.union(v.string(), v.number())), // Compatible with both legacy strings and new numeric crop fractions
     lastUpdated: v.number(),
   }).index("by_city_type", ["city", "type"]),
 });
