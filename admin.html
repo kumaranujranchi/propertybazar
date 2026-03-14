@@ -569,8 +569,23 @@
                   <p class="form-text">Recommended size: 1200x450px (Minimum height 450px)</p>
                 </div>
 
+                <!-- LIVE PREVIEW AREA -->
+                <div class="form-group" style="margin-bottom: 25px;">
+                  <label class="form-label">Live Desktop Preview (What visitors will see)</label>
+                  <div id="bannerPreviewContainer" style="width: 100%; height: 200px; background: #f1f5f9; border-radius: 12px; border: 2px dashed #cbd5e1; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 20px; box-sizing: border-box;">
+                    <div id="bannerPreviewBg" style="position: absolute; inset: 0; background-size: cover; background-position: center 50%; z-index: 0; transition: background-position 0.1s ease;"></div>
+                    <div style="position: absolute; top: 10px; right: 10px; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 700; z-index: 2; border: 1px solid rgba(255,255,255,0.1); text-transform: uppercase; letter-spacing: 1px;">Sponsored</div>
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%); z-index: 1;"></div>
+                    <div style="position: relative; z-index: 2; color: #fff;">
+                      <div id="previewTitle" style="font-size: 14px; font-weight: 700; margin-bottom: 2px;">Properties in [City Name]</div>
+                      <div style="font-size: 10px; opacity: 0.8;">Explore verified listings in your city</div>
+                    </div>
+                  </div>
+                  <p class="form-text" style="margin-top: 8px;">This is a scaled-down preview of how the banner will look on the live site.</p>
+                </div>
+
                 <div class="form-group" style="margin-bottom: 20px;">
-                  <label class="form-label">Vertical Focus (Manually choose visible part)</label>
+                  <label class="form-label">Vertical Focus (Adjust to choose visible part)</label>
                   <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="font-size: 12px; color: var(--text-muted);">Top</span>
                     <input type="range" id="bannerBgPos" min="0" max="100" value="50" style="flex: 1; accent-color: var(--primary);">
