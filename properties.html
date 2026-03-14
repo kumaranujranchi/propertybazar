@@ -69,12 +69,12 @@
     </div>
   </header>
 
-  <!-- FLOATING AD BANNER (Option B) -->
-  <div id="pageBanner" class="page-banner" style="display: none;">
-    <div class="banner-full-img">
+  <!-- HYBRID AD BANNER (Image + CTA) -->
+  <div id="pageBanner" class="page-banner" style="display: none !important;">
+    <div class="banner-image-container">
       <img id="bannerImg" alt="Advertisement Image">
     </div>
-    <div id="bannerFloat" class="banner-floating-content">
+    <div id="bannerContent" class="banner-content-container">
       <h2 id="bannerTitle" class="banner-title"></h2>
       <p id="bannerSubtitle" class="banner-subtitle"></p>
       <a id="bannerCta" href="#" class="banner-cta-btn">
@@ -180,7 +180,7 @@
               }
             }
 
-            bannerEl.style.display = 'block';
+            bannerEl.style.setProperty('display', 'flex', 'important');
             heroFallback.style.display = 'none';
             return;
           }
