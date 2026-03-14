@@ -2085,7 +2085,7 @@ textarea {
   position: relative;
   overflow: hidden;
   display: flex !important;
-  background: #e84118; /* Theme orange fill for the rest of the space */
+  background: var(--banner-overlay-solid, #e84118); /* Theme orange fill for the rest of the space */
 }
 .banner-image-container {
   flex: 0 0 75%; /* Roughly 1500px on 2000px screen */
@@ -2105,7 +2105,7 @@ textarea {
   flex-direction: column;
   justify-content: center;
   padding: 30px 40px;
-  background: #e84118;
+  background: var(--banner-overlay-bg, rgba(232, 65, 24, 0.9));
   position: relative;
   z-index: 2;
   color: #fff;
@@ -2115,7 +2115,7 @@ textarea {
   content: '';
   position: absolute;
   top: 0; left: -100px; bottom: 0; width: 100px;
-  background: linear-gradient(90deg, transparent, #e84118);
+  background: linear-gradient(90deg, transparent, var(--banner-overlay-bg, rgba(232, 65, 24, 0.9)));
   pointer-events: none;
 }
 .banner-title {

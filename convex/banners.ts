@@ -49,9 +49,11 @@ export const saveBanner = mutation({
     title: v.optional(v.string()),
     subtitle: v.optional(v.string()),
     ctaLink: v.optional(v.string()),
+    overlayColor: v.optional(v.string()),
+    overlayOpacity: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    const { city, type, storageId, bgPosition, title, subtitle, ctaLink } = args;
+    const { city, type, storageId, bgPosition, title, subtitle, ctaLink, overlayColor, overlayOpacity } = args;
     // Check if a banner already exists for this city and type
     const existing = await ctx.db
       .query("banners")
@@ -70,6 +72,8 @@ export const saveBanner = mutation({
         title,
         subtitle,
         ctaLink,
+        overlayColor,
+        overlayOpacity,
         lastUpdated: Date.now(),
       });
       return existing._id;
@@ -83,6 +87,8 @@ export const saveBanner = mutation({
         title,
         subtitle,
         ctaLink,
+        overlayColor,
+        overlayOpacity,
         lastUpdated: Date.now(),
       });
     }

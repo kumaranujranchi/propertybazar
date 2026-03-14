@@ -94,6 +94,8 @@ export default defineSchema({
     title: v.optional(v.string()),
     subtitle: v.optional(v.string()),
     ctaLink: v.optional(v.string()),
+    overlayColor: v.optional(v.string()),   // hex color e.g. "#e84118"
+    overlayOpacity: v.optional(v.number()), // 0.0 – 1.0
     lastUpdated: v.number(),
   }).index("by_city_type", ["city", "type"]),
 });
