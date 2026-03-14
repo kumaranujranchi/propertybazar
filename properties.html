@@ -70,16 +70,24 @@
   </header>
 
   <!-- AD BANNER (city/type-specific) -->
-  <div id="pageBanner" class="page-banner" style="display:none"></div>
+  <div id="pageBanner" class="page-banner">
+    <div class="container banner-content">
+      <div class="page-breadcrumb">
+        <a href="index.html" style="color:rgba(255,255,255,0.8)">Home</a> <span style="color:rgba(255,255,255,0.5)">›</span> <span style="color:#fff">Properties</span>
+      </div>
+      <h1 id="bannerTitle" style="font-size:36px; font-weight:800; text-shadow: 0 2px 15px rgba(0,0,0,0.4); margin-bottom:10px;">Properties for Sale & Rent</h1>
+      <p id="bannerSubtitle" style="color:rgba(255,255,255,0.95); font-size:18px; font-weight:500; text-shadow: 0 1px 8px rgba(0,0,0,0.3);">Explore verified listings in your city</p>
+    </div>
+  </div>
 
-  <!-- PAGE HERO -->
-  <div class="page-hero">
+  <!-- PAGE HERO (FALLBACK) -->
+  <div id="pageHeroFallback" class="page-hero-fallback">
     <div class="container">
       <div class="page-breadcrumb">
-        <a href="index.html">Home</a> › <span>Properties</span>
+        <a href="index.html">Home</a> <span style="color:rgba(255,255,255,0.4)">›</span> <span style="color:#fff">Properties</span>
       </div>
-      <h1>Properties for Sale & Rent in India</h1>
-      <p>Explore from 5,000+ verified listings across 50+ cities</p>
+      <h1 style="font-size:32px; font-weight:700; color:#fff; margin-bottom:10px;">Properties for Sale & Rent in India</h1>
+      <p style="color:rgba(255,255,255,0.7); font-size:16px;">Explore from 5,000+ verified listings across 50+ cities</p>
     </div>
   </div>
 
@@ -106,50 +114,48 @@
 
   <!-- MAIN CONTENT -->
 
-  <script>
-    // Banner configuration: map city-type to image URL
-    const cityBanners = {
-      // sample test banner using existing image file
-      // key format is city without spaces (lowercase) + '-' + type
-      'patna-buy': 'images/hero-bg.jpg',
-      // default fallback for buy if no city-specific
-      // 'default-buy': 'images/hero-bg.jpg'
-    };
+  <script type="module">
+    import { convex } from './js/convex.js';
 
-    (function () {
+    async function updateBanner() {
       const params = new URLSearchParams(window.location.search);
       let city = params.get('city') || '';
       const type = params.get('type') || 'buy';
-      if (!city) {
+      
+      if (!city || city === 'Select City') {
         const txt = document.getElementById('currentCityText');
         if (txt) city = txt.textContent || '';
       }
-      city = city.trim().toLowerCase().replace(/\s+/g, '');
-      const key = city + '-' + type.toLowerCase();
-      let img = cityBanners[key];
-      if (!img && cityBanners['default-' + type.toLowerCase()]) {
-        img = cityBanners['default-' + type.toLowerCase()];
-        console.debug('using default banner for', type);
+
+      const bannerEl = document.getElementById('pageBanner');
+      const heroFallback = document.getElementById('pageHeroFallback');
+
+      if (city && city !== 'Select City' && city !== 'All India') {
+        try {
+          const bannerData = await convex.query("banners:getBanner", { city, type });
+          
+          if (bannerData && bannerData.url) {
+            bannerEl.style.backgroundImage = `url('${bannerData.url}')`;
+            bannerEl.style.display = 'block';
+            heroFallback.style.display = 'none';
+            
+            document.getElementById('bannerTitle').textContent = `Properties for ${type.charAt(0).toUpperCase() + type.slice(1)} in ${city}`;
+            return;
+          }
+        } catch (err) {
+          console.error("Failed to fetch banner", err);
+        }
       }
-      console.debug('banner lookup', key, img);
-      const banner = document.getElementById('pageBanner');
-      if (banner && img) {
-        banner.style.backgroundImage = `url('${img}')`;
-        banner.style.display = 'block';
-      }
-    })();
-    const params = new URLSearchParams(window.location.search);
-    let city = params.get('city') || '';
-    const type = params.get('type') || 'buy';
-    city = city.trim().toLowerCase().replace(/\s+/g, '');
-    const key = city + '-' + type.toLowerCase();
-    const img = cityBanners[key];
-    const banner = document.getElementById('pageBanner');
-    if (banner && img) {
-      banner.style.backgroundImage = `url('${img}')`;
-      banner.style.display = 'block';
+
+      // Default fallback
+      bannerEl.style.display = 'none';
+      heroFallback.style.display = 'block';
     }
-      }) ();
+
+    document.addEventListener('DOMContentLoaded', updateBanner);
+    
+    // Listen for custom city change event if it exists in city-selector.js
+    window.addEventListener('cityChanged', updateBanner);
   </script>
   <div class="container">
     <div class="properties-layout">

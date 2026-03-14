@@ -85,4 +85,11 @@ export default defineSchema({
     code: v.string(),
     expiresAt: v.number(),
   }).index("by_code", ["code"]),
+
+  banners: defineTable({
+    city: v.string(),
+    type: v.string(), // buy, rent, commercial
+    storageId: v.id("_storage"),
+    lastUpdated: v.number(),
+  }).index("by_city_type", ["city", "type"]),
 });

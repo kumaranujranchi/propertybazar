@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('activeSearch')?.addEventListener('input', renderActiveListings);
   document.getElementById('userSearch').addEventListener('input', renderUsersTable);
   
+  // Banner Form
+  document.getElementById('bannerForm')?.addEventListener('submit', handleBannerUpload);
+
   // Logout
   document.getElementById('logoutBtn').addEventListener('click', async () => {
     const { logout } = await import('./auth.js');
@@ -27,6 +30,91 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.href = "login.html";
   });
 });
+
+async function handleBannerUpload(e) {
+  e.preventDefault();
+  const city = document.getElementById('bannerCity').value.trim();
+  const type = document.getElementById('bannerType').value;
+  const fileInput = document.getElementById('bannerFile');
+  const file = fileInput.files[0];
+
+  if (!city || !type || !file) {
+    window.showToast("All fields are required", "error");
+    return;
+  }
+
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Uploading...";
+
+  try {
+    // 1. Get upload URL
+    const uploadUrl = await convex.mutation("banners:generateUploadUrl");
+
+    // 2. Post file to storage
+    const result = await fetch(uploadUrl, {
+      method: "POST",
+      headers: { "Content-Type": file.type },
+      body: file,
+    });
+    const { storageId } = await result.json();
+
+    // 3. Save banner metadata
+    await convex.mutation("banners:saveBanner", { city, type, storageId });
+
+    window.showToast("Banner uploaded successfully!");
+    e.target.reset();
+    await loadBanners();
+  } catch (err) {
+    console.error("Banner upload failed", err);
+    window.showToast("Banner upload failed", "error");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+  }
+}
+
+async function loadBanners() {
+  const tbody = document.getElementById('bannersTable');
+  if (!tbody) return;
+
+  try {
+    const banners = await convex.query("banners:listBanners");
+    if (banners.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No banners found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = banners.map(b => `
+      <tr>
+        <td><img src="${b.url}" style="width:100px; height:40px; object-fit:cover; border-radius:4px;"></td>
+        <td>${b.city}</td>
+        <td><span class="badge ${b.type === 'buy' ? 'badge-sale' : 'badge-rent'}">${b.type.toUpperCase()}</span></td>
+        <td style="font-size:12px; color:var(--text-muted);">${new Date(b.lastUpdated).toLocaleString()}</td>
+        <td>
+          <div class="action-btns">
+            <button class="act-btn reject" onclick="deleteBanner('${b._id}')"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    console.error("Failed to load banners", err);
+  }
+}
+
+window.deleteBanner = async (bannerId) => {
+  if (!confirm("Are you sure you want to delete this banner?")) return;
+  try {
+    await convex.mutation("banners:deleteBanner", { bannerId });
+    window.showToast("Banner deleted");
+    await loadBanners();
+  } catch (err) {
+    console.error("Delete failed", err);
+    window.showToast("Failed to delete banner", "error");
+  }
+};
 
 async function checkAdminAuth() {
   const token = localStorage.getItem("pb_session");
@@ -65,6 +153,8 @@ function initAdminNav() {
       const target = item.dataset.target;
       sections.forEach(sec => sec.classList.remove('active'));
       document.getElementById(`section-${target}`).classList.add('active');
+
+      if (target === 'banners') loadBanners();
 
       // Close sidebar on mobile after navigation
       if (window.innerWidth <= 1024) {
@@ -124,6 +214,11 @@ async function loadDashboardData() {
     // 3. Users
     allUsers = await convex.query("admin:getAllUsers", { token });
     renderUsersTable();
+
+    // 4. Banners (initial load if on banner tab)
+    if (document.getElementById('section-banners').classList.contains('active')) {
+      loadBanners();
+    }
 
   } catch (err) {
     console.error("Failed to load dashboard data", err);

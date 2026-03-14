@@ -350,6 +350,10 @@
           <span class="nav-icon"><i class="fa-solid fa-gear"></i></span>
           <span class="nav-label">Settings</span>
         </button>
+        <button class="admin-nav-item" data-target="banners" data-label="Manage Banners">
+          <span class="nav-icon"><i class="fa-solid fa-image"></i></span>
+          <span class="nav-label">Banners</span>
+        </button>
       </nav>
       <div class="admin-sidebar-footer">
         <button class="sidebar-logout-btn" id="logoutBtn">
@@ -502,6 +506,47 @@
                   </span>
                 </label>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BANNERS -->
+        <section id="section-banners" class="admin-section">
+          <div class="panel-card" style="margin-bottom: 28px;">
+            <div class="panel-header"><h3>Upload New Banner</h3></div>
+            <div class="settings-body">
+              <form id="bannerForm">
+                <div class="form-group">
+                  <label class="form-label">City</label>
+                  <input class="form-input" type="text" id="bannerCity" placeholder="e.g. Patna, Ranchi, Chennai" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Property Type</label>
+                  <select class="form-input" id="bannerType" required>
+                    <option value="buy">Buy</option>
+                    <option value="rent">Rent</option>
+                    <option value="commercial">Commercial</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Banner Image</label>
+                  <input class="form-input" type="file" id="bannerFile" accept="image/*" required>
+                  <p class="form-text">Recommended size: 1200x400px</p>
+                </div>
+                <button type="submit" class="view-all-btn" style="background:var(--primary); color:#fff; width:100%; padding:12px;">Upload Banner</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-header"><h3>Existing Banners</h3></div>
+            <div class="table-wrap">
+              <table class="admin-table">
+                <thead><tr>
+                  <th>Preview</th><th>City</th><th>Type</th><th>Last Updated</th><th>Actions</th>
+                </tr></thead>
+                <tbody id="bannersTable"><tr><td colspan="5" class="empty-state">Loading banners...</td></tr></tbody>
+              </table>
             </div>
           </div>
         </section>
