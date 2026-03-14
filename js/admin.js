@@ -2,6 +2,9 @@ import { convex } from "./convex.js";
 
 let allProperties = [];
 let allUsers = [];
+// Editing state for banners
+let editingBannerId = null;
+let editingBannerData = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
   // 1. Auth Check (Basic for now, backend enforces it anyway)
@@ -149,7 +152,9 @@ async function handleBannerUpload(e) {
   const subtitle = document.getElementById("bannerSubtitle").value.trim();
   const ctaLink = document.getElementById("bannerLink").value.trim();
 
-  if (!city || !type || !file) {
+  // If editing existing banner, file is optional. For new upload file is required.
+  const isEditing = typeof editingBannerId !== 'undefined' && editingBannerId !== null;
+  if (!city || !type || (!file && !isEditing)) {
     window.showToast("City, Type, and File are required", "error");
     return;
   }
@@ -160,38 +165,75 @@ async function handleBannerUpload(e) {
   submitBtn.textContent = "Uploading...";
 
   try {
-    // 1. Get upload URL
-    const uploadUrl = await convex.mutation("banners:generateUploadUrl");
-
-    // 2. Post file to storage
-    const result = await fetch(uploadUrl, {
-      method: "POST",
-      headers: { "Content-Type": file.type },
-      body: file,
-    });
-    const { storageId } = await result.json();
-
-    // 3. Save banner metadata
     const overlayColor =
       document.getElementById("bannerOverlayColor")?.value || "#e84118";
     const overlayOpacity = parseFloat(
       document.getElementById("bannerOverlayOpacity")?.value ?? "1",
     );
-    await convex.mutation("banners:saveBanner", {
-      city,
-      type,
-      storageId,
-      bgPosition: parseFloat(bgPos),
-      title: title || undefined,
-      subtitle: subtitle || undefined,
-      ctaLink: ctaLink || undefined,
-      overlayColor,
-      overlayOpacity,
-    });
 
-    window.showToast("Banner uploaded successfully!");
-    e.target.reset();
-    await loadBanners();
+    if (isEditing) {
+      // Editing existing banner
+      let newStorageId = null;
+      if (file) {
+        const uploadUrl = await convex.mutation("banners:generateUploadUrl");
+        const result = await fetch(uploadUrl, {
+          method: "POST",
+          headers: { "Content-Type": file.type },
+          body: file,
+        });
+        const json = await result.json();
+        newStorageId = json.storageId;
+      }
+
+      await convex.mutation('banners:updateBanner', {
+        bannerId: editingBannerId,
+        ...(newStorageId ? { storageId: newStorageId } : {}),
+        city,
+        type,
+        bgPosition: parseFloat(bgPos),
+        title: title || undefined,
+        subtitle: subtitle || undefined,
+        ctaLink: ctaLink || undefined,
+        overlayColor,
+        overlayOpacity,
+      });
+
+      window.showToast('Banner updated successfully!');
+      // reset editing state
+      editingBannerId = null;
+      editingBannerData = null;
+      const cancel = document.getElementById('cancelEditBtn');
+      if (cancel) cancel.remove();
+      e.target.reset();
+      await loadBanners();
+      const uploadBtn = document.getElementById('uploadBannerBtn');
+      uploadBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Upload Banner';
+    } else {
+      // New banner upload
+      const uploadUrl = await convex.mutation("banners:generateUploadUrl");
+      const result = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      const { storageId } = await result.json();
+
+      await convex.mutation("banners:saveBanner", {
+        city,
+        type,
+        storageId,
+        bgPosition: parseFloat(bgPos),
+        title: title || undefined,
+        subtitle: subtitle || undefined,
+        ctaLink: ctaLink || undefined,
+        overlayColor,
+        overlayOpacity,
+      });
+
+      window.showToast("Banner uploaded successfully!");
+      e.target.reset();
+      await loadBanners();
+    }
   } catch (err) {
     console.error("Banner upload failed", err);
     window.showToast("Banner upload failed", "error");
@@ -223,7 +265,8 @@ async function loadBanners() {
         <td style="font-size:12px; color:var(--text-muted);">${new Date(b.lastUpdated).toLocaleString()}</td>
         <td>
           <div class="action-btns">
-            <button class="act-btn reject" onclick="deleteBanner('${b._id}')"><i class="fa-solid fa-trash"></i></button>
+            <button class="act-btn view" onclick="openEditBanner('${b._id}')" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button class="act-btn reject" onclick="deleteBanner('${b._id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
           </div>
         </td>
       </tr>
@@ -244,6 +287,69 @@ window.deleteBanner = async (bannerId) => {
   } catch (err) {
     console.error("Delete failed", err);
     window.showToast("Failed to delete banner", "error");
+  }
+};
+
+// Editing support
+// Editing support (moved declaration earlier)
+
+window.openEditBanner = async (bannerId) => {
+  try {
+    const banners = await convex.query('banners:listBanners');
+    const b = banners.find(x => x._id === bannerId);
+    if (!b) {
+      window.showToast('Banner not found', 'error');
+      return;
+    }
+    editingBannerId = bannerId;
+    editingBannerData = b;
+
+    // Prefill form
+    document.getElementById('bannerCity').value = b.city;
+    document.getElementById('bannerType').value = b.type;
+    document.getElementById('bannerTitle').value = b.title || '';
+    document.getElementById('bannerSubtitle').value = b.subtitle || '';
+    document.getElementById('bannerLink').value = b.ctaLink || '';
+    if (document.getElementById('bannerOverlayColor')) document.getElementById('bannerOverlayColor').value = b.overlayColor || '#e84118';
+    if (document.getElementById('bannerOverlayColorHex')) document.getElementById('bannerOverlayColorHex').value = b.overlayColor || '#e84118';
+    if (document.getElementById('bannerOverlayOpacity')) document.getElementById('bannerOverlayOpacity').value = b.overlayOpacity ?? 0.9;
+    if (document.getElementById('cropResultPos')) document.getElementById('cropResultPos').value = b.bgPosition ?? 50;
+
+    // Show a small preview (replace cropImg if visible)
+    const cropImg = document.getElementById('cropImg');
+    if (cropImg) {
+      cropImg.src = b.url;
+      document.getElementById('cropToolWrapper').style.display = 'block';
+      // recalc frame by triggering load handlers if necessary
+      window.dispatchEvent(new Event('resize'));
+    }
+
+    // Update button label and show cancel
+    const uploadBtn = document.getElementById('uploadBannerBtn');
+    uploadBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Changes';
+    let cancel = document.getElementById('cancelEditBtn');
+    if (!cancel) {
+      cancel = document.createElement('button');
+      cancel.id = 'cancelEditBtn';
+      cancel.type = 'button';
+      cancel.className = 'view-all-btn';
+      cancel.style.marginLeft = '10px';
+      cancel.textContent = 'Cancel Edit';
+      uploadBtn.parentElement.appendChild(cancel);
+      cancel.addEventListener('click', () => {
+        editingBannerId = null;
+        editingBannerData = null;
+        document.getElementById('bannerForm').reset();
+        document.getElementById('cropToolWrapper').style.display = 'none';
+        uploadBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Upload Banner';
+        cancel.remove();
+      });
+    }
+    // Scroll to form
+    document.getElementById('section-banners').scrollIntoView({ behavior: 'smooth' });
+  } catch (err) {
+    console.error('Open edit failed', err);
+    window.showToast('Failed to open edit form', 'error');
   }
 };
 

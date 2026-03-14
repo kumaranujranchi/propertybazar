@@ -105,3 +105,48 @@ export const deleteBanner = mutation({
     }
   },
 });
+
+export const updateBanner = mutation({
+  args: {
+    bannerId: v.id("banners"),
+    storageId: v.optional(v.id("_storage")),
+    bgPosition: v.optional(v.union(v.string(), v.number())),
+    title: v.optional(v.string()),
+    subtitle: v.optional(v.string()),
+    ctaLink: v.optional(v.string()),
+    overlayColor: v.optional(v.string()),
+    overlayOpacity: v.optional(v.number()),
+    city: v.optional(v.string()),
+    type: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const { bannerId, storageId, city, type, bgPosition, title, subtitle, ctaLink, overlayColor, overlayOpacity } = args;
+    const banner = await ctx.db.get(bannerId);
+    if (!banner) return null;
+
+    const patch: any = {};
+    if (city) patch.city = city;
+    if (type) patch.type = type;
+    if (typeof bgPosition !== 'undefined') patch.bgPosition = bgPosition;
+    if (typeof title !== 'undefined') patch.title = title;
+    if (typeof subtitle !== 'undefined') patch.subtitle = subtitle;
+    if (typeof ctaLink !== 'undefined') patch.ctaLink = ctaLink;
+    if (typeof overlayColor !== 'undefined') patch.overlayColor = overlayColor;
+    if (typeof overlayOpacity !== 'undefined') patch.overlayOpacity = overlayOpacity;
+
+    if (storageId) {
+      // new image provided — delete old storage and set new one
+      try {
+        await ctx.storage.delete(banner.storageId);
+      } catch (e) {
+        // ignore storage delete errors
+      }
+      patch.storageId = storageId;
+    }
+
+    patch.lastUpdated = Date.now();
+
+    await ctx.db.patch(bannerId, patch);
+    return bannerId;
+  },
+});
