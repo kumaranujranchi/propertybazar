@@ -6,20 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const zoomOutBtn = document.getElementById('zoomOutBtn');
   const resetBtn = document.getElementById('resetViewBtn');
 
-  let scale = 1;
-  let translateX = 0;
-  let translateY = -50; 
-  // -50 to keep it centered vertically based on our CSS transform-origin: 0 50%;
+  let scale = window.innerWidth < 768 ? 0.4 : 0.8; 
+  let translateX = window.innerWidth < 768 ? 20 : 50;
+  let translateY = viewport.clientHeight / 2;
   
   let isDragging = false;
   let startX, startY;
   
   function updateTransform() {
-    container.style.transform = `translate(${translateX}px, calc(50% + ${translateY}px)) scale(${scale})`;
+    // Pure pixel-based transform for better reliability
+    container.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
   }
 
-  // Initial calculation to place root near left edge but visible
-  translateX = 40;
+  // Initial calculation
   updateTransform();
 
   // PAN logic
@@ -84,9 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   resetBtn.addEventListener('click', () => {
-    scale = 1;
-    translateX = 40;
-    translateY = -50; // offset reset
+    scale = window.innerWidth < 768 ? 0.4 : 0.8;
+    translateX = window.innerWidth < 768 ? 20 : 50;
+    translateY = viewport.clientHeight / 2;
     updateTransform();
   });
 });
