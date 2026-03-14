@@ -131,41 +131,31 @@ body {
   transform: scale(1.02);
 }
 
-/* Collage layout for detail page gallery — fixed size, variants for count */
+/* Collage layout for detail page gallery — dynamic justified flex layout */
 .gallery-collage {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   flex: 2;
   height: 420px;
   max-height: 420px;
 }
-.gallery-collage.one {
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-}
 .gallery-collage.one .collage-side {
   display: none; /* remove empty side column */
 }
-.gallery-collage.two {
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-}
 .gallery-collage.two .collage-side {
-  /* ensure side column stacks vertically but only first child shown */
   flex-direction: column;
 }
-.gallery-collage.three {
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr;
-}
 .collage-main {
-  grid-row: 1;
-  grid-column: 1 / 2;
+  flex: 2 1 60%;
   border-radius: var(--radius);
   overflow: hidden;
-  background: #f2f4f7;
+  background: #000;
   position: relative;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .collage-main img {
   position: absolute;
@@ -177,11 +167,24 @@ body {
   display: block !important;
   border-radius: 0;
   margin: 0 !important;
-  background: #f2f4f7;
+  z-index: 2;
 }
+
+/* Pseudo-element for blurred backdrop to fill empty space */
+.collage-main::before,
+.gallery-item::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  filter: blur(15px) brightness(0.8);
+  z-index: 1;
+}
+
 .collage-side {
-  grid-column: 2 / 3;
-  grid-row: 1;
+  flex: 1 1 30%;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -190,10 +193,13 @@ body {
 .gallery-item {
   border-radius: 10px;
   overflow: hidden;
-  background: #f2f4f7;
+  background: #000;
   position: relative;
   flex: 1; /* equal share of side column height */
   min-height: 0; /* prevent flex blowout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .gallery-item img {
   position: absolute;
@@ -205,7 +211,7 @@ body {
   display: block !important;
   border-radius: 0;
   margin: 0 !important;
-  background: #f2f4f7;
+  z-index: 2;
 }
 /* Use background-image as fallback to ensure full-bleed tiles even for small images */
 .gallery-item.has-bg {
@@ -237,27 +243,22 @@ body {
     gap: 12px;
   }
   .collage-main {
+    flex: none;
     aspect-ratio: 16 / 9;
     min-height: 260px;
     height: auto;
+    width: 100%;
   }
   .collage-side {
+    flex: none;
     flex-direction: row;
     display: flex;
     gap: 12px;
+    width: 100%;
   }
   .gallery-item {
     flex: 1;
     height: 160px;
-  }
-}
-
-/* Tablet Object-Fit Fix (Landscape & Portrait) */
-@media (min-width: 577px) and (max-width: 1200px),
-       (min-width: 577px) and (max-width: 1400px) and (pointer: coarse) {
-  .collage-main img,
-  .gallery-item img {
-    object-fit: cover !important;
   }
 }
 
