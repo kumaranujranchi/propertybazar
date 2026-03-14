@@ -132,10 +132,13 @@ async function handleBannerUpload(e) {
   const type = document.getElementById('bannerType').value;
   const fileInput = document.getElementById('bannerFile');
   const file = fileInput.files[0];
-  const bgPos = document.getElementById('bannerBgPos')?.value || '50';
+  const bgPos = document.getElementById('cropResultPos')?.value || '50';
+  const title = document.getElementById('bannerTitle').value.trim();
+  const subtitle = document.getElementById('bannerSubtitle').value.trim();
+  const ctaLink = document.getElementById('bannerLink').value.trim();
 
   if (!city || !type || !file) {
-    window.showToast("All fields are required", "error");
+    window.showToast("City, Type, and File are required", "error");
     return;
   }
 
@@ -161,7 +164,10 @@ async function handleBannerUpload(e) {
       city, 
       type, 
       storageId, 
-      bgPosition: parseFloat(bgPos)
+      bgPosition: parseFloat(bgPos),
+      title: title || undefined,
+      subtitle: subtitle || undefined,
+      ctaLink: ctaLink || undefined
     });
 
     window.showToast("Banner uploaded successfully!");

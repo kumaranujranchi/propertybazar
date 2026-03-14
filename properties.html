@@ -69,13 +69,17 @@
     </div>
   </header>
 
-  <!-- AD BANNER (city/type-specific) -->
-  <div id="pageBanner" class="page-banner">
-    <div id="bannerBlur" class="banner-blur">
-      <img id="bannerImgBlur" alt="">
+  <!-- HYBRID AD BANNER (Image + CTA) -->
+  <div id="pageBanner" class="page-banner" style="display: none !important;">
+    <div class="banner-image-container">
+      <img id="bannerImg" alt="Advertisement Image">
     </div>
-    <div class="banner-media">
-      <img id="bannerImg" alt="Advertisement Banner">
+    <div id="bannerContent" class="banner-content-container">
+      <h2 id="bannerTitle" class="banner-title"></h2>
+      <p id="bannerSubtitle" class="banner-subtitle"></p>
+      <a id="bannerCta" href="#" class="banner-cta-btn">
+        View Project <i class="fa-solid fa-arrow-right"></i>
+      </a>
     </div>
     <div class="sponsored-badge">
       <i class="fa-solid fa-rectangle-ad"></i> Sponsored
@@ -155,11 +159,28 @@
             }
 
             img.src = bannerData.url;
-            const imgBlur = document.getElementById('bannerImgBlur');
-            if (imgBlur) imgBlur.src = bannerData.url;
-
             img.style.objectPosition = `center ${yPct}%`;
-            bannerEl.style.display = 'block';
+
+            const titleEl = document.getElementById('bannerTitle');
+            const subtitleEl = document.getElementById('bannerSubtitle');
+            const ctaEl = document.getElementById('bannerCta');
+
+            if (titleEl) {
+              titleEl.textContent = bannerData.title || `Best Properties for ${type} in ${city}`;
+            }
+            if (subtitleEl) {
+              subtitleEl.textContent = bannerData.subtitle || `Explore handpicked ${type} listings in ${city}. Find your dream property today with 24Dismil.`;
+            }
+            if (ctaEl) {
+              if (bannerData.ctaLink) {
+                ctaEl.href = bannerData.ctaLink;
+                ctaEl.style.display = 'inline-flex';
+              } else {
+                ctaEl.style.display = 'none';
+              }
+            }
+
+            bannerEl.style.setProperty('display', 'flex', 'important');
             heroFallback.style.display = 'none';
             return;
           }

@@ -91,6 +91,9 @@ export default defineSchema({
     type: v.string(), // buy, rent, commercial
     storageId: v.id("_storage"),
     bgPosition: v.optional(v.union(v.string(), v.number())), // Compatible with both legacy strings and new numeric crop fractions
+    title: v.optional(v.string()),
+    subtitle: v.optional(v.string()),
+    ctaLink: v.optional(v.string()),
     lastUpdated: v.number(),
   }).index("by_city_type", ["city", "type"]),
 });

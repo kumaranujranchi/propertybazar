@@ -46,8 +46,12 @@ export const saveBanner = mutation({
     type: v.string(),
     storageId: v.id("_storage"),
     bgPosition: v.optional(v.union(v.string(), v.number())), // 0-100: % of image height from top where crop starts
+    title: v.optional(v.string()),
+    subtitle: v.optional(v.string()),
+    ctaLink: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    const { city, type, storageId, bgPosition, title, subtitle, ctaLink } = args;
     // Check if a banner already exists for this city and type
     const existing = await ctx.db
       .query("banners")
@@ -61,18 +65,24 @@ export const saveBanner = mutation({
       await ctx.storage.delete(existing.storageId);
       // Update existing record
       await ctx.db.patch(existing._id, {
-        storageId: args.storageId,
-        bgPosition: args.bgPosition,
+        storageId,
+        bgPosition,
+        title,
+        subtitle,
+        ctaLink,
         lastUpdated: Date.now(),
       });
       return existing._id;
     } else {
       // Create new record
       return await ctx.db.insert("banners", {
-        city: args.city,
-        type: args.type,
-        storageId: args.storageId,
-        bgPosition: args.bgPosition,
+        city,
+        type,
+        storageId,
+        bgPosition,
+        title,
+        subtitle,
+        ctaLink,
         lastUpdated: Date.now(),
       });
     }
