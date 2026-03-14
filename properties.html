@@ -71,12 +71,13 @@
 
   <!-- AD BANNER (city/type-specific) -->
   <div id="pageBanner" class="page-banner">
+    <div id="bannerBg" class="banner-bg"></div>
     <div class="container banner-content">
       <div class="page-breadcrumb">
         <a href="index.html" style="color:rgba(255,255,255,0.8)">Home</a> <span style="color:rgba(255,255,255,0.5)">›</span> <span style="color:#fff">Properties</span>
       </div>
-      <h1 id="bannerTitle" style="font-size:36px; font-weight:800; text-shadow: 0 2px 15px rgba(0,0,0,0.4); margin-bottom:10px;">Properties for Sale & Rent</h1>
-      <p id="bannerSubtitle" style="color:rgba(255,255,255,0.95); font-size:18px; font-weight:500; text-shadow: 0 1px 8px rgba(0,0,0,0.3);">Explore verified listings in your city</p>
+      <h1 id="bannerTitle">Properties for Sale & Rent</h1>
+      <p id="bannerSubtitle">Explore verified listings in your city</p>
     </div>
   </div>
 
@@ -133,6 +134,7 @@
 
       city = city.trim();
       const bannerEl = document.getElementById('pageBanner');
+      const bannerBg = document.getElementById('bannerBg');
       const heroFallback = document.getElementById('pageHeroFallback');
 
       if (city && city !== 'Select City' && city !== 'All India') {
@@ -140,7 +142,7 @@
           const bannerData = await convex.query("banners:getBanner", { city, type });
           
           if (bannerData && bannerData.url) {
-            bannerEl.style.backgroundImage = `url('${bannerData.url}')`;
+            bannerBg.style.backgroundImage = `url('${bannerData.url}')`;
             bannerEl.style.display = 'block';
             heroFallback.style.display = 'none';
             
