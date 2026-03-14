@@ -2080,7 +2080,7 @@ textarea {
 /* ========== PAGE BANNER ========== */
 .page-banner {
   width: 100%;
-  aspect-ratio: 1200 / 450;
+  aspect-ratio: 1200 / 350;
   margin-top: 64px;
   position: relative;
   overflow: hidden;

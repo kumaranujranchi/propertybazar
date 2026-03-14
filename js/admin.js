@@ -44,8 +44,8 @@ function initCropTool() {
   const resultPos  = document.getElementById('cropResultPos');
   const wrapper    = document.getElementById('cropToolWrapper');
 
-  // Banner aspect ratio: 1200 wide x 450 tall
-  const BANNER_RATIO = 450 / 1200;
+  // Banner aspect ratio: 1200 wide x 350 tall
+  const BANNER_RATIO = 350 / 1200;
 
   // State for dragging the frame
   let isDragging = false;
