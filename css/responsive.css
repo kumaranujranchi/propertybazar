@@ -188,7 +188,10 @@
   .nav { gap: 10px; justify-content: space-between; }
   .nav-group-left { gap: 6px; }
   .nav-btn-post { display: none; }
-  .nav-city { display: none; }
+  /* Show city selector on mobile as well */
+  .nav-city { display: flex; }
+  /* Reduce logo font size to fit alongside city selector */
+  .nav-logo { font-size: 18px; }
   .nav-logo-icon { width: 26px; height: 26px; font-size: 14px; }
 
   /* Property Posting Flow Optimization */
@@ -357,6 +360,8 @@
   /* Core */
   .nav-city { font-size: 11px; }
   .nav { gap: 8px; }
+  .nav-logo { font-size: 16px; }
+  .nav-logo-icon { width: 24px; height: 24px; font-size: 12px; }
   
   .hero-title { font-size: 20px !important; word-break: break-word; }
   .hero-subtitle { font-size: 13px; line-height: 1.4; }
