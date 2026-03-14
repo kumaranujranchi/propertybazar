@@ -64,10 +64,10 @@ function initCropTool() {
     shadeTop.style.height = `${topPx}px`;
     shadeBot.style.top = `${topPx + frameH}px`;
 
-    // Calculate precise background-position-y %
-    // This formula ensures: when frame is at top=>0%, bottom=>100%
-    const pct = canvasH <= frameH ? 50 : (topPx / (canvasH - frameH)) * 100;
-    resultPos.value = pct.toFixed(2);
+    // Store: what fraction of the full image height is cut from the top?
+    // This is zoom-independent because it's relative to the image itself, not the container.
+    const cropFrac = canvasH > 0 ? topPx / canvasH : 0;
+    resultPos.value = (cropFrac * 100).toFixed(4);
   }
 
   function recalcFrame() {
@@ -161,7 +161,7 @@ async function handleBannerUpload(e) {
       city, 
       type, 
       storageId, 
-      bgPosition: `center ${bgPos}%` 
+      bgPosition: parseFloat(bgPos)
     });
 
     window.showToast("Banner uploaded successfully!");

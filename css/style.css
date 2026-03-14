@@ -2080,34 +2080,31 @@ textarea {
 /* ========== PAGE BANNER ========== */
 .page-banner {
   width: 100%;
-  min-height: 450px;
+  height: 450px;
   margin-top: 64px;
   position: relative;
-  display: none;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  display: none;
 }
-.banner-bg {
+.banner-media {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  overflow: hidden;
+}
+.banner-media img {
   transition: transform 1s cubic-bezier(0.2, 0.4, 0.3, 1);
-  z-index: 0;
 }
-.page-banner:hover .banner-bg {
-  transform: scale(1.08);
+.page-banner:hover .banner-media img {
+  transform: scale(1.05) !important;
 }
-/* Removed overlay to make ad image clearer */
+/* Removed old .banner-bg — now using <img> element */
 .page-banner::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.05); /* Very subtle tint just to unify */
+  background: rgba(0,0,0,0.04);
   z-index: 1;
+  pointer-events: none;
 }
 
 .sponsored-badge {

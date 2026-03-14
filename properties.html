@@ -71,7 +71,9 @@
 
   <!-- AD BANNER (city/type-specific) -->
   <div id="pageBanner" class="page-banner">
-    <div id="bannerBg" class="banner-bg"></div>
+    <div class="banner-media">
+      <img id="bannerImg" alt="Advertisement Banner" style="display:block; width:100%; position:absolute; top:0; left:0; will-change:transform;">
+    </div>
     <div class="sponsored-badge">
       <i class="fa-solid fa-rectangle-ad"></i> Sponsored
     </div>
@@ -114,6 +116,45 @@
   <script type="module">
     import { convex } from './js/convex.js';
 
+    // ---- Zoom-independent banner positioning ----
+    // We store cropFrac (0-1) = fraction of image height from TOP where the crop starts.
+    // On display, we scale image to fill width and compute exact translateY to show the right part.
+    let currentCropFrac = 0.5;
+    let cropInstalled = false;
+
+    function applyBannerPosition() {
+      const bannerEl = document.getElementById('pageBanner');
+      const img = document.getElementById('bannerImg');
+      if (!img || !img.naturalWidth || bannerEl.style.display === 'none') return;
+
+      const containerH = bannerEl.offsetHeight;
+      const containerW = bannerEl.offsetWidth;
+      const naturalH = img.naturalHeight;
+      const naturalW = img.naturalWidth;
+
+      // Scale image to fill the full width of the banner
+      const scaledH = containerW * (naturalH / naturalW);
+
+      if (scaledH <= containerH) {
+        // Image not tall enough — scale to fill height instead
+        const scaleH = containerH / naturalH;
+        const scaledW = naturalW * scaleH;
+        img.style.width = 'auto';
+        img.style.height = containerH + 'px';
+        img.style.left = ((containerW - scaledW) / 2) + 'px';
+        img.style.transform = 'none';
+      } else {
+        // Normal case — image taller than container after scaling to fill width
+        const cropTopPx = currentCropFrac * scaledH;
+        const maxOffset = scaledH - containerH;
+        const offset = Math.min(cropTopPx, maxOffset);
+        img.style.width = '100%';
+        img.style.height = scaledH + 'px';
+        img.style.left = '0';
+        img.style.transform = `translateY(-${offset.toFixed(1)}px)`;
+      }
+    }
+
     async function updateBanner() {
       const params = new URLSearchParams(window.location.search);
       let city = params.get('city') || params.get('location') || '';
@@ -130,7 +171,7 @@
 
       city = city.trim();
       const bannerEl = document.getElementById('pageBanner');
-      const bannerBg = document.getElementById('bannerBg');
+      const img = document.getElementById('bannerImg');
       const heroFallback = document.getElementById('pageHeroFallback');
 
       if (city && city !== 'Select City' && city !== 'All India') {
@@ -138,10 +179,29 @@
           const bannerData = await convex.query("banners:getBanner", { city, type });
           
           if (bannerData && bannerData.url) {
-            bannerBg.style.backgroundImage = `url('${bannerData.url}')`;
-            bannerBg.style.backgroundPosition = bannerData.bgPosition || 'center';
+            // Parse bgPosition: number (0-100) = fraction of image height from top
+            const pos = bannerData.bgPosition;
+            if (typeof pos === 'number') {
+              currentCropFrac = pos / 100;
+            } else if (typeof pos === 'string') {
+              // Legacy fallback: parse "center 50%" style strings
+              const m = pos.match(/([\d.]+)%/);
+              currentCropFrac = m ? parseFloat(m[1]) / 100 : 0.5;
+            } else {
+              currentCropFrac = 0.5;
+            }
+
+            img.src = bannerData.url;
             bannerEl.style.display = 'block';
             heroFallback.style.display = 'none';
+            
+            img.onload = applyBannerPosition;
+            if (img.complete && img.naturalWidth) applyBannerPosition();
+            
+            if (!cropInstalled) {
+              cropInstalled = true;
+              window.addEventListener('resize', applyBannerPosition);
+            }
             return;
           }
         } catch (err) {
