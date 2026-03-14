@@ -64,10 +64,10 @@ function initCropTool() {
     shadeTop.style.height = `${topPx}px`;
     shadeBot.style.top = `${topPx + frameH}px`;
 
-    // Store: what fraction of the full image height is cut from the top?
-    // This is zoom-independent because it's relative to the image itself, not the container.
-    const cropFrac = canvasH > 0 ? topPx / canvasH : 0;
-    resultPos.value = (cropFrac * 100).toFixed(4);
+    // Store the correct object-position-y % (0% = top, 100% = bottom)
+    // This maps directly to CSS object-position in the fixed-aspect-ratio banner container.
+    const pct = canvasH <= frameH ? 50 : (frameTopPx / (canvasH - frameH)) * 100;
+    resultPos.value = pct.toFixed(2);
   }
 
   function recalcFrame() {

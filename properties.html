@@ -116,45 +116,6 @@
   <script type="module">
     import { convex } from './js/convex.js';
 
-    // ---- Zoom-independent banner positioning ----
-    // We store cropFrac (0-1) = fraction of image height from TOP where the crop starts.
-    // On display, we scale image to fill width and compute exact translateY to show the right part.
-    let currentCropFrac = 0.5;
-    let cropInstalled = false;
-
-    function applyBannerPosition() {
-      const bannerEl = document.getElementById('pageBanner');
-      const img = document.getElementById('bannerImg');
-      if (!img || !img.naturalWidth || bannerEl.style.display === 'none') return;
-
-      const containerH = bannerEl.offsetHeight;
-      const containerW = bannerEl.offsetWidth;
-      const naturalH = img.naturalHeight;
-      const naturalW = img.naturalWidth;
-
-      // Scale image to fill the full width of the banner
-      const scaledH = containerW * (naturalH / naturalW);
-
-      if (scaledH <= containerH) {
-        // Image not tall enough — scale to fill height instead
-        const scaleH = containerH / naturalH;
-        const scaledW = naturalW * scaleH;
-        img.style.width = 'auto';
-        img.style.height = containerH + 'px';
-        img.style.left = ((containerW - scaledW) / 2) + 'px';
-        img.style.transform = 'none';
-      } else {
-        // Normal case — image taller than container after scaling to fill width
-        const cropTopPx = currentCropFrac * scaledH;
-        const maxOffset = scaledH - containerH;
-        const offset = Math.min(cropTopPx, maxOffset);
-        img.style.width = '100%';
-        img.style.height = scaledH + 'px';
-        img.style.left = '0';
-        img.style.transform = `translateY(-${offset.toFixed(1)}px)`;
-      }
-    }
-
     async function updateBanner() {
       const params = new URLSearchParams(window.location.search);
       let city = params.get('city') || params.get('location') || '';
@@ -179,29 +140,21 @@
           const bannerData = await convex.query("banners:getBanner", { city, type });
           
           if (bannerData && bannerData.url) {
-            // Parse bgPosition: number (0-100) = fraction of image height from top
+            // Parse bgPosition: 0-100 number = object-position-y %
+            // With aspect-ratio container, this is zoom-independent.
             const pos = bannerData.bgPosition;
+            let yPct = 50;
             if (typeof pos === 'number') {
-              currentCropFrac = pos / 100;
+              yPct = pos;
             } else if (typeof pos === 'string') {
-              // Legacy fallback: parse "center 50%" style strings
               const m = pos.match(/([\d.]+)%/);
-              currentCropFrac = m ? parseFloat(m[1]) / 100 : 0.5;
-            } else {
-              currentCropFrac = 0.5;
+              if (m) yPct = parseFloat(m[1]);
             }
 
             img.src = bannerData.url;
+            img.style.objectPosition = `center ${yPct}%`;
             bannerEl.style.display = 'block';
             heroFallback.style.display = 'none';
-            
-            img.onload = applyBannerPosition;
-            if (img.complete && img.naturalWidth) applyBannerPosition();
-            
-            if (!cropInstalled) {
-              cropInstalled = true;
-              window.addEventListener('resize', applyBannerPosition);
-            }
             return;
           }
         } catch (err) {
