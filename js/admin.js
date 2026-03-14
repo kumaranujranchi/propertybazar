@@ -26,9 +26,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       const slider = document.getElementById('bannerBgPos');
       const valDisp = document.getElementById('bgPosValue');
       const previewBg = document.getElementById('bannerPreviewBg');
-      const previewTitle = document.getElementById('previewTitle');
-      const cityInput = document.getElementById('bannerCity');
-      const typeInput = document.getElementById('bannerType');
       const fileInput = document.getElementById('bannerFile');
 
       if (slider && valDisp) {
@@ -37,17 +34,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           if (previewBg) previewBg.style.backgroundPosition = `center ${e.target.value}%`;
         });
       }
-
-      // Update preview text
-      const updatePreviewText = () => {
-        const city = cityInput?.value || '[City Name]';
-        const type = typeInput?.value || 'Buy';
-        if (previewTitle) {
-          previewTitle.textContent = `Properties for ${type.charAt(0).toUpperCase() + type.slice(1)} in ${city}`;
-        }
-      };
-      cityInput?.addEventListener('input', updatePreviewText);
-      typeInput?.addEventListener('change', updatePreviewText);
 
       // Handle local image preview
       fileInput?.addEventListener('change', (e) => {
