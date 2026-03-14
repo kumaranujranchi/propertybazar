@@ -230,28 +230,33 @@ body {
     flex-direction: column;
   }
   .gallery-collage {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-  }
-  .gallery-collage {
-    height: 260px;
-    max-height: 260px;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    max-height: none;
+    gap: 12px;
   }
   .collage-main {
-    grid-row: 1;
-    grid-column: 1;
-    height: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 260px;
+    height: auto;
   }
   .collage-side {
-    grid-row: 2;
-    grid-column: 1;
     flex-direction: row;
     display: flex;
     gap: 12px;
   }
   .gallery-item {
     flex: 1;
-    height: 120px;
+    height: 160px;
+  }
+}
+
+/* Tablet Object-Fit Fix (Landscape & Portrait) */
+@media (min-width: 577px) and (max-width: 1024px) {
+  .collage-main img,
+  .gallery-item img {
+    object-fit: cover !important;
   }
 }
 
