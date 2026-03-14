@@ -170,6 +170,38 @@
   display: none;
 }
 
+/* Dynamic Interaction Styles */
+.node.expandable {
+  cursor: pointer;
+  padding-right: 40px; /* Space for the +/- icon */
+}
+
+.node.expandable::before {
+  content: '\f068'; /* FontAwesome minus icon by default */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.li-collapsed .node.expandable::before {
+  content: '\f067'; /* FontAwesome plus icon */
+}
+
+.li-collapsed > ul {
+  display: none;
+}
+
+/* Hide the outgoing dashed line from a collapsed node */
+.li-collapsed > .node::after {
+  display: none;
+}
+
+/* Smooth transition for node hover */
 .node:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 25px rgba(232, 65, 24, 0.3);
@@ -181,6 +213,11 @@
   font-size: 16px;
   padding: 16px 32px;
   border: 2px solid rgba(255,255,255,0.1);
+}
+
+/* Adjust root expandable padding if needed */
+.root-node.expandable {
+  padding-right: 48px;
 }
 
 .branch-node {
@@ -199,10 +236,12 @@
   content: '';
   position: absolute;
   top: 50%;
-  right: -20px; /* Attach to next UL margin */
-  width: 20px;
+  right: -50px; /* Use the full 50px defined in the grid */
+  width: 50px;
   height: 1.5px;
-  background: #4b6584; /* Solid or dashed */
+  background: transparent;
+  border-top: 1.5px dashed #4b6584;
+  transform: translateY(-50%);
   z-index: 1;
 }
 

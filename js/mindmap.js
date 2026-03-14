@@ -13,6 +13,23 @@ document.addEventListener('DOMContentLoaded', () => {
   let isDragging = false;
   let startX, startY;
   
+  // Expand/Collapse Logic
+  const allNodes = document.querySelectorAll('.node');
+  allNodes.forEach(node => {
+    // Check if node has a sibling UL (children)
+    const childrenUl = node.nextElementSibling;
+    if (childrenUl && childrenUl.tagName === 'UL') {
+      node.classList.add('expandable');
+      
+      node.addEventListener('click', (e) => {
+        // Prevent click if we were dragging (small threshold)
+        // Note: For simplicity, a direct click works best
+        const li = node.parentElement;
+        li.classList.toggle('li-collapsed');
+      });
+    }
+  });
+
   function updateTransform() {
     // Pure pixel-based transform for better reliability
     container.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
