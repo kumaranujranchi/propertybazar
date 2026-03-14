@@ -569,27 +569,29 @@
                   <p class="form-text">Recommended size: 1200x450px (Minimum height 450px)</p>
                 </div>
 
-                <!-- LIVE PREVIEW AREA -->
-                <div class="form-group" style="margin-bottom: 25px;">
-                  <label class="form-label">Live Desktop Preview (What visitors will see)</label>
-                  <div id="bannerPreviewContainer" style="width: 100%; aspect-ratio: 1200 / 450; background: #f1f5f9; border-radius: 12px; border: 2px dashed #cbd5e1; position: relative; overflow: hidden;">
-                    <div id="bannerPreviewBg" style="position: absolute; inset: 0; background-size: cover; background-position: center 50%; z-index: 0; transition: background-position 0.1s ease;"></div>
-                    <div style="position: absolute; top: 15px; right: 15px; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 2; border: 1px solid rgba(255,255,255,0.1); text-transform: uppercase; letter-spacing: 1px;">
-                      <i class="fa-solid fa-rectangle-ad" style="color: var(--primary); margin-right: 4px;"></i> Sponsored
+                <!-- DRAG-TO-CROP TOOL (hidden until image selected) -->
+                <div id="cropToolWrapper" class="form-group" style="display: none; margin-bottom: 25px;">
+                  <label class="form-label" style="margin-bottom: 12px;">
+                    <i class="fa-solid fa-crop-simple" style="color: var(--primary);"></i>
+                    Adjust Banner Area — Drag to reposition
+                  </label>
+                  <div id="cropCanvas" style="position: relative; background: #0f172a; border-radius: 12px; overflow: hidden; cursor: grab; user-select: none; touch-action: none;">
+                    <!-- The full image, draggable -->
+                    <img id="cropImg" src="" alt="Banner" style="display: block; width: 100%; pointer-events: none;" draggable="false">
+                    <!-- The crop window overlay (shaded area outside crop) -->
+                    <div id="cropShadeTop" style="position: absolute; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); pointer-events: none; z-index: 2;"></div>
+                    <div id="cropShadeBot" style="position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); pointer-events: none; z-index: 2;"></div>
+                    <!-- The crop frame border -->
+                    <div id="cropFrame" style="position: absolute; left: 0; right: 0; border: 2px solid #e84118; pointer-events: none; z-index: 3; box-shadow: 0 0 0 1px rgba(232,65,24,0.3);">
+                      <div style="position: absolute; top: 10px; right: 12px; background: rgba(15,23,42,0.5); backdrop-filter: blur(4px); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 700; border: 1px solid rgba(255,255,255,0.15); text-transform: uppercase; letter-spacing: 1px; pointer-events: none;">
+                        <i class="fa-solid fa-rectangle-ad" style="color: #e84118;"></i> Sponsored
+                      </div>
+                      <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.5); font-size: 11px; white-space: nowrap; pointer-events: none;">↕ Drag banner area up or down</div>
                     </div>
                   </div>
-                  <p class="form-text" style="margin-top: 8px;">This preview accurately reflects the banner crop (450px height). Adjust the "Vertical Focus" slider below to choose the visible area.</p>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 20px;">
-                  <label class="form-label">Vertical Focus (Adjust to choose visible part)</label>
-                  <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="font-size: 12px; color: var(--text-muted);">Top</span>
-                    <input type="range" id="bannerBgPos" min="0" max="100" value="50" style="flex: 1; accent-color: var(--primary);">
-                    <span style="font-size: 12px; color: var(--text-muted);">Bottom</span>
-                    <span id="bgPosValue" style="font-size: 13px; font-weight: 700; color: var(--primary); min-width: 40px; text-align: right;">50%</span>
-                  </div>
-                  <p class="form-text">Choose which part of the image should be visible in the 450px banner area.</p>
+                  <p class="form-text" style="margin-top: 8px;">The <span style="color: #e84118; font-weight: 600;">red frame</span> shows exactly what will appear on the live website. Drag it up or down to select the best part of your image.</p>
+                  <!-- Hidden fields to store crop result -->
+                  <input type="hidden" id="cropResultPos" value="50">
                 </div>
 
                 <div style="background: rgba(232, 65, 24, 0.05); border: 1px solid rgba(232, 65, 24, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">

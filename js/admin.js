@@ -22,31 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const bannerForm = document.getElementById('bannerForm');
     if (bannerForm) {
       bannerForm.addEventListener('submit', handleBannerUpload);
-      
-      const slider = document.getElementById('bannerBgPos');
-      const valDisp = document.getElementById('bgPosValue');
-      const previewBg = document.getElementById('bannerPreviewBg');
-      const fileInput = document.getElementById('bannerFile');
-
-      if (slider && valDisp) {
-        slider.addEventListener('input', (e) => {
-          valDisp.textContent = `${e.target.value}%`;
-          if (previewBg) previewBg.style.backgroundPosition = `center ${e.target.value}%`;
-        });
-      }
-
-      // Handle local image preview
-      fileInput?.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file && previewBg) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            previewBg.style.backgroundImage = `url('${event.target.result}')`;
-            previewBg.parentElement.style.borderStyle = 'solid';
-          };
-          reader.readAsDataURL(file);
-        }
-      });
+      initCropTool();
     }
 
   // Logout
@@ -56,6 +32,99 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.href = "login.html";
   });
 });
+
+// ========== DRAG-TO-CROP TOOL ==========
+function initCropTool() {
+  const fileInput = document.getElementById('bannerFile');
+  const cropImg    = document.getElementById('cropImg');
+  const cropCanvas = document.getElementById('cropCanvas');
+  const cropFrame  = document.getElementById('cropFrame');
+  const shadeTop   = document.getElementById('cropShadeTop');
+  const shadeBot   = document.getElementById('cropShadeBot');
+  const resultPos  = document.getElementById('cropResultPos');
+  const wrapper    = document.getElementById('cropToolWrapper');
+
+  // Banner aspect ratio: 1200 wide x 450 tall
+  const BANNER_RATIO = 450 / 1200;
+
+  // State for dragging the frame
+  let isDragging = false;
+  let dragStartY = 0;
+  let frameTopPx = 0; // top of the crop frame relative to the canvas
+  let canvasH = 0;
+  let frameH = 0;
+
+  function updateCropUI(topPx) {
+    // Clamp so the frame never goes outside the image
+    topPx = Math.max(0, Math.min(topPx, canvasH - frameH));
+    frameTopPx = topPx;
+
+    cropFrame.style.top = `${topPx}px`;
+    cropFrame.style.height = `${frameH}px`;
+    shadeTop.style.height = `${topPx}px`;
+    shadeBot.style.top = `${topPx + frameH}px`;
+
+    // Calculate precise background-position-y %
+    // This formula ensures: when frame is at top=>0%, bottom=>100%
+    const pct = canvasH <= frameH ? 50 : (topPx / (canvasH - frameH)) * 100;
+    resultPos.value = pct.toFixed(2);
+  }
+
+  function recalcFrame() {
+    canvasH = cropCanvas.offsetHeight;
+    const canvasW = cropCanvas.offsetWidth;
+    frameH = Math.round(canvasW * BANNER_RATIO);
+
+    if (frameH > canvasH) {
+      // Image is narrower than frame ratio – show full image
+      frameH = canvasH;
+    }
+    updateCropUI(frameTopPx);
+  }
+
+  // Load image into crop canvas
+  fileInput?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      cropImg.src = ev.target.result;
+      cropImg.onload = () => {
+        wrapper.style.display = 'block';
+        frameTopPx = 0;
+        requestAnimationFrame(() => {
+          recalcFrame();
+          // Start frame at center
+          updateCropUI((canvasH - frameH) / 2);
+        });
+      };
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Pointer drag events
+  cropCanvas.addEventListener('pointerdown', (e) => {
+    isDragging = true;
+    dragStartY = e.clientY;
+    cropCanvas.setPointerCapture(e.pointerId);
+    cropCanvas.style.cursor = 'grabbing';
+  });
+
+  cropCanvas.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    const delta = e.clientY - dragStartY;
+    dragStartY = e.clientY;
+    // Dragging down == moving frame down (showing lower part of image)
+    updateCropUI(frameTopPx + delta);
+  });
+
+  const stopDrag = () => { isDragging = false; cropCanvas.style.cursor = 'grab'; };
+  cropCanvas.addEventListener('pointerup', stopDrag);
+  cropCanvas.addEventListener('pointercancel', stopDrag);
+
+  // Update frame on resize
+  window.addEventListener('resize', recalcFrame);
+}
 
 async function handleBannerUpload(e) {
   e.preventDefault();
