@@ -124,29 +124,24 @@ export const updateBanner = mutation({
     const banner = await ctx.db.get(bannerId);
     if (!banner) return null;
 
-    const patch: any = {};
-    if (city) patch.city = city;
-    if (type) patch.type = type;
-    if (typeof bgPosition !== 'undefined') patch.bgPosition = bgPosition;
-    if (typeof title !== 'undefined') patch.title = title;
-    if (typeof subtitle !== 'undefined') patch.subtitle = subtitle;
-    if (typeof ctaLink !== 'undefined') patch.ctaLink = ctaLink;
-    if (typeof overlayColor !== 'undefined') patch.overlayColor = overlayColor;
-    if (typeof overlayOpacity !== 'undefined') patch.overlayOpacity = overlayOpacity;
-
+    let finalStorageId = banner.storageId;
     if (storageId) {
-      // new image provided — delete old storage and set new one
-      try {
-        await ctx.storage.delete(banner.storageId);
-      } catch (e) {
-        // ignore storage delete errors
-      }
-      patch.storageId = storageId;
+      await ctx.storage.delete(banner.storageId);
+      finalStorageId = storageId;
     }
 
-    patch.lastUpdated = Date.now();
-
-    await ctx.db.patch(bannerId, patch);
+    await ctx.db.patch(bannerId, {
+      storageId: finalStorageId,
+      city: city ?? banner.city,
+      type: type ?? banner.type,
+      bgPosition: bgPosition ?? banner.bgPosition,
+      title: title ?? banner.title,
+      subtitle: subtitle ?? banner.subtitle,
+      ctaLink: ctaLink ?? banner.ctaLink,
+      overlayColor: overlayColor ?? banner.overlayColor,
+      overlayOpacity: overlayOpacity ?? banner.overlayOpacity,
+      lastUpdated: Date.now(),
+    });
     return bannerId;
   },
 });
