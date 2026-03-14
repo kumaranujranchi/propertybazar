@@ -2063,8 +2063,9 @@ textarea {
   gap: 12px;
 }
 .app-badge {
-  height: 42px;
-  width: auto;
+  height: 40px;
+  max-width: 140px;
+  object-fit: contain;
   border-radius: 6px;
   transition:
     transform 0.2s ease,
