@@ -2080,7 +2080,7 @@ textarea {
 /* ========== PAGE BANNER ========== */
 .page-banner {
   width: 100%;
-  min-height: 320px;
+  min-height: 450px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -2103,7 +2103,7 @@ textarea {
   flex-direction: column;
   justify-content: center;
   color: #fff;
-  padding: 60px 0;
+  padding: 100px 0;
 }
 .page-hero-fallback {
   background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 100%);
