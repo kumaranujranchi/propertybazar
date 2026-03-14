@@ -1551,6 +1551,12 @@
             btn.textContent = 'Download Brochure';
             btn.id = 'downloadBrochureBtn';
             btn.style.width = '100%';
+            btn.style.padding = '12px';
+            btn.style.borderRadius = '8px';
+            btn.style.fontWeight = '600';
+            btn.style.fontSize = '14px';
+            btn.style.transition = 'all 0.2s';
+            btn.style.cursor = 'pointer';
             brochureContainer.appendChild(btn);
             const sidebarCard = document.querySelector('.sticky-sidebar .detail-section-card');
             if (sidebarCard) sidebarCard.appendChild(brochureContainer);
