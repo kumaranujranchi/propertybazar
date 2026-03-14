@@ -19,9 +19,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('propSearch').addEventListener('input', renderPropertiesTable);
   document.getElementById('activeSearch')?.addEventListener('input', renderActiveListings);
   document.getElementById('userSearch').addEventListener('input', renderUsersTable);
-  
-  // Banner Form
-  document.getElementById('bannerForm')?.addEventListener('submit', handleBannerUpload);
+    const bannerForm = document.getElementById('bannerForm');
+    if (bannerForm) {
+      bannerForm.addEventListener('submit', handleBannerUpload);
+      
+      const slider = document.getElementById('bannerBgPos');
+      const valDisp = document.getElementById('bgPosValue');
+      if (slider && valDisp) {
+        slider.addEventListener('input', (e) => {
+          valDisp.textContent = `${e.target.value}%`;
+        });
+      }
+    }
 
   // Logout
   document.getElementById('logoutBtn').addEventListener('click', async () => {
@@ -37,6 +46,7 @@ async function handleBannerUpload(e) {
   const type = document.getElementById('bannerType').value;
   const fileInput = document.getElementById('bannerFile');
   const file = fileInput.files[0];
+  const bgPos = document.getElementById('bannerBgPos')?.value || '50';
 
   if (!city || !type || !file) {
     window.showToast("All fields are required", "error");
@@ -61,7 +71,12 @@ async function handleBannerUpload(e) {
     const { storageId } = await result.json();
 
     // 3. Save banner metadata
-    await convex.mutation("banners:saveBanner", { city, type, storageId });
+    await convex.mutation("banners:saveBanner", { 
+      city, 
+      type, 
+      storageId, 
+      bgPosition: `center ${bgPos}%` 
+    });
 
     window.showToast("Banner uploaded successfully!");
     e.target.reset();

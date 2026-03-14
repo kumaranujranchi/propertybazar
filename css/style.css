@@ -2125,6 +2125,32 @@ textarea {
   font-size: 15px !important;
   color: rgba(255,255,255,0.8) !important;
 }
+
+.sponsored-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  z-index: 3;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+.sponsored-badge i {
+  font-size: 12px;
+  color: var(--primary);
+}
+
 .page-hero-fallback {
   background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 100%);
   padding: 60px 0;

@@ -72,6 +72,9 @@
   <!-- AD BANNER (city/type-specific) -->
   <div id="pageBanner" class="page-banner">
     <div id="bannerBg" class="banner-bg"></div>
+    <div class="sponsored-badge">
+      <i class="fa-solid fa-rectangle-ad"></i> Sponsored
+    </div>
     <div class="container banner-content">
       <div class="page-breadcrumb">
         <a href="index.html" style="color:rgba(255,255,255,0.8)">Home</a> <span style="color:rgba(255,255,255,0.5)">›</span> <span style="color:#fff">Properties</span>
@@ -143,6 +146,7 @@
           
           if (bannerData && bannerData.url) {
             bannerBg.style.backgroundImage = `url('${bannerData.url}')`;
+            bannerBg.style.backgroundPosition = bannerData.bgPosition || 'center';
             bannerEl.style.display = 'block';
             heroFallback.style.display = 'none';
             

@@ -563,12 +563,29 @@
                     <option value="commercial">Commercial</option>
                   </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="margin-bottom: 20px;">
                   <label class="form-label">Banner Image</label>
-                  <input class="form-input" type="file" id="bannerFile" accept="image/*" required>
-                  <p class="form-text">Recommended size: 1200x400px</p>
+                  <input type="file" id="bannerFile" accept="image/*" class="form-input" required>
+                  <p class="form-text">Recommended size: 1200x450px (Minimum height 450px)</p>
                 </div>
-                <button type="submit" class="view-all-btn" style="background:var(--primary); color:#fff; width:100%; padding:12px;">Upload Banner</button>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                  <label class="form-label">Vertical Focus (Manually choose visible part)</label>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 12px; color: var(--text-muted);">Top</span>
+                    <input type="range" id="bannerBgPos" min="0" max="100" value="50" style="flex: 1; accent-color: var(--primary);">
+                    <span style="font-size: 12px; color: var(--text-muted);">Bottom</span>
+                    <span id="bgPosValue" style="font-size: 13px; font-weight: 700; color: var(--primary); min-width: 40px; text-align: right;">50%</span>
+                  </div>
+                  <p class="form-text">Choose which part of the image should be visible in the 450px banner area.</p>
+                </div>
+
+                <div style="background: rgba(232, 65, 24, 0.05); border: 1px solid rgba(232, 65, 24, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                  <i class="fa-solid fa-circle-info" style="color: var(--primary);"></i>
+                  <span style="font-size: 13px; color: var(--text-muted);">A "Sponsored" tag will be automatically added to the banner.</span>
+                </div>
+
+                <button type="submit" class="admin-btn-primary" id="uploadBannerBtn" style="margin-top: 20px;">Upload Banner</button>
               </form>
             </div>
           </div>

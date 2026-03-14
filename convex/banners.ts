@@ -45,6 +45,7 @@ export const saveBanner = mutation({
     city: v.string(),
     type: v.string(),
     storageId: v.id("_storage"),
+    bgPosition: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     // Check if a banner already exists for this city and type
@@ -61,6 +62,7 @@ export const saveBanner = mutation({
       // Update existing record
       await ctx.db.patch(existing._id, {
         storageId: args.storageId,
+        bgPosition: args.bgPosition,
         lastUpdated: Date.now(),
       });
       return existing._id;
@@ -70,6 +72,7 @@ export const saveBanner = mutation({
         city: args.city,
         type: args.type,
         storageId: args.storageId,
+        bgPosition: args.bgPosition,
         lastUpdated: Date.now(),
       });
     }
