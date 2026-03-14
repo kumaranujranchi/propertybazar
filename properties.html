@@ -71,8 +71,11 @@
 
   <!-- AD BANNER (city/type-specific) -->
   <div id="pageBanner" class="page-banner">
+    <div id="bannerBlur" class="banner-blur">
+      <img id="bannerImgBlur" alt="">
+    </div>
     <div class="banner-media">
-      <img id="bannerImg" alt="Advertisement Banner" style="display:block;">
+      <img id="bannerImg" alt="Advertisement Banner">
     </div>
     <div class="sponsored-badge">
       <i class="fa-solid fa-rectangle-ad"></i> Sponsored
@@ -152,6 +155,9 @@
             }
 
             img.src = bannerData.url;
+            const imgBlur = document.getElementById('bannerImgBlur');
+            if (imgBlur) imgBlur.src = bannerData.url;
+
             img.style.objectPosition = `center ${yPct}%`;
             bannerEl.style.display = 'block';
             heroFallback.style.display = 'none';

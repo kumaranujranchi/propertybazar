@@ -2087,18 +2087,33 @@ textarea {
   display: none;
   background: #000;
 }
+.banner-blur {
+  position: absolute;
+  inset: -20px; /* offset for blur bleed */
+  z-index: 1;
+}
+.banner-blur img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(25px) brightness(0.7);
+  opacity: 0.6;
+}
 .banner-media {
   position: absolute;
   inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .banner-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Fill width completely */
-  object-position: center 50%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Never cut the image */
   display: block;
-  image-rendering: -webkit-optimize-contrast;
   image-rendering: smooth;
+  box-shadow: 0 0 50px rgba(0,0,0,0.3);
 }
 /* No hover zoom effect */
 /* No overlay tint */
