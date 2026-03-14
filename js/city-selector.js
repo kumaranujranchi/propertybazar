@@ -38,6 +38,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const savedCity = localStorage.getItem('selectedCity') || 'Select City';
         if (currentCityText) currentCityText.textContent = savedCity;
         
+        // Dispatch event on init so banners/filters pick it up
+        if (savedCity && savedCity !== 'Select City') {
+            window.dispatchEvent(new CustomEvent('cityChanged', { detail: { city: savedCity } }));
+        }
+        
         // Open Modal
         if (citySelectorBtn) {
             citySelectorBtn.addEventListener('click', () => {

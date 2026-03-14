@@ -119,14 +119,19 @@
 
     async function updateBanner() {
       const params = new URLSearchParams(window.location.search);
-      let city = params.get('city') || '';
+      let city = params.get('city') || params.get('location') || '';
       const type = params.get('type') || 'buy';
       
-      if (!city || city === 'Select City') {
-        const txt = document.getElementById('currentCityText');
-        if (txt) city = txt.textContent || '';
+      // Fallback to localStorage then UI text
+      if (!city || city === 'Select City' || city === 'All India') {
+        city = localStorage.getItem('selectedCity') || '';
+        if (!city || city === 'Select City') {
+          const txt = document.getElementById('currentCityText');
+          if (txt) city = txt.textContent || '';
+        }
       }
 
+      city = city.trim();
       const bannerEl = document.getElementById('pageBanner');
       const heroFallback = document.getElementById('pageHeroFallback');
 
@@ -152,9 +157,13 @@
       heroFallback.style.display = 'block';
     }
 
-    document.addEventListener('DOMContentLoaded', updateBanner);
+    // Run on load and whenever city/tabs change
+    document.addEventListener('DOMContentLoaded', () => {
+      updateBanner();
+      // Small timeout for city-selector init timing
+      setTimeout(updateBanner, 500);
+    });
     
-    // Listen for custom city change event if it exists in city-selector.js
     window.addEventListener('cityChanged', updateBanner);
   </script>
   <div class="container">

@@ -1407,10 +1407,14 @@ function renderFilteredProperties() {
       activeFilters.statuses.includes(p.status),
     );
 
-  // City/Location filter from URL param
+  // City/Location filter from URL param or localStorage
   const urlParams = new URLSearchParams(window.location.search);
-  const searchLoc = urlParams.get("location") || urlParams.get("city");
-  if (searchLoc && searchLoc !== "All India") {
+  let searchLoc = urlParams.get("location") || urlParams.get("city");
+  if (!searchLoc || searchLoc === "Select City" || searchLoc === "All India") {
+    searchLoc = localStorage.getItem("selectedCity") || "";
+  }
+
+  if (searchLoc && searchLoc !== "All India" && searchLoc !== "Select City") {
     filtered = filtered.filter(
       (p) =>
         (p.city || "").toLowerCase().includes(searchLoc.toLowerCase()) ||
