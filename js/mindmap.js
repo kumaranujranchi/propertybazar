@@ -30,7 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
         li.classList.add('li-collapsed');
       }
 
+      // Add pointerdown to stop viewport from capturing
+      node.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+      });
+
       node.addEventListener('click', (e) => {
+        e.stopPropagation(); // Just in case
+        
         // Prevent click if we were dragging (small threshold)
         // Note: For simplicity, a direct click works best
         li.classList.toggle('li-collapsed');
