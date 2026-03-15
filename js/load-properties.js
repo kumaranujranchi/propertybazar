@@ -148,6 +148,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 function renderHomepageSliders(props) {
   const featuredSlider = document.getElementById("featuredSlider");
   const newLaunchSlider = document.getElementById("newLaunchSlider");
+  const newlyAddedSlider = document.getElementById("newlyAddedSlider");
 
   if (featuredSlider) {
     // Take first 5 for featured
@@ -155,6 +156,20 @@ function renderHomepageSliders(props) {
     featuredSlider.innerHTML = featured
       .map((p) => buildPropertyCardHTML(p))
       .join("");
+  }
+
+  // Newly Added – 10 most recent listings (sorted by creation time)
+  if (newlyAddedSlider) {
+    const sorted = [...props]
+      .sort((a, b) => (b._raw?._creationTime || 0) - (a._raw?._creationTime || 0))
+      .slice(0, 10);
+
+    if (sorted.length > 0) {
+      newlyAddedSlider.innerHTML = sorted.map((p) => buildPropertyCardHTML(p)).join("");
+    } else {
+      const section = document.getElementById("newlyAddedSection");
+      if (section) section.style.display = "none";
+    }
   }
 
   if (newLaunchSlider) {
