@@ -78,9 +78,12 @@ function initNav() {
         navLinks.forEach((l) => l.classList.remove("active"));
         link.classList.add("active");
 
-        // Trigger filter
+        // Trigger filter and banner update
         if (typeof window.renderFilteredProperties === "function") {
           window.renderFilteredProperties();
+        }
+        if (typeof window.updateBanner === "function") {
+          window.updateBanner();
         }
       }
     });
@@ -1118,6 +1121,9 @@ function initSearchTabs() {
         window.history.pushState({}, "", newUrl);
         if (typeof window.renderFilteredProperties === "function") {
           window.renderFilteredProperties();
+        }
+        if (typeof window.updateBanner === "function") {
+          window.updateBanner();
         }
       }
     });
