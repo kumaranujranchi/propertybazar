@@ -1093,6 +1093,22 @@
             if (c.price) txt += ` • ₹${Number(c.price).toLocaleString('en-IN')}`;
             badge.textContent = txt;
             configsList.appendChild(badge);
+
+            // Add per-config floor plan photos to the carousel
+            if (Array.isArray(c.photos) && c.photos.length > 0) {
+              c.photos.forEach(ph => {
+                const url = typeof ph === 'string' ? ph : ph.url || '';
+                if (!url) return;
+                const card = document.createElement('div');
+                card.style.cssText = 'min-width:260px; max-width:400px; border-radius:8px; overflow:hidden; background:#fff; border:1px solid var(--border); display: flex; flex-direction: column; height: 100%;';
+                card.innerHTML = `
+                  <img src="${url}" style="width:100%; height:180px; object-fit:cover; display:block; flex:1" onerror="this.parentElement.style.display='none'">
+                  <div style="padding:6px 10px; font-size:11px; font-weight:600; color:var(--text-muted); background:#f9fafb; border-top:1px solid var(--border)">${c.name || ''}</div>
+                `;
+                card.addEventListener('click', () => window.open(url, '_blank'));
+                floorCarousel.appendChild(card);
+              });
+            }
           });
           if (floorPlanSection) floorPlanSection.style.display = 'block';
         }
@@ -1274,8 +1290,9 @@
           const slider = document.getElementById('similarPropertiesSlider');
           if (slider && similar.length > 0) {
             slider.innerHTML = similar.map(sp => {
-              const spPrice = sp.pricing?.expectedPrice || 0;
-              let spPriceStr = spPrice >= 10000000 ? `₹${(spPrice/10000000).toFixed(2)} Cr` : (spPrice >= 100000 ? `₹${(spPrice/100000).toFixed(2)} Lac` : `₹${spPrice.toLocaleString('en-IN')}`);
+              const spPrice = sp.pricing?.expectedPrice || sp.pricing?.rent || sp.pricing?.pricePerDay || 0;
+              const spIsPor = sp.pricing?.isPriceOnRequest === true || sp.pricing?.priceType === 'Price on request';
+              let spPriceStr = (spIsPor || spPrice === 0) ? 'Price on Request' : (spPrice >= 10000000 ? `₹${(spPrice / 10000000).toFixed(2)} Cr` : (spPrice >= 100000 ? `₹${(spPrice / 100000).toFixed(2)} Lac` : `₹${spPrice.toLocaleString('en-IN')}`));
               const spPhoto = (sp.photos?.[0]?.url || sp.photos?.[0] || 'images/property-1.webp');
               return `
                 <div class="property-card" style="min-width:280px; flex-shrink:0; cursor:pointer; border:1px solid var(--border); border-radius:12px; overflow:hidden; background:#fff;" onclick="window.location.href='property-detail.html?id=${sp._id || sp.id}'">
