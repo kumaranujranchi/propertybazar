@@ -402,7 +402,7 @@
       <div class="subnav-links">
         <a href="#overview" class="subnav-link active">Overview</a>
         <a href="#amenities" class="subnav-link">Amenities</a>
-        <a href="#floorPlan" class="subnav-link">Floor Plan</a>
+        ${!isLand ? '<a href="#floorPlanSection" class="subnav-link">Floor Plan</a>' : ''}
         <a href="#location" class="subnav-link">Location</a>
         <a href="#faq" class="subnav-link">FAQ</a>
       </div>
@@ -1062,7 +1062,7 @@
         const floorCarousel = document.getElementById('floorPlanCarousel');
         const configsList = document.getElementById('projectConfigsList');
         const floorPhotos = (p.photos || []).filter(ph => ph && ph.category && ph.category.toLowerCase().includes('floor'));
-        if (floorPlanSection && floorPhotos && floorPhotos.length > 0) {
+        if (floorPlanSection && floorPhotos && floorPhotos.length > 0 && !isLand) {
           floorCarousel.innerHTML = '';
           floorPhotos.forEach(fp => {
             const url = typeof fp === 'string' ? fp : fp.url || '';
@@ -1079,7 +1079,7 @@
         }
 
         // Configurations
-        if (configsList && p.configurations && Array.isArray(p.configurations) && p.configurations.length > 0) {
+        if (configsList && p.configurations && Array.isArray(p.configurations) && p.configurations.length > 0 && !isLand) {
           configsList.innerHTML = '';
           p.configurations.forEach(c => {
             const badge = document.createElement('div');
@@ -1168,7 +1168,7 @@
         const subnavLinks = document.querySelectorAll('.subnav-link');
         window.addEventListener('scroll', () => {
           let current = '';
-          const sections = ['overview', 'amenities', 'floorPlan', 'location', 'faq'];
+          const sections = ['overview', 'amenities', 'floorPlanSection', 'location', 'faq'];
           sections.forEach(id => {
             const section = document.getElementById(id);
             if (section && window.scrollY >= (section.offsetTop - 150)) {
