@@ -799,7 +799,7 @@
           <div class="dash-nav-item" data-section="plans">
             <i class="fa-solid fa-star"></i> Plan & Subscriptions
           </div>
-          <div class="dash-nav-item" data-section="payments">
+          <div class="dash-nav-item" data-section="payments" onclick="document.querySelector('[data-section=plans]').click()">
             <i class="fa-solid fa-receipt"></i> Payment History
           </div>
           <div class="dash-nav-item" data-section="rera">
@@ -1101,58 +1101,75 @@
 
           <!-- Section 4: Plan & Subscriptions -->
           <div class="dash-section" id="sec-plans">
-            <div class="dash-card">
-              <div class="dash-card-title">Current Plan</div>
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                "
-              >
-                <div>
-                  <h2
-                    style="font-size: 24px; color: var(--dark); margin: 0 0 6px"
-                    id="planNameDisplay"
-                  >
-                    Free Plan
-                  </h2>
-                  <p
-                    style="color: var(--text-muted); font-size: 14px; margin: 0"
-                    id="planExpiryDisplay"
-                  >
-                    Basic listing privileges. Featured properties excluded.
-                  </p>
+            <!-- Current Plan Card -->
+            <div class="dash-card" style="padding: 0; overflow: hidden; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+              <!-- Plan Header Banner -->
+              <div id="planBannerHeader" style="background: linear-gradient(135deg, #e84118 0%, #c0392b 100%); padding: 28px 28px 24px; color: #fff; position: relative; overflow: hidden;">
+                <div style="position:absolute; top:-30px; right:-30px; width:160px; height:160px; background:rgba(255,255,255,0.07); border-radius:50%;"></div>
+                <div style="position:absolute; bottom:-50px; right:60px; width:100px; height:100px; background:rgba(255,255,255,0.05); border-radius:50%;"></div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1; flex-wrap:wrap; gap:16px;">
+                  <div>
+                    <div style="font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; opacity:0.8; margin-bottom:6px;">Current Plan</div>
+                    <h2 id="planNameDisplay" style="font-size:28px; font-weight:800; margin:0 0 8px; color:#fff;">Free Plan</h2>
+                    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                      <span id="planExpiryDisplay" style="font-size:14px; opacity:0.9; display:flex; align-items:center; gap:6px;">
+                        <i class="fa-solid fa-calendar-check"></i> Basic listing privileges
+                      </span>
+                      <span id="planDaysLeft" style="display:none; background:rgba(255,255,255,0.18); border-radius:20px; padding:3px 12px; font-size:13px; font-weight:700;"></span>
+                    </div>
+                  </div>
+                  <a href="pricing.html" style="text-decoration:none; background:#fff; color:#e84118; font-weight:700; font-size:14px; padding:10px 22px; border-radius:8px; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+                    <i class="fa-solid fa-arrow-up-right-dots"></i> Upgrade Plan
+                  </a>
                 </div>
-                <a
-                  href="pricing.html"
-                  class="dash-btn dash-btn-outline"
-                  style="text-decoration: none"
-                  >Upgrade Plan</a
-                >
+              </div>
+
+              <!-- Plan Features -->
+              <div style="padding:24px 28px;">
+                <div style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#94a3b8; margin-bottom:16px;">What's Included</div>
+                <div id="planFeaturesList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:12px;">
+                  <!-- dynamically filled by JS -->
+                </div>
+
+                <!-- Stats row -->
+                <div style="margin-top:24px; padding-top:20px; border-top:1px solid #f1f5f9; display:flex; gap:24px; flex-wrap:wrap;">
+                  <div style="display:flex; flex-direction:column; gap:2px;">
+                    <span style="font-size:11px; font-weight:600; text-transform:uppercase; color:#94a3b8;">Properties Posted</span>
+                    <span id="planStatCount" style="font-size:24px; font-weight:800; color:#0f172a;">—</span>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:2px;">
+                    <span style="font-size:11px; font-weight:600; text-transform:uppercase; color:#94a3b8;">Listing Limit</span>
+                    <span id="planStatLimit" style="font-size:24px; font-weight:800; color:#0f172a;">—</span>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:2px;">
+                    <span style="font-size:11px; font-weight:600; text-transform:uppercase; color:#94a3b8;">Plan Status</span>
+                    <span id="planStatStatus" style="font-size:16px; font-weight:800; color:#22c55e; display:flex; align-items:center; gap:6px; padding-top:4px;"><i class="fa-solid fa-circle-check"></i> Active</span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Section 5: Payment History -->
-          <div class="dash-section" id="sec-payments">
-            <div class="dash-card">
-              <div class="dash-card-title">Payment History</div>
+            <!-- Purchase History -->
+            <div class="dash-card" style="margin-top:20px;">
+              <div class="dash-card-title">
+                <i class="fa-solid fa-receipt" style="color:#e84118;"></i> Purchase History
+              </div>
               <div class="table-wrap">
                 <table class="dash-table">
                   <thead>
                     <tr>
-                      <th>Invoice ID</th>
-                      <th>Date</th>
-                      <th>Plan Detail</th>
-                      <th>Amount</th>
+                      <th>#</th>
+                      <th>Plan</th>
+                      <th>Purchase Date</th>
+                      <th>Expiry Date</th>
                       <th>Status</th>
                     </tr>
                   </thead>
                   <tbody id="paymentHistoryBody">
                     <tr>
-                      <td colspan="5" class="dash-empty" style="padding: 24px">
-                        No payments found.
+                      <td colspan="5" class="dash-empty" style="padding: 32px; text-align:center;">
+                        <i class="fa-solid fa-receipt" style="font-size:2rem; color:#cbd5e1; display:block; margin-bottom:10px;"></i>
+                        No purchase history found.
                       </td>
                     </tr>
                   </tbody>
@@ -1828,18 +1845,135 @@
       document.getElementById("profileImgPreview").src =
         user.profilePictureUrl || defaultAvatar;
 
-      // Pre-fill Plan info in section 4
-      document.getElementById("planNameDisplay").textContent =
-        tierName.charAt(0).toUpperCase() + tierName.slice(1) + " Plan";
+      // ─── Plan & Subscriptions Section ───────────────────────────────
+      const planMeta = {
+        free: {
+          displayName: "Free Plan",
+          color: ["#64748b", "#475569"],
+          features: [
+            { icon: "fa-solid fa-house", text: "1 Free Property Listing" },
+            { icon: "fa-solid fa-eye", text: "Basic Visibility" },
+            { icon: "fa-solid fa-message", text: "Inquiries via Platform" },
+            { icon: "fa-solid fa-ban", text: "No Featured Listings", muted: true },
+            { icon: "fa-solid fa-ban", text: "No Priority Support", muted: true },
+          ],
+        },
+        premium: {
+          displayName: "Premium Plan",
+          color: ["#e84118", "#c0392b"],
+          features: [
+            { icon: "fa-solid fa-bolt", text: "Up to 10 Property Listings" },
+            { icon: "fa-solid fa-star", text: "Featured Listings Included" },
+            { icon: "fa-solid fa-robot", text: "Telegram Bot Posting" },
+            { icon: "fa-solid fa-headset", text: "Priority Support" },
+            { icon: "fa-solid fa-eye", text: "Enhanced Visibility" },
+            { icon: "fa-solid fa-shield-halved", text: "Trust Badge on Profile" },
+          ],
+        },
+        standard_individual: {
+          displayName: "Standard Plan",
+          color: ["#0ea5e9", "#0284c7"],
+          features: [
+            { icon: "fa-solid fa-house", text: "Up to 2 Property Listings" },
+            { icon: "fa-solid fa-eye", text: "Standard Visibility" },
+            { icon: "fa-solid fa-message", text: "Inquiries via Platform" },
+            { icon: "fa-solid fa-headset", text: "Email Support" },
+          ],
+        },
+        agent_starter: {
+          displayName: "Agent Starter",
+          color: ["#8b5cf6", "#7c3aed"],
+          features: [
+            { icon: "fa-solid fa-briefcase", text: "Up to 15 Listings" },
+            { icon: "fa-solid fa-star", text: "Featured Listings" },
+            { icon: "fa-solid fa-robot", text: "Telegram Bot Posting" },
+            { icon: "fa-solid fa-headset", text: "Priority Support" },
+            { icon: "fa-solid fa-chart-bar", text: "Analytics Dashboard" },
+          ],
+        },
+        agent_pro: {
+          displayName: "Agent Pro",
+          color: ["#f59e0b", "#d97706"],
+          features: [
+            { icon: "fa-solid fa-briefcase", text: "Up to 50 Listings" },
+            { icon: "fa-solid fa-star", text: "Premium Featured Listings" },
+            { icon: "fa-solid fa-robot", text: "Telegram Bot Posting" },
+            { icon: "fa-solid fa-headset", text: "Dedicated Support" },
+            { icon: "fa-solid fa-chart-bar", text: "Advanced Analytics" },
+            { icon: "fa-solid fa-shield-halved", text: "Verified Agent Badge" },
+          ],
+        },
+        agent: {
+          displayName: "Agent Plan",
+          color: ["#f59e0b", "#d97706"],
+          features: [
+            { icon: "fa-solid fa-briefcase", text: "Up to 50 Listings" },
+            { icon: "fa-solid fa-star", text: "Featured Listings" },
+            { icon: "fa-solid fa-robot", text: "Telegram Bot Posting" },
+            { icon: "fa-solid fa-headset", text: "Priority Support" },
+            { icon: "fa-solid fa-shield-halved", text: "Agent Badge" },
+          ],
+        },
+      };
+
+      const currentPlan = planMeta[tierName] || planMeta.free;
+
+      // Set banner gradient color
+      document.getElementById("planBannerHeader").style.background =
+        `linear-gradient(135deg, ${currentPlan.color[0]} 0%, ${currentPlan.color[1]} 100%)`;
+
+      // Set plan name
+      document.getElementById("planNameDisplay").textContent = currentPlan.displayName;
+
+      // Set expiry & days left
       if (user.subscriptionExpiry) {
-        document.getElementById("planExpiryDisplay").textContent =
-          "Valid until: " +
-          new Date(user.subscriptionExpiry).toLocaleDateString();
-      } else {
-        document.getElementById("planExpiryDisplay").textContent =
-          tierName === "free"
-            ? "Basic listing privileges."
-            : "Lifetime Access / No Expiry specified.";
+        const expDate = new Date(user.subscriptionExpiry);
+        const daysLeft = Math.ceil((expDate - Date.now()) / (1000 * 60 * 60 * 24));
+        document.getElementById("planExpiryDisplay").innerHTML =
+          `<i class="fa-solid fa-calendar-check"></i> Valid until: ${expDate.toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" })}`;
+        const daysLeftEl = document.getElementById("planDaysLeft");
+        daysLeftEl.style.display = "inline-block";
+        if (daysLeft > 0) {
+          daysLeftEl.textContent = `${daysLeft} day${daysLeft !== 1 ? "s" : ""} left`;
+          daysLeftEl.style.background = daysLeft <= 15 ? "rgba(239,68,68,0.3)" : "rgba(255,255,255,0.18)";
+        } else {
+          daysLeftEl.textContent = "Expired";
+          daysLeftEl.style.background = "rgba(239,68,68,0.4)";
+          document.getElementById("planStatStatus").innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Expired';
+          document.getElementById("planStatStatus").style.color = "#ef4444";
+        }
+      } else if (tierName === "free") {
+        document.getElementById("planExpiryDisplay").innerHTML =
+          `<i class="fa-solid fa-infinity"></i> Free forever — upgrade anytime`;
+      }
+
+      // Render features list
+      const featuresList = document.getElementById("planFeaturesList");
+      featuresList.innerHTML = currentPlan.features.map(f => `
+        <div style="display:flex; align-items:center; gap:10px; background:${f.muted ? "#f8fafc" : "#f0fdf4"}; border:1px solid ${f.muted ? "#e2e8f0" : "#bbf7d0"}; border-radius:8px; padding:10px 14px;">
+          <i class="${f.icon}" style="color:${f.muted ? "#94a3b8" : currentPlan.color[0]}; font-size:14px; width:16px; text-align:center;"></i>
+          <span style="font-size:13px; font-weight:600; color:${f.muted ? "#94a3b8" : "#1e293b"};">${f.text}</span>
+        </div>
+      `).join("");
+
+      // Stats
+      document.getElementById("planStatCount").textContent = user.propertyCount ?? 0;
+      document.getElementById("planStatLimit").textContent = user.limit ?? 1;
+
+      // Purchase History Row
+      if (tierName !== "free" && user.subscriptionExpiry) {
+        const purchaseDate = user.subscriptionExpiry
+          ? new Date(user.subscriptionExpiry - 90 * 24 * 60 * 60 * 1000) // estimate: expiry - 90 days
+          : new Date();
+        document.getElementById("paymentHistoryBody").innerHTML = `
+          <tr>
+            <td>1</td>
+            <td><strong>${currentPlan.displayName}</strong></td>
+            <td>${purchaseDate.toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" })}</td>
+            <td>${new Date(user.subscriptionExpiry).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" })}</td>
+            <td><span class="badge success">Active</span></td>
+          </tr>
+        `;
       }
 
       // Pre-fill RERA info
