@@ -2033,10 +2033,29 @@
       // Telegram Integration
       if (user.telegramChatId) {
         document.getElementById("tgStatus").innerHTML = `
-          <span class="badge" style="background:#DCFCE7; color:#166534; border:none; padding:8px 16px; display:inline-flex; align-items:center; gap:8px;">
-            <i class="fa-solid fa-check"></i> Connected to Telegram
-          </span>
+          <div style="display:flex; align-items:center; justify-content:space-between; width:100%; border:1px solid #dcfce7; background:#f4fbf7; padding:12px; border-radius:8px;">
+            <span class="badge" style="background:#DCFCE7; color:#166534; border:none; padding:6px 12px; display:inline-flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-check"></i> Connected
+            </span>
+            <button id="btnDisconnectTelegram" class="dash-action-btn danger" style="padding:6px 12px; font-size:12px;">
+              <i class="fa-solid fa-link-slash"></i> Disconnect
+            </button>
+          </div>
         `;
+
+        document.getElementById("btnDisconnectTelegram")?.addEventListener("click", async () => {
+          if (!confirm("Are you sure you want to disconnect Telegram? You won't be able to post via bot until you reconnect.")) return;
+          try {
+            const btn = document.getElementById("btnDisconnectTelegram");
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Disconnecting...';
+            btn.disabled = true;
+            await convex.mutation("telegram:disconnectTelegram", { token });
+            window.location.reload();
+          } catch (err) {
+            alert("Error disconnecting: " + err.message);
+            window.location.reload();
+          }
+        });
       }
 
       document.getElementById("btnConnectTelegram")?.addEventListener("click", () => {

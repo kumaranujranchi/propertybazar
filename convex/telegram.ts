@@ -25,6 +25,27 @@ export const linkUser = mutation({
   },
 });
 
+// Disconnect Telegram from user account
+export const disconnectTelegram = mutation({
+  args: { token: v.string() },
+  handler: async (ctx, args) => {
+    const session = await ctx.db
+      .query("sessions")
+      .withIndex("by_token", (q) => q.eq("token", args.token))
+      .first();
+
+    if (!session || session.expiresAt < Date.now()) {
+      throw new Error("Invalid or expired session");
+    }
+
+    await ctx.db.patch(session.userId, {
+      telegramChatId: undefined,
+    });
+
+    return { success: true };
+  },
+});
+
 // Main handler for incoming Telegram messages (called from http.ts action)
 export const handleUpdate = action({
   args: { update: v.any() },
