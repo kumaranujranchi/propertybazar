@@ -1879,6 +1879,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       `;
       container.appendChild(row);
+
+      // Check if property is currently land to adjust the new row
+      const step1Grids = document.querySelectorAll("#formStep1 .form-type-grid");
+      const rawPropType = step1Grids[2]?.querySelector(".active .name")?.innerText.trim().toLowerCase() || "";
+      const isLand = /plot|land/i.test(rawPropType);
+
+      if (isLand) {
+        const bhkSelect = row.querySelector('.config-bhk');
+        const customInput = row.querySelector('.config-custom');
+        const builtupLabel = row.querySelector('.config-builtup').closest('.config-field')?.querySelector('.config-field-label');
+        
+        if (bhkSelect) {
+           bhkSelect.style.display = 'none';
+           bhkSelect.value = 'Custom'; 
+        }
+        if (customInput) {
+           customInput.style.display = 'block';
+           customInput.placeholder = 'e.g. 1000 SqFt Plot, Corner Plot';
+        }
+        if (builtupLabel) builtupLabel.textContent = 'Plot Area *';
+      }
+
       updateConfigRemoveButtons();
     });
   }

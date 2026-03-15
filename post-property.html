@@ -536,8 +536,8 @@
           <!-- hidden BHK input kept for backward compat with getFormState -->
           <input type="hidden" id="bhkTypeSelect" value="">
 
-          <!-- Project Configurations (Multiple flat types) — Apartments only -->
-          <div style="grid-column:1 / -1; margin-top:4px;" id="fgProjectConfigs" data-show-for="apartment">
+          <!-- Project Configurations (Multiple flat/plot types) — Apartments and Land -->
+          <div style="grid-column:1 / -1; margin-top:4px;" id="fgProjectConfigs" data-show-for="apartment,land">
             <h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Flat Configurations</h4>
             <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Add each flat type (2 BHK, 3 BHK, etc.) with its area, price, and optional floor plan images.</p>
             <div id="configContainer" style="display:flex; flex-direction:column; gap:12px;">
@@ -1136,7 +1136,7 @@
 
           <!-- New Plot/Land Specific Fields -->
           <div class="form-group" id="fgRatePerSqFt" style="display:none" data-show-for="land">
-            <label class="form-label" id="ratePerUnitLabel">Rate Per Square Foot (₹) *</label>
+            <label class="form-label" id="ratePerUnitLabel">Rate Per Square Foot (₹)</label>
             <div style="display: flex; gap: 8px;">
               <input type="number" id="plotRateSqFtInput" class="form-input" placeholder="e.g. 1100" style="flex: 1;">
               <select id="plotRateUnit" class="form-input area-unit-select" style="width: 120px;">
@@ -2086,6 +2086,39 @@
           if (el) el.style.display = 'block';
         });
       }
+
+      // Handle Project Configurations UI for Land vs Apartment
+      const configsTitle = document.querySelector('#fgProjectConfigs h4');
+      const configsDesc = document.querySelector('#fgProjectConfigs p');
+      if (configsTitle) configsTitle.textContent = isLand ? 'Plot Configurations' : 'Flat Configurations';
+      if (configsDesc) configsDesc.textContent = isLand 
+        ? 'Add each plot type/size with its area, price, and optional layout images.' 
+        : 'Add each flat type (2 BHK, 3 BHK, etc.) with its area, price, and optional floor plan images.';
+
+      document.querySelectorAll('#configContainer .config-row').forEach(row => {
+        const bhkSelect = row.querySelector('.config-bhk');
+        const customInput = row.querySelector('.config-custom');
+        const builtupLabel = row.querySelector('.config-builtup').closest('.config-field')?.querySelector('.config-field-label');
+        
+        if (isLand) {
+          if (bhkSelect) {
+             bhkSelect.style.display = 'none';
+             bhkSelect.value = 'Custom'; // Ensure logic treats it as custom
+          }
+          if (customInput) {
+             customInput.style.display = 'block';
+             customInput.placeholder = 'e.g. 1000 SqFt Plot, Corner Plot';
+          }
+          if (builtupLabel) builtupLabel.textContent = 'Plot Area *';
+        } else {
+          if (bhkSelect) bhkSelect.style.display = 'block';
+          if (customInput) {
+             customInput.style.display = bhkSelect && bhkSelect.value === 'Custom' ? 'block' : 'none';
+             customInput.placeholder = 'e.g. Studio, 7.5 BHK, Penthouse';
+          }
+          if (builtupLabel) builtupLabel.textContent = 'Built-up Area *';
+        }
+      });
 
       // Handle Label for Rent vs Buy (Pricing context)
       const transType = step1Grids[1]?.querySelector(".active .name")?.innerText.trim() || "";
