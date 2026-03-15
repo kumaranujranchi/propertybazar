@@ -1936,6 +1936,30 @@ document.addEventListener("DOMContentLoaded", async () => {
              <input type="number" class="form-input land-config-price" placeholder="e.g. 4500000">
           </div>
         </div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-top:15px;">
+          <div>
+             <label class="form-label" style="font-size:12px; margin-bottom:4px; display:block;">Frontage Width (ft)</label>
+             <input type="number" class="form-input land-config-frontage" placeholder="e.g. 40">
+          </div>
+          <div>
+             <label class="form-label" style="font-size:12px; margin-bottom:4px; display:block;">Road Width (ft)</label>
+             <input type="number" class="form-input land-config-road" placeholder="e.g. 30">
+          </div>
+          <div>
+             <label class="form-label" style="font-size:12px; margin-bottom:4px; display:block;">Facing Direction</label>
+             <select class="form-input land-config-facing">
+               <option value="">Select</option>
+               <option value="East">East</option>
+               <option value="West">West</option>
+               <option value="North">North</option>
+               <option value="South">South</option>
+               <option value="North-East">North-East</option>
+               <option value="North-West">North-West</option>
+               <option value="South-East">South-East</option>
+               <option value="South-West">South-West</option>
+             </select>
+          </div>
+        </div>
       `;
       container.appendChild(row);
       updateLandConfigRemoveButtons();
@@ -2284,13 +2308,20 @@ document.addEventListener("DOMContentLoaded", async () => {
          const customName = row.querySelector('.land-config-name')?.value.trim();
          const name = customName ? customName : `${builtup} ${builtupUnit} Plot`;
          const price = row.querySelector('.land-config-price')?.value ? Number(row.querySelector('.land-config-price').value) : undefined;
-         configurations.push({ name, custom: customName || undefined, builtup, builtupUnit, price, photos: [] });
+         const frontageWidth = row.querySelector('.land-config-frontage')?.value ? Number(row.querySelector('.land-config-frontage').value) : undefined;
+         const roadWidth = row.querySelector('.land-config-road')?.value ? Number(row.querySelector('.land-config-road').value) : undefined;
+         const facing = row.querySelector('.land-config-facing')?.value || undefined;
+         
+         configurations.push({ name, custom: customName || undefined, builtup, builtupUnit, price, frontageWidth, roadWidth, facing, photos: [] });
        });
        
-       // Sync primary plotArea with first config to pass validation if user left primary hidden field blank
+       // Sync primary plotArea, frontage, roadWidth, facing with first config to pass validation if user left primary hidden field blank
        if (configurations.length > 0) {
          details.plotArea = configurations[0].builtup;
          details.plotAreaUnit = configurations[0].builtupUnit;
+         details.frontageWidth = configurations[0].frontageWidth;
+         details.roadWidth = configurations[0].roadWidth;
+         details.facing = configurations[0].facing;
        }
     } else {
        document.querySelectorAll("#configContainer .config-row").forEach((row) => {
@@ -2570,10 +2601,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                      const builtupInput = newRow.querySelector('.land-config-builtup');
                      const builtupUnit = newRow.querySelector('.land-config-builtup-unit');
                      const priceInput = newRow.querySelector('.land-config-price');
+                     const frontageInput = newRow.querySelector('.land-config-frontage');
+                     const roadInput = newRow.querySelector('.land-config-road');
+                     const facingInput = newRow.querySelector('.land-config-facing');
+                     
                      if (nameInput) nameInput.value = cfg.custom || '';
                      if (builtupInput) builtupInput.value = cfg.builtup || '';
                      if (builtupUnit) builtupUnit.value = cfg.builtupUnit || 'Square Foot';
                      if (priceInput) priceInput.value = cfg.price || '';
+                     if (frontageInput) frontageInput.value = cfg.frontageWidth || '';
+                     if (roadInput) roadInput.value = cfg.roadWidth || '';
+                     if (facingInput) facingInput.value = cfg.facing || '';
                  }
              }
            });
