@@ -158,18 +158,18 @@ function renderHomepageSliders(props) {
       .join("");
   }
 
-  // Newly Added – 10 most recent listings (sorted by creation time)
+  // Newly Added – 10 most recent listings (Convex already returns in desc order)
   if (newlyAddedSlider) {
-    const sorted = [...props]
-      .sort((a, b) => (b._raw?._creationTime || 0) - (a._raw?._creationTime || 0))
-      .slice(0, 10);
+    // Use the top 10 directly – Convex sorts by _creationTime desc already
+    const newest = props.slice(0, 10);
 
-    if (sorted.length > 0) {
-      newlyAddedSlider.innerHTML = sorted.map((p) => buildPropertyCardHTML(p)).join("");
-    } else {
+    if (newest.length > 0) {
+      newlyAddedSlider.innerHTML = newest.map((p) => buildPropertyCardHTML(p)).join("");
+      // Reveal the section (hidden by default via HTML)
       const section = document.getElementById("newlyAddedSection");
-      if (section) section.style.display = "none";
+      if (section) section.style.display = "block";
     }
+    // else: section stays hidden (see display:none in HTML)
   }
 
   if (newLaunchSlider) {
