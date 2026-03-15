@@ -536,8 +536,8 @@
           <!-- hidden BHK input kept for backward compat with getFormState -->
           <input type="hidden" id="bhkTypeSelect" value="">
 
-          <!-- Project Configurations (Multiple flat/plot types) — Apartments and Land -->
-          <div style="grid-column:1 / -1; margin-top:4px;" id="fgProjectConfigs" data-show-for="apartment,land">
+          <!-- Project Configurations (Multiple flat types) — Apartments only -->
+          <div style="grid-column:1 / -1; margin-top:4px;" id="fgProjectConfigs" data-show-for="apartment">
             <h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Flat Configurations</h4>
             <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Add each flat type (2 BHK, 3 BHK, etc.) with its area, price, and optional floor plan images.</p>
             <div id="configContainer" style="display:flex; flex-direction:column; gap:12px;">
@@ -757,7 +757,8 @@
             style="grid-column: 1 / -1; font-weight:700; color:var(--primary); margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:5px;" data-show-for="villa,land">
             Area Details</div>
           <div class="form-grid" data-show-for="villa,land" style="grid-column: 1 / -1;">
-              <div class="form-group">
+              <!-- Villa only plot area (retained for Backward compat) -->
+              <div class="form-group" data-show-for="villa">
                 <label class="form-label">Plot Area *</label>
                 <div class="flex-stack-mobile" style="display: flex; gap: 8px;">
                   <input type="number" id="plotAreaInput" class="form-input" placeholder="e.g. 2400" style="flex: 1;">
@@ -783,6 +784,47 @@
                   </select>
                 </div>
               </div>
+
+              <!-- Plot Specific Multiple Configurations inside Area Details -->
+              <div style="grid-column:1 / -1; margin-bottom: 8px;" id="fgLandConfigs" data-show-for="land">
+                <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Add each plot size available in this project.</p>
+                <div id="landConfigContainer" style="display:flex; flex-direction:column; gap:12px;">
+                  <div class="land-config-row" style="background:var(--bg-light); border:1px solid var(--border); padding:15px; border-radius:8px;">
+                    <div style="display:flex; gap:10px; align-items:flex-end; margin-bottom:10px;">
+                      <div style="flex:1;">
+                        <label class="form-label" style="font-size:12px; margin-bottom:4px; display:block;">Plot Title / Type (e.g. Corner Plot)</label>
+                        <input type="text" class="form-input land-config-name" placeholder="Leave blank for auto-format">
+                      </div>
+                      <button type="button" class="btn btn-outline btn-sm remove-land-config-btn" style="display:none;">✕ Remove</button>
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px;">
+                      <div>
+                         <label class="form-label" style="font-size:12px; margin-bottom:4px; display:block;">Plot Area *</label>
+                         <div style="display: flex; gap: 8px;">
+                            <input type="number" class="form-input land-config-builtup" placeholder="e.g. 1200" style="flex:1;">
+                            <select class="form-input land-config-builtup-unit" style="width:100px;">
+                              <option value="Square Foot">sq ft</option>
+                              <option value="Square Yard (Gaj)">sq yd</option>
+                              <option value="Square Meter">sq m</option>
+                              <option value="Acre">Acre</option>
+                              <option value="Dismil / Decimal">Dismil</option>
+                              <option value="Kattha">Kattha</option>
+                              <option value="Bigha">Bigha</option>
+                            </select>
+                         </div>
+                      </div>
+                      <div>
+                         <label class="form-label" style="font-size:12px; margin-bottom:4px; display:block;">Expected Price (optional)</label>
+                         <input type="number" class="form-input land-config-price" placeholder="e.g. 4500000">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top:10px">
+                  <button type="button" id="addLandConfigBtn" class="btn btn-outline btn-sm"><i class="fa-solid fa-plus"></i> Add Another Plot Size</button>
+                </div>
+              </div>
+
               <div class="form-group" data-show-for="villa">
                 <label class="form-label">Super Built-up Area</label>
                 <div class="flex-stack-mobile" style="display: flex; gap: 8px;">
@@ -2086,39 +2128,6 @@
           if (el) el.style.display = 'block';
         });
       }
-
-      // Handle Project Configurations UI for Land vs Apartment
-      const configsTitle = document.querySelector('#fgProjectConfigs h4');
-      const configsDesc = document.querySelector('#fgProjectConfigs p');
-      if (configsTitle) configsTitle.textContent = isLand ? 'Plot Configurations' : 'Flat Configurations';
-      if (configsDesc) configsDesc.textContent = isLand 
-        ? 'Add each plot type/size with its area, price, and optional layout images.' 
-        : 'Add each flat type (2 BHK, 3 BHK, etc.) with its area, price, and optional floor plan images.';
-
-      document.querySelectorAll('#configContainer .config-row').forEach(row => {
-        const bhkSelect = row.querySelector('.config-bhk');
-        const customInput = row.querySelector('.config-custom');
-        const builtupLabel = row.querySelector('.config-builtup').closest('.config-field')?.querySelector('.config-field-label');
-        
-        if (isLand) {
-          if (bhkSelect) {
-             bhkSelect.style.display = 'none';
-             bhkSelect.value = 'Custom'; // Ensure logic treats it as custom
-          }
-          if (customInput) {
-             customInput.style.display = 'block';
-             customInput.placeholder = 'e.g. 1000 SqFt Plot, Corner Plot';
-          }
-          if (builtupLabel) builtupLabel.textContent = 'Plot Area *';
-        } else {
-          if (bhkSelect) bhkSelect.style.display = 'block';
-          if (customInput) {
-             customInput.style.display = bhkSelect && bhkSelect.value === 'Custom' ? 'block' : 'none';
-             customInput.placeholder = 'e.g. Studio, 7.5 BHK, Penthouse';
-          }
-          if (builtupLabel) builtupLabel.textContent = 'Built-up Area *';
-        }
-      });
 
       // Handle Label for Rent vs Buy (Pricing context)
       const transType = step1Grids[1]?.querySelector(".active .name")?.innerText.trim() || "";

@@ -1879,28 +1879,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       `;
       container.appendChild(row);
-
-      // Check if property is currently land to adjust the new row
-      const step1Grids = document.querySelectorAll("#formStep1 .form-type-grid");
-      const rawPropType = step1Grids[2]?.querySelector(".active .name")?.innerText.trim().toLowerCase() || "";
-      const isLand = /plot|land/i.test(rawPropType);
-
-      if (isLand) {
-        const bhkSelect = row.querySelector('.config-bhk');
-        const customInput = row.querySelector('.config-custom');
-        const builtupLabel = row.querySelector('.config-builtup').closest('.config-field')?.querySelector('.config-field-label');
-        
-        if (bhkSelect) {
-           bhkSelect.style.display = 'none';
-           bhkSelect.value = 'Custom'; 
-        }
-        if (customInput) {
-           customInput.style.display = 'block';
-           customInput.placeholder = 'e.g. 1000 SqFt Plot, Corner Plot';
-        }
-        if (builtupLabel) builtupLabel.textContent = 'Plot Area *';
-      }
-
       updateConfigRemoveButtons();
     });
   }
@@ -1919,6 +1897,64 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   // Initialize remove buttons for any existing rows
   updateConfigRemoveButtons();
+
+  // ========== LAND CONFIGURATIONS UI ==========
+  const addLandConfigBtnEl = document.getElementById("addLandConfigBtn");
+  if (addLandConfigBtnEl) {
+    addLandConfigBtnEl.addEventListener("click", () => {
+      const container = document.getElementById("landConfigContainer");
+      if (!container) return;
+      const row = document.createElement("div");
+      row.className = "land-config-row";
+      row.style.cssText = "background:var(--bg-light); border:1px solid var(--border); padding:15px; border-radius:8px;";
+      row.innerHTML = `
+        <div style="display:flex; gap:10px; align-items:flex-end; margin-bottom:10px;">
+          <div style="flex:1;">
+            <label class="form-label" style="font-size:12px; margin-bottom:4px; display:block;">Plot Title / Type (e.g. Corner Plot)</label>
+            <input type="text" class="form-input land-config-name" placeholder="Leave blank for auto-format">
+          </div>
+          <button type="button" class="btn btn-outline btn-sm remove-land-config-btn" style="display:none;">✕ Remove</button>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px;">
+          <div>
+             <label class="form-label" style="font-size:12px; margin-bottom:4px; display:block;">Plot Area *</label>
+             <div style="display: flex; gap: 8px;">
+                <input type="number" class="form-input land-config-builtup" placeholder="e.g. 1200" style="flex:1;">
+                <select class="form-input land-config-builtup-unit" style="width:100px;">
+                  <option value="Square Foot">sq ft</option>
+                  <option value="Square Yard (Gaj)">sq yd</option>
+                  <option value="Square Meter">sq m</option>
+                  <option value="Acre">Acre</option>
+                  <option value="Dismil / Decimal">Dismil</option>
+                  <option value="Kattha">Kattha</option>
+                  <option value="Bigha">Bigha</option>
+                </select>
+             </div>
+          </div>
+          <div>
+             <label class="form-label" style="font-size:12px; margin-bottom:4px; display:block;">Expected Price (optional)</label>
+             <input type="number" class="form-input land-config-price" placeholder="e.g. 4500000">
+          </div>
+        </div>
+      `;
+      container.appendChild(row);
+      updateLandConfigRemoveButtons();
+    });
+  }
+
+  function updateLandConfigRemoveButtons() {
+    const rows = document.querySelectorAll("#landConfigContainer .land-config-row");
+    rows.forEach((r, idx) => {
+      const btn = r.querySelector(".remove-land-config-btn");
+      if (!btn) return;
+      btn.style.display = rows.length > 1 ? "inline-block" : "none";
+      btn.onclick = () => {
+        r.remove();
+        updateLandConfigRemoveButtons();
+      };
+    });
+  }
+  updateLandConfigRemoveButtons();
 
   // ========== DRAFT SYSTEM ==========
   function getFormState() {
@@ -2236,26 +2272,46 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (q && a) customFAQs.push({ question: q, answer: a });
     });
 
-    // Collect Configurations (flat types)
+    // Collect Configurations (flat types or plot sizes)
     const configurations = [];
-    document.querySelectorAll("#configContainer .config-row").forEach((row) => {
-      const bhk = row.querySelector('.config-bhk')?.value || undefined;
-      const custom = row.querySelector('.config-custom')?.value.trim();
-      const name = custom ? custom : (bhk || row.querySelector('.config-name')?.value.trim());
-      const builtup = row.querySelector('.config-builtup')?.value
-        ? Number(row.querySelector('.config-builtup').value)
-        : undefined;
-      const builtupUnit = row.querySelector('.config-builtup-unit')?.value || 'Square Foot';
-      const carpet = row.querySelector('.config-carpet')?.value
-        ? Number(row.querySelector('.config-carpet').value)
-        : undefined;
-      const carpetUnit = row.querySelector('.config-carpet-unit')?.value || undefined;
-      const price = row.querySelector('.config-price')?.value
-        ? Number(row.querySelector('.config-price').value)
-        : undefined;
-      const configObj = { name, bhk: bhk === 'Custom' ? undefined : bhk, custom: custom || undefined, builtup, builtupUnit, carpet, carpetUnit, price, photos: [] };
-      if (name) configurations.push(configObj);
-    });
+    const isLand = /plot|land/i.test(propertyType);
+
+    if (isLand) {
+       document.querySelectorAll("#landConfigContainer .land-config-row").forEach((row) => {
+         const builtup = row.querySelector('.land-config-builtup')?.value ? Number(row.querySelector('.land-config-builtup').value) : undefined;
+         if (!builtup) return; // Area is mandatory
+         const builtupUnit = row.querySelector('.land-config-builtup-unit')?.value || 'Square Foot';
+         const customName = row.querySelector('.land-config-name')?.value.trim();
+         const name = customName ? customName : `${builtup} ${builtupUnit} Plot`;
+         const price = row.querySelector('.land-config-price')?.value ? Number(row.querySelector('.land-config-price').value) : undefined;
+         configurations.push({ name, custom: customName || undefined, builtup, builtupUnit, price, photos: [] });
+       });
+       
+       // Sync primary plotArea with first config to pass validation if user left primary hidden field blank
+       if (configurations.length > 0) {
+         details.plotArea = configurations[0].builtup;
+         details.plotAreaUnit = configurations[0].builtupUnit;
+       }
+    } else {
+       document.querySelectorAll("#configContainer .config-row").forEach((row) => {
+         const bhk = row.querySelector('.config-bhk')?.value || undefined;
+         const custom = row.querySelector('.config-custom')?.value.trim();
+         const name = custom ? custom : (bhk || row.querySelector('.config-name')?.value.trim());
+         const builtup = row.querySelector('.config-builtup')?.value
+           ? Number(row.querySelector('.config-builtup').value)
+           : undefined;
+         const builtupUnit = row.querySelector('.config-builtup-unit')?.value || 'Square Foot';
+         const carpet = row.querySelector('.config-carpet')?.value
+           ? Number(row.querySelector('.config-carpet').value)
+           : undefined;
+         const carpetUnit = row.querySelector('.config-carpet-unit')?.value || undefined;
+         const price = row.querySelector('.config-price')?.value
+           ? Number(row.querySelector('.config-price').value)
+           : undefined;
+         const configObj = { name, bhk: bhk === 'Custom' ? undefined : bhk, custom: custom || undefined, builtup, builtupUnit, carpet, carpetUnit, price, photos: [] };
+         if (name) configurations.push(configObj);
+       });
+    }
 
     return {
       posterType,
@@ -2494,6 +2550,38 @@ document.addEventListener("DOMContentLoaded", async () => {
       setVal("contactEmailInput", c.email);
       setVal("contactRoleSelect", c.role);
       setVal("contactTimeSelect", c.contactTime);
+    }
+
+    // Load Configurations (Flat or Land)
+    if (d.configurations && d.configurations.length > 0) {
+      const isLand = /plot|land/i.test(d.propertyType || '');
+      if (isLand) {
+        // Find existing row to clear or reuse
+        const container = document.getElementById("landConfigContainer");
+        if (container) {
+           container.innerHTML = ""; // Clear default empty row
+           d.configurations.forEach(cfg => {
+             const addBtn = document.getElementById("addLandConfigBtn");
+             if(addBtn) {
+                 addBtn.click(); // Add a row using our standard function
+                 const newRow = container.lastElementChild;
+                 if(newRow) {
+                     const nameInput = newRow.querySelector('.land-config-name');
+                     const builtupInput = newRow.querySelector('.land-config-builtup');
+                     const builtupUnit = newRow.querySelector('.land-config-builtup-unit');
+                     const priceInput = newRow.querySelector('.land-config-price');
+                     if (nameInput) nameInput.value = cfg.custom || '';
+                     if (builtupInput) builtupInput.value = cfg.builtup || '';
+                     if (builtupUnit) builtupUnit.value = cfg.builtupUnit || 'Square Foot';
+                     if (priceInput) priceInput.value = cfg.price || '';
+                 }
+             }
+           });
+        }
+      } else {
+        // Future logic for flat configuration drafting can go here if needed.
+        // Usually, apartment configs require image mapping which is complex for simple drafts.
+      }
     }
 
     window.showToast("Progress resumed from your last draft!", "success");
