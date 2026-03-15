@@ -2862,9 +2862,31 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      submitBtn.innerText = editId
-        ? "⏳ Updating property..."
-        : "⏳ Posting property...";
+      submitBtn.innerText = editId ? "⏳ Updating..." : "⏳ Posting...";
+
+      // Show full-screen overlay
+      const overlay = document.getElementById("submissionOverlay");
+      const overlayLoading = document.getElementById("overlayLoading");
+      const overlaySuccess = document.getElementById("overlaySuccess");
+      const stepUpload = document.getElementById("stepUpload");
+      const stepSave = document.getElementById("stepSave");
+      const stepDone = document.getElementById("stepDone");
+
+      if (overlay) {
+        overlay.style.display = "flex";
+        // Step 1 is active by default
+      }
+
+      // Advance to step 2 after short delay
+      const t1 = setTimeout(() => {
+        if (stepSave) {
+          stepSave.style.opacity = "1";
+          stepSave.querySelector(".step-icon").style.background = "#e84118";
+          const spinner = document.createElement("div");
+          spinner.style.cssText = "margin-left:auto; width:16px; height:16px; border:2px solid #e2e8f0; border-top-color:#e84118; border-radius:50%; animation:spin 0.8s linear infinite;";
+          stepSave.appendChild(spinner);
+        }
+      }, 3000);
 
       if (editId) {
         await convex.mutation("properties:updateProperty", {
@@ -2875,7 +2897,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           videos: videoData,
           brochure: brochureData,
         });
-        window.showToast("Property updated successfully!", "success");
       } else {
         await convex.mutation("properties:createProperty", {
           ...formState,
@@ -2887,10 +2908,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
         // Delete draft after success
         await convex.mutation("drafts:deleteDraft", { token: getToken() });
-        window.showToast("Property posted successfully!", "success");
       }
-      window.location.href = "dashboard.html";
+
+      clearTimeout(t1);
+
+      // Show step 3 (done) then success screen
+      if (stepDone) {
+        stepDone.style.opacity = "1";
+        stepDone.querySelector(".step-icon").style.background = "#22c55e";
+      }
+
+      await new Promise(r => setTimeout(r, 800));
+
+      // Transition to success
+      if (overlayLoading) overlayLoading.style.display = "none";
+      if (overlaySuccess) {
+        overlaySuccess.style.display = "flex";
+        overlaySuccess.style.animation = "fadeInUp 0.5s ease";
+      }
     } catch (err) {
+      // Hide overlay on error
+      const overlay = document.getElementById("submissionOverlay");
+      if (overlay) overlay.style.display = "none";
+
       console.error("Failed to post property:", err);
       window.showToast("Error posting property: " + err.message, "error");
     } finally {
