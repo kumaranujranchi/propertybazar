@@ -616,7 +616,7 @@ body {
 .btn-primary-large {
   width: 100%;
   background: var(--primary);
-  color: #fff;
+  color: #fff !important;
   padding: 16px;
   border-radius: 8px;
   font-weight: 700;
