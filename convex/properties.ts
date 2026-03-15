@@ -1,6 +1,16 @@
 import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 
+const VALIDITY_PERIODS: Record<string, number> = {
+  free: 30,
+  premium: 90,
+  agent: 180,
+  agent_starter: 90,
+  agent_pro: 180,
+};
+
+const GRACE_PERIOD_DAYS = 30;
+
 export const getProperties = query({
   args: {
     transactionType: v.optional(v.string()),
@@ -16,25 +26,35 @@ export const getProperties = query({
     }
     const results = await propertiesQuery.order("desc").collect();
 
+    // Cache user tiers to avoid redundant fetching
+    const userTierCache: Record<string, string> = {};
+
     // Only show properties that are APPROVED (active) or legacy (no status set)
-    // Reject pending and rejected ones. For legacy entries (no approvalStatus),
-    // only show if still within 60-day window.
-    const visibleResults = results.filter((p: any) => {
+    // and within their tier-aware validity window.
+    const propertiesWithTiers = await Promise.all(results.map(async (p: any) => {
+      if (!p.userId) return { ...p, tier: 'free' };
+      if (!userTierCache[p.userId]) {
+        const user = await ctx.db.get(p.userId);
+        userTierCache[p.userId] = user?.subscriptionTier || 'free';
+      }
+      return { ...p, tier: userTierCache[p.userId] };
+    }));
+
+    const visibleResults = propertiesWithTiers.filter((p: any) => {
       const status = (p.approvalStatus || "").toLowerCase();
 
       // Always hide rejected
       if (status === "rejected") return false;
 
-      // Admin-approved listings: always show
-      if (status === "active") return true;
-
       // Pending: hide
       if (status === "pending") return false;
 
-      // Legacy listings (no approvalStatus) — show if activated within 60 days
+      // Tier-aware validity check
       const activationTime = p.lastActivatedAt || p._creationTime;
-      const daysSinceActivation = (Date.now() - activationTime) / (1000 * 60 * 60 * 24);
-      if (daysSinceActivation > 60) return false;
+      const daysActive = (Date.now() - activationTime) / (1000 * 60 * 60 * 24);
+      const allowedDays = VALIDITY_PERIODS[p.tier] || 30;
+
+      if (daysActive > allowedDays) return false;
 
       return true;
     });
@@ -346,30 +366,67 @@ export const updateProperty = mutation({
 export const deleteOldProperties = internalMutation({
   args: {},
   handler: async (ctx: any) => {
-    // 60 days ago in milliseconds
-    const sixtyDaysAgo = Date.now() - 60 * 24 * 60 * 60 * 1000;
+    const properties = await ctx.db.query("properties").collect();
+    const userTierCache: Record<string, string> = {};
 
-    // Find properties created before 60 days ago
-    const oldProperties = await ctx.db
-      .query("properties")
-      .filter((q: any) => q.lt(q.field("_creationTime"), sixtyDaysAgo))
-      .collect();
+    let deletedCount = 0;
 
-    for (const prop of oldProperties) {
-      // 1. Delete associated photos from storage
-      for (const storageId of prop.photos || []) {
-        try {
-          await ctx.storage.delete(storageId as any);
-        } catch (e) {
-          console.error("Failed to delete photo:", storageId, e);
-        }
+    for (const prop of properties) {
+      if (!prop.userId) continue;
+
+      // Get tier
+      if (!userTierCache[prop.userId]) {
+        const user = await ctx.db.get(prop.userId);
+        userTierCache[prop.userId] = user?.subscriptionTier || 'free';
       }
-      // 2. Delete the property record
-      await ctx.db.delete(prop._id);
+      const tier = userTierCache[prop.userId];
+
+      const activeDays = VALIDITY_PERIODS[tier] || 30;
+      const totalDaysUntilHardDelete = activeDays + GRACE_PERIOD_DAYS;
+
+      const activationTime = prop.lastActivatedAt || prop._creationTime;
+      const daysSinceActivation = (Date.now() - activationTime) / (1000 * 60 * 60 * 24);
+
+      if (daysSinceActivation > totalDaysUntilHardDelete) {
+        // 1. Delete associated photos from storage
+        for (const photo of prop.photos || []) {
+          try {
+            const sid = typeof photo === 'string' ? photo : photo.storageId;
+            if (sid) await ctx.storage.delete(sid as any);
+          } catch (e) {
+            console.error("Failed to delete photo:", photo, e);
+          }
+        }
+        // 2. Delete the property record
+        await ctx.db.delete(prop._id);
+        deletedCount++;
+      }
     }
 
-    return { deletedCount: oldProperties.length };
+    return { deletedCount };
   }
+});
+
+export const repostProperty = mutation({
+  args: { token: v.string(), id: v.id("properties") },
+  handler: async (ctx: any, args: any) => {
+    const session = await ctx.db
+      .query("sessions")
+      .withIndex("by_token", (q: any) => q.eq("token", args.token))
+      .first();
+    if (!session || session.expiresAt < Date.now()) throw new Error("Unauthorized");
+
+    const prop = await ctx.db.get(args.id);
+    if (!prop) throw new Error("Property not found");
+    if (prop.userId !== session.userId) throw new Error("Unauthorized: You do not own this property");
+
+    await ctx.db.patch(args.id, {
+      lastActivatedAt: Date.now(),
+      approvalStatus: "pending", // Reset to pending for re-validation if needed
+    });
+
+    return { success: true };
+  },
 });
 
 export const reactivateProperty = mutation({
