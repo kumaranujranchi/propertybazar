@@ -215,6 +215,9 @@ export const getMe = query({
       reraStatus: user.reraStatus,
       settings: user.settings,
       isAdmin: user.isAdmin || false,
+      telegramChatId: user.telegramChatId,
+      telegramUsername: user.telegramUsername,
+      telegramFirstName: user.telegramFirstName,
     };
   },
 });
