@@ -16,15 +16,25 @@ export const getProperties = query({
     }
     const results = await propertiesQuery.order("desc").collect();
 
-    // Only show properties that are APPROVED and NOT EXPIRED (30 days)
-    // Properties with no approvalStatus are visible by default (older listings)
+    // Only show properties that are APPROVED (active) or legacy (no status set)
+    // Reject pending and rejected ones. For legacy entries (no approvalStatus),
+    // only show if still within 60-day window.
     const visibleResults = results.filter((p: any) => {
-      // Hide rejected or pending properties
-      if (p.approvalStatus === "rejected" || p.approvalStatus === "pending") return false;
+      const status = (p.approvalStatus || "").toLowerCase();
 
+      // Always hide rejected
+      if (status === "rejected") return false;
+
+      // Admin-approved listings: always show
+      if (status === "active") return true;
+
+      // Pending: hide
+      if (status === "pending") return false;
+
+      // Legacy listings (no approvalStatus) — show if activated within 60 days
       const activationTime = p.lastActivatedAt || p._creationTime;
       const daysSinceActivation = (Date.now() - activationTime) / (1000 * 60 * 60 * 24);
-      if (daysSinceActivation > 30) return false;
+      if (daysSinceActivation > 60) return false;
 
       return true;
     });
