@@ -2112,7 +2112,8 @@
           if (slider && similar.length > 0) {
             slider.innerHTML = similar.map(sp => {
               const spPrice = sp.pricing?.expectedPrice || sp.pricing?.rent || sp.pricing?.pricePerDay || 0;
-              let spPriceStr = spPrice >= 10000000 ? `₹${(spPrice / 10000000).toFixed(2)} Cr` : (spPrice >= 100000 ? `₹${(spPrice / 100000).toFixed(2)} Lac` : `₹${spPrice.toLocaleString('en-IN')}`);
+              const spIsPor = sp.pricing?.isPriceOnRequest === true || sp.pricing?.priceType === 'Price on request';
+              let spPriceStr = (spIsPor || spPrice === 0) ? 'Price on Request' : (spPrice >= 10000000 ? `₹${(spPrice / 10000000).toFixed(2)} Cr` : (spPrice >= 100000 ? `₹${(spPrice / 100000).toFixed(2)} Lac` : `₹${spPrice.toLocaleString('en-IN')}`));
               const spPhoto = (sp.photos?.[0]?.url || sp.photos?.[0] || 'images/property-1.webp');
               const spLoc = `${sp.location?.locality || ''}${sp.location?.locality && sp.location?.city ? ', ' : ''}${sp.location?.city || ''}`;
 
