@@ -402,7 +402,7 @@
       <div class="subnav-links">
         <a href="#overview" class="subnav-link active">Overview</a>
         <a href="#amenities" class="subnav-link">Amenities</a>
-        ${!isLand ? '<a href="#floorPlanSection" class="subnav-link">Floor Plan</a>' : ''}
+        <a href="#floorPlanSection" class="subnav-link" id="subnavFloorPlan">Floor Plan</a>
         <a href="#location" class="subnav-link">Location</a>
         <a href="#faq" class="subnav-link">FAQ</a>
       </div>
@@ -841,6 +841,10 @@
 
         // ---- Helpers ----
         const isLand = /plot|land/i.test(p.propertyType || '');
+        if (isLand) {
+          const subnavFP = document.getElementById('subnavFloorPlan');
+          if (subnavFP) subnavFP.style.display = 'none';
+        }
         const isCommercial = /commercial|shop|office|warehouse/i.test(p.propertyType || '');
         const bhkRaw = p.details?.bhk || '';
         const bhk = bhkRaw.toString().replace(/bhk/i, '').trim();
