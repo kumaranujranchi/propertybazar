@@ -146,9 +146,16 @@
         try {
           const bannerData = await convex.query("banners:getBanner", { city, type });
           
+          // We show the banner section for any valid city (either custom or default fallback)
+          bannerEl.style.setProperty('display', 'flex', 'important');
+          heroFallback.style.display = 'none';
+
+          const titleEl = document.getElementById('bannerTitle');
+          const subtitleEl = document.getElementById('bannerSubtitle');
+          const ctaEl = document.getElementById('bannerCta');
+
           if (bannerData && bannerData.url) {
-            // Parse bgPosition: 0-100 number = object-position-y %
-            // With aspect-ratio container, this is zoom-independent.
+            // Custom Banner Data
             const pos = bannerData.bgPosition;
             let yPct = 50;
             if (typeof pos === 'number') {
@@ -161,7 +168,6 @@
             img.src = bannerData.url;
             img.style.objectPosition = `center ${yPct}%`;
 
-            // Apply overlay color + opacity as a CSS custom property on the banner element
             const rawColor = bannerData.overlayColor || '#e84118';
             const opacity  = bannerData.overlayOpacity ?? 0.9;
             const r = parseInt(rawColor.slice(1,3), 16);
@@ -171,16 +177,8 @@
             bannerEl.style.setProperty('--banner-overlay-bg', rgba);
             bannerEl.style.setProperty('--banner-overlay-solid', rawColor);
 
-            const titleEl = document.getElementById('bannerTitle');
-            const subtitleEl = document.getElementById('bannerSubtitle');
-            const ctaEl = document.getElementById('bannerCta');
-
-            if (titleEl) {
-              titleEl.textContent = bannerData.title || `Best Properties for ${type} in ${city}`;
-            }
-            if (subtitleEl) {
-              subtitleEl.textContent = bannerData.subtitle || `Explore handpicked ${type} listings in ${city}. Find your dream property today with 24Dismil.`;
-            }
+            if (titleEl) titleEl.textContent = bannerData.title || `Best Properties for ${type} in ${city}`;
+            if (subtitleEl) subtitleEl.textContent = bannerData.subtitle || `Explore handpicked ${type} listings in ${city}. Find your dream property today with 24Dismil.`;
             if (ctaEl) {
               if (bannerData.ctaLink) {
                 ctaEl.href = bannerData.ctaLink;
@@ -189,17 +187,28 @@
                 ctaEl.style.display = 'none';
               }
             }
+          } else {
+            // Default Fallback for the city
+            img.src = 'images/hero-bg.webp';
+            img.style.objectPosition = 'center 50%';
+            
+            // Standard theme colors for fallback
+            const themeColor = '#e84118';
+            const rgba = `rgba(232, 65, 24, 0.9)`;
+            bannerEl.style.setProperty('--banner-overlay-bg', rgba);
+            bannerEl.style.setProperty('--banner-overlay-solid', themeColor);
 
-            bannerEl.style.setProperty('display', 'flex', 'important');
-            heroFallback.style.display = 'none';
-            return;
+            if (titleEl) titleEl.textContent = `Best Properties for ${type === 'buy' ? 'Sale' : type === 'rent' ? 'Rent' : 'Business'} in ${city}`;
+            if (subtitleEl) subtitleEl.textContent = `Explore verified ${type} listings in ${city}. Browse apartments, villas, and plots with ease on 24Dismil.`;
+            if (ctaEl) ctaEl.style.display = 'none';
           }
+          return;
         } catch (err) {
           console.error("Failed to fetch banner", err);
         }
       }
 
-      // Default fallback
+      // Default fallback (No city selected)
       bannerEl.style.display = 'none';
       heroFallback.style.display = 'block';
     }
