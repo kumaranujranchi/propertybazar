@@ -40,6 +40,8 @@ export const disconnectTelegram = mutation({
 
     await ctx.db.patch(session.userId, {
       telegramChatId: undefined,
+      telegramUsername: undefined,
+      telegramFirstName: undefined,
     });
 
     return { success: true };
@@ -90,11 +92,20 @@ export const handleUpdate = action({
       }
 
       if (codeOrToken) {
-        console.log(`Attempting to link chatId ${chatId} with code/token ${codeOrToken.substring(0, 6)}...`);
-        const linked = await ctx.runMutation(internal.telegram.linkUserByCodeOrToken, { chatId, codeOrToken });
+        const from = update.callback_query?.from || update.message?.from;
+        const username = from?.username;
+        const firstName = from?.first_name;
+
+        console.log(`Attempting to link chatId ${chatId} for ${firstName} (${username}) with code/token ${codeOrToken.substring(0, 6)}...`);
+        const linked = await ctx.runMutation(internal.telegram.linkUserByCodeOrToken, { 
+          chatId, 
+          codeOrToken,
+          username,
+          firstName
+        });
         
         if (linked) {
-          await sendMessage(chatId, "✅ Account linked! You can now post properties by typing /post");
+          await sendMessage(chatId, `✅ Account linked! Welcome ${firstName || 'friend'}. You can now post properties by typing /post`);
           return;
         } else {
           await sendMessage(chatId, "❌ Link failed. Please check your code or click 'Connect Bot' again from the Dashboard.");
@@ -220,9 +231,14 @@ export const generateLinkCode = mutation({
 });
 
 export const linkUserByCodeOrToken = internalMutation({
-  args: { chatId: v.string(), codeOrToken: v.string() },
+  args: { 
+    chatId: v.string(), 
+    codeOrToken: v.string(),
+    username: v.optional(v.string()),
+    firstName: v.optional(v.string()),
+  },
   handler: async (ctx, args) => {
-    const { chatId, codeOrToken } = args;
+    const { chatId, codeOrToken, username, firstName } = args;
 
     // 1. Try linking by 6-digit code
     if (/^\d{6}$/.test(codeOrToken)) {
@@ -232,7 +248,11 @@ export const linkUserByCodeOrToken = internalMutation({
         .first();
 
       if (codeRecord && codeRecord.expiresAt > Date.now()) {
-        await ctx.db.patch(codeRecord.userId, { telegramChatId: chatId });
+        await ctx.db.patch(codeRecord.userId, { 
+          telegramChatId: chatId,
+          telegramUsername: username,
+          telegramFirstName: firstName,
+        });
         await ctx.db.delete(codeRecord._id);
         return true;
       }
@@ -245,7 +265,11 @@ export const linkUserByCodeOrToken = internalMutation({
       .first();
 
     if (session) {
-      await ctx.db.patch(session.userId, { telegramChatId: chatId });
+      await ctx.db.patch(session.userId, { 
+        telegramChatId: chatId,
+        telegramUsername: username,
+        telegramFirstName: firstName,
+      });
       return true;
     }
 

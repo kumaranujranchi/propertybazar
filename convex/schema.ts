@@ -48,6 +48,8 @@ export default defineSchema({
     })),
     isAdmin: v.optional(v.boolean()),
     telegramChatId: v.optional(v.string()),
+    telegramUsername: v.optional(v.string()),
+    telegramFirstName: v.optional(v.string()),
   }).index("by_email", ["email"])
     .index("by_telegramChatId", ["telegramChatId"]),
 
