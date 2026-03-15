@@ -165,13 +165,8 @@ function renderHomepageSliders(props) {
   const newLaunchSlider = document.getElementById("newLaunchSlider");
   const newlyAddedSlider = document.getElementById("newlyAddedSlider");
 
-  if (featuredSlider) {
-    // Take first 5 for featured
-    const featured = props.slice(0, 5);
-    featuredSlider.innerHTML = featured
-      .map((p) => buildPropertyCardHTML(p))
-      .join("");
-  }
+  // Featured section - now kept hardcoded as per user request
+  // (Removed dynamic population logic)
 
   // Newly Added – 10 most recent listings (Convex already returns in desc order)
   if (newlyAddedSlider) {
