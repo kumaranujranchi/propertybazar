@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
   <style>
     /* Responsive Grid for Post Property */
@@ -229,6 +230,29 @@
     @media (max-width: 480px) {
       .config-row-fields { flex-direction: column; }
       .config-field { min-width: unset; width: 100%; }
+    }
+
+    /* Cropper Modal Styles */
+    #cropModal .custom-modal {
+      max-width: 800px;
+      width: 95%;
+      padding: 20px;
+    }
+    .crop-container {
+      max-height: 60vh;
+      overflow: hidden;
+      background: #f0f0f0;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    .crop-container img {
+      max-width: 100%;
+      display: block;
+    }
+    .crop-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
     }
   </style>
 </head>
@@ -2610,4 +2634,25 @@
       </div>
     </div>
   </div>
+
+  <!-- CROP MODAL -->
+  <div class="custom-modal-overlay" id="cropModal">
+    <div class="custom-modal">
+      <h3 class="custom-modal-title" style="text-align: left; margin-bottom: 20px;">
+        <i class="fa-solid fa-crop-simple" style="color: var(--primary);"></i> Crop Property Image
+      </h3>
+      <div class="crop-container">
+        <img id="cropImageTarget" src="" alt="To crop">
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted); text-align: left; margin-bottom: 20px;">
+        <i class="fa-solid fa-circle-info"></i> Please select the area you want to display. We use a 3:2 aspect ratio for the gallery.
+      </p>
+      <div class="crop-actions">
+        <button class="modal-btn modal-btn-outline" id="btnCancelCrop" style="padding: 10px 24px;">Cancel</button>
+        <button class="modal-btn modal-btn-primary" id="btnApplyCrop" style="padding: 10px 24px;">Apply Crop</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 </html>

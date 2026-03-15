@@ -78,7 +78,8 @@ function applyWatermark(file, svgString, options = {}) {
 const photoFileInput = document.getElementById("photoFileInput");
 const photoUploadArea = document.getElementById("photoUploadArea");
 const photoPreviewGrid = document.getElementById("photoPreviewGrid");
-const selectedFiles = [];
+const selectedFiles = []; // Stores processed Files (watermarked + compressed)
+const originalFiles = []; // Stores original Files for re-cropping
 const selectedVideos = []; // Added for video gallery
 let selectedBrochureFile = null;
 let existingBrochure = null;
@@ -323,10 +324,76 @@ async function handleFiles(files, type = "photo") {
         WATERMARK_SVG,
       );
       selectedFiles.push(watermarkedFile);
+      originalFiles.push(file); // Store original for cropping
       addPreview(watermarkedFile, selectedFiles.length - 1, "photo");
     }
     if (uploadArea) uploadArea.style.opacity = "1";
   }
+}
+
+let cropper = null;
+function openCropModal(index) {
+  const modal = document.getElementById("cropModal");
+  const cropImageTarget = document.getElementById("cropImageTarget");
+  const btnApply = document.getElementById("btnApplyCrop");
+  const btnCancel = document.getElementById("btnCancelCrop");
+  const originalFile = originalFiles[index];
+
+  if (!originalFile || !modal || !cropImageTarget) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    cropImageTarget.src = e.target.result;
+    modal.classList.add("open");
+
+    if (cropper) cropper.destroy();
+    cropper = new Cropper(cropImageTarget, {
+      aspectRatio: 3 / 2,
+      viewMode: 2,
+      autoCropArea: 1,
+    });
+  };
+  reader.readAsDataURL(originalFile);
+
+  const closeCropModal = () => {
+    modal.classList.remove("open");
+    if (cropper) {
+      cropper.destroy();
+      cropper = null;
+    }
+  };
+
+  btnCancel.onclick = closeCropModal;
+
+  btnApply.onclick = async () => {
+    if (!cropper) return;
+    const canvas = cropper.getCroppedCanvas({
+      maxWidth: 1600,
+      maxHeight: 1600,
+    });
+
+    canvas.toBlob(async (blob) => {
+      const croppedFile = new File([blob], originalFile.name.replace(/\.[^/.]+$/, "") + "_cropped.webp", {
+        type: "image/webp",
+      });
+
+      // Show loading toast or something?
+      const compressedFile = await compressImage(croppedFile);
+      const watermarkedFile = await applyWatermark(compressedFile, WATERMARK_SVG);
+
+      selectedFiles[index] = watermarkedFile;
+
+      // Update preview UI
+      const card = photoPreviewGrid.querySelector(`.preview-card[data-index="${index}"]`);
+      if (card) {
+        const img = card.querySelector("img");
+        if (img) img.src = URL.createObjectURL(watermarkedFile);
+      }
+
+      closeCropModal();
+      window.showToast("Image cropped successfully!", "success");
+    }, "image/webp", 0.9);
+  };
 }
 
 const photoCategories = [
@@ -445,18 +512,32 @@ function addPreview(file, index, type = "photo") {
     const removeBtn = document.createElement("div");
     removeBtn.textContent = "✕";
     removeBtn.style.cssText =
-      "position:absolute; top:4px; right:4px; background:rgba(232,65,24,0.9); color:#fff; font-size:10px; cursor:pointer; width:18px; height:18px; display:flex; align-items:center; justify-content:center; border-radius:50%;";
+      "position:absolute; top:4px; right:4px; background:rgba(232,65,24,0.9); color:#fff; font-size:10px; cursor:pointer; width:18px; height:18px; display:flex; align-items:center; justify-content:center; border-radius:50%; z-index:11;";
     removeBtn.addEventListener("click", () => {
       const arr = isVideo ? selectedVideos : selectedFiles;
       const idx = parseInt(wrap.dataset.index);
       arr.splice(idx, 1);
+      if (!isVideo) originalFiles.splice(idx, 1);
       wrap.remove();
-      [...grid.querySelectorAll(".preview-card")].forEach(
-        (el, i) => (el.dataset.index = i),
-      );
+      // Re-index remaining cards
+      const container = isVideo ? document.getElementById("videoPreviewGrid") : photoPreviewGrid;
+      container.querySelectorAll(".preview-card").forEach((c, i) => {
+        c.dataset.index = i;
+        const radio = c.querySelector('input[type="radio"]');
+        if (radio) radio.value = i;
+      });
     });
-
     wrap.appendChild(removeBtn);
+
+    // Crop Button (Photos only)
+    if (!isVideo) {
+      const cropBtn = document.createElement("div");
+      cropBtn.innerHTML = '<i class="fa-solid fa-crop-simple"></i> Crop';
+      cropBtn.style.cssText =
+        "position:absolute; top:4px; left:4px; background:rgba(0,0,0,0.6); color:#fff; font-size:10px; cursor:pointer; padding:2px 8px; border-radius:4px; display:flex; align-items:center; gap:4px; z-index:11; font-weight:600;";
+      cropBtn.onclick = () => openCropModal(parseInt(wrap.dataset.index));
+      wrap.appendChild(cropBtn);
+    }
     grid.appendChild(wrap);
   };
   reader.readAsDataURL(file);
