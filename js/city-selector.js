@@ -152,14 +152,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Optional: Trigger a custom event or refresh data if needed
         window.dispatchEvent(new CustomEvent('cityChanged', { detail: { city } }));
         
-        // If on properties page, update filter
+        // If on properties page, reload with new city parameter
         if (window.location.pathname.includes('properties.html')) {
             const url = new URL(window.location.href);
             url.searchParams.set('city', city);
-            window.history.pushState({}, '', url);
-            if (typeof window.renderFilteredProperties === 'function') {
-                window.renderFilteredProperties();
-            }
+            // Replacing pushState with a full location.href update to force a clean reload as requested
+            window.location.href = url.toString();
         }
     }
 
