@@ -56,7 +56,7 @@ function initNav() {
       const url = new URL(link.href, window.location.origin);
       const type = url.searchParams.get("type");
 
-      if (type && window.location.pathname.includes("properties.html")) {
+      if (type && window.location.pathname.includes("properties")) {
         e.preventDefault();
 
         // Update URL without reload
@@ -1043,7 +1043,7 @@ function setCity(city) {
     window.dispatchEvent(new CustomEvent("cityChanged", { detail: { city } }));
 
     // If on properties page, update URL and re-render
-    if (window.location.pathname.includes("properties.html")) {
+    if (window.location.pathname.includes("properties")) {
       const url = new URL(window.location.href);
       url.searchParams.set("city", city);
       window.history.pushState({}, "", url);
@@ -1109,7 +1109,7 @@ function initSearchTabs() {
       });
 
       // Update URL if on properties page
-      if (window.location.pathname.includes("properties.html")) {
+      if (window.location.pathname.includes("properties")) {
         const newUrl = new URL(window.location.href);
         newUrl.searchParams.set("type", type);
         const selCity = localStorage.getItem("selectedCity");

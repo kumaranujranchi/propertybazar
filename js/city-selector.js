@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.dispatchEvent(new CustomEvent('cityChanged', { detail: { city } }));
         
         // If on properties page, reload with new city parameter
-        if (window.location.pathname.includes('properties.html') || window.location.href.includes('properties.html')) {
+        if (window.location.pathname.includes('properties') || window.location.href.includes('properties')) {
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set('city', city);
             // Updating window.location.search directly is more robust for forcing a reload
