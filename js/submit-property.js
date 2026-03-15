@@ -1888,9 +1888,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Configurations UI: Add / Remove rows
-  const addConfigBtnEl = document.getElementById("addConfigBtn");
-  if (addConfigBtnEl) {
-    addConfigBtnEl.addEventListener("click", () => {
+  // Configurations UI: Add / Remove rows (Event Delegation)
+  document.addEventListener("click", (e) => {
+    // 1. Add Apartment Configuration
+    if (e.target.closest("#addConfigBtn")) {
       const container = document.getElementById("configContainer");
       if (!container) return;
       const row = document.createElement("div");
@@ -1961,28 +1962,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
       container.appendChild(row);
       updateConfigRemoveButtons();
-    });
-  }
+    }
 
-  function updateConfigRemoveButtons() {
-    const rows = document.querySelectorAll("#configContainer .config-row");
-    rows.forEach((r, idx) => {
-      const btn = r.querySelector(".remove-config-btn");
-      if (!btn) return;
-      btn.style.display = rows.length > 1 ? "inline-block" : "none";
-      btn.onclick = () => {
-        r.remove();
+    // 2. Remove Apartment Configuration
+    if (e.target.closest(".remove-config-btn")) {
+      const row = e.target.closest(".config-row");
+      if (row) {
+        row.remove();
         updateConfigRemoveButtons();
-      };
-    });
-  }
-  // Initialize remove buttons for any existing rows
-  updateConfigRemoveButtons();
+      }
+    }
 
-  // ========== LAND CONFIGURATIONS UI ==========
-  const addLandConfigBtnEl = document.getElementById("addLandConfigBtn");
-  if (addLandConfigBtnEl) {
-    addLandConfigBtnEl.addEventListener("click", () => {
+    // 3. Add Land Configuration
+    if (e.target.closest("#addLandConfigBtn")) {
       const container = document.getElementById("landConfigContainer");
       if (!container) return;
       const row = document.createElement("div");
@@ -2055,22 +2047,38 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
       container.appendChild(row);
       updateLandConfigRemoveButtons();
+    }
+
+    // 4. Remove Land Configuration
+    if (e.target.closest(".remove-land-config-btn")) {
+      const row = e.target.closest(".land-config-row");
+      if (row) {
+        row.remove();
+        updateLandConfigRemoveButtons();
+      }
+    }
+  });
+
+  function updateConfigRemoveButtons() {
+    const rows = document.querySelectorAll("#configContainer .config-row");
+    rows.forEach((r) => {
+      const btn = r.querySelector(".remove-config-btn");
+      if (btn) btn.style.display = rows.length > 1 ? "inline-block" : "none";
     });
   }
 
   function updateLandConfigRemoveButtons() {
     const rows = document.querySelectorAll("#landConfigContainer .land-config-row");
-    rows.forEach((r, idx) => {
+    rows.forEach((r) => {
       const btn = r.querySelector(".remove-land-config-btn");
-      if (!btn) return;
-      btn.style.display = rows.length > 1 ? "inline-block" : "none";
-      btn.onclick = () => {
-        r.remove();
-        updateLandConfigRemoveButtons();
-      };
+      if (btn) btn.style.display = rows.length > 1 ? "inline-block" : "none";
     });
   }
+
+  // Initialize remove buttons
+  updateConfigRemoveButtons();
   updateLandConfigRemoveButtons();
+
 
   // ========== DRAFT SYSTEM ==========
   function getFormState() {

@@ -1460,26 +1460,26 @@
               return '';
             })()}
             <br>
-            ${(() => {
-              if (p.isFeatured)
-                return '<span class="prop-status-tag status-featured"><i class="fa-solid fa-star"></i> Featured Posting</span>';
-              
-              const tier = p.tier || 'free';
-              const VALIDITY = { free: 30, premium: 90, agent: 180, agent_starter: 90, agent_pro: 180 };
-              const allowedDays = VALIDITY[tier] || 30;
-              
-              const activationTime = p.lastActivatedAt || p._creationTime;
-              const diff = Date.now() - activationTime;
-              const daysUsed = Math.floor(diff / (1000 * 60 * 60 * 24));
-              const daysLeft = Math.max(0, allowedDays - daysUsed);
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px;">
+              ${p.isFeatured ? '<span class="prop-status-tag status-featured" style="margin-right:0"><i class="fa-solid fa-star"></i> Featured Posting</span>' : ""}
+              ${(() => {
+                const tier = p.tier || 'free';
+                const VALIDITY = { free: 30, premium: 90, agent: 180, agent_starter: 90, agent_pro: 180 };
+                const allowedDays = VALIDITY[tier] || 30;
+                
+                const activationTime = p.lastActivatedAt || p._creationTime;
+                const diff = Date.now() - activationTime;
+                const daysUsed = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const daysLeft = Math.max(0, allowedDays - daysUsed);
 
-              if (daysLeft <= 0) {
-                const graceLeft = 30 - (daysUsed - allowedDays);
-                return `<span class="prop-status-tag" style="background:#fee2e2;color:#b91c1c"><i class="fa-solid fa-circle-exclamation"></i> Deactivated (${Math.max(0, Math.floor(graceLeft))} days before deletion)</span>`;
-              }
-              
-              return `<span class="prop-status-tag ${daysLeft < 7 ? "status-expiry" : "status-active"}">${daysLeft} days remaining</span>`;
-            })()}
+                if (daysLeft <= 0) {
+                  const graceLeft = 30 - (daysUsed - allowedDays);
+                  return `<span class="prop-status-tag" style="background:#fee2e2;color:#b91c1c;margin:0"><i class="fa-solid fa-circle-exclamation"></i> Deactivated (${Math.max(0, Math.floor(graceLeft))} days left)</span>`;
+                }
+                
+                return `<span class="prop-status-tag ${daysLeft < 7 ? "status-expiry" : "status-active"}" style="margin:0">${daysLeft} days remaining</span>`;
+              })()}
+            </div>
           </div>
 
           <div class="dash-prop-actions">

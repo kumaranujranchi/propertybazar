@@ -241,6 +241,9 @@ export const getMyProperties = query({
       .order("desc")
       .collect();
 
+    const user = await ctx.db.get(session.userId);
+    const tier = user?.subscriptionTier || "free";
+
     return await Promise.all(
       properties.map(async (p) => {
         const resolvedPhotos = await Promise.all(
@@ -254,7 +257,7 @@ export const getMyProperties = query({
             }
           }),
         );
-        return { ...p, photos: resolvedPhotos.filter(Boolean) };
+        return { ...p, photos: resolvedPhotos.filter(Boolean), tier };
       }),
     );
   },
