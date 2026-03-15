@@ -39,9 +39,17 @@ function buildSpecs(p) {
   return specs;
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
+async function initPropertyLoading() {
   try {
+    console.log("Fetching Convex properties...");
     const convexProps = await convex.query("properties:getProperties", {});
+    console.log("Convex response:", convexProps?.length, "properties found");
+
+    if (!convexProps || !Array.isArray(convexProps)) {
+      console.warn("Invalid response from Convex:", convexProps);
+      return;
+    }
+
     const formatted = convexProps.map((p) => {
       const title = buildTitle(p);
       const specs = buildSpecs(p);
@@ -143,7 +151,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {
     console.error("Error fetching convex properties:", err);
   }
-});
+}
+
+// Start loading
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initPropertyLoading);
+} else {
+  initPropertyLoading();
+}
 
 function renderHomepageSliders(props) {
   const featuredSlider = document.getElementById("featuredSlider");
