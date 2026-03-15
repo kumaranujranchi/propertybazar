@@ -799,7 +799,7 @@
           <div class="dash-nav-item" data-section="plans">
             <i class="fa-solid fa-star"></i> Plan & Subscriptions
           </div>
-          <div class="dash-nav-item" data-section="payments" onclick="document.querySelector('[data-section=plans]').click()">
+          <div class="dash-nav-item" data-section="payments">
             <i class="fa-solid fa-receipt"></i> Payment History
           </div>
           <div class="dash-nav-item" data-section="rera">
@@ -1174,6 +1174,30 @@
                     </tr>
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 5.5: Payment History -->
+          <div class="dash-section" id="sec-payments">
+            <div class="dash-card">
+              <div class="dash-card-title">
+                <i class="fa-solid fa-receipt" style="color:#e84118;"></i> Payment History
+              </div>
+              <div id="paymentHistoryMain" style="padding: 40px 20px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:16px;">
+                <div style="width:72px; height:72px; background:#fef2f2; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-solid fa-receipt" style="font-size:2rem; color:#e84118;"></i>
+                </div>
+                <div>
+                  <h3 style="font-size:18px; font-weight:700; color:#0f172a; margin:0 0 8px;">No Payments Yet</h3>
+                  <p style="color:#64748b; font-size:14px; line-height:1.6; max-width:380px; margin:0 auto;">
+                    Abhi saare plans <strong>bilkul free</strong> hain! 🎉<br>
+                    Jab aap koi paid plan purchase karenge, uski puri payment history yahan dikhai degi — invoice number, date, plan details aur status sab kuch.
+                  </p>
+                </div>
+                <a href="pricing.html" style="margin-top:8px; background:#e84118; color:#fff; font-weight:700; font-size:14px; padding:10px 24px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                  <i class="fa-solid fa-star"></i> Explore Plans
+                </a>
               </div>
             </div>
           </div>
