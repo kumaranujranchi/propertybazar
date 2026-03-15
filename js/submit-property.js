@@ -1920,14 +1920,25 @@ document.addEventListener("DOMContentLoaded", async () => {
              <label class="form-label" style="font-size:12px; margin-bottom:4px; display:block;">Plot Area *</label>
              <div style="display: flex; gap: 8px;">
                 <input type="number" class="form-input land-config-builtup" placeholder="e.g. 1200" style="flex:1;">
-                <select class="form-input land-config-builtup-unit" style="width:100px;">
-                  <option value="Square Foot">sq ft</option>
-                  <option value="Square Yard (Gaj)">sq yd</option>
-                  <option value="Square Meter">sq m</option>
+                <select class="form-input land-config-builtup-unit" style="width:120px;">
+                  <option value="Square Foot">Square Foot</option>
+                  <option value="Square Yard (Gaj)">Square Yard (Gaj)</option>
+                  <option value="Square Meter">Square Meter</option>
                   <option value="Acre">Acre</option>
-                  <option value="Dismil / Decimal">Dismil</option>
+                  <option value="Hectare">Hectare</option>
+                  <option value="Dismil / Decimal">Dismil / Decimal</option>
                   <option value="Kattha">Kattha</option>
                   <option value="Bigha">Bigha</option>
+                  <option value="Kanal">Kanal</option>
+                  <option value="Marla">Marla</option>
+                  <option value="Guntha / Gunta">Guntha / Gunta</option>
+                  <option value="Cent">Cent</option>
+                  <option value="Ground">Ground</option>
+                  <option value="Ankanam">Ankanam</option>
+                  <option value="Biswa">Biswa</option>
+                  <option value="Biswansi">Biswansi</option>
+                  <option value="Lecha">Lecha</option>
+                  <option value="Ares">Ares</option>
                 </select>
              </div>
           </div>
