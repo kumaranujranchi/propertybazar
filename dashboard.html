@@ -328,12 +328,14 @@
         display: inline-block;
       }
       .status-active {
-        background: #d1fae5;
-        color: #065f46;
+        background: rgba(34, 197, 94, 0.1);
+        color: #15803d;
+        border: 1px solid #22c55e;
       }
       .status-expiry {
-        background: #fef3c7;
-        color: #92400e;
+        background: rgba(234, 179, 8, 0.1);
+        color: #a16207;
+        border: 1px solid #eab308;
       }
       .status-featured {
         background: rgba(232, 65, 24, 0.1);
@@ -1477,7 +1479,7 @@
                   return `<span class="prop-status-tag" style="background:#fee2e2;color:#b91c1c;margin:0"><i class="fa-solid fa-circle-exclamation"></i> Deactivated (${Math.max(0, Math.floor(graceLeft))} days left)</span>`;
                 }
                 
-                return `<span class="prop-status-tag ${daysLeft < 7 ? "status-expiry" : "status-active"}" style="margin:0">${daysLeft} days remaining</span>`;
+                return `<span class="prop-status-tag ${daysLeft < 7 ? "status-expiry" : "status-active"}" style="margin:0"><i class="fa-solid fa-clock"></i> ${daysLeft} days remaining</span>`;
               })()}
             </div>
           </div>
