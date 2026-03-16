@@ -620,3 +620,51 @@ export const getPropertyBySlug = query({
     return { ...p, photos: resolvedPhotos.filter(Boolean), videos: resolvedVideos.filter(Boolean), configurations: resolvedConfigurations, brochure: resolvedBrochure, ownerInfo };
   }
 });
+
+export const getForOg = query({
+  args: { id: v.optional(v.string()), slug: v.optional(v.string()) },
+  handler: async (ctx: any, args: any) => {
+    let p = null;
+    
+    if (args.slug) {
+      const slug = args.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const properties = await ctx.db.query('properties').order('desc').collect();
+      p = properties.find((pr: any) => {
+        if (pr.slug && String(pr.slug).toLowerCase() === slug) return true;
+        const projectName = (pr.details && pr.details.projectName) ? String(pr.details.projectName).toLowerCase() : '';
+        const locationName = (pr.location && (pr.location.society || pr.location.locality)) ? String(pr.location.society || pr.location.locality).toLowerCase() : '';
+        for (const name of [projectName, locationName].filter(Boolean)) {
+          if (name.replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug) return true;
+        }
+        return false;
+      });
+    } else if (args.id) {
+      try { p = await ctx.db.get(args.id as any); } catch { /* ignore invalid id */ }
+    }
+
+    if (!p) return null;
+
+    let imageUrl = "https://24dismil.com/images/hero-bg.jpg";
+    if (Array.isArray(p.photos) && p.photos.length > 0) {
+      const firstPhoto = p.photos[0];
+      try {
+        const sid = typeof firstPhoto === 'string' ? firstPhoto : firstPhoto.storageId;
+        const url = await ctx.storage.getUrl(sid as any);
+        if (url) imageUrl = url;
+      } catch { }
+    }
+
+    const titleParts = [];
+    if (p.details?.bhk && p.details.bhk !== 'N/A') titleParts.push(`${p.details.bhk} BHK`);
+    if (p.propertyType) titleParts.push(p.propertyType);
+    if (p.location?.locality) titleParts.push(`in ${p.location.locality}`);
+    
+    const fallbackTitle = titleParts.join(' ');
+    
+    return {
+      title: p.details?.projectName ? `${p.details.projectName} - ${fallbackTitle}` : fallbackTitle,
+      description: p.details?.description ? p.details.description.substring(0, 160) : `Check out this ${fallbackTitle}`,
+      image: imageUrl
+    };
+  }
+});

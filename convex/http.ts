@@ -32,4 +32,42 @@ http.route({
   }),
 });
 
+http.route({
+  path: "/og",
+  method: "GET",
+  handler: httpAction(async (ctx, request) => {
+    // Expected URL format: /og?id=... or /og?slug=...
+    const url = new URL(request.url);
+    const id = url.searchParams.get("id");
+    const slug = url.searchParams.get("slug");
+
+    if (!id && !slug) {
+      return new Response(JSON.stringify({ error: "Missing id or slug" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
+    const ogData = await ctx.runQuery(api.properties.getForOg, {
+      id: id || undefined,
+      slug: slug || undefined,
+    });
+
+    if (!ogData) {
+      return new Response(JSON.stringify({ error: "Not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
+    return new Response(JSON.stringify(ogData), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "public, max-age=3600"
+      }
+    });
+  }),
+});
+
 export default http;
