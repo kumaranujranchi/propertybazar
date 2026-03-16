@@ -1974,9 +1974,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // 3. Add Land Configuration
-    if (e.target.closest("#addLandConfigBtn")) {
+    const addLandBtn = e.target.closest("#addLandConfigBtn");
+    if (addLandBtn) {
+      e.preventDefault();
       const container = document.getElementById("landConfigContainer");
-      if (!container) return;
+      if (!container) {
+        console.error("landConfigContainer not found");
+        return;
+      }
       const row = document.createElement("div");
       row.className = "land-config-row";
       row.style.cssText = "background:var(--bg-light); border:1px solid var(--border); padding:15px; border-radius:8px;";
@@ -2050,8 +2055,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // 4. Remove Land Configuration
-    if (e.target.closest(".remove-land-config-btn")) {
-      const row = e.target.closest(".land-config-row");
+    const removeLandBtn = e.target.closest(".remove-land-config-btn");
+    if (removeLandBtn) {
+      e.preventDefault();
+      const row = removeLandBtn.closest(".land-config-row");
       if (row) {
         row.remove();
         updateLandConfigRemoveButtons();
@@ -2060,7 +2067,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   function updateConfigRemoveButtons() {
-    const rows = document.querySelectorAll("#configContainer .config-row");
+    const container = document.getElementById("configContainer");
+    if (!container) return;
+    const rows = container.querySelectorAll(".config-row");
     rows.forEach((r) => {
       const btn = r.querySelector(".remove-config-btn");
       if (btn) btn.style.display = rows.length > 1 ? "inline-block" : "none";
@@ -2068,7 +2077,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function updateLandConfigRemoveButtons() {
-    const rows = document.querySelectorAll("#landConfigContainer .land-config-row");
+    const container = document.getElementById("landConfigContainer");
+    if (!container) return;
+    const rows = container.querySelectorAll(".land-config-row");
     rows.forEach((r) => {
       const btn = r.querySelector(".remove-land-config-btn");
       if (btn) btn.style.display = rows.length > 1 ? "inline-block" : "none";
