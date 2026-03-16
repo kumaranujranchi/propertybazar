@@ -1462,12 +1462,15 @@ function buildPropertyCardHTML(p) {
       <div class="prop-wishlist">🤍</div>
     </div>
     <div class="prop-body">
-      ${
-        p.projectName
-          ? `<div class="prop-title" style="text-transform:uppercase;">${p.projectName}</div>
-           <div class="prop-subtitle" style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">${p.title}</div>`
-          : `<div class="prop-title">${p.title}</div>`
-      }
+      <div class="prop-title-area" style="min-height: 44px; margin-bottom: 8px;">
+        ${
+          p.projectName
+            ? `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;">${p.projectName}</div>
+               <div class="prop-subtitle" style="font-size: 13px; color: var(--text-muted); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.title}</div>`
+            : `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${p.title}</div>
+               <div class="prop-subtitle" style="font-size: 13px; color: transparent; margin: 0;">&nbsp;</div>`
+        }
+      </div>
       <div class="prop-price" style="font-size:13px;color:var(--text-muted);margin-bottom:6px">${p.priceDisplay}${!p.priceIsPerSqft && p.price_per_sqft ? ` <span class="prop-per">· ₹${p.price_per_sqft?.toLocaleString("en-IN")}/sqft</span>` : ''}</div>
       <div class="prop-location">📍 ${p.location}</div>
       <div class="prop-specs">
@@ -1485,7 +1488,7 @@ function buildPropertyCardHTML(p) {
         }
       </div>
 
-      <div class="prop-footer">
+      <div class="prop-footer" style="margin-top: auto;">
         <div class="badge ${p.status === "ready" ? "badge-success" : "badge-warning"}">${p.status === "ready" ? "✅ Ready to Move" : "🏗️ Under Construction"}</div>
         <div class="prop-contact-btns">
           <button class="prop-btn prop-btn-call" onclick="event.stopPropagation(); window.location.href='${callUrl}'"><i class="fa-solid fa-phone"></i> Call</button>

@@ -1145,6 +1145,7 @@ textarea {
 .cards-slider {
   display: flex;
   gap: 24px;
+  align-items: stretch; /* Force all cards to the same height */
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   padding-bottom: 20px;

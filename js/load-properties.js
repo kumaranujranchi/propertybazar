@@ -240,18 +240,21 @@ function buildPropertyCardHTML(p) {
       ${p.verified ? '<div class="prop-verified" style="background: rgba(16,185,129,0.9); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600"><i class="fa-solid fa-circle-check"></i> Verified</div>' : ""}
     </div>
     <div class="prop-body">
-      ${
-        p.projectName
-          ? `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;">${p.projectName}</div>
-             <div class="prop-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">${p.title}</div>`
-          : `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${p.title}</div>`
-      }
+      <div class="prop-title-area" style="min-height: 44px; margin: 6px 0 8px;">
+        ${
+          p.projectName
+            ? `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;">${p.projectName}</div>
+               <div class="prop-subtitle" style="font-size: 13px; color: var(--text-muted); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.title}</div>`
+            : `<div class="prop-title" style="font-size: 15px; font-weight: 700; color: var(--dark); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${p.title}</div>
+               <div class="prop-subtitle" style="font-size: 13px; color: transparent; margin: 0;">&nbsp;</div>`
+        }
+      </div>
       <div class="prop-price" style="font-size:13px; color:var(--text-muted); margin-bottom:8px">${p.priceDisplay}${!p.priceIsPerSqft && p.price_per_sqft ? ` <span class="prop-per" style="font-size:11px; color:var(--text-muted); font-weight:400">· ₹${p.price_per_sqft?.toLocaleString("en-IN")}/${p.areaUnit}</span>` : ""}</div>
       <div class="prop-location" style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px"><i class="fa-solid fa-location-dot"></i> ${p.location}</div>
       <div class="prop-specs" style="display: flex; gap: 12px; margin-bottom: 16px; font-size: 12px; color: var(--text-muted)">
         ${p.specs.map((s) => `<div class="prop-spec">${s.icon} ${s.label}</div>`).join("")}
       </div>
-      <div class="prop-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 12px">
+      <div class="prop-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 12px; margin-top: auto;">
         <div class="badge ${p.status === "ready" ? "badge-success" : "badge-warning"}" style="font-size: 10px">${p.status === "ready" ? "✅ Ready" : "🏗️ Under Const."}</div>
         <div class="prop-contact-btns">
           <button class="prop-btn prop-btn-call" onclick="event.stopPropagation(); window.location.href='${callUrl}'" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: #f8fafc; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px"><i class="fa-solid fa-phone"></i> Call</button>
