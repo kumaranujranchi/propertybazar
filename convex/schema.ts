@@ -52,6 +52,12 @@ export default defineSchema({
     telegramChatId: v.optional(v.string()),
     telegramUsername: v.optional(v.string()),
     telegramFirstName: v.optional(v.string()),
+    activePlans: v.optional(v.array(v.object({
+      tier: v.string(),
+      listingsLimit: v.number(),
+      expiresAt: v.number(),
+      purchasedAt: v.number(),
+    }))),
   }).index("by_email", ["email"])
     .index("by_telegramChatId", ["telegramChatId"]),
 

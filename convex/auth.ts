@@ -178,12 +178,21 @@ export const getMe = query({
       // Optionally could update DB here, but read-time downgrade is fine
     }
 
-    // Set dynamic limits based on active tier
-    let limit = FREE_PROPERTY_LIMIT;
-    if (activeTier === "premium") limit = 10;
-    if (activeTier === "standard_individual") limit = 2; // 1 free + 1 paid
-    if (activeTier === "agent_starter") limit = 15;
-    if (activeTier === "agent_pro" || activeTier === "agent") limit = 50;
+    // Filter active plans to only non-expired ones
+    const activePlans = (user.activePlans || []).filter(p => p.expiresAt > Date.now());
+
+    // Set dynamic limits based on active tier and active plans
+    // Limit = 1 (Free) + Sum of all active paid plans
+    let paidLimit = activePlans.reduce((sum, p) => sum + p.listingsLimit, 0);
+    const limit = FREE_PROPERTY_LIMIT + paidLimit;
+
+    // Determine primary display tier (the most premium one)
+    let primaryTier = activeTier;
+    if (activePlans.length > 0) {
+      // Priority: premium > standard
+      if (activePlans.some(p => p.tier === "premium")) primaryTier = "premium";
+      else primaryTier = activePlans[activePlans.length - 1].tier;
+    }
 
     // Fetch properties for calculating limits
     const allMyProperties = await ctx.db
@@ -201,7 +210,7 @@ export const getMe = query({
       _id: user._id,
       name: user.name,
       email: user.email,
-      subscriptionTier: activeTier,
+      subscriptionTier: primaryTier,
       subscriptionExpiry: user.subscriptionExpiry,
       propertyCount: allMyProperties.length,
       limit: limit,
@@ -266,7 +275,7 @@ export const getMyProperties = query({
 export const upgradeTier = mutation({
   args: {
     token: v.string(),
-    tier: v.string(), // 'premium', 'agent'
+    tier: v.string(),
     durationDays: v.number(),
   },
   handler: async (ctx, args) => {
@@ -279,11 +288,32 @@ export const upgradeTier = mutation({
       throw new Error("Unauthorized");
     }
 
-    const expiry = Date.now() + args.durationDays * 24 * 60 * 60 * 1000;
+    const user = await ctx.db.get(session.userId);
+    if (!user) throw new Error("User not found");
 
-    await ctx.db.patch(session.userId, {
-      subscriptionTier: args.tier,
-      subscriptionExpiry: expiry,
+    const expiry = Date.now() + args.durationDays * 24 * 60 * 60 * 1000;
+    
+    // Determine listing limit for this plan purchase
+    let listingsLimit = 0;
+    if (args.tier === "premium") listingsLimit = 10;
+    else if (args.tier === "standard_individual") listingsLimit = 1;
+    else if (args.tier === "agent_starter") listingsLimit = 15;
+    else if (args.tier === "agent_pro") listingsLimit = 50;
+
+    const newPlan = {
+      tier: args.tier,
+      listingsLimit,
+      expiresAt: expiry,
+      purchasedAt: Date.now(),
+    };
+
+    const currentPlans = user.activePlans || [];
+    const updatedPlans = [...currentPlans, newPlan];
+
+    await ctx.db.patch(user._id, {
+      subscriptionTier: args.tier, // Still keep the latest tier for simple display
+      subscriptionExpiry: expiry,  // Still keep the latest expiry for legacy compatibility
+      activePlans: updatedPlans,
     });
 
     return { success: true, tier: args.tier, expiresAt: expiry };
