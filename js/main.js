@@ -1455,11 +1455,12 @@ function buildPropertyCardHTML(p) {
   <div class="property-card" onclick="handlePropertyListingClick(event, '${detailUrl}')">
     <div class="prop-img-wrap">
       <img src="${p.image}" alt="${p.title}" loading="lazy">
+      <div class="prop-overlay"></div>
       <div class="prop-type-badge">
         <span class="badge ${p.type === "rent" ? "badge-warning" : "badge-primary"}">${p.type === "rent" ? "RENT" : "BUY"}</span>
       </div>
-      ${p.verified ? '<div class="prop-verified">✓ Verified</div>' : ""}
-      <div class="prop-wishlist">🤍</div>
+      ${p.verified ? '<div class="prop-verified" style="z-index: 2;">✓ Verified</div>' : ""}
+      <div class="prop-wishlist" style="z-index: 2;">🤍</div>
     </div>
     <div class="prop-body">
       <div class="prop-title-area" style="min-height: 44px; margin-bottom: 8px;">

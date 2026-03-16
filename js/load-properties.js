@@ -234,10 +234,11 @@ function buildPropertyCardHTML(p) {
   <div class="property-card" onclick="window.location.href='${detailUrl}'">
     <div class="prop-img-wrap">
       <img src="${p.image}" alt="${p.title}" loading="lazy">
+      <div class="prop-overlay"></div>
       <div class="prop-type-badge">
-        <span class="badge ${p.type === "rent" ? "badge-warning" : "badge-primary"}" style="background: var(--primary); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700">${p.type === "rent" ? "RENT" : "BUY"}</span>
+        <span class="badge ${p.type === "rent" ? "badge-warning" : "badge-primary"}" style="background: var(--primary); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; position: relative; z-index: 2;">${p.type === "rent" ? "RENT" : "BUY"}</span>
       </div>
-      ${p.verified ? '<div class="prop-verified" style="background: rgba(16,185,129,0.9); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600"><i class="fa-solid fa-circle-check"></i> Verified</div>' : ""}
+      ${p.verified ? '<div class="prop-verified" style="background: rgba(16,185,129,0.9); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; position: absolute; top: 12px; right: 12px; z-index: 2;"><i class="fa-solid fa-circle-check"></i> Verified</div>' : ""}
     </div>
     <div class="prop-body">
       <div class="prop-title-area" style="min-height: 44px; margin: 6px 0 8px;">

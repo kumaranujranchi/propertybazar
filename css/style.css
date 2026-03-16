@@ -996,10 +996,29 @@ textarea {
 .property-card:hover .prop-img-wrap img {
   transform: scale(1.06);
 }
+.prop-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(26, 26, 46, 0.4) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  transition: var(--transition);
+  z-index: 1;
+}
+.property-card:hover .prop-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(232, 65, 24, 0.7) 0%,
+    rgba(26, 26, 46, 0.2) 60%
+  );
+}
 .prop-type-badge {
   position: absolute;
   top: 12px;
   left: 12px;
+  z-index: 2;
 }
 .prop-verified {
   position: absolute;
@@ -1015,6 +1034,7 @@ textarea {
   display: flex;
   align-items: center;
   gap: 3px;
+  z-index: 2;
 }
 .prop-wishlist {
   position: absolute;
