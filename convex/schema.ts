@@ -22,6 +22,7 @@ export default defineSchema({
     isHandpicked: v.optional(v.boolean()),
     approvalStatus: v.optional(v.string()), // 'pending', 'approved', 'rejected'
     lastActivatedAt: v.optional(v.number()),
+    activations: v.optional(v.array(v.number())), // Array of timestamps for post/repost events
   }).index("by_transactionType", ["transactionType"])
     .index("by_city", ["location.city"])
     .index("by_featured", ["isFeatured"])

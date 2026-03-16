@@ -200,11 +200,14 @@ export const getMe = query({
       .filter((q) => q.eq(q.field("userId"), user._id))
       .collect();
 
-    // Calculate how many properties have been posted or reposted in the last 90 days
+    // Calculate how many property activations (posts/reposts) have happened in the last 90 days
     const nintyDaysAgo = Date.now() - NINETY_DAYS_MS;
-    const propertiesLast90Days = allMyProperties.filter(
-      (p) => (p.lastActivatedAt || p._creationTime) > nintyDaysAgo,
-    );
+    let totalActivationsLast90Days = 0;
+    allMyProperties.forEach((p) => {
+      const activations = p.activations || [p._creationTime]; // Fallback for old properties
+      const validActivations = activations.filter((t: number) => t > nintyDaysAgo);
+      totalActivationsLast90Days += validActivations.length;
+    });
 
     return {
       _id: user._id,
@@ -214,7 +217,7 @@ export const getMe = query({
       subscriptionExpiry: user.subscriptionExpiry,
       propertyCount: allMyProperties.length,
       limit: limit,
-      canPostMore: propertiesLast90Days.length < limit,
+      canPostMore: totalActivationsLast90Days < limit,
       mobile: user.mobile,
       companyName: user.companyName,
       officeAddress: user.officeAddress,

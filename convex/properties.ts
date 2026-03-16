@@ -10,6 +10,8 @@ const VALIDITY_PERIODS: Record<string, number> = {
 };
 
 const GRACE_PERIOD_DAYS = 30;
+const FREE_PROPERTY_LIMIT = 1;
+const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
 
 export const getProperties = query({
   args: {
@@ -169,6 +171,34 @@ export const getPhotoUrl = query({
   },
 });
 
+const validateUserListingLimit = async (ctx: any, userId: string) => {
+  const user = await ctx.db.get(userId);
+  if (!user) return;
+
+  const activePlans = (user.activePlans || []).filter((p: any) => p.expiresAt > Date.now());
+  const paidLimit = activePlans.reduce((sum: number, p: any) => sum + p.listingsLimit, 0);
+  const totalLimit = FREE_PROPERTY_LIMIT + paidLimit;
+
+  const allMyProperties = await ctx.db
+    .query("properties")
+    .filter((q: any) => q.eq(q.field("userId"), userId))
+    .collect();
+
+  const nintyDaysAgo = Date.now() - NINETY_DAYS_MS;
+  let totalActivationsLast90Days = 0;
+  allMyProperties.forEach((p: any) => {
+    const activations = p.activations || [p._creationTime];
+    const validActivations = activations.filter((t: number) => t > nintyDaysAgo);
+    totalActivationsLast90Days += validActivations.length;
+  });
+
+  if (totalActivationsLast90Days >= totalLimit) {
+    throw new Error(`Your listing limit of ${totalLimit} has been reached. Please upgrade to post or repost more properties.`);
+  }
+
+  return { isFeatured: user.subscriptionTier === 'premium' || activePlans.some((p: any) => p.tier === 'premium') };
+};
+
 export const createProperty = mutation({
   args: {
     token: v.optional(v.string()),
@@ -192,7 +222,6 @@ export const createProperty = mutation({
     let resolvedUserId = args.userId;
     let isFeatured = false;
 
-    // Server-side session verification
     if (args.token) {
       const session = await ctx.db
         .query("sessions")
@@ -203,34 +232,9 @@ export const createProperty = mutation({
       }
     }
 
-    // Enforce dynamic posting limit and check tier for featured status
     if (resolvedUserId) {
-      const user = await ctx.db.get(resolvedUserId);
-      if (user) {
-        let activeTier = user.subscriptionTier || 'free';
-        if (activeTier !== 'free' && user.subscriptionExpiry && user.subscriptionExpiry < Date.now()) {
-          activeTier = 'free'; // Downgrade if expired
-        }
-
-        let limit = 3; // FREE_LIMIT
-        if (activeTier === 'premium') limit = 10;
-        if (activeTier === 'agent_starter') limit = 15;
-        if (activeTier === 'agent_pro' || activeTier === 'agent') limit = 50;
-
-        // Premium and Agent listings are automatically featured
-        if (activeTier === 'premium' || activeTier === 'agent_starter' || activeTier === 'agent_pro' || activeTier === 'agent') {
-          isFeatured = true;
-        }
-
-        const existing = await ctx.db
-          .query("properties")
-          .filter((q: any) => q.eq(q.field("userId"), resolvedUserId))
-          .collect();
-
-        if (existing.length >= limit) {
-          throw new Error(`Your ${activeTier} plan limit of ${limit} listings reached. Please upgrade.`);
-        }
-      }
+      const result = await validateUserListingLimit(ctx, resolvedUserId);
+      if (result) isFeatured = result.isFeatured;
     }
 
     const propertyId = await ctx.db.insert("properties", {
@@ -252,6 +256,7 @@ export const createProperty = mutation({
       isFeatured: isFeatured,
       approvalStatus: "pending",
       lastActivatedAt: Date.now(),
+      activations: [Date.now()],
     });
 
     // Remove any lingering draft for this user (defensive server-side cleanup)
@@ -420,8 +425,14 @@ export const repostProperty = mutation({
     if (!prop) throw new Error("Property not found");
     if (prop.userId !== session.userId) throw new Error("Unauthorized: You do not own this property");
 
+    await validateUserListingLimit(ctx, session.userId);
+
+    const now = Date.now();
+    const existingActivations = prop.activations || [prop.lastActivatedAt || prop._creationTime];
+
     await ctx.db.patch(args.id, {
-      lastActivatedAt: Date.now(),
+      lastActivatedAt: now,
+      activations: [...existingActivations, now],
       approvalStatus: "pending", // Reset to pending for re-validation if needed
     });
 
