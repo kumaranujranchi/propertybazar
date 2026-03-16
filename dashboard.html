@@ -1464,7 +1464,7 @@
               ${p.isFeatured ? '<span class="prop-status-tag status-featured" style="margin-right:0"><i class="fa-solid fa-star"></i> Featured Posting</span>' : ""}
               ${(() => {
                 const tier = p.tier || 'free';
-                const VALIDITY = { free: 30, premium: 90, agent: 180, agent_starter: 90, agent_pro: 180 };
+                const VALIDITY = { free: 30, premium: 30, agent: 30, agent_starter: 30, agent_pro: 30 };
                 const allowedDays = VALIDITY[tier] || 30;
                 
                 const activationTime = p.lastActivatedAt || p._creationTime;
@@ -1485,7 +1485,7 @@
           <div class="dash-prop-actions">
             ${(() => {
               const tier = p.tier || 'free';
-              const VALIDITY = { free: 30, premium: 90, agent: 180, agent_starter: 90, agent_pro: 180 };
+              const VALIDITY = { free: 30, premium: 30, agent: 30, agent_starter: 30, agent_pro: 30 };
               const allowedDays = VALIDITY[tier] || 30;
               const activationTime = p.lastActivatedAt || p._creationTime;
               const daysUsed = (Date.now() - activationTime) / (1000 * 60 * 60 * 24);

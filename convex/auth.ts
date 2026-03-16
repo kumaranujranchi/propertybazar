@@ -200,10 +200,10 @@ export const getMe = query({
       .filter((q) => q.eq(q.field("userId"), user._id))
       .collect();
 
-    // Calculate how many properties have been posted in the last 90 days
+    // Calculate how many properties have been posted or reposted in the last 90 days
     const nintyDaysAgo = Date.now() - NINETY_DAYS_MS;
     const propertiesLast90Days = allMyProperties.filter(
-      (p) => p._creationTime > nintyDaysAgo,
+      (p) => (p.lastActivatedAt || p._creationTime) > nintyDaysAgo,
     );
 
     return {

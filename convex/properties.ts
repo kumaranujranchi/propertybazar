@@ -3,10 +3,10 @@ import { v } from "convex/values";
 
 const VALIDITY_PERIODS: Record<string, number> = {
   free: 30,
-  premium: 90,
-  agent: 180,
-  agent_starter: 90,
-  agent_pro: 180,
+  premium: 30,
+  agent: 30,
+  agent_starter: 30,
+  agent_pro: 30,
 };
 
 const GRACE_PERIOD_DAYS = 30;
