@@ -1271,15 +1271,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (document.getElementById("plotAreaUnit"))
           document.getElementById("plotAreaUnit").value =
             prop.details.plotAreaUnit || "Square Foot";
-        if (document.getElementById("plotRateUnit"))
-          document.getElementById("plotRateUnit").value =
-            prop.details.plotRateUnit ||
-            prop.details.plotAreaUnit ||
-            "Square Foot";
-        if (document.getElementById("plotRateUnit"))
-          document
-            .getElementById("plotRateUnit")
-            .dispatchEvent(new Event("change"));
+
         if (document.getElementById("superBuiltUpAreaInput"))
           document.getElementById("superBuiltUpAreaInput").value =
             prop.details.superBuiltUpArea || "";
@@ -1760,7 +1752,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         setVal("lodgeGstSelect", p.gstExtra);
 
         // Land Pricing
-        setVal("plotRateSqFtInput", p.plotRatePerSqFt);
+
         setVal("plotDevChargesInput", p.plotDevCharges);
 
         const c = prop.contactDesc || {};
@@ -2179,8 +2171,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       plotArea: parseNum("plotAreaInput"),
       plotAreaUnit:
         document.getElementById("plotAreaUnit")?.value || "Square Foot",
-      plotRateUnit:
-        document.getElementById("plotRateUnit")?.value || "Square Foot",
+
       superBuiltUpArea: parseNum("superBuiltUpAreaInput"),
       superBuiltUpAreaUnit:
         document.getElementById("superBuiltUpAreaUnit")?.value || "Square Foot",
@@ -2382,7 +2373,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       roomSizeUnit:
         document.getElementById("roomSizeUnit")?.value || "Square Foot",
       // Land
-      plotRatePerSqFt: parseNum("plotRateSqFtInput"),
+
       plotDevCharges: parseNum("plotDevChargesInput"),
     };
 
@@ -2677,7 +2668,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       setVal("lodgeGstSelect", p.gstExtra);
 
       // Land Pricing
-      setVal("plotRateSqFtInput", p.plotRatePerSqFt);
+
       setVal("plotDevChargesInput", p.plotDevCharges);
     }
 
@@ -3038,28 +3029,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Update Rate Label dynamically based on unit selection
   document.addEventListener("change", (e) => {
     if (
-      e.target.id === "plotAreaUnit" ||
-      e.target.id === "plotRateUnit" ||
       e.target.id === "builtUpAreaUnit" ||
       e.target.id === "commercialSuperAreaUnit"
     ) {
-      // Sync Plot Area and Rate units
-      if (e.target.id === "plotAreaUnit") {
-        const rateUnitSelect = document.getElementById("plotRateUnit");
-        if (rateUnitSelect && rateUnitSelect.value !== e.target.value) {
-          rateUnitSelect.value = e.target.value;
-        }
-      } else if (e.target.id === "plotRateUnit") {
-        const areaUnitSelect = document.getElementById("plotAreaUnit");
-        if (areaUnitSelect && areaUnitSelect.value !== e.target.value) {
-          areaUnitSelect.value = e.target.value;
-        }
-      }
-
-      const label = document.getElementById("ratePerUnitLabel");
-      if (label) {
-        label.textContent = `Rate Per ${e.target.value} (₹) *`;
-      }
+      // Logic for syncing or updating other labels could go here if needed
     }
   });
 });
