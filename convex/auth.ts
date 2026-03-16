@@ -300,8 +300,8 @@ export const upgradeTier = mutation({
     let listingsLimit = 0;
     if (args.tier === "premium") listingsLimit = 10;
     else if (args.tier === "standard_individual") listingsLimit = 1;
-    else if (args.tier === "agent_starter") listingsLimit = 15;
-    else if (args.tier === "agent_pro") listingsLimit = 50;
+    else if (args.tier === "agent_starter") listingsLimit = 45; // 15/mo * 3 months of credits
+    else if (args.tier === "agent_pro") listingsLimit = 150; // 50/mo * 3 months of credits
 
     const newPlan = {
       tier: args.tier,
