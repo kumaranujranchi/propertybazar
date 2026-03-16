@@ -122,6 +122,21 @@ export const deleteProperty = mutation({
   }
 });
 
+export const toggleHandpicked = mutation({
+  args: {
+    token: v.string(),
+    propertyId: v.id("properties"),
+    isHandpicked: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    await requireAdmin(ctx, args.token);
+    const prop = await ctx.db.get(args.propertyId);
+    if (!prop) throw new Error("Property not found");
+    await ctx.db.patch(args.propertyId, { isHandpicked: args.isHandpicked });
+    return { success: true, isHandpicked: args.isHandpicked };
+  },
+});
+
 /**
  * One-time mutation to create the dedicated admin user
  * Run this from Convex Dashboard -> Functions -> admin:seedAdminUser

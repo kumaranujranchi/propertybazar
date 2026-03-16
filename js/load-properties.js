@@ -165,8 +165,15 @@ function renderHomepageSliders(props) {
   const newLaunchSlider = document.getElementById("newLaunchSlider");
   const newlyAddedSlider = document.getElementById("newlyAddedSlider");
 
-  // Featured section - now kept hardcoded as per user request
-  // (Removed dynamic population logic)
+  // Featured section - Handpicked Premium Listings
+  if (featuredSlider) {
+    const featured = props.filter((p) => p._raw && p._raw.isHandpicked).slice(0, 10);
+    if (featured.length > 0) {
+      featuredSlider.innerHTML = featured.map((p) => buildPropertyCardHTML(p)).join("");
+    } else {
+      featuredSlider.innerHTML = '<div class="empty-state" style="grid-column: 1/-1; width: 100%; text-align: center; padding: 40px; color: var(--text-muted);">Stay tuned for our expert-picked premium listings!</div>';
+    }
+  }
 
   // Newly Added – 10 most recent listings (Convex already returns in desc order)
   if (newlyAddedSlider) {

@@ -668,3 +668,28 @@ export const getForOg = query({
     };
   }
 });
+
+export const getHandpickedProperties = query({
+  args: {},
+  handler: async (ctx: any) => {
+    const props = await ctx.db
+      .query('properties')
+      .withIndex('by_handpicked', (q: any) => q.eq('isHandpicked', true))
+      .order('desc')
+      .collect();
+
+    return await Promise.all(
+      props.filter((p: any) => (p.approvalStatus || '').toLowerCase() === 'approved').map(async (p: any) => {
+        let firstPhotoUrl: string | null = null;
+        if (Array.isArray(p.photos) && p.photos.length > 0) {
+          const firstPhoto = p.photos[0];
+          try {
+            const sid = typeof firstPhoto === 'string' ? firstPhoto : firstPhoto.storageId;
+            firstPhotoUrl = await ctx.storage.getUrl(sid as any);
+          } catch { /* no photo */ }
+        }
+        return { ...p, firstPhotoUrl };
+      })
+    );
+  },
+});

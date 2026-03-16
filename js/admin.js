@@ -521,8 +521,9 @@ function renderActiveListings() {
         return url;
       })();
 
+      const isHandpicked = !!p.isHandpicked;
       return `
-    <tr>
+    <tr id="row-${p._id}">
       <td class="td-prop">
         <img src="${photoSrc}" alt="Property" onerror="this.src='images/placeholder.jpg'" style="width:56px;height:44px;border-radius:6px;object-fit:cover;">
         <div>
@@ -538,6 +539,15 @@ function renderActiveListings() {
       <td style="font-size:13px;color:#6b7280;">${new Date(p._creationTime).toLocaleDateString()}</td>
       <td>
         <div class="action-btns">
+          <button 
+            class="act-btn" 
+            id="handpick-btn-${p._id}" 
+            title="${isHandpicked ? "Remove from Handpicked" : "Add to Handpicked Premium Listings"}" 
+            onclick="toggleHandpicked('${p._id}', ${isHandpicked})"
+            style="color: ${isHandpicked ? "#f59e0b" : "#9ca3af"}; border-color: ${isHandpicked ? "#f59e0b" : ""};"
+          >
+            <i class="fa-${isHandpicked ? "solid" : "regular"} fa-star"></i>
+          </button>
           <button class="act-btn" title="Deactivate Listing" onclick="updatePropertyStatus('${p._id}', 'rejected')"><i class="fa-solid fa-ban"></i></button>
           <button class="act-btn view" title="View on Site" onclick="window.open('property-detail.html?id=${p._id}', '_blank')"><i class="fa-solid fa-eye"></i></button>
         </div>
@@ -759,5 +769,36 @@ window.deletePropertyAdmin = async (id) => {
     console.error(err);
     if (window.showToast)
       window.showToast("Failed to delete property", "error");
+  }
+};
+
+/** ⭐ Toggle Handpicked status for a property */
+window.toggleHandpicked = async (id, currentlyHandpicked) => {
+  const token = localStorage.getItem('pb_session');
+  const newState = !currentlyHandpicked;
+  try {
+    await convex.mutation('admin:toggleHandpicked', {
+      token,
+      propertyId: id,
+      isHandpicked: newState,
+    });
+    // Update button in-place without full reload
+    const btn = document.getElementById(`handpick-btn-${id}`);
+    if (btn) {
+      btn.title = newState ? 'Remove from Handpicked' : 'Add to Handpicked Premium Listings';
+      btn.style.color = newState ? '#f59e0b' : '#9ca3af';
+      btn.style.borderColor = newState ? '#f59e0b' : '';
+      btn.innerHTML = `<i class="fa-${newState ? 'solid' : 'regular'} fa-star"></i>`;
+      btn.setAttribute('onclick', `toggleHandpicked('${id}', ${newState})`);
+    }
+    // Update the local data so re-render stays accurate
+    const prop = allProperties.find(p => p._id === id);
+    if (prop) prop.isHandpicked = newState;
+    if (window.showToast) {
+      window.showToast(newState ? '⭐ Added to Handpicked Listings!' : 'Removed from Handpicked Listings');
+    }
+  } catch (err) {
+    console.error(err);
+    if (window.showToast) window.showToast('Failed to update handpicked status', 'error');
   }
 };

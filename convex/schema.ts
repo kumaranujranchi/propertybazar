@@ -19,11 +19,13 @@ export default defineSchema({
     customFAQs: v.optional(v.array(v.any())),
     brochure: v.optional(v.any()),
     isFeatured: v.optional(v.boolean()),
+    isHandpicked: v.optional(v.boolean()),
     approvalStatus: v.optional(v.string()), // 'pending', 'approved', 'rejected'
     lastActivatedAt: v.optional(v.number()),
   }).index("by_transactionType", ["transactionType"])
     .index("by_city", ["location.city"])
     .index("by_featured", ["isFeatured"])
+    .index("by_handpicked", ["isHandpicked"])
     .index("by_approvalStatus", ["approvalStatus"]),
 
   users: defineTable({
