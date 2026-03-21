@@ -141,17 +141,45 @@ async function runScraper(groupUrl) {
   console.log("Starting Chrome browser...");
   // headless: false -> shows the browser. Essential for first-time FB login.
   // userDataDir -> caches cookies, so subsequent runs don't need manual login.
+  // Use headless mode and disable sandbox for cloud environments like Render
   const browser = await puppeteer.launch({ 
-    headless: false, 
-    userDataDir: "./user_data" 
+    headless: true, // "new" headless mode is standard now
+    userDataDir: "./user_data",
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-notifications']
   });
   
   const page = await browser.newPage();
   
-  console.log(`Navigating to ${groupUrl}...`);
+  console.log("Checking Facebook login status...");
+  await page.goto("https://www.facebook.com/", { waitUntil: 'networkidle2' });
+
+  // Auto-login logic for Cloud (Render)
+  if (process.env.FB_EMAIL && process.env.FB_PASSWORD) {
+    const emailInput = await page.$('#email');
+    if (emailInput) {
+      console.log("Logging into Facebook automatically using credentials...");
+      await page.type('#email', process.env.FB_EMAIL, {delay: 50});
+      await page.type('#pass', process.env.FB_PASSWORD, {delay: 50});
+      
+      const loginButton = await page.$('[name="login"]');
+      if (loginButton) {
+        await Promise.all([
+          page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 30000 }).catch(() => {}),
+          loginButton.click()
+        ]);
+        console.log("Login submitted successfully!");
+      }
+    } else {
+      console.log("Already logged in via cached cookies.");
+    }
+  } else {
+      console.log("No FB_EMAIL or FB_PASSWORD provided in .env. Assuming already logged in or manual browser.");
+  }
+
+  console.log(`Navigating to group: ${groupUrl}...`);
   await page.goto(groupUrl, { waitUntil: 'networkidle2' });
   
-  console.log("Please ensure you are logged into Facebook. Waiting 15 seconds to let feed load...");
+  console.log("Waiting 15 seconds to let Facebook group feed load properly...");
   await new Promise(r => setTimeout(r, 15000));
 
   console.log("Extracting posts...");
@@ -217,5 +245,17 @@ async function runScraper(groupUrl) {
   console.log("\\nScraping finished.");
 }
 
-const targetGroup = process.argv[2] || 'https://www.facebook.com/groups/NoidaRealEstateGroupExample'; // Replace with a real group URL in Terminal argument
-runScraper(targetGroup);
+const targetGroupsString = process.argv[2] || 'https://www.facebook.com/groups/Group1,https://www.facebook.com/groups/Group2';
+const targetGroups = targetGroupsString.split(',').map(g => g.trim()).filter(Boolean);
+
+(async function runAll() {
+  for (const group of targetGroups) {
+    console.log(`\n\n=== Starting Scraping for Group: ${group} ===`);
+    try {
+      await runScraper(group);
+    } catch(e) {
+      console.error(`Error scraping group ${group}:`, e.message);
+    }
+  }
+})();
+
