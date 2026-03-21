@@ -255,7 +255,7 @@ async function runScraper(groupUrl) {
     return data;
   });
 
-  console.log(`Found ${postsData.length} valid posts. Processing via OpenAI...`);
+  console.log(`Found ${postsData.length} valid posts. Processing via DeepSeek...`);
   
   for (const post of postsData) {
     try {
