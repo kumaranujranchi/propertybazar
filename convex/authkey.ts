@@ -35,7 +35,7 @@ export const sendOtp = action({
       
       // Authkey usually returns a numeric ID on success or a JSON string
       // We'll check if it looks like a success
-      if (resText && !resText.toLowerCase().includes("error") && !resText.toLowerCase().includes("invalid")) {
+      if (resText && !resText.toLowerCase().includes("error") && !resText.toLowerCase().includes("invalid") && (resText.length > 5 || /^\d+$/.test(resText.trim()))) {
         // Store the OTP in the database via a mutation
         await ctx.runMutation("authkey:storeOtp", {
           mobile: args.mobile,
@@ -44,7 +44,18 @@ export const sendOtp = action({
         return { success: true, message: "OTP sent successfully" };
       } else {
         console.error("Authkey API Response Error:", resText);
-        return { success: false, message: "Failed to send OTP. Please check your number." };
+        
+        // Try to provide a more helpful message
+        let errorMsg = "Failed to send OTP. WhatsApp service error.";
+        if (resText.toLowerCase().includes("balance")) {
+          errorMsg = "Insufficient balance in Authkey account. Please recharge.";
+        } else if (resText.toLowerCase().includes("sid") || resText.toLowerCase().includes("sender")) {
+          errorMsg = "Invalid Sender ID (SID) or SID not approved.";
+        } else if (resText.toLowerCase().includes("authkey")) {
+          errorMsg = "Invalid API Key/Authkey configuration.";
+        }
+        
+        return { success: false, message: errorMsg };
       }
     } catch (error) {
       console.error("Authkey call failed:", error);
