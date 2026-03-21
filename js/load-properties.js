@@ -175,10 +175,10 @@ function renderHomepageSliders(props) {
     }
   }
 
-  // Newly Added – 10 most recent listings (Convex already returns in desc order)
+  // Newly Added – 10 most recent listings (Sort by creation time directly to bypass isFeatured overriding)
   if (newlyAddedSlider) {
-    // Use the top 10 directly – Convex sorts by _creationTime desc already
-    const newest = props.slice(0, 10);
+    const sortedDesc = [...props].sort((a,b) => (b._raw._creationTime || 0) - (a._raw._creationTime || 0));
+    const newest = sortedDesc.slice(0, 10);
 
     if (newest.length > 0) {
       newlyAddedSlider.innerHTML = newest.map((p) => buildPropertyCardHTML(p)).join("");

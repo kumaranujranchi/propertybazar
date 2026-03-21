@@ -796,6 +796,9 @@
           <div class="dash-nav-item" data-section="properties">
             <i class="fa-solid fa-house"></i> My Properties
           </div>
+          <div class="dash-nav-item" data-section="scraped">
+            <i class="fa-solid fa-robot"></i> Scraped Listings
+          </div>
           <div class="dash-nav-item" data-section="drafts">
             <i class="fa-solid fa-file-pen"></i> My Drafts
           </div>
@@ -1071,6 +1074,18 @@
               </div>
               <div id="myPropertiesList">
                 <div class="dash-empty">Loading your properties...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Scraped Listings -->
+          <div class="dash-section" id="sec-scraped">
+            <div class="dash-card">
+              <div class="dash-card-title">
+                Bot-Scraped Listings
+              </div>
+              <div id="scrapedPropertiesList">
+                <div class="dash-empty">Loading scraped properties...</div>
               </div>
             </div>
           </div>
@@ -1646,6 +1661,56 @@
 
       // Render properties using helper so actions don't redirect away
       await fetchAndRenderProperties();
+      
+      // Also fetch and render Scraped Properties
+      async function fetchAndRenderScrapedProperties() {
+        const scrapedList = document.getElementById("scrapedPropertiesList");
+        try {
+          console.log("Fetching scraped properties...");
+          const props = await convex.query("properties:getScrapedProperties", { token });
+          console.log("Scraped Properties:", props);
+          
+          if (!props || props.length === 0) {
+            scrapedList.innerHTML = `<div class="dash-empty">No scraped listings found! Run the bot to gather data.</div>`;
+            return;
+          }
+
+          scrapedList.innerHTML = props.map(p => {
+             const title = p.details?.projectName || `${p.propertyType} in ${p.location?.locality || ""}`;
+             const price = (p.pricing?.expectedPrice || p.pricing?.rent || p.pricing?.pricePerDay || p.pricing?.plotRatePerSqFt || 0).toLocaleString("en-IN");
+             const statusTag = p.approvalStatus === "approved" 
+                  ? `<span class="prop-status-tag status-approved">● Approved (Public)</span>`
+                  : `<span class="prop-status-tag status-pending">● ${p.approvalStatus}</span>`;
+                  
+             const firstImage = p.photos?.[0]?.url || p.photos?.[0] || 'images/property-1.webp';
+             
+             return `
+              <div class="dash-prop-card">
+                <img src="${firstImage}" alt="Property" class="dash-prop-img" loading="lazy">
+                <div class="dash-prop-info">
+                  <div class="dash-prop-title">${title} <span style="font-size:12px; font-weight:normal; color:#666">(${p.transactionType})</span></div>
+                  <div class="dash-prop-loc"><i class="fa-solid fa-map-marker-alt"></i> ${p.location?.locality || ""}, ${p.location?.city || ""}</div>
+                  <div style="font-size:13px; font-weight:bold; color:var(--dark); margin-bottom: 8px">₹${price}</div>
+                  <div>${statusTag} <span style="font-size:11px; background:#e2e8f0; padding:2px 8px; border-radius:12px; margin-left:8px"><i class="fa-solid fa-robot"></i> Bot</span></div>
+                  
+                  <div class="dash-prop-actions">
+                    <button class="dash-action-btn" onclick="window.location.href='edit-property.html?id=${p._id}'"><i class="fa-solid fa-pen"></i> Edit</button>
+                    <button class="dash-action-btn danger" onclick="deleteProperty('${p._id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+                  </div>
+                </div>
+              </div>
+             `;
+          }).join("");
+        } catch(err) {
+          console.error("Failed to fetch scraped props:", err);
+          if (err.message && err.message.includes("Unauthorized")) {
+             scrapedList.innerHTML = `<div class="dash-empty">You must be an admin to view this section.</div>`;
+          } else {
+             scrapedList.innerHTML = `<div class="dash-empty">Error loading scraped properties.</div>`;
+          }
+        }
+      }
+      await fetchAndRenderScrapedProperties();
 
       // Load Drafts
       const draftsList = document.getElementById("myDraftsList");

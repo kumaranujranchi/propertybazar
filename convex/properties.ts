@@ -288,7 +288,9 @@ export const deleteProperty = mutation({
 
     const prop = await ctx.db.get(args.id);
     if (!prop) throw new Error("Property not found");
-    if (prop.userId !== session.userId) throw new Error("Unauthorized: You do not own this property");
+    if (prop.userId !== session.userId && prop.posterType !== "Bot") {
+       throw new Error("Unauthorized: You do not own this property");
+    }
 
     // Delete photos from storage
     for (const storageId of prop.photos || []) {
@@ -328,7 +330,9 @@ export const updateProperty = mutation({
 
     const prop = await ctx.db.get(args.id);
     if (!prop) throw new Error("Property not found");
-    if (prop.userId !== session.userId) throw new Error("Unauthorized: You do not own this property");
+    if (prop.userId !== session.userId && prop.posterType !== "Bot") {
+       throw new Error("Unauthorized: You do not own this property");
+    }
 
     await ctx.db.patch(args.id, {
       transactionType: args.transactionType,
@@ -703,4 +707,35 @@ export const getHandpickedProperties = query({
       })
     );
   },
+});
+
+export const getScrapedProperties = query({
+  args: { token: v.string() },
+  handler: async (ctx: any, args: any) => {
+    const session = await ctx.db
+      .query("sessions")
+      .withIndex("by_token", (q: any) => q.eq("token", args.token))
+      .first();
+    if (!session || session.expiresAt < Date.now()) throw new Error("Unauthorized");
+
+    const allProps = await ctx.db.query("properties").order("desc").collect();
+    const scrapedProps = allProps.filter((p: any) => p.posterType === "Bot");
+
+    return await Promise.all(
+      scrapedProps.map(async (p: any) => {
+        const resolvedPhotos = await Promise.all(
+          (p.photos || []).map(async (photo: any) => {
+            try {
+              const storageId = typeof photo === 'string' ? photo : photo.storageId;
+              const url = await ctx.storage.getUrl(storageId as any);
+              return typeof photo === 'string' ? url : { ...photo, url: url ?? null };
+            } catch {
+              return null;
+            }
+          })
+        );
+        return { ...p, photos: resolvedPhotos.filter(Boolean) };
+      })
+    );
+  }
 });
