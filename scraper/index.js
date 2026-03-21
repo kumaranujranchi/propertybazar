@@ -142,14 +142,32 @@ async function runScraper(groupUrl) {
   console.log("Starting Chrome browser...");
   // headless: false -> shows the browser. Essential for first-time FB login.
   // userDataDir -> caches cookies, so subsequent runs don't need manual login.
+  // Setup standard cloud arguments
+  const browserArgs = ['--no-sandbox', '--disable-setuid-sandbox', '--disable-notifications'];
+
+  // Add Proxy Argument if exists
+  if (process.env.PROXY_SERVER) {
+     browserArgs.push(`--proxy-server=${process.env.PROXY_SERVER}`);
+     console.log("Using External Proxy Server...");
+  }
+
   // Use headless mode and disable sandbox for cloud environments like Render
   const browser = await puppeteer.launch({ 
     headless: true, // "new" headless mode is standard now
     userDataDir: "./user_data",
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-notifications']
+    args: browserArgs
   });
   
   const page = await browser.newPage();
+
+  // Proxy Authentication if required by Proxy Provider
+  if (process.env.PROXY_USERNAME && process.env.PROXY_PASSWORD) {
+      await page.authenticate({
+         username: process.env.PROXY_USERNAME,
+         password: process.env.PROXY_PASSWORD
+      });
+  }
+
   
   console.log("Checking Facebook login status...");
   await page.goto("https://www.facebook.com/", { waitUntil: 'networkidle2' });
