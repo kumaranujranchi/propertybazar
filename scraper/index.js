@@ -19,8 +19,24 @@ console.log("[DEBUG] Initialization complete, ready to run scraper.");
 async function downloadImage(browser, url, dest) {
   const page = await browser.newPage();
   try {
-    const viewSource = await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    await page.setExtraHTTPHeaders({
+       'accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+       'sec-fetch-dest': 'image',
+    });
+    const viewSource = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    
+    if (!viewSource || !viewSource.ok()) {
+       throw new Error(`Failed to load image, HTTP Status: ${viewSource ? viewSource.status() : 'Unknown'}`);
+    }
+    
+    const contentType = viewSource.headers()['content-type'];
+    if (contentType && contentType.includes('text/html')) {
+       throw new Error('Facebook returned HTML instead of an image file');
+    }
+
     const buffer = await viewSource.buffer();
+    if (buffer.length < 1024) throw new Error('Image too small (less than 1KB), likely corrupted');
+
     fs.writeFileSync(dest, buffer);
   } finally {
     await page.close();

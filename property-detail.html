@@ -1237,7 +1237,7 @@
         if (heroTitle) {
           // Use details.projectName if available, otherwise fallback to location.society (form saves society there)
           const projectName = p.details?.projectName || p.location?.society || '';
-          if (projectName) {
+          if (projectName && projectName.toUpperCase() !== 'N/A') {
             heroTitle.textContent = projectName.toUpperCase();
             // Add subtitle below project name
             let subtitle = heroTitle.nextElementSibling;
@@ -1758,9 +1758,10 @@
           if (finRows) advancedContainer.innerHTML += `<div class="info-col"><h3>FINANCIALS</h3>${finRows}</div>`;
         }
 
-        // ---- Description ----
         const descEl = document.getElementById('dynamicDescription');
-        if (descEl && p.details?.description) descEl.textContent = p.details.description;
+        if (descEl) {
+           descEl.textContent = p.details?.description || p.details?.about || 'No detailed description available for this property.';
+        }
 
         // ---- Floor Plans (multiple) ----
         const floorPlanSection = document.getElementById('floorPlanSection');
