@@ -15,27 +15,23 @@ const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
 console.log("[DEBUG] Initialization complete, ready to run scraper.");
 
 
-// 1. Download image to temp file
-async function downloadImage(url, dest) {
-  return new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(dest);
-    https.get(url, response => {
-      response.pipe(file);
-      file.on('finish', () => {
-        file.close(() => resolve(dest));
-      });
-    }).on('error', err => {
-      fs.unlink(dest, () => {});
-      reject(err);
-    });
-  });
+// 1. Download image to temp file via Puppeteer (Bypasses IP blocks by using the same Proxy)
+async function downloadImage(browser, url, dest) {
+  const page = await browser.newPage();
+  try {
+    const viewSource = await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    const buffer = await viewSource.buffer();
+    fs.writeFileSync(dest, buffer);
+  } finally {
+    await page.close();
+  }
 }
 
 // 2. Upload to Convex Storage
-async function uploadToConvex(imageUrl) {
+async function uploadToConvex(browser, imageUrl) {
   try {
     const tempPath = path.join(os.tmpdir(), `scrape_${Date.now()}.jpg`);
-    await downloadImage(imageUrl, tempPath);
+    await downloadImage(browser, imageUrl, tempPath);
     
     // Get upload URL using REST API
     const authRes = await fetch(`${siteUrl}/scraper/uploadUrl`, {
@@ -60,7 +56,7 @@ async function uploadToConvex(imageUrl) {
     fs.unlinkSync(tempPath); // cleanup
     return { storageId, category: "Property" };
   } catch (error) {
-    console.error("Failed to upload image:", error);
+    console.error(`Failed to upload image ${imageUrl}:`, error.message);
     return null;
   }
 }
@@ -307,9 +303,9 @@ async function runScraper(groupUrl) {
       
       // Upload Images
       const photos = [];
-      for(const imgUrl of post.images.slice(0, 3)) { // max 3 images so we don't overkill
+      for(const imgUrl of post.images.slice(0, 3)) { // max 3 images
          console.log(`Downloading and uploading image: ${imgUrl.substring(0, 40)}...`);
-         const uploaded = await uploadToConvex(imgUrl);
+         const uploaded = await uploadToConvex(browser, imgUrl);
          if(uploaded) photos.push(uploaded);
       }
       propertyData.photos = photos;
