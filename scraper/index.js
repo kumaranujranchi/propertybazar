@@ -256,7 +256,8 @@ async function runScraper(groupUrl) {
   }
 
   console.log(`Navigating to group: ${groupUrl}...`);
-  await page.goto(groupUrl, { waitUntil: 'networkidle2' });
+  // Increased timeout to 90s and switched to 'domcontentloaded' for better reliability with slow proxies
+  await page.goto(groupUrl, { waitUntil: 'domcontentloaded', timeout: 90000 });
   
   console.log("Waiting 15 seconds to let Facebook group feed load properly...");
   await new Promise(r => setTimeout(r, 15000));
