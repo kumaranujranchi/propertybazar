@@ -263,12 +263,13 @@ async function runScraper(groupUrl) {
   await page.screenshot({ path: "debug_fb_group.jpg" });
 
   // Auto-Join Group Logic
-  const joinButton = await page.evaluateHandle(() => {
+  const joinButtonHandle = await page.evaluateHandle(() => {
     // Find any button or div with text "Join Group" or "Join"
     const elements = Array.from(document.querySelectorAll('div[role="button"], button'));
     return elements.find(el => el.innerText && (el.innerText.trim() === 'Join Group' || el.innerText.trim() === 'Join'));
   });
 
+  const joinButton = joinButtonHandle.asElement();
   if (joinButton) {
     console.log("Found 'Join Group' button. Clicking it to join...");
     await joinButton.click().catch(() => {});
@@ -276,7 +277,7 @@ async function runScraper(groupUrl) {
     await new Promise(r => setTimeout(r, 5000));
     await page.screenshot({ path: "debug_fb_after_join.jpg" });
   } else {
-    console.log("No 'Join Group' button found. Assuming already joined or group is public.");
+    console.log("No 'Join Group' button found (or already joined).");
   }
 
   console.log("Scrolling to load more posts...");
