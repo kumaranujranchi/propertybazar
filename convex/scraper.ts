@@ -31,6 +31,16 @@ export const importProperty = mutation({
       throw new Error("Unauthorized: Invalid API Key");
     }
 
+    // Duplicate Prevention
+    if (args.details && args.details.sourceHash) {
+      const recentProperties = await ctx.db.query("properties").order("desc").take(500);
+      const isDuplicate = recentProperties.some(p => p.details?.sourceHash === args.details.sourceHash);
+      if (isDuplicate) {
+        console.log("Duplicate blocked:", args.details.sourceHash);
+        return { success: true, message: "Skipped Duplicate" };
+      }
+    }
+
     const propertyId = await ctx.db.insert("properties", {
       transactionType: args.transactionType,
       propertyType: args.propertyType,

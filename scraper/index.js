@@ -8,6 +8,7 @@ const fs = require('fs');
 const https = require('https');
 const os = require('os');
 const path = require('path');
+const crypto = require('crypto');
 
 const siteUrl = process.env.CONVEX_URL.replace('.cloud', '.site');
 const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
@@ -212,6 +213,12 @@ async function runScraper(groupUrl) {
       console.log("Raw text snippet:", post.text.substring(0, 100).replace(/\\n/g, " ") + "...");
       
       const propertyData = await processTextWithAI(post.text);
+
+      // Create a unique hash of the raw text so we can block duplicates
+      const sourceHash = crypto.createHash('sha256').update(post.text).digest('hex');
+      propertyData.details = propertyData.details || {};
+      propertyData.details.sourceHash = sourceHash;
+
       console.log("AI Parsed Data:", JSON.stringify(propertyData, null, 2));
       
       // Upload Images
