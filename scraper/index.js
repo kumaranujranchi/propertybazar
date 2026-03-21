@@ -372,8 +372,12 @@ async function runScraper(groupUrl) {
   console.log("\\nScraping finished.");
 }
 
-const targetGroupsString = process.argv[2] || 'https://www.facebook.com/groups/Group1,https://www.facebook.com/groups/Group2';
+const targetGroupsString = process.env.TARGET_GROUPS || process.argv[2] || '';
 const targetGroups = targetGroupsString.split(',').map(g => g.trim()).filter(Boolean);
+if (targetGroups.length === 0) {
+    console.error("No target groups defined in TARGET_GROUPS env var or process.argv[2].");
+    process.exit(1);
+}
 
 (async function runAll() {
   for (const group of targetGroups) {
