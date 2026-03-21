@@ -45,13 +45,17 @@ export const sendOtp = action({
       } else {
         console.error("Authkey API Response Error:", resText);
         
-        // Try to provide a more helpful message
-        let errorMsg = "Failed to send OTP. WhatsApp service error.";
+        // Professional user-facing message
+        let errorMsg = "WhatsApp service is temporarily unavailable. Please try again later.";
+        
+        // We can still log the real reason for the admin in Convex logs
         if (resText.toLowerCase().includes("balance")) {
-          errorMsg = "Insufficient balance in Authkey account. Please recharge.";
+          console.error("CRITICAL: Authkey account has insufficient balance!");
+          errorMsg = "Service temporarily busy. Please try again after 5 minutes.";
         } else if (resText.toLowerCase().includes("sid") || resText.toLowerCase().includes("sender")) {
-          errorMsg = "Invalid Sender ID (SID) or SID not approved.";
-        } else if (resText.toLowerCase().includes("authkey")) {
+          errorMsg = "Contact service configuration error. Please contact support.";
+        }
+ else if (resText.toLowerCase().includes("authkey")) {
           errorMsg = "Invalid API Key/Authkey configuration.";
         }
         
