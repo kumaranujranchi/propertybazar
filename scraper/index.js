@@ -1,0 +1,221 @@
+require('dotenv').config();
+console.log("[DEBUG] Loaded dotenv.");
+const puppeteer = require('puppeteer');
+console.log("[DEBUG] Loaded puppeteer.");
+
+
+const fs = require('fs');
+const https = require('https');
+const os = require('os');
+const path = require('path');
+
+const siteUrl = process.env.CONVEX_URL.replace('.cloud', '.site');
+const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
+console.log("[DEBUG] Initialization complete, ready to run scraper.");
+
+
+// 1. Download image to temp file
+async function downloadImage(url, dest) {
+  return new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(dest);
+    https.get(url, response => {
+      response.pipe(file);
+      file.on('finish', () => {
+        file.close(() => resolve(dest));
+      });
+    }).on('error', err => {
+      fs.unlink(dest, () => {});
+      reject(err);
+    });
+  });
+}
+
+// 2. Upload to Convex Storage
+async function uploadToConvex(imageUrl) {
+  try {
+    const tempPath = path.join(os.tmpdir(), `scrape_${Date.now()}.jpg`);
+    await downloadImage(imageUrl, tempPath);
+    
+    // Get upload URL using REST API
+    const authRes = await fetch(`${siteUrl}/scraper/uploadUrl`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ apiKey: SCRAPER_API_KEY })
+    });
+    if (!authRes.ok) throw new Error("Failed to get upload URL: " + await authRes.text());
+    const { url: uploadUrl } = await authRes.json();
+    
+    // Read file and upload via HTTP
+    const imageBuffer = fs.readFileSync(tempPath);
+    
+    // Native NodeJS fetch
+    const result = await fetch(uploadUrl, {
+      method: "POST",
+      headers: { "Content-Type": "image/jpeg" },
+      body: imageBuffer,
+    });
+    const { storageId } = await result.json();
+    
+    fs.unlinkSync(tempPath); // cleanup
+    return { storageId, category: "Property" };
+  } catch (error) {
+    console.error("Failed to upload image:", error);
+    return null;
+  }
+}
+
+// 3. Process text with OpenAI
+async function processTextWithAI(rawText) {
+  const prompt = `
+  You are an expert real estate data extraction assistant.
+  Extract the following property details from the given unstructured Facebook post text.
+  Return ONLY a valid JSON object matching the exact keys below.
+  If a detail is missing, provide a sensible default (like "N/A" or 0) based on the context.
+  
+  Expected JSON schema:
+  {
+    "transactionType": "Sell" | "Rent",
+    "propertyType": "Apartment" | "House/Villa" | "Plot" | "Commercial",
+    "location": {
+      "city": "String",
+      "locality": "String",
+      "society": "String (optional)"
+    },
+    "details": {
+      "bhk": "String or Number",
+      "bathrooms": "String or Number",
+      "balconies": "String or Number",
+      "builtUpArea": "String (e.g., '1200 Sq.Ft.')",
+      "furnishing": "Unfurnished" | "Semi-Furnished" | "Fully-Furnished",
+      "projectName": "String (if any)"
+    },
+    "amenities": ["Array of strings (e.g., 'Parking', 'Lift')"],
+    "pricing": {
+      "expectedPrice": Number (e.g., 5000000),
+      "pricePerSqFt": Number (optional),
+      "maintenance": Number (optional)
+    },
+    "contactDesc": {
+      "ownerName": "Unknown Owner",
+      "ownerPhone": "String - Extract the phone number",
+      "agentDetails": "Unknown Agent"
+    }
+  }
+
+  Raw Text to analyse:
+  """${rawText}"""
+  `;
+
+  const requestBody = {
+    model: "deepseek-chat",
+    response_format: { type: "json_object" },
+    messages: [{ role: "user", content: prompt }]
+  };
+
+  const response = await fetch('https://api.deepseek.com/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`
+    },
+    body: JSON.stringify(requestBody)
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`DeepSeek API failed: ${response.status} ${errorText}`);
+  }
+
+  const data = await response.json();
+  if(!data.choices || !data.choices[0]) throw new Error("Unexpected DeepSeek response: " + JSON.stringify(data));
+  return JSON.parse(data.choices[0].message.content);
+}
+
+// 4. Main Scraper function
+async function runScraper(groupUrl) {
+  if(!process.env.DEEPSEEK_API_KEY || !process.env.CONVEX_URL || !process.env.SCRAPER_API_KEY) {
+     console.error("Missing environment variables in .env file!");
+     process.exit(1);
+  }
+
+  console.log("Starting Chrome browser...");
+  // headless: false -> shows the browser. Essential for first-time FB login.
+  // userDataDir -> caches cookies, so subsequent runs don't need manual login.
+  const browser = await puppeteer.launch({ 
+    headless: false, 
+    userDataDir: "./user_data" 
+  });
+  
+  const page = await browser.newPage();
+  
+  console.log(`Navigating to ${groupUrl}...`);
+  await page.goto(groupUrl, { waitUntil: 'networkidle2' });
+  
+  console.log("Please ensure you are logged into Facebook. Waiting 15 seconds to let feed load...");
+  await new Promise(r => setTimeout(r, 15000));
+
+  console.log("Extracting posts...");
+  // Note: Facebook class names are obfuscated, so we target 'role="article"' which usually wraps posts.
+  const postsData = await page.evaluate(() => {
+    const posts = document.querySelectorAll('div[role="article"]');
+    const data = [];
+    
+    // Only process the first 3 posts for safety testing
+    Array.from(posts).slice(0, 3).forEach((post) => {
+      const text = post.innerText || "";
+      // Find actual post images (filtering out emojis and tiny icons)
+      const imgs = Array.from(post.querySelectorAll('img'))
+                    .map(img => img.src)
+                    .filter(src => (src.includes('scontent') || src.includes('fbcdn')) && !src.includes('emoji'));
+      
+      // We only care about large texts indicative of a property post
+      if(text.length > 50) {
+        data.push({ text, images: imgs });
+      }
+    });
+    return data;
+  });
+
+  console.log(`Found ${postsData.length} valid posts. Processing via OpenAI...`);
+  
+  for (const post of postsData) {
+    try {
+      console.log("\\n-----------------------------------------");
+      console.log("Raw text snippet:", post.text.substring(0, 100).replace(/\\n/g, " ") + "...");
+      
+      const propertyData = await processTextWithAI(post.text);
+      console.log("AI Parsed Data:", JSON.stringify(propertyData, null, 2));
+      
+      // Upload Images
+      const photos = [];
+      for(const imgUrl of post.images.slice(0, 3)) { // max 3 images so we don't overkill
+         console.log(`Downloading and uploading image: ${imgUrl.substring(0, 40)}...`);
+         const uploaded = await uploadToConvex(imgUrl);
+         if(uploaded) photos.push(uploaded);
+      }
+      propertyData.photos = photos;
+
+      // Submit to Convex Database
+      console.log("Inserting property into Convex...");
+      const dbRes = await fetch(`${siteUrl}/scraper/import`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          apiKey: SCRAPER_API_KEY,
+          ...propertyData,
+        })
+      });
+      if (!dbRes.ok) throw new Error("Failed to insert property: " + await dbRes.text());
+      const dbResult = await dbRes.json();
+      console.log("Property inserted successfully! ID:", dbResult.propertyId);
+    } catch(e) {
+      console.error("Error processing post:", e.message || e);
+    }
+  }
+
+  await browser.close();
+  console.log("\\nScraping finished.");
+}
+
+const targetGroup = process.argv[2] || 'https://www.facebook.com/groups/NoidaRealEstateGroupExample'; // Replace with a real group URL in Terminal argument
+runScraper(targetGroup);

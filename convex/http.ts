@@ -5,6 +5,29 @@ import { api } from "./_generated/api";
 const http = httpRouter();
 
 http.route({
+  path: "/scraper/uploadUrl",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const data = await request.json();
+      const url = await ctx.runMutation(api.scraper.generateUploadUrl, { apiKey: data.apiKey });
+      return new Response(JSON.stringify({ url }), { status: 200, headers: { "Content-Type": "application/json" } });
+    } catch(e: any) { return new Response(JSON.stringify({ error: e.message }), { status: 400 }) }
+  })
+});
+
+http.route({
+  path: "/scraper/import",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const data = await request.json();
+      const res = await ctx.runMutation(api.scraper.importProperty, data);
+      return new Response(JSON.stringify(res), { status: 200, headers: { "Content-Type": "application/json" } });
+    } catch(e: any) { return new Response(JSON.stringify({ error: e.message }), { status: 400 }) }
+  })
+});
+http.route({
   path: "/telegram",
   method: "POST",
   handler: httpAction(async (ctx, request) => {
