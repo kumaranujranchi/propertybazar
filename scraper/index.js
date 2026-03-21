@@ -143,7 +143,7 @@ async function runScraper(groupUrl) {
   // headless: false -> shows the browser. Essential for first-time FB login.
   // userDataDir -> caches cookies, so subsequent runs don't need manual login.
   // Setup standard cloud arguments
-  const browserArgs = ['--no-sandbox', '--disable-setuid-sandbox', '--disable-notifications'];
+  const browserArgs = ['--no-sandbox', '--disable-setuid-sandbox', '--disable-notifications', '--ignore-certificate-errors'];
 
   // Add Proxy Argument if exists
   if (process.env.PROXY_SERVER) {
