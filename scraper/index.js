@@ -171,6 +171,9 @@ async function runScraper(groupUrl) {
   });
   
   const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(90000);
+  page.setDefaultTimeout(90000);
+
 
   // Proxy Authentication if required by Proxy Provider
   if (process.env.PROXY_USERNAME && process.env.PROXY_PASSWORD) {
@@ -182,7 +185,7 @@ async function runScraper(groupUrl) {
 
   
   console.log("Checking Facebook login status...");
-  await page.goto("https://www.facebook.com/", { waitUntil: 'networkidle2' });
+  await page.goto("https://www.facebook.com/", { waitUntil: 'domcontentloaded' });
 
   // Better Login Detection & Debugging
   await page.screenshot({ path: "debug_fb_home.jpg" }); // Save screenshot to see what bot sees
@@ -209,7 +212,7 @@ async function runScraper(groupUrl) {
       const loginBtn = await page.$(loginButton);
       if (loginBtn) {
         await Promise.all([
-          page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 30000 }).catch(() => {}),
+          page.waitForNavigation({ waitUntil: 'domcontentloaded' }).catch(() => {}),
           loginBtn.click()
         ]);
         console.log("Login submitted successfully!");
@@ -229,7 +232,7 @@ async function runScraper(groupUrl) {
             const cpButton = await page.$('#checkpointSubmitButton') || await page.$('button[type="submit"]');
             if(cpButton) {
                 await Promise.all([
-                    page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 30000 }).catch(() => {}),
+                    page.waitForNavigation({ waitUntil: 'domcontentloaded' }).catch(() => {}),
                     cpButton.click()
                 ]);
                 console.log("2FA OTP Submitted!");
@@ -240,7 +243,7 @@ async function runScraper(groupUrl) {
                 const saveBrowserButton = await page.$('#checkpointSubmitButton');
                 if(saveBrowserButton) {
                     await Promise.all([
-                        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 30000 }).catch(() => {}),
+                        page.waitForNavigation({ waitUntil: 'domcontentloaded' }).catch(() => {}),
                         saveBrowserButton.click()
                     ]);
                     console.log("Saved browser settings!");
