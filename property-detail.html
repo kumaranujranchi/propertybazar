@@ -342,16 +342,15 @@
                 style="padding-left:106px;">
             </div>
 
-            <!-- WhatsApp OTP Section -->
             <div id="advOtpSection"
               style="display:none; margin-top:20px; padding:15px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;">
               <label class="adv-label" style="color: #166534;"><i class="fa-brands fa-whatsapp"></i> WhatsApp OTP
                 sent!</label>
               <div class="adv-input-wrap" style="margin-top:8px;">
                 <i class="fa-solid fa-key adv-input-icon"></i>
-                <input type="text" id="advInputOtp" class="adv-input-text" placeholder="Enter OTP (any value works)">
+                <input type="text" id="advInputOtp" class="adv-input-text" placeholder="Enter 6-digit OTP" maxlength="6">
               </div>
-              <p style="font-size:11px; color:#166534; margin-top:8px;">For demo, any 4-digit OTP will be accepted.</p>
+              <p id="advOtpTimer" style="font-size:11px; color:#166534; margin-top:8px;"></p>
             </div>
           </div>
 
@@ -1033,34 +1032,66 @@
           return;
         }
 
+        const phone = phoneEl.value.trim().replace(/\D/g, '').slice(-10);
+
         if (!isFallbackOtpSent) {
           this.disabled = true;
           this.textContent = 'Sending OTP...';
-          await new Promise(r => setTimeout(r, 800));
-          if (otpSection) otpSection.style.display = 'block';
-          isFallbackOtpSent = true;
-          this.disabled = false;
-          this.textContent = 'Verify & Unlock Details';
+          try {
+             // In fallback mode, we use a simple timeout for demo, or real call if convex is global
+             const res = await window.convex?.action('authkey:sendOtp', { mobile: phone, countryCode: '91' });
+             if (res?.success) {
+               if (otpSection) otpSection.style.display = 'block';
+               isFallbackOtpSent = true;
+               this.disabled = false;
+               this.textContent = 'Verify & Unlock Details';
+             } else {
+               alert(res?.message || 'Failed to send OTP via WhatsApp.');
+               this.disabled = false;
+               this.textContent = 'Get Contact Details';
+             }
+          } catch (e) {
+             console.error(e);
+             alert('Error sending OTP. Please try again.');
+             this.disabled = false;
+             this.textContent = 'Get Contact Details';
+          }
           return;
         }
 
         if (!isFallbackVerified) {
-          if (!otpInput.value.trim()) {
+          const otp = otpInput.value.trim();
+          if (!otp) {
             alert('Please enter the OTP sent to your WhatsApp.');
             return;
           }
           this.disabled = true;
           this.textContent = 'Verifying...';
-          await new Promise(r => setTimeout(r, 800));
-          isFallbackVerified = true;
-          this.disabled = false;
-          // Continue to final reveal
+          try {
+             const res = await window.convex?.mutation('authkey:verifyOtp', { mobile: phone, otp });
+             if (res?.success) {
+                isFallbackVerified = true;
+                this.disabled = false;
+                // Continue to final reveal
+             } else {
+                alert(res?.message || 'Invalid OTP. Please try again.');
+                this.disabled = false;
+                this.textContent = 'Verify & Unlock Details';
+                return;
+             }
+          } catch (e) {
+             console.error(e);
+             alert('Verification failed.');
+             this.disabled = false;
+             this.textContent = 'Verify & Unlock Details';
+             return;
+          }
         }
 
         this.disabled = true;
         this.textContent = 'Submitting...';
 
-        // Reveal owner details (Lead creation happens here in the real DB flow)
+        // Reveal owner details
         await new Promise(r => setTimeout(r, 800));
 
         // Success UI update
@@ -1456,28 +1487,54 @@
             if (!name || !phone) { alert('Please enter Name and Mobile'); return; }
             if (!document.getElementById('advCheckTerms').checked) { alert('Please agree to terms'); return; }
 
+            const cleanPhone = phone.replace(/\D/g, '').slice(-10);
+
             if (!isOtpSent) {
               this.disabled = true;
               this.textContent = 'Sending OTP...';
-              await new Promise(r => setTimeout(r, 800));
-              if (otpSection) otpSection.style.display = 'block';
-              isOtpSent = true;
-              this.disabled = false;
-              this.textContent = 'Verify & Unlock Details';
+              try {
+                const res = await convex.action('authkey:sendOtp', { mobile: cleanPhone, countryCode: '91' });
+                if (res.success) {
+                  isOtpSent = true;
+                  if (otpSection) otpSection.style.display = 'block';
+                  this.disabled = false;
+                  this.textContent = 'Verify & Unlock Details';
+                } else {
+                  alert(res.message || 'Failed to send OTP');
+                  this.disabled = false;
+                  this.textContent = 'Get Contact Details';
+                }
+              } catch (err) {
+                alert('Error: ' + err.message);
+                this.disabled = false;
+                this.textContent = 'Get Contact Details';
+              }
               return;
             }
 
             if (!isVerified) {
-              if (!otpInput.value.trim()) {
-                alert('Please enter the OTP sent to your WhatsApp');
-                return;
-              }
+              const otp = otpInput.value.trim();
+              if (!otp) { alert('Please enter OTP'); return; }
               this.disabled = true;
               this.textContent = 'Verifying...';
-              await new Promise(r => setTimeout(r, 800));
-              isVerified = true;
-              this.disabled = false;
-              // Continue to final submit
+              try {
+                const res = await convex.mutation('authkey:verifyOtp', { mobile: cleanPhone, otp });
+                if (res.success) {
+                  isVerified = true;
+                  this.disabled = false;
+                  // Continue to final submit
+                } else {
+                  alert(res.message || 'Invalid OTP');
+                  this.disabled = false;
+                  this.textContent = 'Verify & Unlock Details';
+                  return;
+                }
+              } catch (err) {
+                alert('Error: ' + err.message);
+                this.disabled = false;
+                this.textContent = 'Verify & Unlock Details';
+                return;
+              }
             }
 
             this.disabled = true;
@@ -1488,14 +1545,12 @@
               });
               this.style.display = 'none';
               document.getElementById('advSuccessMsg').style.display = 'block';
-              if (advPhoneDisplay) advPhoneDisplay.textContent = '+91 ' + window.REAL_OWNER_PHONE;
-              if (advNameDisplay) advNameDisplay.textContent = window.REAL_OWNER_NAME;
-              // Also reveal the number in the sidebar contact card
-              if (typeof revealPublicContact === 'function') revealPublicContact();
+              if (advPhoneDisplay) advPhoneDisplay.textContent = '+91 ' + REAL_OWNER_PHONE;
+              if (advNameDisplay) advNameDisplay.textContent = REAL_OWNER_NAME;
             } catch (err) {
               alert('Failed: ' + err.message);
               this.disabled = false;
-              this.textContent = 'Get Contact Details';
+              this.textContent = 'Verify & Unlock Details';
             }
           });
         }

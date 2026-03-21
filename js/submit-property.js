@@ -625,8 +625,7 @@ async function addExistingPhoto(photoObj) {
     removeBtn.style.cssText =
       "position:absolute; top:4px; right:4px; background:rgba(232,65,24,0.9); color:#fff; font-size:10px; cursor:pointer; width:18px; height:18px; display:flex; align-items:center; justify-content:center; border-radius:50%;";
     removeBtn.addEventListener("click", () => wrap.remove());
-
-    wrap.appendChild(removeBtn);
+      wrap.appendChild(removeBtn);
     photoPreviewGrid.appendChild(wrap);
   } catch (e) {
     console.error("Error loading existing photo:", e);

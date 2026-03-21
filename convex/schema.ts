@@ -109,4 +109,11 @@ export default defineSchema({
     overlayOpacity: v.optional(v.number()), // 0.0 – 1.0
     lastUpdated: v.number(),
   }).index("by_city_type", ["city", "type"]),
+
+  whatsapp_otps: defineTable({
+    mobile: v.string(),
+    otp: v.string(),
+    expiresAt: v.number(),
+    verified: v.boolean(),
+  }).index("by_mobile", ["mobile"]),
 });
