@@ -187,6 +187,38 @@ async function runScraper(groupUrl) {
           loginButton.click()
         ]);
         console.log("Login submitted successfully!");
+
+        // Check for 2FA Screen
+        await new Promise(r => setTimeout(r, 5000)); // wait for FB to redirect to 2FA Page
+        const twoFaInput = await page.$('#approvals_code') || await page.$('input[name="approvals_code"]');
+        if (twoFaInput && process.env.FB_2FA_SECRET) {
+            console.log("2FA Challenge detected! Generating OTP code securely...");
+            const { authenticator } = require('otplib');
+            const cleanSecret = process.env.FB_2FA_SECRET.replace(/\\s+/g, '');
+            const otpCode = authenticator.generate(cleanSecret);
+            
+            await page.type('input[name="approvals_code"]', otpCode, {delay: 50});
+            await new Promise(r => setTimeout(r, 1000));
+            const cpButton = await page.$('#checkpointSubmitButton');
+            if(cpButton) {
+                await Promise.all([
+                    page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 30000 }).catch(() => {}),
+                    cpButton.click()
+                ]);
+                console.log("2FA OTP Submitted!");
+                
+                // Sometimes Facebook asks to "Save Browser", we must click continue again
+                await new Promise(r => setTimeout(r, 3000));
+                const saveBrowserButton = await page.$('#checkpointSubmitButton');
+                if(saveBrowserButton) {
+                    await Promise.all([
+                        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 30000 }).catch(() => {}),
+                        saveBrowserButton.click()
+                    ]);
+                    console.log("Saved browser settings!");
+                }
+            }
+        }
       }
     } else {
       console.log("Already logged in via cached cookies.");
