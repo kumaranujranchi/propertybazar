@@ -30,6 +30,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   document
     .getElementById("userSearch")
     .addEventListener("input", renderUsersTable);
+  document
+    .getElementById("scrapedSearch")
+    ?.addEventListener("input", renderScrapedPropertiesAdmin);
+
   const bannerForm = document.getElementById("bannerForm");
   if (bannerForm) {
     bannerForm.addEventListener("submit", handleBannerUpload);
@@ -396,6 +400,7 @@ function initAdminNav() {
       document.getElementById(`section-${target}`).classList.add("active");
 
       if (target === "banners") loadBanners();
+      if (target === "scraped-listings") fetchAndRenderScrapedPropertiesAdmin();
 
       // Close sidebar on mobile after navigation
       if (window.innerWidth <= 1024) {
@@ -469,6 +474,12 @@ async function loadDashboardData() {
       document.getElementById("section-banners").classList.contains("active")
     ) {
       loadBanners();
+    }
+    // 5. Scraped properties
+    if (
+      document.getElementById("section-scraped-listings")?.classList.contains("active")
+    ) {
+      fetchAndRenderScrapedPropertiesAdmin();
     }
   } catch (err) {
     console.error("Failed to load dashboard data", err);
@@ -734,6 +745,83 @@ function renderUsersTable() {
     })
     .join("");
 }
+
+// SCRAPED LISTINGS LOGIC
+window.fetchAndRenderScrapedPropertiesAdmin = async () => {
+  const tbody = document.getElementById("scrapedListingsTable");
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Loading scraped properties...</td></tr>';
+
+  try {
+    const token = localStorage.getItem("pb_session");
+    // Fetch specifically properties posted by Bot
+    window.allScrapedProperties = await convex.query("properties:getScrapedProperties", { token });
+    renderScrapedPropertiesAdmin();
+  } catch (err) {
+    console.error("Failed to load scraped properties", err);
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state" style="color:var(--primary);">Failed to load properties.</td></tr>';
+  }
+};
+
+window.renderScrapedPropertiesAdmin = () => {
+  const tbody = document.getElementById("scrapedListingsTable");
+  if (!tbody) return;
+  if (!window.allScrapedProperties) return;
+
+  const searchStr = (document.getElementById("scrapedSearch")?.value || "").toLowerCase();
+
+  const filtered = window.allScrapedProperties.filter(p => {
+    if (!searchStr) return true;
+    const titleStr = `${p.details?.bhk || ""} ${p.propertyType}`.toLowerCase();
+    const locStr = `${p.location?.locality || ""} ${p.location?.city || ""}`.toLowerCase();
+    const projStr = (p.details?.projectName || "").toLowerCase();
+    return titleStr.includes(searchStr) || locStr.includes(searchStr) || projStr.includes(searchStr);
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No scraped properties found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(p => {
+    const photoSrc = (() => {
+      if (!p.photos || p.photos.length === 0) return "images/property-1.webp";
+      const first = p.photos[0];
+      const url = typeof first === "object" ? first.url : first;
+      if (!url || (typeof url === "string" && !url.startsWith("http") && !url.startsWith("/"))) {
+        return "images/property-1.webp";
+      }
+      return url;
+    })();
+
+    const price = p.pricing?.expectedPrice || p.pricing?.rent || p.pricing?.pricePerDay || 0;
+    const priceStr = price > 0 ? `₹${price.toLocaleString("en-IN")}` : "Price on Request";
+
+    return `
+    <tr id="row-${p._id}">
+      <td class="td-prop">
+        <img src="${photoSrc}" alt="Property" onerror="this.src='images/property-1.webp'" style="width:56px;height:44px;border-radius:6px;object-fit:cover;">
+        <div>
+          <div class="td-prop-title">${p.details?.bhk || ""} ${p.propertyType}</div>
+          <div class="td-prop-loc">${p.location?.locality || ""}, ${p.location?.city || ""}</div>
+        </div>
+      </td>
+      <td>
+        <div style="font-size:14px;font-weight:600;"><i class="fa-brands fa-facebook" style="color:#1877F2"></i> Facebook Bot</div>
+        <div style="font-size:12px;color:#6b7280;">Auto Scraped</div>
+      </td>
+      <td style="font-weight: 600;">${priceStr}</td>
+      <td style="font-size:13px;color:#6b7280;">${new Date(p._creationTime).toLocaleDateString()}</td>
+      <td>
+        <div class="action-btns">
+          <button class="act-btn view" title="View Property" onclick="window.open('property-detail.html?id=${p._id}', '_blank')"><i class="fa-solid fa-eye"></i></button>
+          <button class="act-btn reject" title="Delete Scrape" onclick="deletePropertyAdmin('${p._id}')"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `;
+  }).join("");
+};
 
 // Admin Actions global expose
 window.updatePropertyStatus = async (id, status) => {

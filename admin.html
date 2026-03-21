@@ -779,6 +779,10 @@
           <span class="nav-icon"><i class="fa-solid fa-list"></i></span>
           <span class="nav-label">Active Listings</span>
         </button>
+        <button class="admin-nav-item" data-target="scraped-listings" data-label="Scraped Listings">
+          <span class="nav-icon"><i class="fa-solid fa-robot"></i></span>
+          <span class="nav-label">Scraped Listings</span>
+        </button>
         <button class="admin-nav-item" data-target="users" data-label="Registered Users">
           <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
           <span class="nav-label">Users</span>
@@ -939,6 +943,37 @@
                 <tbody id="activeListingsTable">
                   <tr>
                     <td colspan="5" class="empty-state">Loading...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCRAPED LISTINGS -->
+        <section id="section-scraped-listings" class="admin-section">
+          <div class="panel-card panel-full">
+            <div class="panel-header">
+              <h3>Scraped Listings (Bot)</h3>
+              <button class="view-all-btn" onclick="fetchAndRenderScrapedPropertiesAdmin()">Refresh</button>
+            </div>
+            <div class="filter-bar">
+              <input type="text" id="scrapedSearch" placeholder="Search scraped listings by title or city...">
+            </div>
+            <div class="table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Property Info</th>
+                    <th>Poster</th>
+                    <th>Price</th>
+                    <th>Date Scraped</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="scrapedListingsTable">
+                  <tr>
+                    <td colspan="5" class="empty-state">Loading scraped properties...</td>
                   </tr>
                 </tbody>
               </table>
