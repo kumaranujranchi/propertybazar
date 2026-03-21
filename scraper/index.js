@@ -172,42 +172,58 @@ async function runScraper(groupUrl) {
   console.log("Checking Facebook login status...");
   await page.goto("https://www.facebook.com/", { waitUntil: 'networkidle2' });
 
-  // Auto-login logic for Cloud (Render)
-  if (process.env.FB_EMAIL && process.env.FB_PASSWORD) {
-    const emailInput = await page.$('#email');
-    if (emailInput) {
-      console.log("Logging into Facebook automatically using credentials...");
-      await page.type('#email', process.env.FB_EMAIL, {delay: 50});
-      await page.type('#pass', process.env.FB_PASSWORD, {delay: 50});
+  // Better Login Detection & Debugging
+  await page.screenshot({ path: "debug_fb_home.jpg" }); // Save screenshot to see what bot sees
+  const pageTitle = await page.title();
+  const currentUrl = page.url();
+  console.log(`Current URL: ${currentUrl} | Title: ${pageTitle}`);
+
+  const isLoginPage = currentUrl.includes('login') || pageTitle.toLowerCase().includes('log in') || await page.$('#email') !== null;
+  const isBlocked = await page.evaluate(() => document.body.innerText.toLowerCase().includes("security check") || document.body.innerText.toLowerCase().includes("captcha"));
+
+  if (isBlocked) {
+       console.error("Facebook has blocked this IP or requires a CAPTCHA. Please check 'debug_fb_home.jpg'!");
+  } else if (process.env.FB_EMAIL && process.env.FB_PASSWORD) {
+    if (isLoginPage) {
+      console.log("Not logged in. Logging into Facebook automatically using credentials...");
+      // Handle mobile view vs desktop view logins just in case
+      const emailSelector = (await page.$('#m_login_email')) ? '#m_login_email' : '#email';
+      const passSelector = (await page.$('#m_login_password')) ? '#m_login_password' : '#pass';
+      const loginButton = (await page.$('[name="login"]')) ? '[name="login"]' : 'button[type="submit"]';
+
+      await page.type(emailSelector, process.env.FB_EMAIL, {delay: 50});
+      await page.type(passSelector, process.env.FB_PASSWORD, {delay: 50});
       
-      const loginButton = await page.$('[name="login"]');
-      if (loginButton) {
+      const loginBtn = await page.$(loginButton);
+      if (loginBtn) {
         await Promise.all([
           page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 30000 }).catch(() => {}),
-          loginButton.click()
+          loginBtn.click()
         ]);
         console.log("Login submitted successfully!");
+        await page.screenshot({ path: "debug_fb_after_login.jpg" });
 
         // Check for 2FA Screen
-        await new Promise(r => setTimeout(r, 5000)); // wait for FB to redirect to 2FA Page
+        await new Promise(r => setTimeout(r, 5000)); 
         const twoFaInput = await page.$('#approvals_code') || await page.$('input[name="approvals_code"]');
         if (twoFaInput && process.env.FB_2FA_SECRET) {
             console.log("2FA Challenge detected! Generating OTP code securely...");
             const { authenticator } = require('otplib');
-            const cleanSecret = process.env.FB_2FA_SECRET.replace(/\\s+/g, '');
+            const cleanSecret = process.env.FB_2FA_SECRET.replace(/\s+/g, '');
             const otpCode = authenticator.generate(cleanSecret);
             
             await page.type('input[name="approvals_code"]', otpCode, {delay: 50});
             await new Promise(r => setTimeout(r, 1000));
-            const cpButton = await page.$('#checkpointSubmitButton');
+            const cpButton = await page.$('#checkpointSubmitButton') || await page.$('button[type="submit"]');
             if(cpButton) {
                 await Promise.all([
                     page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 30000 }).catch(() => {}),
                     cpButton.click()
                 ]);
                 console.log("2FA OTP Submitted!");
+                await page.screenshot({ path: "debug_fb_after_2fa.jpg" });
                 
-                // Sometimes Facebook asks to "Save Browser", we must click continue again
+                // Sometimes Facebook asks to "Save Browser"
                 await new Promise(r => setTimeout(r, 3000));
                 const saveBrowserButton = await page.$('#checkpointSubmitButton');
                 if(saveBrowserButton) {
@@ -221,7 +237,7 @@ async function runScraper(groupUrl) {
         }
       }
     } else {
-      console.log("Already logged in via cached cookies.");
+      console.log("Login fields not found. Looks like we are Already logged in via cached cookies!");
     }
   } else {
       console.log("No FB_EMAIL or FB_PASSWORD provided in .env. Assuming already logged in or manual browser.");
@@ -232,6 +248,24 @@ async function runScraper(groupUrl) {
   
   console.log("Waiting 15 seconds to let Facebook group feed load properly...");
   await new Promise(r => setTimeout(r, 15000));
+  await page.screenshot({ path: "debug_fb_group.jpg" });
+
+  // Auto-Join Group Logic
+  const joinButton = await page.evaluateHandle(() => {
+    // Find any button or div with text "Join Group" or "Join"
+    const elements = Array.from(document.querySelectorAll('div[role="button"], button'));
+    return elements.find(el => el.innerText && (el.innerText.trim() === 'Join Group' || el.innerText.trim() === 'Join'));
+  });
+
+  if (joinButton) {
+    console.log("Found 'Join Group' button. Clicking it to join...");
+    await joinButton.click().catch(() => {});
+    console.log("Waiting 5 seconds for join to process...");
+    await new Promise(r => setTimeout(r, 5000));
+    await page.screenshot({ path: "debug_fb_after_join.jpg" });
+  } else {
+    console.log("No 'Join Group' button found. Assuming already joined or group is public.");
+  }
 
   console.log("Extracting posts...");
   // Note: Facebook class names are obfuscated, so we target 'role="article"' which usually wraps posts.
