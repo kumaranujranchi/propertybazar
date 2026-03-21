@@ -279,21 +279,40 @@ async function runScraper(groupUrl) {
     console.log("No 'Join Group' button found. Assuming already joined or group is public.");
   }
 
+  console.log("Scrolling to load more posts...");
+  let scrollAttempts = 0;
+  const maxScrollAttempts = 12; // Scraper will try to scroll up to 12 times to fetch enough data
+  
+  while (scrollAttempts < maxScrollAttempts) {
+    const postCount = await page.evaluate(() => document.querySelectorAll('div[role="article"]').length);
+    process.stdout.write(`[DEBUG] Loaded ${postCount} potential posts... \r`);
+    if (postCount >= 35) break; // Aim for 25 valid ones, so load a few extra for safety
+    
+    const previousHeight = await page.evaluate('document.body.scrollHeight');
+    await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
+    await new Promise(r => setTimeout(r, 5000)); // Facebook is slow, wait 5s for lazy load
+    
+    const newHeight = await page.evaluate('document.body.scrollHeight');
+    if (newHeight === previousHeight) break; // End of feed
+    scrollAttempts++;
+  }
+  console.log("\nScroll complete.");
+
   console.log("Extracting posts...");
   // Note: Facebook class names are obfuscated, so we target 'role="article"' which usually wraps posts.
   const postsData = await page.evaluate(() => {
     const posts = document.querySelectorAll('div[role="article"]');
     const data = [];
     
-    // Only process the first 3 posts for safety testing
-    Array.from(posts).slice(0, 3).forEach((post) => {
+    // Increase limit to 25 posts per group for comprehensive data collection
+    Array.from(posts).slice(0, 25).forEach((post) => {
       const text = post.innerText || "";
       // Find actual post images (filtering out emojis and tiny icons)
       const imgs = Array.from(post.querySelectorAll('img'))
                     .map(img => img.src)
-                    .filter(src => (src.includes('scontent') || src.includes('fbcdn')) && !src.includes('emoji'));
+                    .filter(src => (src && (src.includes('scontent') || src.includes('fbcdn'))) && !src.includes('emoji'));
       
-      // We only care about large texts indicative of a property post
+      // We only care about valid property posts (usually > 50 chars)
       if(text.length > 50) {
         data.push({ text, images: imgs });
       }
