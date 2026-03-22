@@ -83,35 +83,35 @@ async function processTextWithAI(rawText) {
   You are an expert real estate data extraction assistant.
   Extract the following property details from the given unstructured Facebook post text.
   Return ONLY a valid JSON object matching the exact keys below.
-  If a detail is missing, provide a sensible default (like "N/A" or 0) based on the context.
+  CRITICAL RULE: If a string detail is missing, provide an empty string "" (DO NOT use "N/A", "Unknown", or similar placeholders). If a number is missing, provide 0.
   
   Expected JSON schema:
   {
     "transactionType": "Sell" | "Rent",
     "propertyType": "Apartment" | "House/Villa" | "Plot" | "Commercial",
     "location": {
-      "city": "String",
+      "city": "String (e.g., 'Patna')",
       "locality": "String",
-      "society": "String (optional)"
+      "society": "String"
     },
     "details": {
-      "bhk": "String or Number",
-      "bathrooms": "String or Number",
-      "balconies": "String or Number",
+      "bhk": "String (e.g., '2' or '3')",
+      "bathrooms": "String",
+      "balconies": "String",
       "builtUpArea": "String (e.g., '1200 Sq.Ft.')",
       "furnishing": "Unfurnished" | "Semi-Furnished" | "Fully-Furnished",
-      "projectName": "String (if any)"
+      "projectName": "String (Extract the building/project name if present, otherwise leave empty '')"
     },
     "amenities": ["Array of strings (e.g., 'Parking', 'Lift')"],
     "pricing": {
-      "expectedPrice": Number (e.g., 5000000),
-      "pricePerSqFt": Number (optional),
-      "maintenance": Number (optional)
+      "expectedPrice": Number (e.g., 5000000, use 0 if not specified),
+      "pricePerSqFt": Number (use 0 if not specified),
+      "maintenance": Number (use 0 if not specified)
     },
     "contactDesc": {
-      "ownerName": "Unknown Owner",
+      "ownerName": "String (leave empty if not found)",
       "ownerPhone": "String - Extract the phone number",
-      "agentDetails": "Unknown Agent"
+      "agentDetails": "String (leave empty if not found)"
     }
   }
 

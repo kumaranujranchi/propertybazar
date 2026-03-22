@@ -753,6 +753,33 @@
 
       /* Hide less critical columns on very small screens */
     }
+    /* ---------- MODAL ---------- */
+    .admin-modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); z-index: 9999;
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .admin-modal-overlay.active { display: flex; }
+    .admin-modal-content {
+      background: #fff; width: 100%; max-width: 500px;
+      border-radius: var(--radius); overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .admin-modal-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .admin-modal-title { font-size: 16px; font-weight: 700; color: var(--dark); }
+    .admin-modal-close { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted); }
+    .admin-modal-body { padding: 20px; }
+    .admin-modal-group { margin-bottom: 16px; }
+    .admin-modal-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--dark); }
+    .admin-modal-input { width: 100%; height: 40px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; font-family: inherit; font-size: 14px; }
+    .admin-modal-select { width: 100%; height: 40px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; font-family: inherit; font-size: 14px; background: #fff; }
+    .admin-modal-footer { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: #f9fafb; }
+    .admin-btn-cancel { padding: 8px 16px; border: 1px solid var(--border); background: #fff; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; }
+    .admin-btn-save { padding: 8px 16px; border: none; background: var(--primary); color: #fff; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; }
   </style>
 </head>
 
@@ -1265,6 +1292,67 @@
         </section>
       </div>
     </main>
+  </div>
+
+  <!-- Edit Scraped Property Modal -->
+  <div class="admin-modal-overlay" id="editScrapedModal">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <div class="admin-modal-title">Edit Scraped Property</div>
+        <button class="admin-modal-close" onclick="window.closeScrapedEditModal && window.closeScrapedEditModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="editScrapedForm" onsubmit="event.preventDefault();">
+          <input type="hidden" id="editScrapedId">
+          
+          <div class="admin-modal-group">
+            <label class="admin-modal-label">Title / Project Name</label>
+            <input type="text" id="editScrapedProjectName" class="admin-modal-input" placeholder="e.g. 2 BHK Apartment in Patna">
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="admin-modal-group">
+              <label class="admin-modal-label">Property Type</label>
+              <select id="editScrapedType" class="admin-modal-select">
+                <option value="Apartment">Apartment</option>
+                <option value="House/Villa">House/Villa</option>
+                <option value="Plot">Plot</option>
+                <option value="Commercial">Commercial</option>
+              </select>
+            </div>
+            <div class="admin-modal-group">
+              <label class="admin-modal-label">Transaction Type</label>
+              <select id="editScrapedTransaction" class="admin-modal-select">
+                <option value="Sell">Sell</option>
+                <option value="Rent">Rent</option>
+              </select>
+            </div>
+            
+            <div class="admin-modal-group">
+              <label class="admin-modal-label">Expected Price (₹)</label>
+              <input type="number" id="editScrapedPrice" class="admin-modal-input" placeholder="e.g. 5000000">
+            </div>
+            <div class="admin-modal-group">
+              <label class="admin-modal-label">BHK</label>
+              <input type="text" id="editScrapedBhk" class="admin-modal-input" placeholder="e.g. 2, 3">
+            </div>
+            
+            <div class="admin-modal-group">
+              <label class="admin-modal-label">City</label>
+              <input type="text" id="editScrapedCity" class="admin-modal-input">
+            </div>
+            <div class="admin-modal-group">
+              <label class="admin-modal-label">Locality</label>
+              <input type="text" id="editScrapedLocality" class="admin-modal-input">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="admin-btn-cancel" onclick="window.closeScrapedEditModal && window.closeScrapedEditModal()">Cancel</button>
+        <button class="admin-btn-save" id="btnSaveScraped">Save Changes</button>
+      </div>
+    </div>
   </div>
 
   <!-- Toast container -->

@@ -815,7 +815,8 @@ window.renderScrapedPropertiesAdmin = () => {
       <td>
         <div class="action-btns">
           <button class="act-btn view" title="View Property" onclick="window.open('property-detail.html?id=${p._id}', '_blank')"><i class="fa-solid fa-eye"></i></button>
-          <button class="act-btn reject" title="Delete Scrape" onclick="deletePropertyAdmin('${p._id}')"><i class="fa-solid fa-trash"></i></button>
+          <button class="act-btn edit" title="Edit Scraped Property" onclick="window.openScrapedEditModal('${p._id}')" style="color:#0ea5e9; border-color:#0ea5e9;"><i class="fa-solid fa-pen"></i></button>
+          <button class="act-btn reject" title="Delete Scrape" onclick="window.deletePropertyAdmin('${p._id}')"><i class="fa-solid fa-trash"></i></button>
         </div>
       </td>
     </tr>
@@ -890,3 +891,88 @@ window.toggleHandpicked = async (id, currentlyHandpicked) => {
     if (window.showToast) window.showToast('Failed to update handpicked status', 'error');
   }
 };
+
+window.openScrapedEditModal = (id) => {
+  const prop = window.allScrapedProperties?.find(p => p._id === id);
+  if (!prop) return;
+
+  document.getElementById("editScrapedId").value = prop._id;
+  document.getElementById("editScrapedProjectName").value = prop.details?.projectName || "";
+  document.getElementById("editScrapedType").value = prop.propertyType || "Apartment";
+  document.getElementById("editScrapedTransaction").value = prop.transactionType || "Sell";
+  document.getElementById("editScrapedPrice").value = prop.pricing?.expectedPrice || "";
+  document.getElementById("editScrapedBhk").value = prop.details?.bhk || "";
+  document.getElementById("editScrapedCity").value = prop.location?.city || "";
+  document.getElementById("editScrapedLocality").value = prop.location?.locality || "";
+
+  document.getElementById("editScrapedModal").classList.add("active");
+};
+
+window.closeScrapedEditModal = () => {
+  document.getElementById("editScrapedModal").classList.remove("active");
+};
+
+document.getElementById('btnSaveScraped')?.addEventListener('click', async () => {
+  const id = document.getElementById("editScrapedId").value;
+  const prop = window.allScrapedProperties?.find(p => p._id === id);
+  if (!prop) return;
+
+  const btn = document.getElementById('btnSaveScraped');
+  const orgText = btn.innerText;
+  btn.innerText = "Saving...";
+  btn.disabled = true;
+
+  try {
+    const token = localStorage.getItem("pb_session");
+    
+    // Construct updated objects manually to preserve unchanged nested fields
+    const updatedDetails = {
+      ...prop.details,
+      projectName: document.getElementById("editScrapedProjectName").value,
+      bhk: document.getElementById("editScrapedBhk").value,
+    };
+    
+    const updatedPricing = {
+      ...prop.pricing,
+      expectedPrice: parseInt(document.getElementById("editScrapedPrice").value) || 0,
+    };
+    
+    const updatedLocation = {
+      ...prop.location,
+      city: document.getElementById("editScrapedCity").value,
+      locality: document.getElementById("editScrapedLocality").value,
+    };
+
+    const payload = {
+      token,
+      id: prop._id,
+      transactionType: document.getElementById("editScrapedTransaction").value,
+      propertyType: document.getElementById("editScrapedType").value,
+      location: updatedLocation,
+      details: updatedDetails,
+      pricing: updatedPricing,
+      amenities: prop.amenities || [],
+      photos: prop.photos || [],
+      videos: prop.videos,
+      brochure: prop.brochure,
+      configurations: prop.configurations,
+      externalVideos: prop.externalVideos,
+      contactDesc: prop.contactDesc || {},
+      posterType: prop.posterType || "Bot",
+      customFAQs: prop.customFAQs,
+    };
+
+    await convex.mutation("properties:updateProperty", payload);
+    
+    if (window.showToast) window.showToast("Property updated successfully!");
+    window.closeScrapedEditModal();
+    window.fetchAndRenderScrapedPropertiesAdmin(); // Refresh UI
+
+  } catch (err) {
+    console.error("Error updating SCRAPED prop:", err);
+    if (window.showToast) window.showToast("Failed to update property", "error");
+  } finally {
+    btn.innerText = orgText;
+    btn.disabled = false;
+  }
+});
