@@ -33,9 +33,30 @@ export const sendOtp = action({
       const response = await fetch(url.toString(), { method: 'POST' });
       const resText = await response.text();
       
-      // Authkey usually returns a numeric ID on success or a JSON string
-      // We'll check if it looks like a success
-      if (resText && !resText.toLowerCase().includes("error") && !resText.toLowerCase().includes("invalid") && (resText.length > 5 || /^\d+$/.test(resText.trim()))) {
+      // ALWAYS log the raw Authkey response for debugging
+      console.log("Authkey raw response for mobile", args.mobile, ":", resText);
+
+      const resLower = resText.toLowerCase().trim();
+
+      // Authkey returns a numeric message ID on success (e.g. "1234567890")
+      // Detect failure keywords that may slip through a loose check
+      const isFailure =
+        resLower.includes("error") ||
+        resLower.includes("invalid") ||
+        resLower.includes("balance") ||
+        resLower.includes("insufficient") ||
+        resLower.includes("quota") ||
+        resLower.includes("failed") ||
+        resLower.includes("unauthorized") ||
+        resLower.includes("forbidden") ||
+        resLower.includes("not found") ||
+        resLower.includes("rejected") ||
+        resLower.includes("blocked");
+
+      // Authkey success response is purely numeric (message ID)
+      const isNumericId = /^\d+$/.test(resText.trim());
+
+      if (!isFailure && (isNumericId || response.ok)) {
         // Store the OTP in the database via a mutation
         await ctx.runMutation("authkey:storeOtp", {
           mobile: args.mobile,
@@ -45,18 +66,20 @@ export const sendOtp = action({
       } else {
         console.error("Authkey API Response Error:", resText);
         
-        // Professional user-facing message
+        // Specific error detection for useful admin logs
         let errorMsg = "WhatsApp service is temporarily unavailable. Please try again later.";
         
-        // We can still log the real reason for the admin in Convex logs
-        if (resText.toLowerCase().includes("balance")) {
-          console.error("CRITICAL: Authkey account has insufficient balance!");
+        if (resLower.includes("balance") || resLower.includes("insufficient") || resLower.includes("quota")) {
+          console.error("CRITICAL: Authkey account has insufficient balance or quota exceeded!");
           errorMsg = "Service temporarily busy. Please try again after 5 minutes.";
-        } else if (resText.toLowerCase().includes("sid") || resText.toLowerCase().includes("sender")) {
+        } else if (resLower.includes("sid") || resLower.includes("sender")) {
+          console.error("CRITICAL: Authkey WhatsApp SID issue!");
           errorMsg = "Contact service configuration error. Please contact support.";
-        }
- else if (resText.toLowerCase().includes("authkey")) {
-          errorMsg = "Invalid API Key/Authkey configuration.";
+        } else if (resLower.includes("unauthorized") || resLower.includes("forbidden") || resLower.includes("authkey")) {
+          console.error("CRITICAL: Authkey API Key invalid!");
+          errorMsg = "Invalid API configuration. Please contact support.";
+        } else if (resLower.includes("invalid")) {
+          errorMsg = "Invalid request to WhatsApp service. Please check your phone number.";
         }
         
         return { success: false, message: errorMsg };
