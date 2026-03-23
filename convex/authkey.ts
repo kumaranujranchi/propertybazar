@@ -27,8 +27,9 @@ export const sendOtp = action({
     url.searchParams.append("authkey", authkey);
     url.searchParams.append("mobile", args.mobile);
     url.searchParams.append("country_code", args.countryCode);
-    url.searchParams.append("wid", wid);   // WhatsApp Template ID
-    url.searchParams.append("otp", otp);   // OTP for copy_code authentication template
+    url.searchParams.append("wid", wid);              // WhatsApp Template ID
+    url.searchParams.append("1", otp);               // Template variable {#1#} = OTP value
+    url.searchParams.append("copy_code_value", otp); // Copy code button value for copy_code templates
 
     try {
       const response = await fetch(url.toString(), { method: 'POST' });
