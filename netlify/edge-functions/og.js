@@ -25,8 +25,8 @@ export default async (request, context) => {
     const propertySlug = url.searchParams.get("slug");
 
     // Defaults that will be overridden if data is fetched successfully
-    let ogTitle = "Property Details | 24Dismil.com";
-    let ogDescription = "View detailed information, photos, and amenities of this property on 24Dismil.com.";
+    let ogTitle = "Property Details | 24Dismil";
+    let ogDescription = "View detailed information, photos, and amenities of this property on 24Dismil.";
     let ogImage = "https://24dismil.com/images/hero-bg.jpg";
     let ogImageWidth = "1200";
     let ogImageHeight = "630";
