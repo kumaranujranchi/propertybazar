@@ -11,23 +11,25 @@ export const sendOtp = action({
   },
   handler: async (ctx, args) => {
     const authkey = process.env.AUTHKEY_API_KEY;
-    const sid = process.env.AUTHKEY_WHATSAPP_SID; // WhatsApp Sender ID (sid)
+    const wid = process.env.AUTHKEY_WHATSAPP_WID; // WhatsApp Template ID (wid)
 
-    if (!authkey || !sid) {
-      console.error("Missing AUTHKEY_API_KEY or AUTHKEY_WHATSAPP_SID");
+    if (!authkey || !wid) {
+      console.error("Missing AUTHKEY_API_KEY or AUTHKEY_WHATSAPP_WID");
       return { success: false, message: "Server configuration error" };
     }
 
     // Generate a 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Construct the Authkey API URL as per documentation screenshot
+    // Construct the Authkey WhatsApp API URL
+    // Uses wid (WhatsApp Template ID) and bodyValues to pass OTP variable
     const url = new URL("https://api.authkey.io/request");
     url.searchParams.append("authkey", authkey);
     url.searchParams.append("mobile", args.mobile);
     url.searchParams.append("country_code", args.countryCode);
-    url.searchParams.append("sid", sid);
-    url.searchParams.append("otp", otp);
+    url.searchParams.append("wid", wid);                          // WhatsApp Template ID
+    url.searchParams.append("type", "text");                       // Template type
+    url.searchParams.append("bodyValues", JSON.stringify({"1": otp})); // OTP as body variable
 
     try {
       const response = await fetch(url.toString(), { method: 'POST' });
