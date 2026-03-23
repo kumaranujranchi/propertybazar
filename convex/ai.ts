@@ -83,7 +83,7 @@ export const parseSearchQuery = action({
     if (/\b(rent|rental|kiraya|lp|lease|kiraye)\b/i.test(userText)) scannedFilters.type = "Rent";
     else if (/\b(buy|purchase|sale|sell|bechna|kharidna|bechana)\b/i.test(userText)) scannedFilters.type = "Sale";
 
-    const systemPrompt = `You are 24Dismil Ai Assitance, a smart real estate buddy for 24Dismil.com.
+    const systemPrompt = `You are 24Dismil Ai Assistance, a smart real estate buddy for 24Dismil.
 Your job is to help users find properties and engage in friendly conversation.
 
 HOW TO RESPOND:

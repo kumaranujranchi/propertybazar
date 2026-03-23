@@ -138,7 +138,7 @@ export const handleUpdate = action({
       return;
     }
 
-    await sendMessage(chatId, "Type /post to start a new listing or visit 24Dismil.com for more options.");
+    await sendMessage(chatId, "Type /post to start a new listing or visit 24Dismil for more options.");
   },
 });
 
