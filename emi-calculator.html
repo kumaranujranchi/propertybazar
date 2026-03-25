@@ -61,9 +61,15 @@
       .emi-result-card h4 { margin: 0 0 6px; color: #1c4f64; }
       .emi-result-card p { margin: 4px 0; font-size: 20px; font-weight: 700; color: #065c5b; }
       .emi-notice { border-left: 4px solid #0d8b96; background: rgba(13, 139, 150, 0.08); padding: 12px 14px; margin-top: 16px; border-radius: 8px; }
-      @media (max-width: 900px) {
-        .emi-result-grid { grid-template-columns: 1fr; }
-      }
+      .cta-sticky-wrap { text-align: right; margin-top: 22px; }
+      .cta-sticky-wrap a { display: inline-block; background: #fe7a22; color: #fff; font-weight: 700; box-shadow: 0 8px 20px rgba(254, 122, 34, 0.28); border-radius: 10px; padding: 12px 18px; transition: transform .2s ease, box-shadow .2s ease; }
+      .cta-sticky-wrap a:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(254, 122, 34, 0.33); }
+      .why-loan { background: #f3fbff; border: 1px solid #d5eef8; border-radius: 14px; padding: 26px 18px; margin-top: 30px; }
+      .why-loan h3 { margin-bottom: 14px; }
+      .why-loan-grid { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: 14px; }
+      .why-loan-item { background: #fff; border-radius: 12px; border: 1px solid #dcebf5; padding: 14px; }
+      .why-loan-item h4 { margin-bottom: 6px; font-size: 16px; }
+      @media (max-width: 900px) { .emi-result-grid { grid-template-columns: 1fr; } .why-loan-grid { grid-template-columns: 1fr; } }
     </style>
   </head>
   <body>
@@ -159,15 +165,26 @@
           </div>
 
           <section id="amortizationSection" style="margin-top: 30px; display:none;">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 10px;">
-              <h3>Amortization Schedule</h3>
-              <a href="#" class="btn btn-outline" id="homeLoanCTA" style="background-color:#fe7a22; color:#fff; border:none; padding: 10px 18px; border-radius: 8px;">Looking for Home Loan? Submit your details</a>
-            </div>
+            <h3 style="margin-bottom: 10px;">Amortization Schedule</h3>
             <div style="overflow:auto; max-height: 320px; border: 1px solid #dce9f2; border-radius: 12px; background:#fff;">
               <table style="width:100%; min-width:768px; border-collapse: collapse; font-size: 13px;">
                 <thead style="background:#f1faff; color:#004e70;"><tr><th style="padding: 11px 8px; border-bottom:1px solid #dae8f0;">Month</th><th style="padding: 11px 8px;border-bottom:1px solid #dae8f0;">EMI (₹)</th><th style="padding: 11px 8px;border-bottom:1px solid #dae8f0;">Principal</th><th style="padding: 11px 8px;border-bottom:1px solid #dae8f0;">Interest</th><th style="padding: 11px 8px;border-bottom:1px solid #dae8f0;">Balance</th></tr></thead>
                 <tbody id="amortizationBody"></tbody>
               </table>
+            </div>
+            <div class="cta-sticky-wrap">
+              <a href="#" id="homeLoanCTA">Looking for Home Loan? Submit your details</a>
+            </div>
+            <div class="why-loan">
+              <h3>Why Choose 24Dismil for Your Home Loan</h3>
+              <div class="why-loan-grid">
+                <div class="why-loan-item"><h4>Best Interest Rates</h4><p>Compare offers from top lenders and get lowest EMI on the market through our partner panel.</p></div>
+                <div class="why-loan-item"><h4>Quick Approval</h4><p>Fast document check and pre-approval in hours, so you can book property without delay.</p></div>
+                <div class="why-loan-item"><h4>Transparent Process</h4><p>No hidden charges or surprises—clear breakup of processing fees, interest, and total cost.</p></div>
+                <div class="why-loan-item"><h4>Expert Guidance</h4><p>Dedicated loan advisors for every customer to assist with paperwork and negotiation.</p></div>
+                <div class="why-loan-item"><h4>Flexible Tenures</h4><p>Choose loan tenure from 5 years up to 30 years with easy prepayment options.</p></div>
+                <div class="why-loan-item"><h4>Home Loan Calculator</h4><p>Built-in EMI insights help optimize principal vs interest strategy over time.</p></div>
+              </div>
             </div>
           </section>
         </div>
