@@ -518,6 +518,12 @@
         document.getElementById('fromValue').value = '1';
         performConversion();
       }
+      
+        function updateToUnitOptions(state) {
+          const data = unitsData[state];
+          const select = document.getElementById('toUnit');
+          select.innerHTML = data.units.map(u => `<option value="${u.sqft}">${u.name} (${u.abbr})</option>`).join('');
+        }
 
       function performConversion() {
         const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
@@ -530,6 +536,7 @@
       document.getElementById('stateSelect').addEventListener('change', (e) => {
         updateUnitsTable(e.target.value);
         updateFromUnitOptions(e.target.value);
+          updateToUnitOptions(e.target.value);
       });
 
       document.getElementById('fromValue').addEventListener('input', performConversion);
@@ -539,6 +546,7 @@
       // Initialize on load
       updateUnitsTable('national');
       updateFromUnitOptions('national');
+        updateToUnitOptions('national');
     </script>
   </body>
 </html>
