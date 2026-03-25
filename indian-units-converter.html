@@ -233,10 +233,7 @@
           <div class="input-group">
             <label for="fromUnit">From Unit</label>
             <select id="fromUnit">
-              <option value="sqft">Square Foot (sq ft)</option>
-              <option value="sqm">Square Meter (sq m)</option>
-              <option value="acre">Acre</option>
-              <option value="hectare">Hectare</option>
+              <option value="435.6">Dismil / Decimal (Dismil)</option>
             </select>
           </div>
         </div>
@@ -251,10 +248,11 @@
           <div class="input-group">
             <label for="toUnit">To Unit</label>
             <select id="toUnit">
-              <option value="sqft">Square Foot (sq ft)</option>
-              <option value="sqm">Square Meter (sq m)</option>
-              <option value="acre">Acre</option>
-              <option value="hectare">Hectare</option>
+              <option value="1">Square Foot (sq ft)</option>
+              <option value="9">Square Yard (sq yd)</option>
+              <option value="10.7639">Square Meter (sq m)</option>
+              <option value="43560">Acre</option>
+              <option value="107639">Hectare</option>
             </select>
           </div>
         </div>
@@ -385,16 +383,22 @@
 
     <script src="js/main.js"></script>
     <script>
-      // Unit conversion database
+      // Standard units remain fixed for all states.
+      const STANDARD_UNITS = [
+        { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+        { name: 'Square Yard', abbr: 'sq yd', sqft: 9, sqm: 0.836127 },
+        { name: 'Square Meter', abbr: 'sq m', sqft: 10.7639, sqm: 1 },
+        { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+        { name: 'Hectare', abbr: 'ha', sqft: 107639, sqm: 10000 },
+      ];
+
+      // Local units vary by selected state.
       const unitsData = {
         national: {
-          title: 'National / Standard Units',
+          title: 'National / Common Units',
           units: [
-            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
-            { name: 'Square Yard', abbr: 'sq yd', sqft: 9, sqm: 0.836127 },
-            { name: 'Square Meter', abbr: 'sq m', sqft: 10.7639, sqm: 1 },
-            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
-            { name: 'Hectare', abbr: 'ha', sqft: 107639, sqm: 10000 },
+            { name: 'Dismil / Decimal', abbr: 'Dismil', sqft: 435.6, sqm: 40.47 },
+            { name: 'Gaj', abbr: 'Gaj', sqft: 9, sqm: 0.836127 },
           ]
         },
         bihar: {
@@ -403,8 +407,6 @@
             { name: 'Dismil / Decimal', abbr: 'Dismil', sqft: 435.6, sqm: 40.47 },
             { name: 'Kattha', abbr: 'Kattha', sqft: 1361, sqm: 126.48 },
             { name: 'Bigha', abbr: 'Bigha', sqft: 27220, sqm: 2529.75 },
-            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
-            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
           ]
         },
         up: {
@@ -412,9 +414,8 @@
           units: [
             { name: 'Bigha', abbr: 'Bigha', sqft: 27000, sqm: 2508.45 },
             { name: 'Biswa', abbr: 'Biswa', sqft: 1350, sqm: 125.42 },
+            { name: 'Biswansi', abbr: 'Biswansi', sqft: 27, sqm: 2.51 },
             { name: 'Gaj', abbr: 'Gaj', sqft: 9, sqm: 0.836127 },
-            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
-            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
           ]
         },
         punjab: {
@@ -423,8 +424,6 @@
             { name: 'Kanal', abbr: 'Kanal', sqft: 5445, sqm: 506.13 },
             { name: 'Marla', abbr: 'Marla', sqft: 272.25, sqm: 25.31 },
             { name: 'Sarsahi', abbr: 'Sarsahi', sqft: 270, sqm: 25.08 },
-            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
-            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
           ]
         },
         rajasthan: {
@@ -433,8 +432,6 @@
             { name: 'Bigha', abbr: 'Bigha', sqft: 17424, sqm: 1618.29 },
             { name: 'Biswa', abbr: 'Biswa', sqft: 871, sqm: 80.91 },
             { name: 'Biswansi', abbr: 'Biswansi', sqft: 43.5, sqm: 4.04 },
-            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
-            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
           ]
         },
         maharashtra: {
@@ -442,8 +439,6 @@
           units: [
             { name: 'Guntha / Gunta', abbr: 'Guntha', sqft: 1089, sqm: 101.17 },
             { name: 'Aana', abbr: 'Aana', sqft: 653, sqm: 60.70 },
-            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
-            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
           ]
         },
         south: {
@@ -452,8 +447,6 @@
             { name: 'Cent', abbr: 'Cent', sqft: 435.6, sqm: 40.47 },
             { name: 'Ground', abbr: 'Ground', sqft: 2400, sqm: 223.08 },
             { name: 'Ankanam', abbr: 'Ankanam', sqft: 72, sqm: 6.69 },
-            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
-            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
           ]
         },
         telangana: {
@@ -462,8 +455,6 @@
             { name: 'Ankanam', abbr: 'Ankanam', sqft: 72, sqm: 6.69 },
             { name: 'Kuncham', abbr: 'Kuncham', sqft: 4356, sqm: 404.69 },
             { name: 'Gajam', abbr: 'Gajam', sqft: 9, sqm: 0.836127 },
-            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
-            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
           ]
         },
         kerala: {
@@ -471,8 +462,6 @@
           units: [
             { name: 'Cent', abbr: 'Cent', sqft: 435.6, sqm: 40.47 },
             { name: 'Ares', abbr: 'Ares', sqft: 1076, sqm: 100 },
-            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
-            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
           ]
         },
         bengal: {
@@ -481,8 +470,6 @@
             { name: 'Kattha', abbr: 'Kattha', sqft: 720, sqm: 66.89 },
             { name: 'Chittak', abbr: 'Chittak', sqft: 45, sqm: 4.18 },
             { name: 'Bigha', abbr: 'Bigha', sqft: 14400, sqm: 1337.81 },
-            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
-            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
           ]
         },
         northeast: {
@@ -491,8 +478,6 @@
             { name: 'Lecha', abbr: 'Lecha', sqft: 144, sqm: 13.38 },
             { name: 'Kattha', abbr: 'Kattha', sqft: 2880, sqm: 267.56 },
             { name: 'Bigha', abbr: 'Bigha', sqft: 14400, sqm: 1337.81 },
-            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
-            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
           ]
         }
       };
@@ -518,17 +503,20 @@
         document.getElementById('fromValue').value = '1';
         performConversion();
       }
-      
-        function updateToUnitOptions(state) {
-          const data = unitsData[state];
-          const select = document.getElementById('toUnit');
-          select.innerHTML = data.units.map(u => `<option value="${u.sqft}">${u.name} (${u.abbr})</option>`).join('');
-        }
+
+      function updateToUnitOptions() {
+        const select = document.getElementById('toUnit');
+        select.innerHTML = STANDARD_UNITS.map(u => `<option value="${u.sqft}">${u.name} (${u.abbr})</option>`).join('');
+      }
 
       function performConversion() {
         const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
         const fromUnit = parseFloat(document.getElementById('fromUnit').value);
         const toUnit = parseFloat(document.getElementById('toUnit').value);
+        if (!Number.isFinite(fromUnit) || !Number.isFinite(toUnit) || toUnit === 0) {
+          document.getElementById('toValue').value = '';
+          return;
+        }
         const result = (fromValue * fromUnit) / toUnit;
         document.getElementById('toValue').value = result.toLocaleString('en-IN', {maximumFractionDigits: 4});
       }
@@ -536,7 +524,7 @@
       document.getElementById('stateSelect').addEventListener('change', (e) => {
         updateUnitsTable(e.target.value);
         updateFromUnitOptions(e.target.value);
-          updateToUnitOptions(e.target.value);
+        performConversion();
       });
 
       document.getElementById('fromValue').addEventListener('input', performConversion);
@@ -544,9 +532,10 @@
       document.getElementById('toUnit').addEventListener('change', performConversion);
 
       // Initialize on load
-      updateUnitsTable('national');
-      updateFromUnitOptions('national');
-        updateToUnitOptions('national');
+      document.getElementById('stateSelect').value = 'bihar';
+      updateToUnitOptions();
+      updateUnitsTable('bihar');
+      updateFromUnitOptions('bihar');
     </script>
   </body>
 </html>
