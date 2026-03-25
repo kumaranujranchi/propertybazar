@@ -3407,6 +3407,8 @@ textarea {
   box-shadow: var(--shadow-card);
   text-align: center;
   transition: var(--transition);
+  padding: 0 32px;
+  min-width: 280px;
 }
 .team-card:hover {
   transform: translateY(-6px);
