@@ -984,6 +984,19 @@ function initTopCitiesTabs() {
     });
   });
 
+  // Next arrow button — advance to next city tab
+  const nextBtn = document.querySelector(".cities-next");
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      const allTabs = Array.from(document.querySelectorAll(".city-tab"));
+      const currentIdx = allTabs.findIndex((t) => t.classList.contains("active"));
+      const nextIdx = (currentIdx + 1) % allTabs.length;
+      allTabs[nextIdx].click();
+      // Scroll the tab bar so the newly active tab is visible
+      allTabs[nextIdx].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    });
+  }
+
   // Ensure default city is rendered
   const active = document.querySelector(".city-tab.active");
   if (active) renderCityGrid(active.dataset.city || active.textContent.trim());
