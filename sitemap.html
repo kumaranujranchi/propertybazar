@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sitemap | 24Dismil — India's Trusted Real Estate Portal</title>
+  <meta name="description" content="Explore the sitemap of 24Dismil to easily find properties for buy, rent, or commercial use across major Indian cities.">
+  <link rel="canonical" href="https://24dismil.com/sitemap.html" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+  <style>
+    .sitemap-container {
+      padding: 60px 0;
+      background: var(--bg);
+    }
+    .sitemap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+      margin-top: 40px;
+    }
+    .sitemap-section h3 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--dark);
+    }
+    .sitemap-section h3 i {
+      color: var(--primary);
+    }
+    .sitemap-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sitemap-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 15px;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sitemap-links a:hover {
+      color: var(--primary);
+      padding-left: 5px;
+    }
+    .sitemap-links a i {
+      font-size: 12px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-group nav-group-left">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logo-icon">24</div>
+          <span class="nav-logo-text">24Dismil</span>
+        </a>
+        <button class="nav-city" id="citySelectorBtn">
+          <i class="fa-solid fa-location-dot"></i> <span id="currentCityText">Select City</span> <i class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
+        </button>
+      </div>
+
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="properties.html?type=buy" class="nav-link">Buy</a>
+        <a href="properties.html?type=rent" class="nav-link">Rent</a>
+        <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+      </div>
+
+      <div class="nav-group nav-group-right">
+        <div class="nav-actions">
+          <a href="login.html" class="nav-btn-login">Login</a>
+          <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
+        </div>
+        <div class="hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+    <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+    <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
+    <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+  </div>
+</header>
+
+<div class="sitemap-container">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Navigation</span>
+      <h2>Website Sitemap</h2>
+      <p>A comprehensive list of all pages and resources available on 24Dismil.</p>
+      <div class="section-title-line"></div>
+    </div>
+
+    <div class="sitemap-grid">
+      <div class="sitemap-section">
+        <h3><i class="fa-solid fa-house"></i> Main Pages</h3>
+        <div class="sitemap-links">
+          <a href="index.html"><i class="fa-solid fa-chevron-right"></i> Home Page</a>
+          <a href="about.html"><i class="fa-solid fa-chevron-right"></i> About Us</a>
+          <a href="contact.html"><i class="fa-solid fa-chevron-right"></i> Contact Support</a>
+          <a href="pricing.html"><i class="fa-solid fa-chevron-right"></i> Subscription Pricing</a>
+          <a href="post-property.html"><i class="fa-solid fa-chevron-right"></i> Post Your Property</a>
+          <a href="login.html"><i class="fa-solid fa-chevron-right"></i> Member Login</a>
+        </div>
+      </div>
+
+      <div class="sitemap-section">
+        <h3><i class="fa-solid fa-building"></i> Property Categories</h3>
+        <div class="sitemap-links">
+          <a href="properties.html?type=buy"><i class="fa-solid fa-chevron-right"></i> Buy Properties</a>
+          <a href="properties.html?type=rent"><i class="fa-solid fa-chevron-right"></i> Rent Properties</a>
+          <a href="properties.html?type=commercial"><i class="fa-solid fa-chevron-right"></i> Commercial Properties</a>
+          <a href="properties.html?newLaunch=true"><i class="fa-solid fa-chevron-right"></i> New Projects</a>
+          <a href="properties.html?verified=true"><i class="fa-solid fa-chevron-right"></i> Verified Listings</a>
+        </div>
+      </div>
+
+      <div class="sitemap-section">
+        <h3><i class="fa-solid fa-circle-info"></i> Resources & Legal</h3>
+        <div class="sitemap-links">
+          <a href="faq.html"><i class="fa-solid fa-chevron-right"></i> Frequently Asked Questions</a>
+          <a href="rera-guide.html"><i class="fa-solid fa-chevron-right"></i> RERA Compliance Guide</a>
+          <a href="privacy.html"><i class="fa-solid fa-chevron-right"></i> Privacy Policy</a>
+          <a href="terms.html"><i class="fa-solid fa-chevron-right"></i> Terms of Use</a>
+          <a href="sitemap.html"><i class="fa-solid fa-chevron-right"></i> Sitemap</a>
+        </div>
+      </div>
+
+      <div class="sitemap-section">
+        <h3><i class="fa-solid fa-location-dot"></i> Properties by City</h3>
+        <div class="sitemap-links">
+          <a href="properties.html?city=Mumbai"><i class="fa-solid fa-chevron-right"></i> Mumbai</a>
+          <a href="properties.html?city=Delhi NCR"><i class="fa-solid fa-chevron-right"></i> Delhi NCR</a>
+          <a href="properties.html?city=Bangalore"><i class="fa-solid fa-chevron-right"></i> Bangalore</a>
+          <a href="properties.html?city=Hyderabad"><i class="fa-solid fa-chevron-right"></i> Hyderabad</a>
+          <a href="properties.html?city=Pune"><i class="fa-solid fa-chevron-right"></i> Pune</a>
+          <a href="properties.html?city=Chennai"><i class="fa-solid fa-chevron-right"></i> Chennai</a>
+          <a href="properties.html?city=Kolkata"><i class="fa-solid fa-chevron-right"></i> Kolkata</a>
+          <a href="properties.html?city=Ahmedabad"><i class="fa-solid fa-chevron-right"></i> Ahmedabad</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="nav-logo-icon">24</div>
+          24Dismil
+        </div>
+        <p class="footer-tagline">
+          India's most trusted real estate portal. Find your dream property
+          with verified listings, expert guidance, and market insights.
+        </p>
+        <div class="footer-socials">
+          <a href="https://www.facebook.com/24dismil" target="_blank" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+          <a href="https://www.linkedin.com/company/112450325/" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <div class="footer-links">
+          <a href="pricing.html">Pricing</a>
+          <a href="properties.html?type=buy">Buy Properties</a>
+          <a href="properties.html?type=rent">Rent Properties</a>
+          <a href="properties.html?type=commercial">Commercial</a>
+          <a href="post-property.html">Post Free Property</a>
+          <a href="properties.html?newLaunch=true">New Projects</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <div class="footer-links">
+          <a href="#">EMI Calculator</a>
+          <a href="#">Property Rates</a>
+          <a href="rera-guide.html">RERA Guide</a>
+          <a href="#">Home Loan</a>
+          <a href="#">Legal Guide</a>
+          <a href="#">Vastu Tips</a>
+          <a href="#">Blog & News</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+      </div>
+      <div class="footer-col footer-col-cities">
+        <h4>Top Cities</h4>
+        <div class="footer-links footer-cities-grid">
+          <a href="properties.html?city=Mumbai">Mumbai</a>
+          <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
+          <a href="properties.html?city=Bangalore">Bangalore</a>
+          <a href="properties.html?city=Hyderabad">Hyderabad</a>
+          <a href="properties.html?city=Pune">Pune</a>
+          <a href="properties.html?city=Chennai">Chennai</a>
+          <a href="properties.html?city=Kolkata">Kolkata</a>
+          <a href="properties.html?city=Noida">Noida</a>
+          <a href="properties.html?city=Ahmedabad">Ahmedabad</a>
+          <a href="properties.html?city=Jaipur">Jaipur</a>
+          <a href="properties.html?city=Patna">Patna</a>
+          <a href="properties.html?city=Lucknow">Lucknow</a>
+        </div>
+      </div>
+      <div class="footer-col footer-download">
+        <h4>Post via Telegram</h4>
+        <p class="footer-download-text">List your property in seconds using our automated bot.</p>
+        <a href="https://t.me/DismilBot" target="_blank" class="footer-telegram-btn">
+          <i class="fa-brands fa-telegram"></i> Start Posting
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 24Dismil. All rights reserved. | India's #1 Real Estate Portal</span>
+      <div class="footer-bottom-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="sitemap.html">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu toggle
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  });
+
+  // Simple toast function
+  function showToast(msg, type) {
+    alert(msg); // Placeholder
+  }
+</script>
+
+</body>
+</html>
