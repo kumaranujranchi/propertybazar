@@ -77,21 +77,39 @@
       <div class="container">
         <nav class="nav">
           <div class="nav-group nav-group-left">
-            <a href="index.html" class="nav-logo"><div class="nav-logo-icon">24</div><span class="nav-logo-text">24Dismil</span></a>
+            <a href="index.html" class="nav-logo">
+              <div class="nav-logo-icon">24</div>
+              <span class="nav-logo-text">24Dismil</span>
+            </a>
+            <button class="nav-city" id="citySelectorBtn">
+              <i class="fa-solid fa-location-dot"></i>
+              <span id="currentCityText">Select City</span>
+              <i class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
+            </button>
           </div>
           <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
             <a href="properties.html?type=buy" class="nav-link">Buy</a>
             <a href="properties.html?type=rent" class="nav-link">Rent</a>
-            <a href="emi-calculator.html" class="nav-link active">EMI Calculator</a>
+            <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
           </div>
           <div class="nav-group nav-group-right">
             <div class="nav-actions">
               <a href="login.html" class="nav-btn-login">Login</a>
               <a href="post-property.html" class="nav-btn-post">+ Post Property</a>
             </div>
+            <div class="hamburger" id="hamburger">
+              <span></span><span></span><span></span>
+            </div>
           </div>
         </nav>
+      </div>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+        <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+        <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
+        <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
       </div>
     </header>
 
