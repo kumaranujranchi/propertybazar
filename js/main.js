@@ -31,16 +31,19 @@ function initNav() {
   const navLinks = document.querySelectorAll(".nav-links .nav-link");
 
   // Ensure header nav links include selected city when available
+  // Deferred to after first paint to avoid visible flicker from href mutation
   const selCity = localStorage.getItem("selectedCity");
   if (selCity && selCity !== "Select City") {
-    navLinks.forEach((link) => {
-      try {
-        const u = new URL(link.href, window.location.origin);
-        u.searchParams.set("city", selCity);
-        link.href = u.toString();
-      } catch (e) {
-        /* ignore */
-      }
+    requestAnimationFrame(() => {
+      navLinks.forEach((link) => {
+        try {
+          const u = new URL(link.href, window.location.origin);
+          u.searchParams.set("city", selCity);
+          link.href = u.toString();
+        } catch (e) {
+          /* ignore */
+        }
+      });
     });
   }
 

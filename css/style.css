@@ -454,7 +454,7 @@ textarea {
   font-weight: 500;
   color: var(--text-muted);
   border-radius: var(--radius-sm);
-  transition: var(--transition);
+  transition: color 0.3s ease, background-color 0.3s ease;
   white-space: nowrap;
 }
 .nav-link:hover,
