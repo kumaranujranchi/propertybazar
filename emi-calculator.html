@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>24Dismil EMI Calculator | Home Loan EMI Calculator</title>
+    <meta name="description" content="Fast EMI calculator for home loans, plot loans, and more. Get monthly payment, total interest and total amount over loan tenure." />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/city-dropdown.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <style>
+      .emi-hero { background: linear-gradient(135deg, #065c5b, #012a36); color: white; padding: 56px 0 40px; text-align: center; }
+      .emi-card { background: #ffffff; border-radius: 16px; box-shadow: 0 20px 40px rgba(2, 19, 30, 0.08); padding: 30px; max-width: 980px; margin: auto; }
+      .emi-card h2 { margin-bottom: 16px; }
+      .emi-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+      .emi-grid .emi-input-wrap { grid-column: span 12; }
+      .emi-input-group { display: flex; flex-direction: column; gap: 6px; }
+      .emi-input-group label { font-weight: 600; color: #2b3a4d; }
+      .emi-input-group input, .emi-input-group select { border: 1px solid #d2d8e6; border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+      .emi-input-group input:focus { outline: none; border-color: #0d8b96; box-shadow: 0 0 0 2px rgba(13, 139, 150,0.15); }
+      .emi-buttons { display: flex; gap: 12px; margin-top: 10px; }
+      .emi-result-grid { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: 16px; margin-top: 20px; }
+      .emi-result-card { background: #f7fcff; border: 1px solid #d4edf3; border-radius: 12px; padding: 16px; text-align: center; }
+      .emi-result-card h4 { margin: 0 0 6px; color: #1c4f64; }
+      .emi-result-card p { margin: 4px 0; font-size: 20px; font-weight: 700; color: #065c5b; }
+      .emi-notice { border-left: 4px solid #0d8b96; background: rgba(13, 139, 150, 0.08); padding: 12px 14px; margin-top: 16px; border-radius: 8px; }
+      @media (max-width: 900px) {
+        .emi-result-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header" id="header">
+      <div class="container">
+        <nav class="nav">
+          <div class="nav-group nav-group-left">
+            <a href="index.html" class="nav-logo"><div class="nav-logo-icon">24</div><span class="nav-logo-text">24Dismil</span></a>
+          </div>
+          <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="properties.html?type=buy" class="nav-link">Buy</a>
+            <a href="properties.html?type=rent" class="nav-link">Rent</a>
+            <a href="emi-calculator.html" class="nav-link active">EMI Calculator</a>
+          </div>
+          <div class="nav-group nav-group-right">
+            <div class="nav-actions">
+              <a href="login.html" class="nav-btn-login">Login</a>
+              <a href="post-property.html" class="nav-btn-post">+ Post Property</a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <section class="emi-hero">
+      <div class="container" style="max-width: 1100px;">
+        <h1>EMI Calculator</h1>
+        <p style="font-size: 1.1rem; margin-top: 6px; color: #cce7eb; max-width: 720px; margin-left: auto; margin-right: auto;">Calculate your monthly home loan EMI in seconds. Estimate total interest and total payable amount to plan your budget smartly.</p>
+      </div>
+    </section>
+
+    <section class="section" style="background: var(--bg); padding: 32px 0 80px;">
+      <div class="container">
+        <div class="emi-card">
+          <h2>Simple and Speedy EMI Calculator</h2>
+          <p style="color: #556a7a;">Enter loan details below and get instant results.</p>
+          <div class="emi-grid">
+            <div class="emi-input-wrap" style="grid-column: span 4;">
+              <div class="emi-input-group">
+                <label for="loanAmount">Loan Amount (₹)</label>
+                <input type="number" id="loanAmount" value="5000000" min="1000" step="1000" />
+              </div>
+            </div>
+            <div class="emi-input-wrap" style="grid-column: span 4;">
+              <div class="emi-input-group">
+                <label for="annualRate">Annual Interest Rate (%)</label>
+                <input type="number" id="annualRate" value="7.5" min="0" step="0.01" />
+              </div>
+            </div>
+            <div class="emi-input-wrap" style="grid-column: span 4;">
+              <div class="emi-input-group">
+                <label for="tenureYears">Loan Tenure</label>
+                <div style="display: flex; gap: 10px;"><input type="number" id="tenureYears" value="20" min="1" step="1" style="flex:1;" /><select id="tenureType" style="width:120px;"><option value="years">Years</option><option value="months">Months</option></select></div>
+              </div>
+            </div>
+            <div class="emi-input-wrap" style="grid-column: span 6;">
+              <div class="emi-input-group">
+                <label for="downPayment">Down Payment (₹)</label>
+                <input type="number" id="downPayment" value="500000" min="0" step="1000" />
+              </div>
+            </div>
+            <div class="emi-input-wrap" style="grid-column: span 6;"> 
+              <div class="emi-input-group">
+                <label for="processingFee">Processing Fee (%)</label>
+                <input type="number" id="processingFee" value="0.5" min="0" step="0.01" />
+              </div>
+            </div>
+          </div>
+
+          <div class="emi-buttons">
+            <button class="btn btn-primary" onclick="computeEMI()">Calculate EMI</button>
+            <button class="btn" onclick="resetForm()">Reset</button>
+          </div>
+
+          <div class="emi-result-grid" id="resultSection" style="display:none; margin-top: 30px;">
+            <div class="emi-result-card">
+              <h4>Monthly EMI</h4>
+              <p id="monthlyEmi">₹0</p>
+            </div>
+            <div class="emi-result-card">
+              <h4>Total Interest</h4>
+              <p id="totalInterest">₹0</p>
+            </div>
+            <div class="emi-result-card">
+              <h4>Total Payment</h4>
+              <p id="totalPayment">₹0</p>
+            </div>
+          </div>
+
+          <div class="emi-notice">
+            <strong>Note:</strong> This calculator gives an estimate. Actual EMI may vary depending on lender, credit score, and loan terms.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const formatINR = (x) => {
+        if (!isFinite(x)) return '₹0';
+        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(x);
+      };
+      function computeEMI() {
+        const loanAmount = Number(document.getElementById('loanAmount').value) || 0;
+        const annualRate = Number(document.getElementById('annualRate').value) || 0;
+        const tenureValue = Number(document.getElementById('tenureYears').value) || 0;
+        const tenureType = document.getElementById('tenureType').value;
+        const downPayment = Number(document.getElementById('downPayment').value) || 0;
+        const processingFeePct = Number(document.getElementById('processingFee').value) || 0;
+
+        const tenureMonths = tenureType === 'months' ? tenureValue : tenureValue * 12;
+        const principal = Math.max(loanAmount - downPayment, 0);
+        const monthlyRate = annualRate / 1200;
+
+        if (principal <= 0 || tenureMonths <= 0 || annualRate < 0) {
+          alert('Please enter valid loan inputs');
+          return;
+        }
+
+        const ratePower = Math.pow(1 + monthlyRate, tenureMonths);
+        const monthlyEmi = monthlyRate === 0 ? principal / tenureMonths : principal * monthlyRate * ratePower / (ratePower - 1);
+        const totalPayment = monthlyEmi * tenureMonths;
+        const totalInterest = totalPayment - principal;
+        const processingFee = (loanAmount * processingFeePct / 100);
+
+        document.getElementById('monthlyEmi').textContent = formatINR(monthlyEmi);
+        document.getElementById('totalInterest').textContent = formatINR(totalInterest);
+        document.getElementById('totalPayment').textContent = formatINR(totalPayment + processingFee);
+        document.getElementById('resultSection').style.display = 'grid';
+      }
+
+      function resetForm() {
+        document.getElementById('loanAmount').value = 5000000;
+        document.getElementById('annualRate').value = 7.5;
+        document.getElementById('tenureYears').value = 20;
+        document.getElementById('tenureType').value = 'years';
+        document.getElementById('downPayment').value = 500000;
+        document.getElementById('processingFee').value = 0.5;
+        document.getElementById('resultSection').style.display = 'none';
+      }
+
+      document.querySelectorAll('#loanAmount, #annualRate, #tenureYears, #tenureType, #downPayment, #processingFee').forEach(el => {
+        el.addEventListener('input', () => { document.getElementById('resultSection').style.display = 'none'; });
+      });
+
+      window.addEventListener('DOMContentLoaded', () => {
+        computeEMI();
+      });
+    </script>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <div class="footer-logo-icon">24</div>
+              <div class="footer-logo-text">24Dismil</div>
+            </div>
+            <p class="footer-tagline">India's most trusted real estate portal. Find your dream property with verified listings, expert guidance, and market insights.</p>
+            <div class="footer-socials">
+              <a href="https://www.facebook.com/24dismil" class="social-icon" target="_blank"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://www.linkedin.com/company/112450325/" class="social-icon" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <div class="footer-links">
+              <a href="about.html">About Us</a>
+              <a href="contact.html">Contact</a>
+              <a href="pricing.html">Pricing</a>
+              <a href="rera-guide.html">RERA Guide</a>
+              <a href="faq.html">FAQ</a>
+              <a href="emi-calculator.html">EMI Calculator</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <div class="footer-links">
+              <a href="properties.html">All Listings</a>
+              <a href="#">Home Loan</a>
+              <a href="#">Legal Guide</a>
+              <a href="#">Vastu Tips</a>
+              <a href="#">Blog & News</a>
+            </div>
+          </div>
+          <div class="footer-col footer-col-cities">
+            <h4>Top Cities</h4>
+            <div class="footer-links footer-cities-grid">
+              <a href="properties.html?city=Mumbai">Mumbai</a>
+              <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
+              <a href="properties.html?city=Bangalore">Bangalore</a>
+              <a href="properties.html?city=Hyderabad">Hyderabad</a>
+              <a href="properties.html?city=Pune">Pune</a>
+              <a href="properties.html?city=Chennai">Chennai</a>
+              <a href="properties.html?city=Kolkata">Kolkata</a>
+              <a href="properties.html?city=Noida">Noida</a>
+              <a href="properties.html?city=Ahmedabad">Ahmedabad</a>
+              <a href="properties.html?city=Jaipur">Jaipur</a>
+              <a href="properties.html?city=Patna">Patna</a>
+              <a href="properties.html?city=Lucknow">Lucknow</a>
+            </div>
+          </div>
+          <div class="footer-col footer-download">
+            <h4>Post via Telegram</h4>
+            <p class="footer-download-text">List your property in seconds using our automated bot.</p>
+            <a href="https://t.me/DismilBot" target="_blank" class="footer-telegram-btn"><i class="fa-brands fa-telegram"></i> Start Posting</a>
+            <div class="footer-badges">
+              <span style="font-size: 11px; display: block; margin-bottom: 8px; color: rgba(255,255,255,0.4); font-weight: 600;">Mobile App (Coming Soon)</span>
+              <div style="display: flex; gap: 8px; opacity: 0.6;">
+                <a href="#" onclick="showToast('Our app is launching soon! Stay tuned.', 'warning'); return false;"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store" class="app-badge" style="height: 28px;"></a>
+                <a href="#" onclick="showToast('Our app is launching soon! Stay tuned.', 'warning'); return false;"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" class="app-badge" style="height: 28px;"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 24Dismil. All rights reserved. | India's #1 Real Estate Portal</span>
+          <div class="footer-bottom-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Use</a>
+            <a href="sitemap.html">Sitemap</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>
