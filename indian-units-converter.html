@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Indian Land Units Converter – 24Dismil</title>
+    <meta name="description" content="Convert between Indian land measurement units across states. Bigha, Kattha, Dismil, Cent, Guntһa, Kanal, and more with state-specific filters." />
+    <link rel="canonical" href="https://24dismil.com/indian-units-converter.html" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/city-dropdown.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <style>
+      .converter-hero {
+        background: linear-gradient(135deg, var(--primary) 0%, #8b3a0a 100%);
+        color: white;
+        padding: 96px 0 48px;
+        text-align: center;
+      }
+      .converter-hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 14px; }
+      .converter-hero p { font-size: 1.1rem; color: rgba(255,255,255,0.9); max-width: 700px; margin: 0 auto; }
+
+      .converter-body { max-width: 1000px; margin: 0 auto; padding: 48px 20px 80px; }
+
+      .state-filter {
+        background: #fff8f5;
+        border: 1px solid #fbd5c5;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 32px;
+      }
+      .state-filter label { font-weight: 700; color: var(--primary); margin-bottom: 10px; display: block; font-size: 1.05rem; }
+      .state-filter select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 2px solid #fbd5c5;
+        border-radius: 8px;
+        font-size: 1rem;
+        color: #3a2010;
+        background: white;
+        cursor: pointer;
+        transition: border-color 0.3s;
+      }
+      .state-filter select:focus { outline: none; border-color: var(--primary); }
+
+      .converter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+      .converter-card {
+        background: white;
+        border: 2px solid #f0ddd6;
+        border-radius: 14px;
+        padding: 24px;
+      }
+      .converter-card h3 { font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
+
+      .input-group {
+        margin-bottom: 16px;
+      }
+      .input-group label { font-size: 0.95rem; color: #3a4a5a; font-weight: 600; display: block; margin-bottom: 6px; }
+      .input-group input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #e0e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+      .input-group input:focus { outline: none; border-color: var(--primary); }
+
+      .conversion-results {
+        background: #f7f9fc;
+        border-radius: 10px;
+        padding: 16px;
+        margin-top: 16px;
+      }
+      .conversion-results h4 { font-size: 0.95rem; font-weight: 700; color: #2b3a4d; margin-bottom: 10px; }
+      .result-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #e0e8f0;
+        font-size: 0.95rem;
+      }
+      .result-row:last-child { border-bottom: none; }
+      .result-value { color: var(--primary); font-weight: 600; }
+
+      .units-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-size: 0.95rem;
+      }
+      .units-table thead {
+        background: #fff8f5;
+        border-bottom: 2px solid #fbd5c5;
+      }
+      .units-table th {
+        padding: 14px;
+        text-align: left;
+        font-weight: 700;
+        color: var(--primary);
+      }
+      .units-table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid #f0ddd6;
+      }
+      .units-table tr:hover { background: #fff8f5; }
+
+      .section-divider {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #fbd5c5, transparent);
+        margin: 40px 0;
+      }
+
+      .reference-section {
+        background: #fff8f5;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 32px;
+      }
+      .reference-section h3 { color: var(--primary); font-size: 1.2rem; margin-bottom: 16px; }
+      .units-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+      .unit-box {
+        background: white;
+        border: 1px solid #fbd5c5;
+        border-radius: 10px;
+        padding: 14px;
+        font-size: 0.9rem;
+      }
+      .unit-box strong { color: var(--primary); }
+
+      .cta-banner {
+        background: linear-gradient(135deg, var(--primary), #c43c0d);
+        border-radius: 14px;
+        padding: 28px 24px;
+        text-align: center;
+        color: white;
+        margin-top: 40px;
+      }
+      .cta-banner h3 { font-size: 1.3rem; margin-bottom: 10px; }
+      .cta-banner p { color: rgba(255,255,255,0.9); margin-bottom: 18px; }
+      .cta-banner a { background: #fff; color: var(--primary); font-weight: 700; padding: 12px 28px; border-radius: 8px; display: inline-block; }
+      .cta-banner a:hover { background: #fff8f5; }
+
+      @media (max-width: 768px) {
+        .converter-grid { grid-template-columns: 1fr; }
+        .units-table { font-size: 0.85rem; }
+        .units-table th, .units-table td { padding: 10px; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="header" id="header">
+      <div class="container">
+        <nav class="nav">
+          <div class="nav-group nav-group-left">
+            <a href="index.html" class="nav-logo">
+              <div class="nav-logo-icon">24</div>
+              <span class="nav-logo-text">24Dismil</span>
+            </a>
+            <button class="nav-city" id="citySelectorBtn">
+              <i class="fa-solid fa-location-dot"></i>
+              <span id="currentCityText">Select City</span>
+              <i class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
+            </button>
+          </div>
+          <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="properties.html?type=buy" class="nav-link">Buy</a>
+            <a href="properties.html?type=rent" class="nav-link">Rent</a>
+            <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+          </div>
+          <div class="nav-group nav-group-right">
+            <div class="nav-actions">
+              <a href="login.html" class="nav-btn-login">Login</a>
+              <a href="post-property.html" class="nav-btn-post">+ Post Property</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+        <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+        <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
+        <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="converter-hero">
+      <div class="container">
+        <h1>Indian Land Units Converter</h1>
+        <p>Convert between Bigha, Kattha, Dismil, Cent, Guntha, Kanal and other regional land measurement units across India.</p>
+      </div>
+    </section>
+
+    <!-- CONVERTER -->
+    <div class="converter-body">
+
+      <!-- State Filter -->
+      <div class="state-filter">
+        <label for="stateSelect"><i class="fa-solid fa-map-location-dot"></i> Select Your State/Region</label>
+        <select id="stateSelect">
+          <option value="national">National / Standard Units</option>
+          <option value="bihar">Bihar / Jharkhand</option>
+          <option value="up">Uttar Pradesh</option>
+          <option value="punjab">Punjab / Haryana</option>
+          <option value="rajasthan">Rajasthan</option>
+          <option value="maharashtra">Maharashtra / Gujarat</option>
+          <option value="south">South India (Tamil Nadu, Kerala)</option>
+          <option value="telangana">Telangana / Andhra Pradesh</option>
+          <option value="kerala">Kerala</option>
+          <option value="bengal">West Bengal</option>
+          <option value="northeast">Northeast (Assam)</option>
+        </select>
+      </div>
+
+      <!-- Converter Cards -->
+      <div class="converter-grid">
+        <!-- From Converter -->
+        <div class="converter-card">
+          <h3><i class="fa-solid fa-arrow-right-long"></i> Convert From</h3>
+          <div class="input-group">
+            <label for="fromValue">Enter Value</label>
+            <input type="number" id="fromValue" placeholder="Enter amount" value="1" min="0" />
+          </div>
+          <div class="input-group">
+            <label for="fromUnit">From Unit</label>
+            <select id="fromUnit">
+              <option value="sqft">Square Foot (sq ft)</option>
+              <option value="sqm">Square Meter (sq m)</option>
+              <option value="acre">Acre</option>
+              <option value="hectare">Hectare</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- To Converter -->
+        <div class="converter-card">
+          <h3><i class="fa-solid fa-equals"></i> Convert To</h3>
+          <div class="input-group">
+            <label>Result</label>
+            <input type="text" id="toValue" readonly style="background:#f7f9fc; cursor:default;" placeholder="0.00" />
+          </div>
+          <div class="input-group">
+            <label for="toUnit">To Unit</label>
+            <select id="toUnit">
+              <option value="sqft">Square Foot (sq ft)</option>
+              <option value="sqm">Square Meter (sq m)</option>
+              <option value="acre">Acre</option>
+              <option value="hectare">Hectare</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- State-Specific Units -->
+      <div class="section-divider"></div>
+
+      <div class="reference-section">
+        <h3 id="stateTitle"><i class="fa-solid fa-book"></i> Regional Units Reference</h3>
+        <p style="color:#556478; margin-bottom:20px;">Common units used in your selected region with their conversions to standard measurements.</p>
+        <table class="units-table" id="unitsReference">
+          <thead>
+            <tr>
+              <th>Unit Name</th>
+              <th>Abbr.</th>
+              <th>Square Feet</th>
+              <th>Square Meter</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Quick Reference Cards -->
+      <div class="section-divider"></div>
+      <div class="reference-section">
+        <h3><i class="fa-solid fa-list-check"></i> Standard Units (Used Nationwide)</h3>
+        <div class="units-grid">
+          <div class="unit-box"><strong>Square Foot (sq ft)</strong> — Base unit</div>
+          <div class="unit-box"><strong>Square Yard (sq yd / Gaj)</strong> — 1 sq yd = 9 sq ft</div>
+          <div class="unit-box"><strong>Square Meter (sq m)</strong> — 1 sq m = 10.7639 sq ft</div>
+          <div class="unit-box"><strong>Acre</strong> — 43,560 sq ft</div>
+          <div class="unit-box"><strong>Hectare</strong> — 2.471 acres = 107,639 sq ft</div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-banner">
+        <h3>Ready to Find Your Perfect Property?</h3>
+        <p>Browse verified listings and filter by exact land measurements and area.</p>
+        <a href="properties.html">Browse Properties</a>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <div class="nav-logo-icon">24</div>
+              24Dismil
+            </div>
+            <p class="footer-tagline">India's most trusted real estate portal. Find your dream property with verified listings, expert guidance, and market insights. Your home journey starts here.</p>
+            <div class="footer-socials">
+              <a href="https://www.facebook.com/24dismil" target="_blank" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+              <a href="https://www.instagram.com/24dismil/" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+              <a href="https://www.linkedin.com/company/112450325/" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+              <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <div class="footer-links">
+              <a href="about.html">About Us</a>
+              <a href="contact.html">Contact</a>
+              <a href="pricing.html">Pricing</a>
+              <a href="rera-guide.html">RERA Guide</a>
+              <a href="faq.html">FAQ</a>
+              <a href="emi-calculator.html">EMI Calculator</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <div class="footer-links">
+              <a href="properties.html">All Listings</a>
+              <a href="emi-calculator.html">Home Loan</a>
+              <a href="legal-guide.html">Legal Guide</a>
+              <a href="vastu-tips.html">Vastu Tips</a>
+              <a href="indian-units-converter.html">Indian Units Converter</a>
+            </div>
+          </div>
+          <div class="footer-col footer-col-cities">
+            <h4>Top Cities</h4>
+            <div class="footer-links footer-cities-grid">
+              <a href="properties.html?city=Mumbai">Mumbai</a>
+              <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
+              <a href="properties.html?city=Bangalore">Bangalore</a>
+              <a href="properties.html?city=Hyderabad">Hyderabad</a>
+              <a href="properties.html?city=Pune">Pune</a>
+              <a href="properties.html?city=Chennai">Chennai</a>
+              <a href="properties.html?city=Kolkata">Kolkata</a>
+              <a href="properties.html?city=Noida">Noida</a>
+              <a href="properties.html?city=Ahmedabad">Ahmedabad</a>
+              <a href="properties.html?city=Jaipur">Jaipur</a>
+              <a href="properties.html?city=Patna">Patna</a>
+              <a href="properties.html?city=Lucknow">Lucknow</a>
+            </div>
+          </div>
+          <div class="footer-col footer-download">
+            <h4>Post via Telegram</h4>
+            <p class="footer-download-text">List your property in seconds using our automated bot.</p>
+            <a href="https://t.me/DismilBot" target="_blank" class="footer-telegram-btn"><i class="fa-brands fa-telegram"></i> Start Posting</a>
+            <div class="footer-badges">
+              <span style="font-size: 11px; display: block; margin-bottom: 8px; color: rgba(255,255,255,0.4); font-weight: 600;">Mobile App (Coming Soon)</span>
+              <div style="display: flex; gap: 8px; opacity: 0.6;">
+                <a href="#" onclick="showToast('Our app is launching soon! Stay tuned.', 'warning'); return false;"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store" class="app-badge" style="height: 28px;"></a>
+                <a href="#" onclick="showToast('Our app is launching soon! Stay tuned.', 'warning'); return false;"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" class="app-badge" style="height: 28px;"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 24Dismil. All rights reserved. | India's #1 Real Estate Portal</span>
+          <div class="footer-bottom-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Use</a>
+            <a href="sitemap.html">Sitemap</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+      // Unit conversion database
+      const unitsData = {
+        national: {
+          title: 'National / Standard Units',
+          units: [
+            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+            { name: 'Square Yard', abbr: 'sq yd', sqft: 9, sqm: 0.836127 },
+            { name: 'Square Meter', abbr: 'sq m', sqft: 10.7639, sqm: 1 },
+            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+            { name: 'Hectare', abbr: 'ha', sqft: 107639, sqm: 10000 },
+          ]
+        },
+        bihar: {
+          title: 'Bihar / Jharkhand / Eastern India',
+          units: [
+            { name: 'Dismil / Decimal', abbr: 'Dismil', sqft: 435.6, sqm: 40.47 },
+            { name: 'Kattha', abbr: 'Kattha', sqft: 1361, sqm: 126.48 },
+            { name: 'Bigha', abbr: 'Bigha', sqft: 27220, sqm: 2529.75 },
+            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+          ]
+        },
+        up: {
+          title: 'Uttar Pradesh / North India',
+          units: [
+            { name: 'Bigha', abbr: 'Bigha', sqft: 27000, sqm: 2508.45 },
+            { name: 'Biswa', abbr: 'Biswa', sqft: 1350, sqm: 125.42 },
+            { name: 'Gaj', abbr: 'Gaj', sqft: 9, sqm: 0.836127 },
+            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+          ]
+        },
+        punjab: {
+          title: 'Punjab / Haryana / Himachal',
+          units: [
+            { name: 'Kanal', abbr: 'Kanal', sqft: 5445, sqm: 506.13 },
+            { name: 'Marla', abbr: 'Marla', sqft: 272.25, sqm: 25.31 },
+            { name: 'Sarsahi', abbr: 'Sarsahi', sqft: 270, sqm: 25.08 },
+            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+          ]
+        },
+        rajasthan: {
+          title: 'Rajasthan',
+          units: [
+            { name: 'Bigha', abbr: 'Bigha', sqft: 17424, sqm: 1618.29 },
+            { name: 'Biswa', abbr: 'Biswa', sqft: 871, sqm: 80.91 },
+            { name: 'Biswansi', abbr: 'Biswansi', sqft: 43.5, sqm: 4.04 },
+            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+          ]
+        },
+        maharashtra: {
+          title: 'Maharashtra / Gujarat / Karnataka',
+          units: [
+            { name: 'Guntha / Gunta', abbr: 'Guntha', sqft: 1089, sqm: 101.17 },
+            { name: 'Aana', abbr: 'Aana', sqft: 653, sqm: 60.70 },
+            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+          ]
+        },
+        south: {
+          title: 'South India (Tamil Nadu, Kerala)',
+          units: [
+            { name: 'Cent', abbr: 'Cent', sqft: 435.6, sqm: 40.47 },
+            { name: 'Ground', abbr: 'Ground', sqft: 2400, sqm: 223.08 },
+            { name: 'Ankanam', abbr: 'Ankanam', sqft: 72, sqm: 6.69 },
+            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+          ]
+        },
+        telangana: {
+          title: 'Telangana / Andhra Pradesh',
+          units: [
+            { name: 'Ankanam', abbr: 'Ankanam', sqft: 72, sqm: 6.69 },
+            { name: 'Kuncham', abbr: 'Kuncham', sqft: 4356, sqm: 404.69 },
+            { name: 'Gajam', abbr: 'Gajam', sqft: 9, sqm: 0.836127 },
+            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+          ]
+        },
+        kerala: {
+          title: 'Kerala',
+          units: [
+            { name: 'Cent', abbr: 'Cent', sqft: 435.6, sqm: 40.47 },
+            { name: 'Ares', abbr: 'Ares', sqft: 1076, sqm: 100 },
+            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+          ]
+        },
+        bengal: {
+          title: 'West Bengal',
+          units: [
+            { name: 'Kattha', abbr: 'Kattha', sqft: 720, sqm: 66.89 },
+            { name: 'Chittak', abbr: 'Chittak', sqft: 45, sqm: 4.18 },
+            { name: 'Bigha', abbr: 'Bigha', sqft: 14400, sqm: 1337.81 },
+            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+          ]
+        },
+        northeast: {
+          title: 'Northeast India (Assam)',
+          units: [
+            { name: 'Lecha', abbr: 'Lecha', sqft: 144, sqm: 13.38 },
+            { name: 'Kattha', abbr: 'Kattha', sqft: 2880, sqm: 267.56 },
+            { name: 'Bigha', abbr: 'Bigha', sqft: 14400, sqm: 1337.81 },
+            { name: 'Square Foot', abbr: 'sq ft', sqft: 1, sqm: 0.092903 },
+            { name: 'Acre', abbr: 'acre', sqft: 43560, sqm: 4046.86 },
+          ]
+        }
+      };
+
+      function updateUnitsTable(state) {
+        const data = unitsData[state];
+        document.getElementById('stateTitle').textContent = '📚 ' + data.title;
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = data.units.map(u => `
+          <tr>
+            <td><strong>${u.name}</strong></td>
+            <td>${u.abbr}</td>
+            <td>${u.sqft.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
+            <td>${u.sqm.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
+          </tr>
+        `).join('');
+      }
+
+      function updateFromUnitOptions(state) {
+        const data = unitsData[state];
+        const select = document.getElementById('fromUnit');
+        select.innerHTML = data.units.map(u => `<option value="${u.sqft}">${u.name} (${u.abbr})</option>`).join('');
+        document.getElementById('fromValue').value = '1';
+        performConversion();
+      }
+
+      function performConversion() {
+        const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
+        const fromUnit = parseFloat(document.getElementById('fromUnit').value);
+        const toUnit = parseFloat(document.getElementById('toUnit').value);
+        const result = (fromValue * fromUnit) / toUnit;
+        document.getElementById('toValue').value = result.toLocaleString('en-IN', {maximumFractionDigits: 4});
+      }
+
+      document.getElementById('stateSelect').addEventListener('change', (e) => {
+        updateUnitsTable(e.target.value);
+        updateFromUnitOptions(e.target.value);
+      });
+
+      document.getElementById('fromValue').addEventListener('input', performConversion);
+      document.getElementById('fromUnit').addEventListener('change', performConversion);
+      document.getElementById('toUnit').addEventListener('change', performConversion);
+
+      // Initialize on load
+      updateUnitsTable('national');
+      updateFromUnitOptions('national');
+    </script>
+  </body>
+</html>
