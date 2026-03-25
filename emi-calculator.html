@@ -157,6 +157,19 @@
           <div class="emi-notice">
             <strong>Note:</strong> This calculator gives an estimate. Actual EMI may vary depending on lender, credit score, and loan terms.
           </div>
+
+          <section id="amortizationSection" style="margin-top: 30px; display:none;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 10px;">
+              <h3>Amortization Schedule</h3>
+              <a href="#" class="btn btn-outline" id="homeLoanCTA" style="background-color:#fe7a22; color:#fff; border:none; padding: 10px 18px; border-radius: 8px;">Looking for Home Loan? Submit your details</a>
+            </div>
+            <div style="overflow:auto; max-height: 320px; border: 1px solid #dce9f2; border-radius: 12px; background:#fff;">
+              <table style="width:100%; min-width:768px; border-collapse: collapse; font-size: 13px;">
+                <thead style="background:#f1faff; color:#004e70;"><tr><th style="padding: 11px 8px; border-bottom:1px solid #dae8f0;">Month</th><th style="padding: 11px 8px;border-bottom:1px solid #dae8f0;">EMI (₹)</th><th style="padding: 11px 8px;border-bottom:1px solid #dae8f0;">Principal</th><th style="padding: 11px 8px;border-bottom:1px solid #dae8f0;">Interest</th><th style="padding: 11px 8px;border-bottom:1px solid #dae8f0;">Balance</th></tr></thead>
+                <tbody id="amortizationBody"></tbody>
+              </table>
+            </div>
+          </section>
         </div>
       </div>
     </section>
@@ -193,6 +206,35 @@
         document.getElementById('totalInterest').textContent = formatINR(totalInterest);
         document.getElementById('totalPayment').textContent = formatINR(totalPayment + processingFee);
         document.getElementById('resultSection').style.display = 'grid';
+
+        generateAmortization(principal, monthlyRate, tenureMonths, monthlyEmi);
+        document.getElementById('amortizationSection').style.display = 'block';
+      }
+
+      function generateAmortization(principal, monthlyRate, months, monthlyEmi) {
+        const body = document.getElementById('amortizationBody');
+        body.innerHTML = '';
+        let remaining = principal;
+        const rowCount = Math.min(months, 120); // show first 10 years max, compact to avoid too long table
+        for (let i = 1; i <= rowCount; i++) {
+          const interest = remaining * monthlyRate;
+          const principalPaid = monthlyEmi - interest;
+          remaining = Math.max(remaining - principalPaid, 0);
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td style="padding:8px; border-bottom:1px solid #e3ecf4;">${i}</td>` +
+                         `<td style="padding:8px; border-bottom:1px solid #e3ecf4;">${formatINR(monthlyEmi)}</td>` +
+                         `<td style="padding:8px; border-bottom:1px solid #e3ecf4;">${formatINR(principalPaid)}</td>` +
+                         `<td style="padding:8px; border-bottom:1px solid #e3ecf4;">${formatINR(interest)}</td>` +
+                         `<td style="padding:8px; border-bottom:1px solid #e3ecf4;">${formatINR(remaining)}</td>`;
+          body.appendChild(tr);
+        }
+
+        if (months > rowCount) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td colspan="5" style="padding: 10px 8px; color:#116a8b; background:#f8fdff; font-size:12px;">Showing first ${rowCount} months. For complete schedule, run with shorter tenure or reach out to our loan advisor.</td>`;
+          body.appendChild(tr);
+        }
       }
 
       function resetForm() {
@@ -209,8 +251,24 @@
         el.addEventListener('input', () => { document.getElementById('resultSection').style.display = 'none'; });
       });
 
+      function submitLoanDetails(event) {
+        event.preventDefault();
+        const loanAmount = document.getElementById('loanAmount').value;
+        const annualRate = document.getElementById('annualRate').value;
+        const tenureYears = document.getElementById('tenureYears').value;
+        const tenureType = document.getElementById('tenureType').value;
+        const downPayment = document.getElementById('downPayment').value;
+
+        const contactUrl = `https://24dismil.com/contact.html?loanAmount=${encodeURIComponent(loanAmount)}&annualRate=${encodeURIComponent(annualRate)}&tenure=${encodeURIComponent(tenureYears)}&tenureType=${encodeURIComponent(tenureType)}&downPayment=${encodeURIComponent(downPayment)}`;
+        window.location.href = contactUrl;
+      }
+
       window.addEventListener('DOMContentLoaded', () => {
         computeEMI();
+        const ctaBtn = document.getElementById('homeLoanCTA');
+        if (ctaBtn) {
+          ctaBtn.addEventListener('click', submitLoanDetails);
+        }
       });
     </script>
 
