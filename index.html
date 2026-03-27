@@ -231,17 +231,38 @@
           <div class="section-title-line"></div>
         </div>
         <div class="cards-slider-wrap">
-          <button class="slider-btn slider-prev">‹</button>
+          <button class="slider-btn slider-prev" onclick="scrollSlider('featuredSlider', -1)">‹</button>
           <div class="cards-slider" id="featuredSlider">
             <!-- Will be populated by JS from Handpicked Listings -->
             <div class="empty-state" style="grid-column: 1/-1; width: 100%; text-align: center; padding: 40px; color: var(--text-muted);">Loading premium listings...</div>
           </div>
-          <button class="slider-btn slider-next">›</button>
+          <button class="slider-btn slider-next" onclick="scrollSlider('featuredSlider', 1)">›</button>
         </div>
         <div style="text-align: center; margin-top: 32px">
           <a href="properties.html" class="btn btn-outline btn-lg"
             >View All Properties →</a
           >
+        </div>
+      </div>
+    </section>
+
+    <!-- TRENDING PROPERTIES BY CITY -->
+    <section class="section" id="trendingByCitySection" style="display:none; background: #f8fafc;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Local Favorites</span>
+          <h2 id="trendingCityTitle">Trending Property In City</h2>
+          <p>
+            Discover top-rated and trending properties in your current city.
+          </p>
+          <div class="section-title-line"></div>
+        </div>
+        <div class="cards-slider-wrap">
+          <button class="slider-btn slider-prev" onclick="scrollSlider('trendingCitySlider', -1)">‹</button>
+          <div class="cards-slider" id="trendingCitySlider">
+            <!-- Populated by JS -->
+          </div>
+          <button class="slider-btn slider-next" onclick="scrollSlider('trendingCitySlider', 1)">›</button>
         </div>
       </div>
     </section>
@@ -258,11 +279,11 @@
           <div class="section-title-line"></div>
         </div>
         <div class="cards-slider-wrap">
-          <button class="slider-btn slider-prev">‹</button>
+          <button class="slider-btn slider-prev" onclick="scrollSlider('newlyAddedSlider', -1)">‹</button>
           <div class="cards-slider" id="newlyAddedSlider">
             <!-- Populated by JS -->
           </div>
-          <button class="slider-btn slider-next">›</button>
+          <button class="slider-btn slider-next" onclick="scrollSlider('newlyAddedSlider', 1)">›</button>
         </div>
         <div style="text-align: center; margin-top: 32px">
           <a href="properties.html" class="btn btn-outline btn-lg">View All Properties →</a>

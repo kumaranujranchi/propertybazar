@@ -148,10 +148,69 @@ async function initPropertyLoading() {
 
     // Homepage sliders
     renderHomepageSliders(formatted);
+
+    // Initial render for city-specific trending (based on localStorage)
+    const savedCity = localStorage.getItem('selectedCity');
+    if (savedCity && savedCity !== 'Select City') {
+      renderTrendingInCitySlider(formatted, savedCity);
+    }
   } catch (err) {
     console.error("Error fetching convex properties:", err);
   }
 }
+
+// Global scroll function for sliders with auto-hide logic for buttons
+window.scrollSlider = function(id, direction) {
+  const slider = document.getElementById(id);
+  if (!slider) return;
+  const scrollAmount = slider.clientWidth * 0.8;
+  slider.scrollBy({
+    left: direction * scrollAmount,
+    behavior: 'smooth'
+  });
+};
+
+// Function to handle slider button visibility
+function updateSliderButtons(sliderId) {
+  const slider = document.getElementById(sliderId);
+  const wrap = slider?.parentElement;
+  if (!slider || !wrap) return;
+
+  const prevBtn = wrap.querySelector('.slider-prev');
+  const nextBtn = wrap.querySelector('.slider-next');
+
+  if (prevBtn) {
+    prevBtn.style.display = slider.scrollLeft <= 5 ? 'none' : 'flex';
+  }
+  if (nextBtn) {
+    const isAtEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 5;
+    nextBtn.style.display = isAtEnd ? 'none' : 'flex';
+  }
+}
+
+// Attach scroll listeners to sliders for button visibility
+function initSliderListeners() {
+  const sliders = ['featuredSlider', 'trendingCitySlider', 'newlyAddedSlider', 'newLaunchSlider'];
+  sliders.forEach(id => {
+    const slider = document.getElementById(id);
+    if (slider) {
+      // Initial check
+      setTimeout(() => updateSliderButtons(id), 500);
+      // Scroll check
+      slider.addEventListener('scroll', () => updateSliderButtons(id));
+      // Resize check
+      window.addEventListener('resize', () => updateSliderButtons(id));
+    }
+  });
+}
+
+// Listen for city changes from city-selector.js
+window.addEventListener('cityChanged', (e) => {
+  const newCity = e.detail.city;
+  if (window.properties && newCity && newCity !== 'Select City') {
+    renderTrendingInCitySlider(window.properties, newCity);
+  }
+});
 
 // Start loading
 if (document.readyState === "loading") {
@@ -225,6 +284,34 @@ function renderHomepageSliders(props) {
   // Re-init sliders/animations if needed
   if (typeof window.initSliders === "function") window.initSliders();
   if (typeof window.initAnimations === "function") window.initAnimations();
+
+  // Init button visibility listeners
+  initSliderListeners();
+}
+
+/**
+ * Renders trending properties for a specific city
+ */
+function renderTrendingInCitySlider(props, city) {
+  const trendingSection = document.getElementById("trendingByCitySection");
+  const trendingSlider = document.getElementById("trendingCitySlider");
+  const trendingTitle = document.getElementById("trendingCityTitle");
+
+  if (!trendingSection || !trendingSlider) return;
+
+  // Filter properties by city, excluding ones without images/titles, sorted by quality score
+  const cityProps = props
+    .filter((p) => p.city && p.city.toLowerCase() === city.toLowerCase())
+    .sort((a, b) => (b.qualityScore || 0) - (a.qualityScore || 0))
+    .slice(0, 15);
+
+  if (cityProps.length > 0) {
+    trendingTitle.textContent = `Trending Property In ${city}`;
+    trendingSlider.innerHTML = cityProps.map((p) => buildPropertyCardHTML(p)).join("");
+    trendingSection.style.display = "block";
+  } else {
+    trendingSection.style.display = "none";
+  }
 }
 
 function buildPropertyCardHTML(p) {
