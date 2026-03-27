@@ -1529,20 +1529,52 @@
     let blogTagsList = [];
 
     async function initBlogCMS() {
+      async function quillImageHandler() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+          const file = input.files?.[0];
+          if (!file) return;
+          try {
+            const uploadUrl = await convex.mutation('files:generateUploadUrl', {});
+            const result = await fetch(uploadUrl, { method: 'POST', headers: { 'Content-Type': file.type }, body: file });
+            const data = await result.json();
+            if (!data.storageId) throw new Error('Invalid upload response');
+            const fileUrl = await convex.query('files:getFileUrl', { storageId: data.storageId });
+
+            const range = quill.getSelection(true);
+            quill.insertEmbed(range.index, 'image', fileUrl);
+            quill.setSelection(range.index + 1);
+            window.showToast('Image uploaded and inserted successfully!', 'success');
+          } catch (err) {
+            console.error('Inline image upload failed', err);
+            window.showToast('Inline image upload failed. Please try again.', 'error');
+          }
+        };
+      }
+
       quill = new Quill('#blogEditor', {
         theme: 'snow',
         placeholder: 'Write your blog post here...',
         modules: {
-          toolbar: [
-            [{ header: [1, 2, 3, false] }],
-            ['bold', 'italic', 'underline', 'strike'],
-            [{ color: [] }, { background: [] }],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            [{ align: [] }],
-            ['blockquote', 'code-block'],
-            ['link', 'image'],
-            ['clean']
-          ]
+          toolbar: {
+            container: [
+              [{ header: [1, 2, 3, false] }],
+              ['bold', 'italic', 'underline', 'strike'],
+              [{ color: [] }, { background: [] }],
+              [{ list: 'ordered' }, { list: 'bullet' }],
+              [{ align: [] }],
+              ['blockquote', 'code-block'],
+              ['link', 'image'],
+              ['clean']
+            ],
+            handlers: {
+              image: quillImageHandler
+            }
+          }
         }
       });
 
@@ -1681,9 +1713,15 @@
       const title = document.getElementById('blogFormTitle').value.trim();
       const slug = document.getElementById('blogSlug').value.trim();
       if (!title || !slug) { window.showToast('Title and Slug are required', 'error'); return; }
+      const contentHtml = quill.root.innerHTML;
+      if (contentHtml.includes('data:image/')) {
+        window.showToast('Please upload and insert images via the image tool (not copy-paste base64).', 'error');
+        return;
+      }
+
       const payload = {
         title, slug,
-        content: quill.root.innerHTML,
+        content: contentHtml,
         status: document.getElementById('blogPublished').checked ? 'published' : 'draft',
         excerpt: document.getElementById('blogExcerpt').value.trim() || undefined,
         coverImageUrl: document.getElementById('blogCoverUrl').value.trim() || undefined,
