@@ -82,7 +82,24 @@
     }
     .post-content {
       font-size: 16px; line-height: 1.8; color: #374151;
+      word-break: break-word;
+      white-space: normal;
     }
+
+    .post-content .ql-align-center,
+    .post-content .ql-align-right,
+    .post-content .ql-align-justify {
+      text-align: inherit;
+    }
+
+    .post-content .ql-align-center { text-align: center !important; }
+    .post-content .ql-align-right { text-align: right !important; }
+    .post-content .ql-align-justify { text-align: justify !important; }
+
+    .post-content p[style*="text-align: justify"] { text-align: justify !important; }
+    .post-content p[style*="text-align: center"] { text-align: center !important; }
+    .post-content p[style*="text-align: right"] { text-align: right !important; }
+
     .post-content h1, .post-content h2, .post-content h3 {
       font-family: 'Poppins', sans-serif;
       font-weight: 700; color: #1a2230;
