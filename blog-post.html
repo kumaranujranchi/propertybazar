@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/city-dropdown.css">
   <style>
     /* ---- BLOG POST PAGE ---- */
     .post-hero {
@@ -112,22 +114,45 @@
 </head>
 <body>
   <!-- HEADER -->
-  <header class="header" id="mainHeader">
-    <div class="container header-inner">
-      <a href="index.html" class="logo">
-        <span class="logo-icon">24</span>
-        <span>24Dismil</span>
-      </a>
-      <nav class="main-nav" id="mainNav">
-        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-        <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
-        <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
-        <a href="blog.html" class="active"><i class="fa-solid fa-newspaper"></i> Blog</a>
-        <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+  <header class="header" id="header">
+    <div class="container">
+      <nav class="nav">
+        <div class="nav-group nav-group-left">
+          <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">24</div>
+            <span class="nav-logo-text">24Dismil</span>
+          </a>
+          <button class="nav-city" id="citySelectorBtn">
+            <i class="fa-solid fa-location-dot"></i> <span id="currentCityText">Select City</span> <i class="fa-solid fa-chevron-down" style="font-size: 0.8em"></i>
+          </button>
+        </div>
+
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="properties.html?type=buy" class="nav-link">Buy</a>
+          <a href="properties.html?type=rent" class="nav-link">Rent</a>
+          <a href="properties.html?type=commercial" class="nav-link">Commercial</a>
+          <a href="blog.html" class="nav-link active">Blog</a>
+        </div>
+
+        <div class="nav-group nav-group-right">
+          <div class="nav-actions">
+            <a href="login.html" class="nav-btn-login">Login</a>
+            <a href="post-property.html" class="nav-btn-post">+ Post FREE Property</a>
+          </div>
+          <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
       </nav>
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+      <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+      <a href="properties.html?type=commercial"><i class="fa-solid fa-building"></i> Commercial</a>
+      <a href="blog.html" class="active"><i class="fa-solid fa-newspaper"></i> Blog</a>
+      <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
     </div>
   </header>
 
@@ -186,28 +211,72 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="footer-logo">
-            <span class="logo-icon" style="font-size:16px;width:32px;height:32px;">24</span>
-            <span>24Dismil</span>
+            <div class="nav-logo-icon">24</div>
+            24Dismil
           </div>
-          <p>India's trusted real estate platform connecting buyers, sellers, and renters across the country.</p>
+          <p class="footer-tagline">
+            India's most trusted real estate portal. Find your dream property
+            with verified listings, expert guidance, and market insights.
+          </p>
+          <div class="footer-socials">
+            <a href="https://www.facebook.com/24dismil" target="_blank" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://www.instagram.com/24dismil/" target="_blank" class="social-icon" ><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/company/112450325/" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+          </div>
         </div>
-        <div class="footer-links">
+        <div class="footer-col">
           <h4>Quick Links</h4>
-          <a href="properties.html?type=buy">Buy Property</a>
-          <a href="properties.html?type=rent">Rent Property</a>
-          <a href="post-property.html">Post Property</a>
-          <a href="blog.html">Blog</a>
+          <div class="footer-links">
+            <a href="pricing.html">Pricing</a>
+            <a href="properties.html?type=buy">Buy Properties</a>
+            <a href="properties.html?type=rent">Rent Properties</a>
+            <a href="properties.html?type=commercial">Commercial</a>
+            <a href="blog.html">Blog</a>
+            <a href="post-property.html">Post Free Property</a>
+            <a href="properties.html?newLaunch=true">New Projects</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+          </div>
         </div>
-        <div class="footer-links">
-          <h4>Company</h4>
-          <a href="about.html">About Us</a>
-          <a href="contact.html">Contact</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Service</a>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <div class="footer-links">
+            <a href="properties.html">All Listings</a>
+            <a href="rera-guide.html">RERA Guide</a>
+            <a href="emi-calculator.html">EMI Calculator</a>
+            <a href="legal-guide.html">Legal Guide</a>
+            <a href="vastu-tips.html">Vastu Tips</a>
+            <a href="faq.html">FAQ</a>
+            <a href="indian-units-converter.html">Indian Units Converter</a>
+          </div>
+        </div>
+        <div class="footer-col footer-col-cities">
+          <h4>Top Cities</h4>
+          <div class="footer-links footer-cities-grid">
+            <a href="properties.html?city=Mumbai">Mumbai</a>
+            <a href="properties.html?city=Delhi NCR">Delhi NCR</a>
+            <a href="properties.html?city=Bangalore">Bangalore</a>
+            <a href="properties.html?city=Hyderabad">Hyderabad</a>
+            <a href="properties.html?city=Pune">Pune</a>
+            <a href="properties.html?city=Chennai">Chennai</a>
+            <a href="properties.html?city=Kolkata">Kolkata</a>
+            <a href="properties.html?city=Noida">Noida</a>
+            <a href="properties.html?city=Ahmedabad">Ahmedabad</a>
+            <a href="properties.html?city=Jaipur">Jaipur</a>
+            <a href="properties.html?city=Patna">Patna</a>
+            <a href="properties.html?city=Lucknow">Lucknow</a>
+          </div>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2024 24Dismil. All rights reserved.</p>
+        <span>© 2026 24Dismil. All rights reserved. | India's #1 Real Estate Portal</span>
+        <div class="footer-bottom-links">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Use</a>
+          <a href="sitemap.html">Sitemap</a>
+        </div>
       </div>
     </div>
   </footer>
