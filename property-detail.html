@@ -761,15 +761,45 @@
   </div>
 
   <!-- SIMILAR PROPERTIES -->
-  <section class="section">
+  <section class="section" id="similarPropertiesSection">
     <div class="container">
       <div class="section-header" style="text-align:left; margin-bottom:24px">
-        <h2 style="font-size:22px; font-weight:700;">Similar Properties You May Like</h2>
+        <h2 style="font-size:22px; font-weight:700;">Similar Properties in ${p.location?.city || 'this City'}</h2>
       </div>
       <div class="cards-slider-wrap">
         <div class="cards-slider" id="similarPropertiesSlider"
-          style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px;">
+          style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
           <!-- Dynamic Similar Properties -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OTHER PROPERTIES IN THE SAME CITY -->
+  <section class="section" id="otherCityPropertiesSection" style="display:none; background:#f8fafc;">
+    <div class="container">
+      <div class="section-header" style="text-align:left; margin-bottom:24px">
+        <h2 style="font-size:22px; font-weight:700;">Other Properties in ${p.location?.city || 'this City'}</h2>
+      </div>
+      <div class="cards-slider-wrap">
+        <div class="cards-slider" id="otherCityPropertiesSlider"
+          style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
+          <!-- Dynamic Other City Properties -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDING PROPERTIES IN THE STATE -->
+  <section class="section" id="trendingStatePropertiesSection" style="display:none;">
+    <div class="container">
+      <div class="section-header" style="text-align:left; margin-bottom:24px">
+        <h2 style="font-size:22px; font-weight:700;">Trending Properties in the State</h2>
+      </div>
+      <div class="cards-slider-wrap">
+        <div class="cards-slider" id="trendingStatePropertiesSlider"
+          style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
+          <!-- Dynamic Trending State Properties -->
         </div>
       </div>
     </div>
@@ -2160,17 +2190,16 @@
           document.getElementById('amenities')?.remove();
         }
 
-        // ---- Similar Properties ----
+        // ---- Enhanced Property Discovery Logic ----
         try {
           const allProps = await convex.query('properties:getProperties', {}) || [];
-          const similar = allProps
-            .filter(item => item._id !== id && item.id !== id)
-            .filter(item => (item.location?.city === p.location?.city) || (item.propertyType === p.propertyType))
-            .slice(0, 4);
+          const currentCity = p.location?.city;
+          const currentState = p.location?.state;
 
-          const slider = document.getElementById('similarPropertiesSlider');
-          if (slider && similar.length > 0) {
-            slider.innerHTML = similar.map(sp => {
+          const renderPropertySlider = (elementId, props) => {
+            const slider = document.getElementById(elementId);
+            if (!slider || props.length === 0) return;
+            slider.innerHTML = props.map(sp => {
               const spPrice = sp.pricing?.expectedPrice || sp.pricing?.rent || sp.pricing?.pricePerDay || 0;
               const spIsPor = sp.pricing?.isPriceOnRequest === true || sp.pricing?.priceType === 'Price on request';
               let spPriceStr = (spIsPor || spPrice === 0) ? 'Price on Request' : (spPrice >= 10000000 ? `₹${(spPrice / 10000000).toFixed(2)} Cr` : (spPrice >= 100000 ? `₹${(spPrice / 100000).toFixed(2)} Lac` : `₹${spPrice.toLocaleString('en-IN')}`));
@@ -2178,7 +2207,7 @@
               const spLoc = `${sp.location?.locality || ''}${sp.location?.locality && sp.location?.city ? ', ' : ''}${sp.location?.city || ''}`;
 
               return `
-                <div class="property-card" onclick="window.location.href='property-detail.html?id=${sp._id || sp.id}'">
+                <div class="property-card" onclick="window.location.href='property-detail.html?id=${sp._id || sp.id}'" style="min-width: 280px; flex-shrink: 0;">
                   <div class="prop-img-wrap">
                     <img src="${spPhoto}" alt="${sp.propertyType}">
                   </div>
@@ -2189,10 +2218,58 @@
                   </div>
                 </div>`;
             }).join('');
-          } else if (slider) {
-            slider.closest('section')?.remove();
+          };
+
+          // 1. Similar Properties (Flat and Land in same city)
+          const similar = allProps
+            .filter(item => item._id !== id && item.id !== id)
+            .filter(item => item.location?.city === currentCity)
+            .filter(item => /flat|land|plot|apartment|villa|house/i.test(item.propertyType || ''))
+            .slice(0, 8);
+
+          if (similar.length > 0) {
+            const header = document.querySelector('#similarPropertiesSection h2');
+            if (header) header.textContent = `Similar Properties in ${currentCity || 'this City'}`;
+            renderPropertySlider('similarPropertiesSlider', similar);
+          } else {
+            document.getElementById('similarPropertiesSection')?.remove();
           }
-        } catch (e) { console.error(e); }
+
+          // 2. Other Properties in the Same City (All types, 15 cards)
+          const otherInCity = allProps
+            .filter(item => item._id !== id && item.id !== id)
+            .filter(item => item.location?.city === currentCity)
+            .slice(0, 15);
+
+          if (otherInCity.length > 0) {
+            const section = document.getElementById('otherCityPropertiesSection');
+            if (section) {
+              section.style.display = 'block';
+              const header = section.querySelector('h2');
+              if (header) header.textContent = `Other Properties in ${currentCity || 'this City'}`;
+            }
+            renderPropertySlider('otherCityPropertiesSlider', otherInCity);
+          }
+
+          // 3. Trending Properties in the State (Other cities in same state)
+          if (currentState) {
+            const inState = allProps
+              .filter(item => item._id !== id && item.id !== id)
+              .filter(item => item.location?.state === currentState && item.location?.city !== currentCity)
+              .slice(0, 15);
+
+            if (inState.length > 0) {
+              const section = document.getElementById('trendingStatePropertiesSection');
+              if (section) {
+                section.style.display = 'block';
+                const header = section.querySelector('h2');
+                if (header) header.textContent = `Trending Properties in ${currentState}`;
+              }
+              renderPropertySlider('trendingStatePropertiesSlider', inState);
+            }
+          }
+
+        } catch (e) { console.error('Error populating discovery sections:', e); }
 
         // ---- Auto-open Modal logic ----
         const urlParams = new URLSearchParams(window.location.search);
