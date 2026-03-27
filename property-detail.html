@@ -820,7 +820,7 @@
   <section class="section" id="similarPropertiesSection">
     <div class="container">
       <div class="section-header" style="text-align:left; margin-bottom:24px">
-        <h2 style="font-size:22px; font-weight:700;">Similar Properties in ${p.location?.city || 'this City'}</h2>
+        <h2 style="font-size:22px; font-weight:700;">Similar Properties</h2>
       </div>
       <div class="cards-slider-wrap">
         <button class="slider-btn prev" onclick="scrollSlider('similarPropertiesSlider', -1)"><i class="fa-solid fa-chevron-left"></i></button>
@@ -2313,7 +2313,7 @@
 
           if (similar.length > 0) {
             const header = document.querySelector('#similarPropertiesSection h2');
-            if (header) header.textContent = `Similar Properties in ${currentCity || 'this City'}`;
+            if (header) header.textContent = `Similar Properties`;
             renderPropertySlider('similarPropertiesSlider', similar);
           } else {
             document.getElementById('similarPropertiesSection')?.remove();
