@@ -1346,15 +1346,16 @@
                 </div>
               </div>
 
-              <!-- Row 2: Author + Cover Image URL -->
+              <!-- Row 2: Author + Cover Image Upload -->
               <div class="blog-form-row">
                 <div class="form-group" style="margin-bottom:0;">
                   <label class="form-label">Author</label>
                   <input id="blogAuthor" class="form-input" type="text" placeholder="e.g. Anuj Kumar">
                 </div>
                 <div class="form-group" style="margin-bottom:0;">
-                  <label class="form-label">Cover Image URL</label>
-                  <input id="blogCoverUrl" class="form-input" type="url" placeholder="https://...">
+                  <label class="form-label">Cover Image (Upload or URL)</label>
+                  <input id="blogCoverFile" class="form-input" type="file" accept="image/*" style="padding:.5rem;" />
+                  <input id="blogCoverUrl" class="form-input" type="url" placeholder="https://..." style="margin-top:8px;" />
                   <img id="blogCoverPreview" src="" alt="Cover Preview" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-top:8px;display:none;">
                 </div>
               </div>
@@ -1551,6 +1552,26 @@
         else img.style.display = 'none';
       });
 
+      document.getElementById('blogCoverFile')?.addEventListener('change', async function() {
+        const file = this.files?.[0];
+        if (!file) return;
+        try {
+          const uploadUrl = await convex.mutation('files:generateUploadUrl', {});
+          const result = await fetch(uploadUrl, { method: 'POST', headers: { 'Content-Type': file.type }, body: file });
+          const data = await result.json();
+          if (!data.storageId) throw new Error('Invalid upload response');
+          const fileUrl = await convex.query('files:getFileUrl', { storageId: data.storageId });
+          document.getElementById('blogCoverUrl').value = fileUrl;
+          const img = document.getElementById('blogCoverPreview');
+          img.src = fileUrl;
+          img.style.display = 'block';
+        } catch (err) {
+          console.error('Cover image upload failed', err);
+          window.showToast('Cover image upload failed', 'error');
+          this.value = '';
+        }
+      });
+
       document.getElementById('blogTagInput')?.addEventListener('keydown', function(e) {
         if ((e.key === 'Enter' || e.key === ',') && this.value.trim()) {
           e.preventDefault();
@@ -1619,6 +1640,8 @@
       editingPostId = null;
       blogTagsList = [];
       ['blogFormTitle','blogSlug','blogExcerpt','blogAuthor','blogCoverUrl'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+      const fileInput = document.getElementById('blogCoverFile');
+      if (fileInput) fileInput.value = '';
       document.getElementById('blogCoverPreview').style.display = 'none';
       document.getElementById('blogPublished').checked = false;
       document.getElementById('blogStatusLabel').textContent = 'Draft';
@@ -1638,6 +1661,8 @@
       document.getElementById('blogExcerpt').value = post.excerpt || '';
       document.getElementById('blogAuthor').value = post.author || '';
       document.getElementById('blogCoverUrl').value = post.coverImageUrl || '';
+      const fileInput = document.getElementById('blogCoverFile');
+      if (fileInput) fileInput.value = '';
       const img = document.getElementById('blogCoverPreview');
       if (post.coverImageUrl) { img.src = post.coverImageUrl; img.style.display = 'block'; } else img.style.display = 'none';
       document.getElementById('blogPublished').checked = post.status === 'published';
