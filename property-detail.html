@@ -260,6 +260,62 @@
       text-align: right;
     }
 
+    /* ---- Slider Navigation Buttons ---- */
+    .cards-slider-wrap {
+      position: relative;
+    }
+
+    .slider-btn {
+      position: absolute;
+      top: calc(50% - 10px);
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 20;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--text);
+    }
+
+    .slider-btn:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .slider-btn.prev {
+      left: -22px;
+    }
+
+    .slider-btn.next {
+      right: -22px;
+    }
+
+    .slider-btn i {
+      font-size: 16px;
+    }
+
+    /* Hide scrollbar but keep functionality */
+    .cards-slider {
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE 10+ */
+    }
+    .cards-slider::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    @media (max-width: 1024px) {
+      .slider-btn { display: none !important; }
+    }
+
     @media (max-width: 768px) {
       .info-grid-3col {
         grid-template-columns: 1fr;
@@ -767,10 +823,12 @@
         <h2 style="font-size:22px; font-weight:700;">Similar Properties in ${p.location?.city || 'this City'}</h2>
       </div>
       <div class="cards-slider-wrap">
+        <button class="slider-btn prev" onclick="scrollSlider('similarPropertiesSlider', -1)"><i class="fa-solid fa-chevron-left"></i></button>
         <div class="cards-slider" id="similarPropertiesSlider"
           style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
           <!-- Dynamic Similar Properties -->
         </div>
+        <button class="slider-btn next" onclick="scrollSlider('similarPropertiesSlider', 1)"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
     </div>
   </section>
@@ -782,10 +840,12 @@
         <h2 style="font-size:22px; font-weight:700;">Other Properties in ${p.location?.city || 'this City'}</h2>
       </div>
       <div class="cards-slider-wrap">
+        <button class="slider-btn prev" onclick="scrollSlider('otherCityPropertiesSlider', -1)"><i class="fa-solid fa-chevron-left"></i></button>
         <div class="cards-slider" id="otherCityPropertiesSlider"
           style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
           <!-- Dynamic Other City Properties -->
         </div>
+        <button class="slider-btn next" onclick="scrollSlider('otherCityPropertiesSlider', 1)"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
     </div>
   </section>
@@ -797,10 +857,12 @@
         <h2 style="font-size:22px; font-weight:700;">Trending Properties in the State</h2>
       </div>
       <div class="cards-slider-wrap">
+        <button class="slider-btn prev" onclick="scrollSlider('trendingStatePropertiesSlider', -1)"><i class="fa-solid fa-chevron-left"></i></button>
         <div class="cards-slider" id="trendingStatePropertiesSlider"
           style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
           <!-- Dynamic Trending State Properties -->
         </div>
+        <button class="slider-btn next" onclick="scrollSlider('trendingStatePropertiesSlider', 1)"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
     </div>
   </section>
@@ -2196,9 +2258,31 @@
           const currentCity = p.location?.city;
           const currentState = p.location?.state;
 
+          // Slider Helper Functions
+          window.scrollSlider = (id, direction) => {
+            const slider = document.getElementById(id);
+            if (!slider) return;
+            const scrollAmount = slider.clientWidth * 0.8;
+            slider.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+          };
+
+          const updateSliderButtons = (id) => {
+            const slider = document.getElementById(id);
+            if (!slider) return;
+            const wrap = slider.parentElement;
+            const prevBtn = wrap.querySelector('.slider-btn.prev');
+            const nextBtn = wrap.querySelector('.slider-btn.next');
+            if (prevBtn) prevBtn.style.display = slider.scrollLeft > 20 ? 'flex' : 'none';
+            if (nextBtn) nextBtn.style.display = (slider.scrollLeft + slider.clientWidth) < (slider.scrollWidth - 20) ? 'flex' : 'none';
+          };
+
           const renderPropertySlider = (elementId, props) => {
             const slider = document.getElementById(elementId);
             if (!slider || props.length === 0) return;
+            
+            // Add scroll listener for button visibility
+            slider.addEventListener('scroll', () => updateSliderButtons(elementId));
+
             slider.innerHTML = props.map(sp => {
               const spPrice = sp.pricing?.expectedPrice || sp.pricing?.rent || sp.pricing?.pricePerDay || 0;
               const spIsPor = sp.pricing?.isPriceOnRequest === true || sp.pricing?.priceType === 'Price on request';
@@ -2268,6 +2352,11 @@
               renderPropertySlider('trendingStatePropertiesSlider', inState);
             }
           }
+
+          // Initial button check
+          setTimeout(() => {
+            ['similarPropertiesSlider', 'otherCityPropertiesSlider', 'trendingStatePropertiesSlider'].forEach(updateSliderButtons);
+          }, 1000);
 
         } catch (e) { console.error('Error populating discovery sections:', e); }
 
