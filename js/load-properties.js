@@ -212,6 +212,85 @@ window.addEventListener('cityChanged', (e) => {
   }
 });
 
+// Auto-refresh the trending city section every 30 seconds so new
+// properties posted to that city appear without a page reload.
+async function autoRefreshTrendingCity() {
+  const city = localStorage.getItem('selectedCity');
+  if (!city || city === 'Select City') return;
+
+  try {
+    const convexProps = await convex.query("properties:getProperties", {});
+    if (!convexProps || !Array.isArray(convexProps)) return;
+
+    const formatted = convexProps.map((p) => {
+      const title = buildTitle(p);
+      const specs = buildSpecs(p);
+      const pricing = p.pricing || {};
+      const price = pricing.expectedPrice || pricing.rent || pricing.pricePerDay || pricing.plotRatePerSqFt || 0;
+      const area = p.details?.builtUpArea || 0;
+      const score = calculateQualityScore(p);
+      return {
+        id: p._id,
+        convexId: p._id,
+        qualityScore: score,
+        type: /commercial|shop|office|warehouse/i.test(p.propertyType || "")
+          ? "commercial"
+          : (p.transactionType || "").toLowerCase().includes("rent") || (p.transactionType || "").toLowerCase().includes("pg")
+          ? "rent"
+          : "buy",
+        propType: p.propertyType,
+        bhk: parseInt(p.details?.bhk) || 0,
+        price,
+        priceDisplay: (() => {
+          const isPor = pricing.isPriceOnRequest === true || pricing.priceType === "Price on request";
+          if (isPor) return "Price on Request";
+          if (price > 0) {
+            const tt = (p.transactionType || "").toLowerCase();
+            const pt = (p.propertyType || "").toLowerCase();
+            let suffix = "";
+            if (tt.includes("rent") || tt.includes("pg")) suffix = "/mo";
+            else if (/lodge|hotel|resort/i.test(pt)) suffix = "/day";
+            else if (pricing.plotRatePerSqFt && !pricing.expectedPrice) suffix = "/sq.ft";
+            return "₹" + price.toLocaleString("en-IN") + suffix;
+          }
+          return "Price on Request";
+        })(),
+        title,
+        specs,
+        location: `${p.location?.locality || ""}, ${p.location?.city || ""}`,
+        city: p.location?.city || "",
+        area,
+        areaDisplay: area > 0 ? `${area} ${p.details?.builtUpAreaUnit || "sq.ft"}` : "",
+        image: p.photos && p.photos.length > 0
+          ? typeof p.photos[0] === "object" ? p.photos[0].url : p.photos[0]
+          : "images/property-1.webp",
+        status: p.details?.status === "Ready to Move" ? "ready" : "under-construction",
+        verified: p.verified || false,
+        featured: p.featured || false,
+        price_per_sqft: (() => {
+          if (pricing.pricingType === "Per Sqft" && pricing.expectedPrice) return pricing.expectedPrice;
+          return area > 0 ? Math.round(price / area) : 0;
+        })(),
+        priceIsPerSqft: pricing.pricingType === "Per Sqft" || (!!pricing.plotRatePerSqFt && !pricing.expectedPrice),
+        areaUnit: p.details?.builtUpAreaUnit || "sq.ft",
+        projectName: p.details?.projectName || p.location?.society || "",
+        _raw: p,
+      };
+    });
+
+    // Update global properties store
+    window.properties = [...formatted, ...(window.properties || []).filter(p => !formatted.find(f => f.id === p.id))];
+
+    // Re-render trending for current city
+    renderTrendingInCitySlider(formatted, city);
+  } catch (err) {
+    console.warn("Auto-refresh failed:", err);
+  }
+}
+
+// Start polling every 30 seconds
+setInterval(autoRefreshTrendingCity, 30000);
+
 // Start loading
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initPropertyLoading);
