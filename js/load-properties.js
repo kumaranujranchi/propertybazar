@@ -188,9 +188,9 @@ function updateSliderButtons(sliderId) {
   }
 }
 
-// Attach scroll listeners to sliders for button visibility
+// Attach scroll listeners to sliders for button visibility (trending slider excluded — always shows buttons)
 function initSliderListeners() {
-  const sliders = ['featuredSlider', 'trendingCitySlider', 'newlyAddedSlider', 'newLaunchSlider'];
+  const sliders = ['featuredSlider', 'newlyAddedSlider', 'newLaunchSlider'];
   sliders.forEach(id => {
     const slider = document.getElementById(id);
     if (slider) {

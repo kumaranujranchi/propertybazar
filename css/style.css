@@ -1182,19 +1182,12 @@ textarea {
   flex-shrink: 0;
 }
 
-/* Trending city section: uniform card height regardless of content */
-#trendingCitySlider .property-card {
-  height: 420px;
-  overflow: hidden;
-}
+/* Trending city section: uniform card height via flex stretch */
 #trendingCitySlider .prop-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   height: auto;
-}
-#trendingCitySlider .prop-body {
-  overflow: hidden;
 }
 .slider-btn {
   position: absolute;
