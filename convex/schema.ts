@@ -29,6 +29,19 @@ export default defineSchema({
     .index("by_handpicked", ["isHandpicked"])
     .index("by_approvalStatus", ["approvalStatus"]),
 
+  blogPosts: defineTable({
+    title: v.string(),
+    slug: v.string(),
+    content: v.string(),           // Rich HTML from Quill editor
+    excerpt: v.optional(v.string()),
+    coverImageUrl: v.optional(v.string()),
+    author: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
+    status: v.string(),            // 'draft' | 'published'
+    publishedAt: v.optional(v.number()),
+  }).index("by_status", ["status"])
+    .index("by_slug", ["slug"]),
+
   users: defineTable({
     name: v.string(),
     email: v.string(),

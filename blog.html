@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | 24Dismil Real Estate</title>
+  <meta name="description" content="Read the latest property market insights, real estate guides, and buying tips from 24Dismil.">
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ---- BLOG PAGE SPECIFIC STYLES ---- */
+    .blog-hero {
+      background: linear-gradient(135deg, #1a2230 0%, #2d3a50 100%);
+      padding: 72px 0 60px;
+      text-align: center;
+    }
+    .blog-hero-label {
+      display: inline-block;
+      background: rgba(232, 65, 24, 0.15);
+      color: #e84118;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(232, 65, 24, 0.3);
+    }
+    .blog-hero h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+    .blog-hero h1 span { color: #e84118; }
+    .blog-hero p {
+      color: rgba(255,255,255,0.7);
+      font-size: 16px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ---- BLOG GRID ---- */
+    .blog-section { padding: 60px 0 80px; background: #f8fafc; }
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    @media(max-width: 900px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width: 600px) { .blog-grid { grid-template-columns: 1fr; } }
+
+    /* ---- BLOG CARD ---- */
+    .blog-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border: 1px solid #eef0f4;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+    }
+    .blog-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    }
+    .blog-card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #e0e3e9, #f0f2f5);
+    }
+    .blog-card-img-placeholder {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #1a2230, #2d3a50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .blog-card-img-placeholder i { font-size: 48px; color: rgba(255,255,255,0.2); }
+
+    .blog-card-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+    .blog-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .blog-card-date {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .blog-card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .blog-tag-pill {
+      background: rgba(232,65,24,0.08);
+      color: #e84118;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    .blog-card-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: #1a2230;
+      line-height: 1.4;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .blog-card-excerpt {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.6;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .blog-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid #f0f2f5;
+    }
+    .blog-card-author {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #374151;
+      font-weight: 600;
+    }
+    .blog-author-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary, #e84118);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .blog-read-more {
+      font-size: 13px;
+      color: #e84118;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ---- EMPTY / LOADING ---- */
+    .blog-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      color: #9ca3af;
+    }
+    .blog-empty i { font-size: 52px; margin-bottom: 16px; display: block; opacity: 0.3; }
+    .blog-empty h3 { font-size: 20px; font-weight: 700; color: #374151; margin-bottom: 8px; }
+
+    /* ---- SKELETON LOADING ---- */
+    .blog-skeleton { animation: pulse 1.5s infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .blog-skel-img { width: 100%; height: 200px; background: #e5e7eb; }
+    .blog-skel-line { height: 14px; background: #e5e7eb; border-radius: 4px; margin: 8px 22px; }
+    .blog-skel-line.wide { width: 80%; }
+    .blog-skel-line.medium { width: 60%; }
+    .blog-skel-line.short { width: 40%; }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header" id="mainHeader">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">24</span>
+        <span>24Dismil</span>
+      </a>
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+        <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+        <a href="blog.html" class="active"><i class="fa-solid fa-newspaper"></i> Blog</a>
+        <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="blog-hero">
+    <div class="container">
+      <div class="blog-hero-label"><i class="fa-solid fa-pen-nib"></i> Real Estate Insights</div>
+      <h1>The <span>24Dismil</span> Blog</h1>
+      <p>Property market updates, buying guides, investment tips, and more — written by experts.</p>
+    </div>
+  </section>
+
+  <!-- BLOG GRID -->
+  <section class="blog-section">
+    <div class="container">
+      <div class="blog-grid" id="blogGrid">
+        <!-- Skeleton loaders -->
+        <div class="blog-card blog-skeleton">
+          <div class="blog-skel-img"></div>
+          <div class="blog-skel-line wide" style="margin-top:16px;"></div>
+          <div class="blog-skel-line medium"></div>
+          <div class="blog-skel-line short"></div>
+        </div>
+        <div class="blog-card blog-skeleton">
+          <div class="blog-skel-img"></div>
+          <div class="blog-skel-line wide" style="margin-top:16px;"></div>
+          <div class="blog-skel-line medium"></div>
+          <div class="blog-skel-line short"></div>
+        </div>
+        <div class="blog-card blog-skeleton">
+          <div class="blog-skel-img"></div>
+          <div class="blog-skel-line wide" style="margin-top:16px;"></div>
+          <div class="blog-skel-line medium"></div>
+          <div class="blog-skel-line short"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span class="logo-icon" style="font-size:16px;width:32px;height:32px;">24</span>
+            <span>24Dismil</span>
+          </div>
+          <p>India's trusted real estate platform connecting buyers, sellers, and renters across the country.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <a href="properties.html?type=buy">Buy Property</a>
+          <a href="properties.html?type=rent">Rent Property</a>
+          <a href="post-property.html">Post Property</a>
+          <a href="blog.html">Blog</a>
+        </div>
+        <div class="footer-links">
+          <h4>Company</h4>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 24Dismil. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/convex.js"></script>
+  <script type="module">
+    import { convex } from './js/convex.js';
+
+    async function loadBlog() {
+      const grid = document.getElementById('blogGrid');
+      try {
+        const posts = await convex.query('blog:getPublishedPosts', {});
+        if (!posts || !posts.length) {
+          grid.innerHTML = `
+            <div class="blog-empty">
+              <i class="fa-solid fa-newspaper"></i>
+              <h3>No Posts Yet</h3>
+              <p>Stay tuned — new articles are coming soon.</p>
+            </div>`;
+          return;
+        }
+
+        grid.innerHTML = posts.map(p => {
+          const date = p.publishedAt
+            ? new Date(p.publishedAt).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' })
+            : '';
+          const tags = (p.tags || []).slice(0, 3)
+            .map(t => `<span class="blog-tag-pill">${t}</span>`).join('');
+          const authorInitial = (p.author || 'A').charAt(0).toUpperCase();
+          const imgHtml = p.coverImageUrl
+            ? `<img class="blog-card-img" src="${p.coverImageUrl}" alt="${p.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'blog-card-img-placeholder\\'><i class=\\'fa-solid fa-newspaper\\'></i></div>'">`
+            : `<div class="blog-card-img-placeholder"><i class="fa-solid fa-newspaper"></i></div>`;
+
+          return `
+            <a class="blog-card" href="blog-post.html?slug=${p.slug}">
+              ${imgHtml}
+              <div class="blog-card-body">
+                <div class="blog-card-meta">
+                  <span class="blog-card-date"><i class="fa-regular fa-calendar" style="margin-right:4px;"></i>${date}</span>
+                  <div class="blog-card-tags">${tags}</div>
+                </div>
+                <h2 class="blog-card-title">${p.title}</h2>
+                <p class="blog-card-excerpt">${p.excerpt || ''}</p>
+                <div class="blog-card-footer">
+                  <div class="blog-card-author">
+                    <div class="blog-author-avatar">${authorInitial}</div>
+                    ${p.author || 'Team 24Dismil'}
+                  </div>
+                  <div class="blog-read-more">Read More <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+              </div>
+            </a>`;
+        }).join('');
+      } catch(e) {
+        console.error('Blog load error:', e);
+        grid.innerHTML = '<div class="blog-empty"><i class="fa-solid fa-circle-exclamation"></i><h3>Could not load posts</h3><p>Please try again later.</p></div>';
+      }
+    }
+
+    loadBlog();
+  </script>
+  <script src="js/main.js" type="module"></script>
+</body>
+</html>

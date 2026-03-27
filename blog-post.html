@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="postPageTitle">Blog Post | 24Dismil</title>
+  <meta id="postMetaDesc" name="description" content="Read this blog post on 24Dismil.">
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ---- BLOG POST PAGE ---- */
+    .post-hero {
+      background: linear-gradient(135deg, #1a2230 0%, #2d3a50 100%);
+      padding: 56px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .post-hero-inner { max-width: 800px; margin: 0 auto; padding: 0 24px 48px; text-align: center; }
+    .post-breadcrumb {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px;
+    }
+    .post-breadcrumb a { color: rgba(255,255,255,0.6); text-decoration: none; }
+    .post-breadcrumb a:hover { color: #e84118; }
+    .post-tags-hero { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 18px; }
+    .post-tag-pill {
+      background: rgba(232,65,24,0.2); color: #ff7055; font-size: 11px;
+      font-weight: 700; padding: 3px 12px; border-radius: 20px;
+      border: 1px solid rgba(232,65,24,0.3);
+    }
+    .post-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(22px, 4vw, 40px);
+      font-weight: 800; color: #fff; line-height: 1.25;
+      margin-bottom: 18px;
+    }
+    .post-meta {
+      display: flex; align-items: center; gap: 20px;
+      justify-content: center; flex-wrap: wrap;
+      font-size: 13px; color: rgba(255,255,255,0.55);
+    }
+    .post-meta-item { display: flex; align-items: center; gap: 6px; }
+    .post-cover {
+      width: 100%; max-height: 480px; object-fit: cover;
+      border-radius: 16px; margin: -24px 0 0;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      display: block;
+    }
+
+    /* ---- POST BODY ---- */
+    .post-layout {
+      max-width: 800px; margin: 0 auto;
+      padding: 52px 24px 80px;
+    }
+    .post-content {
+      font-size: 16px; line-height: 1.8; color: #374151;
+    }
+    .post-content h1, .post-content h2, .post-content h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700; color: #1a2230;
+      margin: 32px 0 14px;
+    }
+    .post-content h1 { font-size: 28px; }
+    .post-content h2 { font-size: 22px; }
+    .post-content h3 { font-size: 18px; }
+    .post-content p { margin-bottom: 18px; }
+    .post-content img { max-width: 100%; border-radius: 10px; margin: 20px 0; }
+    .post-content a { color: #e84118; }
+    .post-content blockquote {
+      border-left: 4px solid #e84118; margin: 24px 0;
+      padding: 14px 20px; background: #fff8f6;
+      color: #6b7280; border-radius: 0 8px 8px 0;
+      font-style: italic;
+    }
+    .post-content ul, .post-content ol { padding-left: 24px; margin-bottom: 18px; }
+    .post-content li { margin-bottom: 8px; }
+    .post-content pre {
+      background: #1a2230; color: #e2e8f0;
+      padding: 20px; border-radius: 8px;
+      overflow-x: auto; font-size: 14px; margin-bottom: 18px;
+    }
+    .post-content code {
+      background: #f0f2f5; padding: 2px 6px;
+      border-radius: 4px; font-size: 14px; color: #e84118;
+    }
+
+    /* ---- BACK BUTTON ---- */
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: #6b7280; font-size: 14px; font-weight: 600;
+      text-decoration: none; margin-bottom: 32px;
+      padding: 8px 16px; border-radius: 8px;
+      border: 1px solid #e5e7eb; transition: all 0.2s;
+    }
+    .back-btn:hover { color: #e84118; border-color: #e84118; background: rgba(232,65,24,0.04); }
+
+    /* ---- NOT FOUND ---- */
+    .post-not-found {
+      text-align: center; padding: 100px 20px; color: #9ca3af;
+    }
+    .post-not-found i { font-size: 56px; opacity: 0.2; display: block; margin-bottom: 20px; }
+    .post-not-found h2 { font-size: 24px; font-weight: 700; color: #374151; margin-bottom: 8px; }
+
+    /* ---- SKELETON ---- */
+    .post-skeleton { animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .skel { background: #e5e7eb; border-radius: 6px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header" id="mainHeader">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">24</span>
+        <span>24Dismil</span>
+      </a>
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="properties.html?type=buy"><i class="fa-solid fa-cart-shopping"></i> Buy Property</a>
+        <a href="properties.html?type=rent"><i class="fa-solid fa-key"></i> Rent Property</a>
+        <a href="blog.html" class="active"><i class="fa-solid fa-newspaper"></i> Blog</a>
+        <a href="login.html" style="color: var(--primary); font-weight: 700"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- POST HERO (populated by JS) -->
+  <section class="post-hero" id="postHero" style="display:none;">
+    <div class="post-hero-inner">
+      <div class="post-breadcrumb">
+        <a href="index.html">Home</a> <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        <a href="blog.html">Blog</a> <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+        <span id="postBreadcrumbTitle" style="color:rgba(255,255,255,0.8);"></span>
+      </div>
+      <div class="post-tags-hero" id="postTagsHero"></div>
+      <h1 class="post-title" id="postMainTitle">Loading...</h1>
+      <div class="post-meta">
+        <span class="post-meta-item" id="postAuthorMeta"></span>
+        <span class="post-meta-item" id="postDateMeta"></span>
+      </div>
+    </div>
+    <div class="container">
+      <img id="postCoverImg" class="post-cover" src="" alt="" style="display:none;">
+    </div>
+  </section>
+
+  <!-- POST CONTENT -->
+  <div class="post-layout">
+    <!-- Loading skeleton -->
+    <div id="postSkeleton" class="post-skeleton">
+      <div class="skel" style="height:18px;width:100px;margin-bottom:24px;"></div>
+      <div class="skel" style="height:14px;width:60%;"></div>
+      <div class="skel" style="height:14px;width:80%;"></div>
+      <div class="skel" style="height:14px;width:70%;"></div>
+      <div class="skel" style="height:14px;width:50%; margin-bottom:28px;"></div>
+      <div class="skel" style="height:14px;width:90%;"></div>
+      <div class="skel" style="height:14px;width:75%;"></div>
+      <div class="skel" style="height:14px;width:85%;"></div>
+    </div>
+
+    <!-- Actual content -->
+    <div id="postBody" style="display:none;">
+      <a href="blog.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Blog</a>
+      <article class="post-content" id="postContent"></article>
+    </div>
+
+    <!-- Not found -->
+    <div id="postNotFound" class="post-not-found" style="display:none;">
+      <i class="fa-solid fa-file-circle-xmark"></i>
+      <h2>Post Not Found</h2>
+      <p>This blog post doesn't exist or has been removed.</p>
+      <a href="blog.html" class="back-btn" style="margin: 24px auto 0; display:inline-flex;"><i class="fa-solid fa-arrow-left"></i> Go to Blog</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span class="logo-icon" style="font-size:16px;width:32px;height:32px;">24</span>
+            <span>24Dismil</span>
+          </div>
+          <p>India's trusted real estate platform connecting buyers, sellers, and renters across the country.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <a href="properties.html?type=buy">Buy Property</a>
+          <a href="properties.html?type=rent">Rent Property</a>
+          <a href="post-property.html">Post Property</a>
+          <a href="blog.html">Blog</a>
+        </div>
+        <div class="footer-links">
+          <h4>Company</h4>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 24Dismil. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/convex.js"></script>
+  <script type="module">
+    import { convex } from './js/convex.js';
+
+    async function loadPost() {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
+
+      if (!slug) {
+        showNotFound();
+        return;
+      }
+
+      try {
+        const post = await convex.query('blog:getPostBySlug', { slug });
+
+        if (!post || post.status !== 'published') {
+          showNotFound();
+          return;
+        }
+
+        // Update page metadata
+        document.getElementById('postPageTitle').textContent = `${post.title} | 24Dismil Blog`;
+        document.getElementById('postMetaDesc').content = post.excerpt || post.title;
+
+        // Hero
+        document.getElementById('postBreadcrumbTitle').textContent = post.title.length > 40
+          ? post.title.substring(0, 40) + '...' : post.title;
+        document.getElementById('postMainTitle').textContent = post.title;
+
+        // Tags
+        const tagsHtml = (post.tags || []).map(t => `<span class="post-tag-pill">${t}</span>`).join('');
+        document.getElementById('postTagsHero').innerHTML = tagsHtml;
+
+        // Author + Date
+        if (post.author) {
+          document.getElementById('postAuthorMeta').innerHTML =
+            `<i class="fa-solid fa-user-pen"></i> ${post.author}`;
+        }
+        if (post.publishedAt) {
+          const date = new Date(post.publishedAt).toLocaleDateString('en-IN', {
+            day: 'numeric', month: 'long', year: 'numeric'
+          });
+          document.getElementById('postDateMeta').innerHTML =
+            `<i class="fa-regular fa-calendar"></i> ${date}`;
+        }
+
+        // Cover image
+        if (post.coverImageUrl) {
+          const img = document.getElementById('postCoverImg');
+          img.src = post.coverImageUrl;
+          img.alt = post.title;
+          img.style.display = 'block';
+          img.onerror = () => img.style.display = 'none';
+        }
+
+        // Show hero
+        document.getElementById('postHero').style.display = '';
+
+        // Content
+        document.getElementById('postContent').innerHTML = post.content;
+
+        // Show body
+        document.getElementById('postSkeleton').style.display = 'none';
+        document.getElementById('postBody').style.display = 'block';
+
+      } catch(e) {
+        console.error('Failed to load post:', e);
+        showNotFound();
+      }
+    }
+
+    function showNotFound() {
+      document.getElementById('postSkeleton').style.display = 'none';
+      document.getElementById('postNotFound').style.display = 'block';
+    }
+
+    loadPost();
+  </script>
+  <script src="js/main.js" type="module"></script>
+</body>
+</html>
