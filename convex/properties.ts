@@ -534,6 +534,26 @@ export const getMyLeads = query({
   }
 });
 
+export const updateLeadStatus = mutation({
+  args: { token: v.string(), leadId: v.id("leads"), status: v.string() },
+  handler: async (ctx: any, args: any) => {
+    const session = await ctx.db
+      .query("sessions")
+      .withIndex("by_token", (q: any) => q.eq("token", args.token))
+      .first();
+    if (!session || session.expiresAt < Date.now()) throw new Error("Unauthorized");
+
+    const lead = await ctx.db.get(args.leadId);
+    if (!lead || lead.ownerId !== session.userId) throw new Error("Not found");
+
+    const allowed = ["new", "contacted", "not_responding", "interested", "not_interested", "follow_up"];
+    if (!allowed.includes(args.status)) throw new Error("Invalid status");
+
+    await ctx.db.patch(args.leadId, { leadStatus: args.status });
+    return { ok: true };
+  },
+});
+
 export const getUniqueCities = query({
   args: {},
   handler: async (ctx: any) => {

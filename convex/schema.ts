@@ -87,7 +87,8 @@ export default defineSchema({
     inquirerName: v.string(),
     inquirerEmail: v.string(),
     inquirerPhone: v.string(),
-    message: v.optional(v.string())
+    message: v.optional(v.string()),
+    leadStatus: v.optional(v.string()), // e.g. new, contacted, not_responding, interested, not_interested, follow_up
   }).index("by_ownerId", ["ownerId"]),
 
   drafts: defineTable({
